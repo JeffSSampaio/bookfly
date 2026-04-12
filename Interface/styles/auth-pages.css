@@ -97,20 +97,20 @@ body{
     font-weight: bolder;
 }
 
-.link-cadastro {
+.link {
     font-family: var(--fonte-principal);
     color: var(--cor-marrom);
     font-weight: 400;
     margin: 10px;
 }
 
-.link-cadastro a{
+.link a{
     color: var(--cor-marrom);
     text-decoration: none;
     font-weight: 500;
 }
 
-.link-cadastro a:hover{
+.link a:hover{
     font-weight: bolder;
     transform: scale(0.9);
     transition: font-weight 1s ease-in-out;
