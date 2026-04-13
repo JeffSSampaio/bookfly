@@ -1,0 +1,77 @@
+
+.body-page{
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.s-emprestimo-body{
+    margin: 0px 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.s-emprestimo-container{
+    margin: 20px 60px;
+    text-align: center;
+
+}
+
+.s-emprestimo{
+    background-color: var(--cor-pastel-clara);
+    margin: 60px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.s-emprestimo-container {
+    font-family: var(--fonte-principal);
+    font-weight: 800;
+    color: var(--cor-marrom);
+}
+
+
+.s-titulo-emprestimo{
+     font-family: var(--fonte-principal);
+    font-weight: 800;
+    font-size: 39px;
+    color: var(--cor-marrom);
+}
+ 
+
+
+.btn-emprestimo-container{
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    flex-direction: row;
+    
+    margin-right: 90px;
+   
+}
+
+.btn-emprestimo{
+    padding: 15px;
+    border-radius: 20px;
+    border: none;
+    margin: 50px 20px;
+    background-color: var(--cor-branco-fraco);
+     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+.btn-emprestimo span{
+    font-family: var(--fonte-principal);
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--cor-marrom);
+}
+
+
+.sec-1{
+    margin: 0;
+}
+

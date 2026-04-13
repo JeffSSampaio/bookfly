@@ -1,0 +1,34 @@
+
+.c-card-emprestimo{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    background-color: var(--cor-pastel);
+    margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.c-card-emprestimo img {
+    height: 130px;
+    margin: 15px;
+}
+.card-info-text{
+    padding: 5px;
+    text-align: left;
+    font-family: var(--font-principal);
+    font-weight: 700;
+}
+
+
+
+.c-card-emprestimo h1, .c-card-emprestimo span, .c-card-emprestimo p{
+    margin: 9px auto;
+    padding: 0 auto;
+}
+.card-info-text p {
+       color: var(--cor-marrom);
+     
+}
+

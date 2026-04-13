@@ -4,5 +4,23 @@
     --cor-branco-fraco-2: #ADADAD;
     --fonte-principal: 'League Spartan', sans-serif;
     --cor-pastel: #A39664;
+    --cor-pastel-clara:#C7C0A4;
     --cor-pastel-escuro: #91865A;
+}
+
+
+/* Footer global*/
+
+footer{
+    position: sticky;
+    background-color: var(--cor-marrom);
+    width: 100%;   
+    margin-top: 100px;
+}
+
+footer h1{
+    text-align: center;
+    color: var(--cor-branco-fraco);
+    font-family: var(--fonte-principal);
+    font-weight: 800;
 }
