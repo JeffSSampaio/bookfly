@@ -1,0 +1,88 @@
+
+
+.modal-bookcase{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow:auto;
+    background-color: rgba(0, 0,0,0.4);
+}
+
+
+
+.c-modal-bookcase{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 50%;
+    background-color: var(--cor-pastel-clara);
+}
+
+.c-bookcase-btn{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+    align-items: center;
+    margin: 20px 2px;
+
+}
+
+.c-bookcase-btn button{
+    display: flex;
+    padding: 10px;
+    background-color: var(--cor-pastel-escuro);
+    border: none;
+    border-radius: 20px;
+    font-family: var(--fonte-principal);
+    color: var(--cor-marrom);
+    font-weight: 500;
+    border: 2px solid var(--cor-marrom);
+
+}
+
+
+.c-bookcase-btn button:hover{
+    background-color: var(--cor-pastel-clara);
+    transition: background-color 1s ease-in-out;
+}
+
+.c-b-modal-bookcase h1{
+    text-align: center;
+    color: var(--cor-marrom);
+    font-family: var(--fonte-principal);
+    margin: 20px    
+}
+
+.f-input-bookcase{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+
+.f-input-bookcase label{
+  font-family: var(--fonte-principal);
+  color: var(--cor-marrom);
+  font-weight: 500;
+}
+
+.form-bookcase label{
+    text-align: left;
+
+}
+
+.form-bookcase input{
+    background-color: var(--cor-branco-fraco);
+    padding: 7px;
+    border-radius: 15px;
+    border: none;
+
+}
