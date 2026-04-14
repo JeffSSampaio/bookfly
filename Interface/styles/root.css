@@ -6,13 +6,17 @@
     --cor-pastel: #A39664;
     --cor-pastel-clara:#C7C0A4;
     --cor-pastel-escuro: #91865A;
+    --cor-pastel-escuro-2: #7C724D;
+    --box-shadow: 0 4px 6px rgba(0,0,0,0.2); /*  box-shadow: 0 4px 6px rgba(0,0,0,0.2);*/
+
 }
 
 
-/* Footer global*/
+/* Footer global    */
 
 footer{
     position: sticky;
+    bottom: 0;
     background-color: var(--cor-marrom);
     width: 100%;   
     margin-top: 100px;

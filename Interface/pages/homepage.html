@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="/Interface/styles/page-user.css">
    <link rel="stylesheet" href="/Interface/styles/h-navbar.css">
-    <link rel="stylesheet" href="/Interface/styles/root.css">
-    <link rel="stylesheet" href="/Interface/styles/s-emprestimos.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="/Interface/styles/homepage.css">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link rel="stylesheet" href="/Interface/styles/root.css">
+   <link rel="stylesheet" href="/Interface/styles/s-emprestimos.css">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="stylesheet" href="/Interface/styles/homepage.css">
+    <link rel="stylesheet" href="/Interface/styles/modal-emprestimo.css">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
  
     <title>Home</title>
@@ -19,7 +20,9 @@
     <div id="h-navbar-right" class="menu-right-container">
         <div id="menu-content" class="body-menu">
             <div class="menu-header">
-               <img  id="close-menu" src="/Interface/assets/iconclose.svg" alt="" srcset="">
+                <span  id="close-menu">
+                    <img  src="/Interface/assets/iconclose.svg" alt="" srcset="">
+                </span>
                 <h1>Menu</h1>
             </div>
         </div>
@@ -44,12 +47,14 @@
 
     <div class="body-page">
 
-       
+        <dialog class="m-emprestimo" id="modal-emprestimo" >
+            
+        </dialog>
 
         <div class="sec-1">
             <div class="btn-emprestimo-container">
 
-             <button class="btn-emprestimo">
+             <button class="btn-emprestimo" id="btn-fazer-emprestimo" onclick="openModal()">
                <span>
                 Fazer Emprestimo
              </span>
@@ -83,6 +88,7 @@
             BookFLy
         </h1>
     </footer>
+    
 <script src="/Interface/scripts/s-emprestimos.js"></script>
 <script src="/Interface/scripts/h-navbar.js"></script>
 </body>
