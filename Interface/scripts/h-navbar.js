@@ -19,7 +19,7 @@ closeBtn.addEventListener("click", () => {
 
 buttons = [ 
     "<a href='../pages/perfil.html'>Perfil</a>",
-    "<a href='../pages/meus-livros.html'>Meus Livros</a>",
+    "<a href='../pages/meus-livros.html'>Minhas Estantes</a>",
     "<a href='../pages/login.html'>Desconectar</a>",
 
 ]
