@@ -39,7 +39,7 @@ var bookcases = [
 
 
 var bookcase = document.getElementById('bookcase');
- const b = document.getElementById('c-books')
+
 
 bookcases.forEach(element => {
    
