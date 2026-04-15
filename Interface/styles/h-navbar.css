@@ -28,6 +28,28 @@ body{
 .icon-menu{
     margin: 20px;
     height: 70px;
+    transform: scale(1.0);
+    transition: transform 1s ease-out ;
+}
+
+.icon-menu:hover{
+    transform: scale(0.9);
+    transition: transform 1s ease-in;
+}
+
+.icon-close{
+    transform: scale(1.0);
+    transition: all 1s ease-out;
+}
+
+.icon-close:hover{
+    transform: scale(0.9);
+    transition: all 1s transform;
+}
+
+.c-icon-menu{
+    background-color: transparent;
+    border: none;
 }
 .h-container-actions-itens{
     display: flex;
