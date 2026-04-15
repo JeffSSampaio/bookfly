@@ -16,7 +16,7 @@
 /* Footer global    */
 
 footer{
-    position: sticky;
+    position: static;
     bottom: 0;
     background-color: var(--cor-marrom);
     width: 100%;   
