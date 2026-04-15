@@ -21,7 +21,7 @@
     margin: 15% auto;
     padding: 20px;
     border-radius: 5px;
-    width: 50%;
+    width: 20%;
     background-color: var(--cor-pastel-clara);
 }
 
@@ -30,7 +30,8 @@
     flex-direction: row;
     justify-content:space-around;
     align-items: center;
-    margin: 20px 2px;
+    margin: 10px 10px;
+    padding: 5px 10px;
 
 }
 
@@ -63,23 +64,25 @@
 .f-input-bookcase{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 20px;
+    margin: 0 26px;
+    padding: 0 20px;
 }
 
 .f-input-bookcase label{
+    margin-left: 4px;
+    margin-bottom: 5px;
+  text-align: left;
   font-family: var(--fonte-principal);
   color: var(--cor-marrom);
   font-weight: 500;
 }
 
-.form-bookcase label{
-    text-align: left;
 
-}
 
 .form-bookcase input{
+    display: flex;
+     justify-content: center;
+    align-items: center;
     background-color: var(--cor-branco-fraco);
     padding: 7px;
     border-radius: 15px;

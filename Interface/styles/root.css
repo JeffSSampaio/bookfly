@@ -7,6 +7,7 @@
     --cor-pastel-clara:#C7C0A4;
     --cor-pastel-escuro: #91865A;
     --cor-pastel-escuro-2: #7C724D;
+    --cor-pastel-escuro-3: #A7A18C;
     --box-shadow: 0 4px 6px rgba(0,0,0,0.2); /*  box-shadow: 0 4px 6px rgba(0,0,0,0.2);*/
 
 }
@@ -28,3 +29,8 @@ footer h1{
     font-family: var(--fonte-principal);
     font-weight: 800;
 }
+
+
+
+
+
