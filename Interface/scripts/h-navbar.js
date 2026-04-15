@@ -16,13 +16,24 @@ closeBtn.addEventListener("click", () => {
 
 
 } 
-
-buttons = [ 
+var buttons = [ 
     "<a href='../pages/perfil.html'>Perfil</a>",
+    "<a href='../pages/homepage.html'>HomePage</a>",
     "<a href='../pages/meus-livros.html'>Minhas Estantes</a>",
     "<a href='../pages/login.html'>Desconectar</a>",
 
 ]
+
+
+
+ var page = new URL(window.location.href)
+
+ if (page.pathname == '/Interface/pages/homepage.html') {
+    var index = buttons.indexOf("<a href='../pages/homepage.html'>HomePage</a>")
+    buttons.splice(index,1)
+ };
+
+
 
 content = document.getElementById("menu-content")
 

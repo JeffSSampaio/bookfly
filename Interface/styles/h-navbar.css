@@ -111,8 +111,21 @@ body{
     padding: 20px;
     margin: 10px;
     border-radius: 20px;
+    transform: scale(1.0);
+    transition: background-color 1s ease-out,
+    transform 1s ease-out
+    
+    ;
 
 }
+
+.btns-menu a:hover{
+    background-color: var(--cor-pastel-escuro-2);
+    transform: scale(0.8);
+    transition: all 1s ease-in;
+}
+
+
 .menu-header{
     display: flex;
     align-items: center;
