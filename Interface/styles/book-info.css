@@ -1,0 +1,89 @@
+
+.c-book-info{
+    display: flex;
+    flex-direction: row;
+    margin: 30px 270px;
+    padding: 20px 20px;
+    border-radius: 30px;
+    background-color: var(--cor-pastel-clara);
+    box-shadow: var(--box-shadow);
+}
+
+
+
+.c-book-info img{
+    margin: 30px;
+    width: 250px;
+    height: 300px;
+    border: 4px solid var(--cor-marrom);
+    border-radius: 20px;
+    box-shadow: var(--box-shadow);
+}
+
+.b-book-info{
+    margin: 20px;
+    padding: 0 50px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--box-shadow);
+    background-color: var(--cor-pastel-escuro-3);
+}
+
+
+.t-author , .t-book{
+     font-family: var(--fonte-principal);
+     color: var(--cor-marrom);
+     font-weight: 700;
+}
+
+.t-author {
+text-align: center;
+margin: 0;
+}
+
+.t-book{
+    text-align: center;
+   
+}
+
+.s-field-status{
+    background-color: var(--cor-pastel-clara);
+    padding: 8px 10px;
+    margin: 10px 40px;
+    text-align: center;
+    font-family: var(--fonte-principal);
+    font-weight: 700;
+    flex-wrap: wrap;
+    color: var(--cor-marrom);
+    border-radius: 20px;
+}
+
+.s-book h2{
+    font-family: var(--fonte-principal);
+    color: var(--cor-marrom);
+}
+
+.s-book p{
+    margin: 10px;
+    padding: 10px;
+}
+
+.btn-back{
+    display: flex;
+    margin: 30px 70px;
+    border: none;
+    padding: 10px;
+    color: var(--cor-marrom);
+    background-color: transparent;
+    font-weight: 700;
+    font-family: var(--fonte-principal);
+    font-size: 30px;
+    border-radius: 20px;
+    transition: background-color 1s ease-in-out;
+}
+.btn-back:hover{
+    background-color: var(--cor-marrom);
+    color: var(--cor-pastel-clara);
+    transition: all 1s ease-in-out;
+}
