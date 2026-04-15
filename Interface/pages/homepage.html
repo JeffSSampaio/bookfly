@@ -6,6 +6,7 @@
    <link rel="stylesheet" href="/Interface/styles/page-user.css">
    <link rel="stylesheet" href="/Interface/styles/h-navbar.css">
    <link rel="stylesheet" href="/Interface/styles/root.css">
+   <link rel="stylesheet" href="/Interface/styles/modal-emprestimo.css">
    <link rel="stylesheet" href="/Interface/styles/s-emprestimos.css">
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="stylesheet" href="/Interface/styles/homepage.css">
@@ -47,9 +48,28 @@
 
     <div class="body-page">
 
-        <dialog class="m-emprestimo" id="modal-emprestimo" >
-            
-        </dialog>
+        
+    <div class="modal-emprestimo">
+        <div class="c-modal-emprestimo">
+            <div class="c-b-modal-emprestimo">
+
+                <h1>Fazer Emprestimo</h1>
+                <form class="form-emprestimo" action="" method="post">
+                    <div class="f-input-emprestimo">
+                        <label for="">Nome da Estante</label>
+                        <input type="search" id="f-input-emprestimo">
+                    </div>
+
+                </form>
+                <div class="c-emprestimo-btn">
+                    <button onclick="closeModal()">fechar</button>
+                    <button onclick="confirmModal()">confirmar</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 
         <div class="sec-1">
             <div class="btn-emprestimo-container">
@@ -88,7 +108,8 @@
             BookFLy
         </h1>
     </footer>
-    
+
+<script src="/Interface/scripts/modal-emprestimo.js"></script>    
 <script src="/Interface/scripts/s-emprestimos.js"></script>
 <script src="/Interface/scripts/h-navbar.js"></script>
 </body>
