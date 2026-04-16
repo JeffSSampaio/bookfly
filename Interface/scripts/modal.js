@@ -191,6 +191,8 @@ function abrirModalCadastro(){
         ],
         onSubmit: (dados) => {
             console.log(dados);
+            let content = document.getElementById('c-register-books');
+
         }
     });
 }
@@ -373,4 +375,33 @@ var container_devolucao = document.getElementById('devolucao')
         }
     )
 
+}
+
+function abrirCadastrarLivro(){
+    modalForm(
+    {
+        titulo:'Cadastrar Livros ',
+        campos:
+        [
+            {label:'Titulo',type:'text',name:'titulo'},
+            {label:'Capa',type:'text',name:'capa'},
+             {label:'Qtd',type:'text',name:'quantidade'}
+
+        ],
+        onSubmit: (dado)=>{
+            console.log(dado)
+            var content = document.getElementById('c-register-books');
+
+                content.innerHTML += `
+                <div clas="c-book">
+                     <h2>${dado.titulo}</h2>
+                     <img src="${dado.capa}" alt="" />
+                     <p>Quantidade Disponível: ${dado.quantidade}</p>
+                 </div>
+                 `;
+            
+
+        }
+    }
+)
 }
