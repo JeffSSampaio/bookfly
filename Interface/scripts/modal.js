@@ -72,7 +72,7 @@ function modalForm({ titulo, campos = [], onSubmit }) {
 }
 
 // modal so que com o style
-function modalForm({ titulo, campos = [], onSubmit, styles = {} }) {
+function modalFormStyle({ titulo, campos = [], onSubmit, styles = {} }) {
 
     let htmlContent = "";
 
@@ -171,7 +171,7 @@ function applyStyles(styles, modal) {
 }
 
 
-      function closeModal(){
+function closeModal(){
     const modals = document.querySelectorAll(".modal");
     const modal = modals[modals.length - 1];
 
@@ -192,3 +192,40 @@ function abrirModalCadastro(){
         }
     });
 }
+
+
+function abrirModalEmprestimo(){
+
+ modalForm({
+        titulo: "Cadastro",
+        campos: [
+            { label: "Nome da Estante", type: "text", name: "name" },
+            
+        ],
+        onSubmit: (dado) => {
+            console.log(dado);
+
+
+     var bookcase = document.getElementById('bookcase');
+
+     var name_bookcase = dado.name;
+
+     if(name_bookcase != ''){
+     bookcase.innerHTML +=  `
+     <div class="title-bookase-container">
+            <h1>${name_bookcase}</h1>
+            <span>  <img src="/Interface/assets/iconAdd.svg" alt=""></span>
+            <span>  <img src="/Interface/assets/iconEdit.svg" alt=""></span>
+        </div>
+     <div class='books-container'>
+
+
+    </div>
+     `
+}
+        }
+    });
+}
+
+    
+
