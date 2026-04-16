@@ -49,8 +49,8 @@ bookcases.forEach(element => {
     
         <div class="title-bookase-container">
             <h1>${element.name}</h1>
-            <span>  <img src="/Interface/assets/iconAdd.svg" alt=""></span>
-            <span>  <img src="/Interface/assets/iconEdit.svg" alt=""></span>
+            <span>  <img src="/Interface/assets/iconAdd.svg" alt="" onClick="abrirModalEstanteAdicao()"></span>
+            <span>  <img src="/Interface/assets/iconEdit.svg" alt="" onClick="abrirModalEstanteEdicao('${element.name}')"></span>
         </div>
        
 

@@ -227,7 +227,37 @@ function abrirModalEstante(){
     });
 }
 
-    
+function abrirModalEstanteEdicao(title=String){
+modalForm(
+    {
+        titulo:`Editar Livros de "${title}"`,
+        campos:
+        [
+            {label:'Edição',type:'text',name:'edit'}
+        ],
+        onSubmit: (dado)=>{
+            console.log(dados)
+        }
+    }
+)
+
+}
+
+function abrirModalEstanteAdicao(){
+modalForm(
+    {
+        titulo:'Adicionar Livros ',
+        campos:
+        [
+            {label:'Edição',type:'text',name:'edit'}
+        ],
+        onSubmit: (dado)=>{
+            
+        }
+    }
+)
+
+}
 
 function abrirModalEmprestimo(){
     modalForm(
