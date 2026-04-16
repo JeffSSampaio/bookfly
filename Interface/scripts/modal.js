@@ -1,46 +1,49 @@
-'use scripts'
-
-
-function modalForm(titulo, content = [], inHtml){
+function modalForm({ titulo, campos = [], onSubmit }) {
 
     let htmlContent = "";
-        content.forEach(element => {
-            
-          htmlContent += element;
 
-        })
+    campos.forEach(campo => {
+        htmlContent += `
+            <div>
+                <label>${campo.label}</label>
+                <input type="${campo.type}" name="${campo.name}" />
+            </div>
+        `;
+    });
 
-
-    return `
-    <div class="modal">
+    const modalHTML = `
+    <div class="modal" id="modal">
         <div class="c-modal">
             <div class="b-modal">
                 <h1>${titulo}</h1>
-                <form class="c-modal-form" action="" method="post">
-                   ${htmlContent}
+                <form class="c-modal-form" id="modalForm">
+                    ${htmlContent}
                 </form>
                 <div class="c-modal-btn">
-                    <button onclick="closeModal()">fechar</button>
-                    <button>confirmar</button>
+                    <button onclick="closeModal()">Fechar</button>
+                    <button id="confirmBtn">Confirmar</button>
                 </div>
             </div>
         </div>
-
     </div>
-    `
+    `;
+    
+    document.body.insertAdjacentHTML("beforeend", modalHTML);
 
-}
+    document.getElementById("confirmBtn").addEventListener("click", function(e){
+        e.preventDefault();
 
+        const form = document.getElementById("modalForm");
+        const formData = new FormData(form);
 
+        let dados = {};
 
+        formData.forEach((value, key) => {
+            dados[key] = value;
+        });
 
-function openModal(modal,id){
-
-    const modal = document.getElementById(id);
-     modal.style.display='block';
-}
-
-function closeModal(modal,id){
-      const modal = document.querySelector(id);
-     modal.style.display='none';
+        if(onSubmit){
+            onSubmit(dados);
+        }
+    });
 }
