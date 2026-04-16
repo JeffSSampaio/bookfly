@@ -194,10 +194,10 @@ function abrirModalCadastro(){
 }
 
 
-function abrirModalEmprestimo(){
+function abrirModalEstante(){
 
  modalForm({
-        titulo: "Cadastro",
+        titulo: "Criar Estante",
         campos: [
             { label: "Nome da Estante", type: "text", name: "name" },
             
@@ -229,3 +229,114 @@ function abrirModalEmprestimo(){
 
     
 
+function abrirModalEmprestimo(){
+    modalForm(
+        {
+            titulo: 'Fazer Emprestimo',
+            campos:[
+                {label:'Nome do Livro',type:'search', name:'name'}
+                ],
+                onSubmit: (dado)=>{
+                    var container_emprestimo = document.getElementById('emprestimo');
+var container_devolucao = document.getElementById('devolucao')
+
+ dado.forEach(element => {
+    
+    var status = [
+        'style="color: blue ;"',
+        'style="color: red ;"',
+        'style="color: green ;"'    
+        
+    ] 
+
+        if(element.situation == 'lending' ){
+
+
+        if(element.status == "Devolvido"){
+             container_emprestimo.innerHTML += `
+        <div class="c-card-emprestimo">
+          <img src=${element.cover}>
+          <div class="card-info-text">
+          <h1>${element.title.toUpperCase()}</h1>
+          <p>${element.author}</p>
+          <span ${status[2]} >${element.status}</span>
+          </div>
+        </div>
+        `  
+        } else if(element.status == "Em Andamento"){
+             container_emprestimo.innerHTML += `
+        <div class="c-card-emprestimo">
+          <img src=${element.cover}>
+          <div class="card-info-text">
+          <h1>${element.title.toUpperCase()}</h1>
+          <p>${element.author}</p>
+          <span ${status[0]} >${element.status}</span>
+          </div>
+        </div>
+        `  
+        } else if(element.status =="Devolver"){
+             container_emprestimo.innerHTML += `
+        <div class="c-card-emprestimo">
+          <img src=${element.cover}>
+          <div class="card-info-text">
+          <h1>${element.title.toUpperCase()}</h1>
+          <p>${element.author}</p>
+          <span ${status[1]} >${element.status}</span>
+          </div>
+        </div>
+        `  
+        } 
+
+          }
+
+            if(element.situation == 'devolution' ){
+
+
+        if(element.status == "Devolvido"){
+             container_devolucao.innerHTML += `
+        <div class="c-card-emprestimo">
+          <img src=${element.cover}>
+          <div class="card-info-text">
+          <h1>${element.title.toUpperCase()}</h1>
+          <p>${element.author}</p>
+          <span ${status[2]} >${element.status}</span>
+          </div>
+        </div>
+        `  
+        } else if(element.status == "Em Andamento"){
+             container_devolucao.innerHTML += `
+        <div class="c-card-emprestimo">
+          <img src=${element.cover}>
+          <div class="card-info-text">
+          <h1>${element.title.toUpperCase()}</h1>
+          <p>${element.author}</p>
+          <span ${status[0]} >${element.status}</span>
+          </div>
+        </div>
+        `  
+        } else if(element.status =="Devolver"){
+             container_devolucao.innerHTML += `
+        <div class="c-card-emprestimo">
+          <img src=${element.cover}>
+          <div class="card-info-text">
+          <h1>${element.title}</h1>
+          <p>${element.author}</p>
+          <span ${status[1]} >${element.status}</span>
+          </div>
+        </div>
+        `  
+        } 
+
+          }
+
+
+
+
+      
+    });
+
+                }
+        }
+    )
+
+}

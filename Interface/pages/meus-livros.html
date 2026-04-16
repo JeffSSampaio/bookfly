@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="/Interface/styles/page-user.css">
    <link rel="stylesheet" href="/Interface/styles/h-navbar.css">
+   <link rel="stylesheet" href="/Interface/styles/modal.css">
    <link rel="stylesheet" href="/Interface/styles/meus-livros.css">
-   <link rel="stylesheet" href="/Interface/styles/modal-estante.css">
     <link rel="stylesheet" href="/Interface/styles/root.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,30 +23,6 @@
                 <h1>Menu</h1>
             </div>
         </div>
-    </div>
-
-    <div id="overlay"></div>
-
-
-    <div class="modal-bookcase">
-        <div class="c-modal-bookcase">
-            <div class="c-b-modal-bookcase">
-
-                <h1>Estante</h1>
-                <form class="form-bookcase" action="" method="post">
-                    <div class="f-input-bookcase">
-                        <label for="">Nome da Estante</label>
-                        <input type="text" id="input-bookcase">
-                    </div>
-
-                </form>
-                <div class="c-bookcase-btn">
-                    <button onclick="closeModal()">fechar</button>
-                    <button onclick="confirmModal()">confirmar</button>
-                </div>
-            </div>
-        </div>
-
     </div>
 
 
@@ -68,7 +44,7 @@
 
     <div class="bookcase-container">
             <div class="c-btn-bookcase">
-                <button class="btn-bookcase" onclick="openModal()"> Criar Estante</button>
+                <button class="btn-bookcase" onclick="abrirModalEstante()"> Criar Estante</button>
             </div>
   
         
@@ -79,9 +55,9 @@
 
     </div>
 
-<script src="/Interface/scripts/modal-estante.js"></script>
+
 <script src="/Interface/scripts/bookcase.js"></script>
 <script src="/Interface/scripts/h-navbar.js"></script>
-
+<script src="/Interface/scripts/modal.js"></script>
 </body>
 </html>
