@@ -1,3 +1,5 @@
+
+
 function modalForm({ titulo, campos = [], onSubmit }) {
 
     let htmlContent = "";
@@ -210,19 +212,21 @@ function abrirModalEstante(){
 
      var name_bookcase = dado.name;
 
-     if(name_bookcase != ''){
-     bookcase.innerHTML +=  `
-     <div class="title-bookase-container">
-            <h1>${name_bookcase}</h1>
-            <span>  <img src="/Interface/assets/iconAdd.svg" alt=""></span>
-            <span>  <img src="/Interface/assets/iconEdit.svg" alt=""></span>
-        </div>
-     <div class='books-container'>
-
-
-    </div>
-     `
-}
+    if (name_bookcase !== '') {
+        
+                bookcase.innerHTML += `
+                <div class="title-bookase-container">
+                    <h1>${name_bookcase}</h1>
+                    <span> 
+                        <img src="/Interface/assets/iconAdd.svg" onClick="abrirModalEstanteAdicao()" alt="Adicionar">
+                    </span>
+                    <span> 
+                        <img src="/Interface/assets/iconEdit.svg" onClick="abrirModalEstanteEdicao('${name_bookcase}')" alt="Editar">
+                    </span>
+                </div>
+                <div class='books-container'></div>
+                `;
+            }
         }
     });
 }
@@ -236,7 +240,7 @@ modalForm(
             {label:'Edição',type:'text',name:'edit'}
         ],
         onSubmit: (dado)=>{
-            console.log(dados)
+            console.log(dado)
         }
     }
 )
@@ -252,7 +256,7 @@ modalForm(
             {label:'Edição',type:'text',name:'edit'}
         ],
         onSubmit: (dado)=>{
-            
+            console.log(dado)
         }
     }
 )
