@@ -172,7 +172,9 @@ function applyStyles(styles, modal) {
 
 
       function closeModal(){
-    const modal = document.getElementById("modal");
+    const modals = document.querySelectorAll(".modal");
+    const modal = modals[modals.length - 1];
+
     if(modal){
         modal.remove();
     }
