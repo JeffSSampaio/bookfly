@@ -20,6 +20,11 @@ body{
     align-items: center;
 }
 
+.title-logo img{
+    height: 50px;
+    margin: 5px 15px;
+}
+
 .title-logo h1{
     color: var(--marfin);
     font-weight: bolder;

@@ -1,11 +1,13 @@
 
 .c-book-info{
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: row;
     margin: 30px 270px;
     padding: 20px 20px;
     border-radius: 30px;
-    background-color: var(--cor-pastel-clara);
+    background-color: white;
     box-shadow: var(--box-shadow);
 }
 
@@ -15,9 +17,26 @@
     margin: 30px;
     width: 250px;
     height: 300px;
-    border: 4px solid var(--cor-marrom);
+    border: 4px solid var(--ambar-dourado);
     border-radius: 20px;
     box-shadow: var(--box-shadow);
+}
+
+.s-book-status{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin: 20px 5px;
+    padding: 0;
+    gap: 1px;
+    
+    color: var(--verde-medio);
+}
+.s-book-status p{
+    background-color: white;
+}
+.s-book-status h2{
+    margin: 0;
 }
 
 .b-book-info{
@@ -25,48 +44,61 @@
     padding: 0 50px;
     border-radius: 20px;
     display: flex;
+    justify-content: center;
     flex-direction: column;
     box-shadow: var(--box-shadow);
-    background-color: var(--cor-pastel-escuro-3);
+    background-color: var(--marfin);
 }
 
 
-.t-author , .t-book{
-     font-family: var(--fonte-principal);
-     color: var(--cor-marrom);
-     font-weight: 700;
-}
+
 
 .t-author {
-text-align: center;
-margin: 0;
+    text-align: center;
+    margin: 0;
+    color: var(--verde-medio);
+    font-weight: 700;
+     margin: 2px;
 }
 
 .t-book{
+    color: var(--verde-escuro);
     text-align: center;
-   
+    font-weight: 700;
+    margin: 10px;
 }
 
 .s-field-status{
-    background-color: var(--cor-pastel-clara);
     padding: 8px 10px;
-    margin: 10px 40px;
+    margin: 1px 10px;
     text-align: center;
     font-family: var(--fonte-principal);
     font-weight: 700;
+    background-color: white;
     flex-wrap: wrap;
-    color: var(--cor-marrom);
+    color: var(--verde-vivo);
     border-radius: 20px;
 }
 
+
+
+.s-book{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+}
+
 .s-book h2{
-    font-family: var(--fonte-principal);
-    color: var(--cor-marrom);
+    text-align: left;
+    color: var(--verde-medio);
+    margin: 0;
+    padding: 0;
 }
 
 .s-book p{
-    margin: 10px;
-    padding: 10px;
+    margin: 10px 10px;
+    padding: 5px;
 }
 
 .btn-back{
@@ -74,16 +106,15 @@ margin: 0;
     margin: 30px 70px;
     border: none;
     padding: 10px;
-    color: var(--cor-marrom);
-    background-color: transparent;
+    color: var(--marfin);
+    background-color: var(--verde-escuro);
     font-weight: 700;
-    font-family: var(--fonte-principal);
     font-size: 30px;
     border-radius: 20px;
     transition: background-color 1s ease-in-out;
 }
 .btn-back:hover{
-    background-color: var(--cor-marrom);
-    color: var(--cor-pastel-clara);
+    background-color: var(--verde-medio);
+    color: var(--marfin);
     transition: all 1s ease-in-out;
 }
