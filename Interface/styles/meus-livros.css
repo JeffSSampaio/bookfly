@@ -43,18 +43,22 @@
 
 
 .bookcase-body{
+    display: grid;
+    grid-template-columns: 1fr 1fr ;
      margin: 30px;
 }
 .title-bookase-container{
     display: flex;
+     text-align: left;
     align-items: center;
+    justify-content: center;
     flex-direction: row;
     margin: 10px;
 }
 
 .title-bookase-container h1{
-    text-align: left;
-    font-family: var(--fonte-principal);
+   
+
     color: var(--verde-escuro);
     margin: 10px 5px;
 }
@@ -68,42 +72,67 @@
     transition: transform 1s ease-in-out;
 }
 
+.c-book{
+    display: grid;
+    grid-template-columns: 1fr 1fr ;
+    margin: 20px;
+}
 
 .books-container{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
     border-radius: 20px;
 }
 .book{
     display: flex;
-    flex-direction: column;
-   background-color: var(--marfin);
-    padding: 20px;
+    flex-direction: row;
+   background-color: white;
+    padding: 15px 5px;
     border-radius: 20px;
     margin: 20px 10px;
     box-shadow: var(--box-shadow);
+    transform: scale(1.01);
+    transition: 
+        transform 1s ease-out
+    ;
 }
 
 
 .book:hover{
    
     cursor: pointer;
-    transform: scale(1.10);
+    transform: scale(1.04);
     transition: 
-        transform 1s ease-in-out
-    ;
+        transform 1s ease-in;
 }
 
+.book img{
+    margin: 0 10px;
+    height: 60px;
+    width: 60px;
+    padding: auto 0;
+}
 
-.book p{
-    color: var(--verde-medio);
-    font-family: var(--fonte-principal);
+.book h3, .book p{
+    text-align: center;
     font-size: 22px;
     margin: 2px;
-    font-weight: 700;
+   
 }
+
+.book h3{
+    color: var(--verde-escuro);
+    font-weight: 800;
+}
+
+.book p {
+ color: var(--verde-medio);
+ opacity: 80%;
+}
+
 .book-info{
     display: flex;
     flex-direction: column;

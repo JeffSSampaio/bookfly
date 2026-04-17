@@ -3,7 +3,7 @@
 
 var bookcases = [
     {
-        'name':"Terror em Dobro",
+        'name':"Estante 1",
         'books': [
         {
         'cover':'../assets/livro.png',
@@ -11,6 +11,16 @@ var bookcases = [
         'author':'Ganymédes José',
          },
           {
+        'cover':'../assets/livro.png',
+        'title':'girassol na Janela',
+        'author':'Ganymédes José',
+         },
+         {
+        'cover':'../assets/livro.png',
+        'title':'girassol na Janela',
+        'author':'Ganymédes José',
+         },
+         {
         'cover':'../assets/livro.png',
         'title':'girassol na Janela',
         'author':'Ganymédes José',
@@ -20,7 +30,7 @@ var bookcases = [
         ]
     },
       {
-        'name':"Terror em Dobro2",
+        'name':"Estante 2",
         'books': [
         {
         'cover':'../assets/livro.png',
@@ -32,6 +42,18 @@ var bookcases = [
         'title':'girassol na Janela',
         'author':'Ganymédes José',
          },
+         {
+        'cover':'../assets/livro.png',
+        'title':'girassol na Janela',
+        'author':'Ganymédes José',
+         },
+         {
+        'cover':'../assets/livro.png',
+        'title':'girassol na Janela',
+        'author':'Ganymédes José',
+         },
+         
+         
         ]
     },
     
@@ -44,17 +66,7 @@ var bookcase = document.getElementById('bookcase');
 bookcases.forEach(element => {
    
 
-    bookcase.innerHTML += `
-    
-    
-        <div class="title-bookase-container">
-            <h1>${element.name}</h1>
-            <span>  <img src="/Interface/assets/iconAdd.svg" alt="" onClick="abrirModalEstanteAdicao()"></span>
-            <span>  <img src="/Interface/assets/iconEdit.svg" alt="" onClick="abrirModalEstanteEdicao('${element.name}')"></span>
-        </div>
-       
-
- ` 
+   
     
   
     let livros = ""
@@ -68,7 +80,7 @@ bookcases.forEach(element => {
             <div class="book">
                   <img src=${book.cover} alt="">
                  <div class="book-info">
-                    <p>${book.title.toUpperCase()}</p>
+                    <h3>${book.title.toUpperCase()}</h3>
                      <p>${book.author}</p>
                 </div>
             </div>
@@ -78,11 +90,19 @@ bookcases.forEach(element => {
  
     })
 
+
+
     bookcase.innerHTML +=
     ` 
     <div class='books-container'>
-
-    ${livros}
+        <div class="title-bookase-container">
+            <h1>${element.name}</h1>
+            <span>  <img src="/Interface/assets/iconAdd.svg" alt="" onClick="abrirModalEstanteAdicao()"></span>
+            <span>  <img src="/Interface/assets/iconEdit.svg" alt="" onClick="abrirModalEstanteEdicao('${element.name}')"></span>
+        </div>
+        <div class="c-book">
+            ${livros}
+        </div>
 
     </div>
     `
