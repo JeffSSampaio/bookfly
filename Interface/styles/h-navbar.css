@@ -117,11 +117,14 @@ body{
 
 .body-menu h1{
     text-align: center;
-    color: var(--ambar-dourado);
+    color: var(--marfin);
     margin-bottom: 50px;
 
 }
 
+.body-menu{
+    margin: 20px;
+}
 
 .btns-menu a{
     text-decoration: none;
@@ -131,7 +134,7 @@ body{
     font-family: var(--fonte-principal);
     font-weight: 700;
     font-size: 28px;
-    padding: 20px;
+    padding: 10px;
     margin: 10px;
     border-radius: 20px;
     transform: scale(1.0);

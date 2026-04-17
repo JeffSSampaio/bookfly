@@ -15,7 +15,6 @@
 
 
 html, body {
-   
     margin: 0;
     padding: 0;
     display: flex;
@@ -52,7 +51,7 @@ footer{
 
 footer h1{
     text-align: center;
-    color: var(--ambar-dourado);
+    color: var(--marfin);
     font-family: var(--font-principal);
     font-weight: 800;
     margin: 0;

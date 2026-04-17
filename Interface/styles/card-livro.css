@@ -8,10 +8,45 @@
     background-color: white;
     margin: 10px ;
    padding: 10px;
-   width: 350px;
+   width: 300px;
   
     border-radius: 10px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.s-emprestimo-body{
+    margin: 5px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.s-emprestimo-container{
+    margin: 30px 90px;
+}
+
+.s-emprestimo{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.s-emprestimo-container{
+    margin: 50px;
+    
+}
+.s-emprestimo-container h1{
+     text-align: left;
+     margin: 20px;
+     border: none;
+     font-family: var(--fonte-principal);
+    font-weight: 800;
+    font-size: 25px;
+    color: var(--verde-escuro);
 }
 
 .c-card-emprestimo img {

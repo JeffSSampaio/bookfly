@@ -13,37 +13,7 @@ background-color: var(--marfin);
     flex-direction: column;
 }
 
-.s-emprestimo-body{
-    margin: 70px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
 
-.s-emprestimo-container{
-    margin: 20px 80px;
-}
-
-.s-emprestimo{
-  
-    border-radius: 10px;
-}
-
-.s-emprestimo-container {
-    font-family: var(--fonte-principal);
-    font-weight: 800;
-}
-
-
-.s-titulo-emprestimo{
-     text-align: left;
-     margin-left: 10px;
-     font-family: var(--fonte-principal);
-    font-weight: 800;
-    font-size: 25px;
-    color: var(--verde-escuro);
-}
  
 
 
@@ -52,7 +22,6 @@ background-color: var(--marfin);
     align-items: end;
     justify-content: end;
     flex-direction: row;
-    
     margin-right: 90px;
    
 }
@@ -61,7 +30,7 @@ background-color: var(--marfin);
     padding: 15px;
     border-radius: 20px;
     border: none;
-    margin: 50px 20px;
+    margin: 30px 20px;
     background-color: var(--verde-escuro);
      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }

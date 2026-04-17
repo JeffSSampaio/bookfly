@@ -8,6 +8,13 @@ var books = [
         'status':'Em Andamento',
         'situation':'lending',
     },
+     {
+        'cover':'/Interface/assets/livro.png',
+        'title':'girassol na Janela',
+        'author':'Ganymédes José',
+        'status':'Em Andamento',
+        'situation':'lending',
+    },
     {
         'cover':'/Interface/assets/livro.png',
         'title':'girassol na Janela',
@@ -23,6 +30,15 @@ var books = [
         'situation':'devolution',
     }
     ,
+    {
+        'cover':'/Interface/assets/livro.png',
+        'title':'girassol na Janela',
+        'author':'Ganymédes José',
+        'status':'Devolvido',
+        'situation':'devolution',
+    }
+    ,
+   
     {
         'cover':'/Interface/assets/livro.png',
         'title':'girassol na Janela',
