@@ -32,7 +32,7 @@
 }
 .card-info-text .c-emprestimo-text-title{
     color:var(--verde-escuro);
-    font-weight: bolder;
+    font-weight: 700;
     font-size: 20px;
 }
 

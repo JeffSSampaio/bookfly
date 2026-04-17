@@ -23,7 +23,7 @@ body{
 .title-logo h1{
     color: var(--marfin);
     font-weight: bolder;
-    font-family: var(--fonte-principal); 
+   
 }
 
 .icon-menu{
@@ -117,7 +117,6 @@ body{
 
 .body-menu h1{
     text-align: center;
-    font-family: var(--fonte-principal);
     color: var(--ambar-dourado);
     margin-bottom: 50px;
 
@@ -138,7 +137,6 @@ body{
     transform: scale(1.0);
     transition: background-color 1s ease-out,
     transform 1s ease-out
-    
     ;
 
 }
