@@ -1,30 +1,30 @@
 .c-profile{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+
     margin: 15% 39%;
     border: none;
     padding: 20px;
     border-radius: 20px;
-    background-color: var(--cor-branco-fraco);
+    background-color: var(--verde-escuro);
     box-shadow: var(--box-shadow);
 }
 
 .c-profile h3{
     margin: 0;
     text-align: left;
-
+    color: var(--ambar-dourado);
      padding:0;
 }
 
 .btn-back{
-    display: flex;
-    margin: 30px 70px;
+ 
+    margin: 30px;
     border: none;
+   
     padding: 10px;
-    color: var(--cor-marrom);
-    background-color: transparent;
+    color: var(--ambar-dourado);
+    background-color: var(--verde-medio);
     font-weight: 700;
     font-family: var(--fonte-principal);
     font-size: 30px;
@@ -32,7 +32,6 @@
     transition: background-color 1s ease-in-out;
 }
 .btn-back:hover{
-    background-color: var(--cor-marrom);
-    color: var(--cor-pastel-clara);
+    background-color: var(--verde-escuro);
     transition: all 1s ease-in-out;
 }

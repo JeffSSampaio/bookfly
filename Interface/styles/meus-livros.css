@@ -15,18 +15,18 @@
     margin: 30px;
     border: none;
     border-radius: 20px;
-    background-color: var(--cor-pastel-escuro-2);
+    background-color: var(--verde-escuro);
     font-size: 20px;
     font-family: var(--fonte-principal);
     font-weight: 800;
-    color: var(--cor-branco-fraco);
+    color: var(--marfin);
     box-shadow: var(--box-shadow);
   
 
 }
 
 .btn-bookcase:hover{
-    background-color: var(--cor-marrom);
+    background-color: var(--verde-medio);
     transform: scale(1.1);
     cursor: pointer;
     transition: background-color 1s ease-in,
@@ -55,7 +55,7 @@
 .title-bookase-container h1{
     text-align: left;
     font-family: var(--fonte-principal);
-    color: var(--cor-marrom);
+    color: var(--verde-escuro);
     margin: 10px 5px;
 }
 
@@ -74,14 +74,12 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background-color: var(--cor-pastel-clara);
-    box-shadow: var(--box-shadow);
     border-radius: 20px;
 }
 .book{
     display: flex;
     flex-direction: column;
-    background-color: var(--cor-pastel-escuro);
+   background-color: var(--marfin);
     padding: 20px;
     border-radius: 20px;
     margin: 20px 10px;
@@ -90,7 +88,7 @@
 
 
 .book:hover{
-    border:5px solid var(--cor-marrom);
+   
     cursor: pointer;
     transform: scale(1.10);
     transition: 
@@ -100,7 +98,7 @@
 
 
 .book p{
-    color: var(--cor-marrom);
+    color: var(--verde-medio);
     font-family: var(--fonte-principal);
     font-size: 22px;
     margin: 2px;

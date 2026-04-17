@@ -1,35 +1,52 @@
 :root{
-    --cor-marrom: #332211;
-    --cor-branco-fraco:#CFCCCC;
-    --cor-branco-fraco-2: #ADADAD;
-    --fonte-principal: 'League Spartan', sans-serif;
-    --cor-pastel: #A39664;
-    --cor-pastel-clara:#C7C0A4;
-    --cor-pastel-escuro: #91865A;
-    --cor-pastel-escuro-2: #7C724D;
-    --cor-pastel-escuro-3: #A7A18C;
+   --verde-escuro:#1B3A2D;
+    --verde-medio: #2E5C44;
+    --verde-vivo: #4E7C52;
+    --marfin:#F5EDD8;
+    --ambar-dourado:#C9A836;
+    --badge-amarelo:#FFF3C4;
+    --badge-verde: #D6F0E0;
+    --badge-vermelho: #FAD4D4;
     --box-shadow: 0 4px 6px rgba(0,0,0,0.2); /*  box-shadow: 0 4px 6px rgba(0,0,0,0.2);*/
 
 }
 
 
+
+html, body {
+   
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    min-height: 100vh;
+    background-color: var(--marfin);
+}
+
+
+
+
 /* Footer global    */
 
 footer{
-    position: static;
+    position: relative;
     bottom: 0;
-    background-color: var(--cor-marrom);
-    width: 100%;   
-    margin-top: 100px;
+    background-color: var(--verde-escuro);
+    width: 97%;
+    margin-top: auto;
+    padding: 20px;
 }
 
 footer h1{
     text-align: center;
-    color: var(--cor-branco-fraco);
-    font-family: var(--fonte-principal);
+    color: var(--ambar-dourado);
+    font-family: var(--font-principal);
     font-weight: 800;
+    margin: 0;
 }
-
 
 
 

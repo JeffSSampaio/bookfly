@@ -5,7 +5,6 @@ body{
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    background-color: var(--cor-pastel);
 }
 
 .login-container{
@@ -23,7 +22,7 @@ body{
     align-items: center;
 }
 .title-logo h1{
-    color: var(--cor-marrom);
+    color: var(--ambar-dourado);
     font-weight: bolder;
     font-family: var(--fonte-principal); 
 }
@@ -33,7 +32,7 @@ body{
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background-color: var(--cor-branco-fraco);
+    background-color: var(--verde-escuro);
     padding: 20px;
     
     border-radius: 20px;
@@ -42,7 +41,7 @@ body{
 }
 
 .login-container-form h2{
-    color: var(--cor-marrom);
+    color: var(--ambar-dourado);
     font-family: var(--fonte-principal);
     font-size: 28px;
     margin: 5px;
@@ -59,7 +58,7 @@ body{
 
 .container-form label{
     font-family: var(--fonte-principal);
-    color: var(--cor-marrom);
+    color: var(--marfin);
     font-weight: bolder;
     font-size: 25px;
     margin-left: 10px;
@@ -72,13 +71,15 @@ body{
     font-size: 20px;
     border: none;
     outline: none;
-    background-color: var(--cor-branco-fraco-2);
+    color: var(--ambar-dourado);
+    background-color: var(--verde-medio);
+    transition: background-color 1s ease-out;
 }
 
 
 .container-form input:hover{
-    border: 1px solid var(--cor-marrom);
-    transition: border 1s ease-in-out, ease-in-out;
+    border: 1px solid var(--verde-escuro);
+    transition: border 1s ease-in;
 }
 
 .container-form-btn{
@@ -87,7 +88,8 @@ body{
     font-size: 10px;
     border: none;
     margin: 10px;
-    background-color: var(--cor-pastel);
+    color: var(--marfin);
+    background-color: var(--verde-medio);
     
 }
 
@@ -99,13 +101,13 @@ body{
 
 .link {
     font-family: var(--fonte-principal);
-    color: var(--cor-marrom);
+    color: var(--verde-medio);
     font-weight: 400;
     margin: 10px;
 }
 
 .link a{
-    color: var(--cor-marrom);
+    color: var(--verde-medio);
     text-decoration: none;
     font-weight: 500;
 }

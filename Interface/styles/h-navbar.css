@@ -8,6 +8,7 @@ body{
      display: flex;
     flex-direction: row;
     justify-content: space-between;
+    background-color: var(--verde-escuro);
     align-items: center;
       box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
@@ -20,7 +21,7 @@ body{
 }
 
 .title-logo h1{
-    color: var(--cor-marrom);
+    color: var(--marfin);
     font-weight: bolder;
     font-family: var(--fonte-principal); 
 }
@@ -68,14 +69,14 @@ body{
   padding: 12px 40px 12px 15px; 
   border: none;
   border-radius: 10px;
-  background: var(--cor-branco-fraco);
+  background: var(--verde-medio);
   font-size: 18px;
   font-weight: bold;
   color: #5a4a2e;
   box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 .search-input-container input::placeholder {
-  color: var(--cor-marrom);
+  color: var(--marfin);
   font-family: var(--fonte-principal);
   font-weight: bold;
   font-size: 20px;
@@ -97,7 +98,7 @@ body{
   right: -300px; 
   width: 300px;
   height: 100%;
-  background-color: var(--cor-pastel);
+  background-color: var(--verde-escuro);
   box-shadow: -5px 0 10px rgba(0,0,0,0.2);
   transition: 0.3s;
   z-index: 999;
@@ -117,7 +118,7 @@ body{
 .body-menu h1{
     text-align: center;
     font-family: var(--fonte-principal);
-    color: var(--cor-marrom);
+    color: var(--ambar-dourado);
     margin-bottom: 50px;
 
 }
@@ -125,8 +126,9 @@ body{
 
 .btns-menu a{
     text-decoration: none;
-    color: var(--cor-marrom);
-    background-color: var(--cor-pastel-escuro);
+    color: var(--marfin);
+    background-color: var(--verde-medio);
+    border: 1px solid var(--marfin);
     font-family: var(--fonte-principal);
     font-weight: 700;
     font-size: 28px;
@@ -142,7 +144,7 @@ body{
 }
 
 .btns-menu a:hover{
-    background-color: var(--cor-pastel-escuro-2);
+    background-color: var(--verde-escuro);
     transform: scale(0.8);
     transition: all 1s ease-in;
 }

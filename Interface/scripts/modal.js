@@ -7,8 +7,8 @@ function modalForm({ titulo, campos = [], onSubmit }) {
     campos.forEach(campo => {
         htmlContent += `
         <div class="f-input-modal">
-            <label>${campo.label}</label>
-            <input type="${campo.type}" name="${campo.name}" />
+            <label for="${campo.name}">${campo.label}</label>
+            <input type="${campo.type}" name="${campo.name}" id="${campo.name}" />
         </div>
         `;
     });

@@ -1,6 +1,13 @@
 
+/* Background */
+
+body{
+background-color: var(--marfin);
+
+}
+
 .body-page{
-    margin: 0 auto;
+   
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,7 +15,7 @@
 }
 
 .s-emprestimo-body{
-    margin: 0px 20px;
+    margin: 70px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -16,31 +23,27 @@
 }
 
 .s-emprestimo-container{
-    margin: 20px 60px;
-    text-align: center;
-
+    margin: 20px 80px;
 }
 
 .s-emprestimo{
-    background-color: var(--cor-pastel-clara);
-    margin: 60px;
-    padding: 20px;
+  
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
 .s-emprestimo-container {
     font-family: var(--fonte-principal);
     font-weight: 800;
-    color: var(--cor-marrom);
 }
 
 
 .s-titulo-emprestimo{
+     text-align: left;
+     margin-left: 10px;
      font-family: var(--fonte-principal);
     font-weight: 800;
-    font-size: 39px;
-    color: var(--cor-marrom);
+    font-size: 25px;
+    color: var(--verde-escuro);
 }
  
 
@@ -60,14 +63,14 @@
     border-radius: 20px;
     border: none;
     margin: 50px 20px;
-    background-color: var(--cor-branco-fraco);
+    background-color: var(--verde-escuro);
      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 .btn-emprestimo span{
     font-family: var(--fonte-principal);
     font-weight: 700;
     font-size: 20px;
-    color: var(--cor-marrom);
+    color: var(--marfin);
 }
 
 

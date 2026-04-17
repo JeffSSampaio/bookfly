@@ -1,34 +1,67 @@
 
 .c-card-emprestimo{
     display: flex;
-    justify-content: center;
     flex-direction: row;
-    background-color: var(--cor-pastel);
-    margin: 20px;
-    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: white;
+    margin: 10px ;
+   padding: 10px;
+   width: 350px;
+  
     border-radius: 10px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
 .c-card-emprestimo img {
-    height: 130px;
-    margin: 15px;
+    height: 78px;
+    border-radius: 5px;
 }
 .card-info-text{
-    padding: 5px;
+    padding: 0px;
     text-align: left;
     font-family: var(--font-principal);
     font-weight: 700;
 }
 
-
+.card-info-text .c-emprestimo-text-author{
+    color: var(--verde-medio);
+    font-size: 15px;
+    opacity: 80%;
+}
+.card-info-text .c-emprestimo-text-title{
+    color:var(--verde-escuro);
+    font-weight: bolder;
+    font-size: 20px;
+}
 
 .c-card-emprestimo h1, .c-card-emprestimo span, .c-card-emprestimo p{
-    margin: 9px auto;
-    padding: 0 auto;
-}
-.card-info-text p {
-       color: var(--cor-marrom);
-     
+    margin: 9px ;
+    padding: 1px ;
 }
 
+.card-info-text .text-emprestimo-ongoing{
+    color: var(--ambar-dourado);
+    font-weight: 700;
+    background-color: var(--badge-amarelo);
+    font-family: var(--font-principal);
+    font-size: 15px;
+}
+
+
+.card-info-text .text-emprestimo-vermelho{
+    color: red;
+    font-weight: 700;
+    background-color: var(--badge-vermelho);
+    font-family: var(--font-principal);
+    font-size: 15px;
+}
+
+.card-info-text .text-emprestimo-verde{
+    color: green;
+    font-weight: 700;
+    background-color: var(--badge-verde);
+    font-family: var(--font-principal);
+    font-size: 15px;
+}

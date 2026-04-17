@@ -53,9 +53,9 @@ var container_devolucao = document.getElementById('devolucao')
         <div class="c-card-emprestimo">
           <img src=${element.cover}>
           <div class="card-info-text">
-          <h1>${element.title.toUpperCase()}</h1>
-          <p>${element.author}</p>
-          <span ${status[2]} >${element.status}</span>
+          <h1 class="c-emprestimo-text-title">${element.title}</h1>
+          <p class="c-emprestimo-text-author">${element.author}</p>
+          <span class="text-emprestimo-verde">${element.status}</span>
           </div>
         </div>
         `  
@@ -64,9 +64,9 @@ var container_devolucao = document.getElementById('devolucao')
         <div class="c-card-emprestimo">
           <img src=${element.cover}>
           <div class="card-info-text">
-          <h1>${element.title.toUpperCase()}</h1>
-          <p>${element.author}</p>
-          <span ${status[0]} >${element.status}</span>
+          <h1 class="c-emprestimo-text-title">${element.title}</h1>
+          <p class="c-emprestimo-text-author">${element.author}</p>
+          <span class="text-emprestimo-ongoing">${element.status}</span>
           </div>
         </div>
         `  
@@ -75,9 +75,9 @@ var container_devolucao = document.getElementById('devolucao')
         <div class="c-card-emprestimo">
           <img src=${element.cover}>
           <div class="card-info-text">
-          <h1>${element.title.toUpperCase()}</h1>
-          <p>${element.author}</p>
-          <span ${status[1]} >${element.status}</span>
+          <h1 class="c-emprestimo-text-title">${element.title}</h1>
+          <p class="c-emprestimo-text-author">${element.author}</p>
+          <span class="text-emprestimo-vermelho">${element.status}</span>
           </div>
         </div>
         `  
@@ -93,9 +93,9 @@ var container_devolucao = document.getElementById('devolucao')
         <div class="c-card-emprestimo">
           <img src=${element.cover}>
           <div class="card-info-text">
-          <h1>${element.title.toUpperCase()}</h1>
-          <p>${element.author}</p>
-          <span ${status[2]} >${element.status}</span>
+          <h1 class="c-emprestimo-text-title">${element.title}</h1>
+          <p class="c-emprestimo-text-author">${element.author}</p>
+          <span class="text-emprestimo-verde">${element.status}</span>
           </div>
         </div>
         `  
@@ -104,9 +104,9 @@ var container_devolucao = document.getElementById('devolucao')
         <div class="c-card-emprestimo">
           <img src=${element.cover}>
           <div class="card-info-text">
-          <h1>${element.title.toUpperCase()}</h1>
-          <p>${element.author}</p>
-          <span ${status[0]} >${element.status}</span>
+          <h1 class="c-emprestimo-text-title">${element.title}</h1>
+          <p class="c-emprestimo-text-author">${element.author}</p>
+          <span class="text-emprestimo-ongoing">${element.status}</span>
           </div>
         </div>
         `  
@@ -115,9 +115,9 @@ var container_devolucao = document.getElementById('devolucao')
         <div class="c-card-emprestimo">
           <img src=${element.cover}>
           <div class="card-info-text">
-          <h1>${element.title}</h1>
-          <p>${element.author}</p>
-          <span ${status[1]} >${element.status}</span>
+          <h1 class="c-emprestimo-text-title">${element.title}</h1>
+          <p class="c-emprestimo-text-author">${element.author}</p>
+          <span class="text-emprestimo-vermelho">${element.status}</span>
           </div>
         </div>
         `  

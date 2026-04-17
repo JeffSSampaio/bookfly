@@ -20,7 +20,7 @@
     padding: 20px;
     border-radius: 5px;
     width: 50%;
-    background-color: var(--cor-pastel-clara);
+    background-color: var(--marfin);
 }
 
 .c-modal-btn{
@@ -35,52 +35,51 @@
 .c-modal-btn button{
     display: flex;
     padding: 10px;
-    background-color: var(--cor-pastel-escuro);
+    background-color: var(--verde-medio);
     border: none;
     border-radius: 20px;
     font-family: var(--fonte-principal);
-    color: var(--cor-marrom);
-    font-weight: 500;
-    border: 2px solid var(--cor-marrom);
+    color: var(--marfin);
+    font-weight: bolder;
+    border: 2px solid var(--marfin);
 
 }
 
 
 .c-modal-btn button:hover{
-    background-color: var(--cor-pastel-clara);
+    background-color: var(--verde-escuro);
     transition: background-color 1s ease-in-out;
 }
 
 .b-modal h1{
     text-align: center;
-    color: var(--cor-marrom);
+    color: var(--verde-escuro);
     font-family: var(--fonte-principal);
     margin: 20px    
 }
 
-.f-input-modal{
+.f-input-modal {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    margin: 20px;
+    gap: 5px;
+   
 }
 
-.f-input-modal label{
-  font-family: var(--fonte-principal);
-  color: var(--cor-marrom);
-  font-weight: 500;
-}
-
-.c-modal-form label{
+.f-input-modal label {
+    font-family: var(--fonte-principal);
+    color: var(--verde-escuro);
+    font-weight: bolder;
+    margin: 5px 20px;
     text-align: left;
-
+    
+   
 }
 
-.c-modal-form input{
-    background-color: var(--cor-branco-fraco);
-    padding: 7px;
+.f-input-modal input {
+  
+    background-color: var(--verde-vivo);
+    padding: 7px 12px;
     border-radius: 15px;
     border: none;
-
 }
