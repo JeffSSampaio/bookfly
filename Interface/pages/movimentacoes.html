@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="/Interface/styles/page-user.css">
    <link rel="stylesheet" href="/Interface/styles/h-navbar.css">
     <link rel="stylesheet" href="/Interface/styles/root.css">
     <link rel="stylesheet" href="/Interface/styles/modal.css">
+    <link rel="stylesheet" href="/Interface/styles/table.css">
     <link rel="stylesheet" href="/Interface/styles/book-register.css">
  <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,16 +42,17 @@
         </div>
     </header>
 
-    <div class="b-register-book">
-        <h1>Livros</h1>
-        <div class="c-register-book-btn">
-            <input class="b-register-book-input" type="search" placeholder="Buscar">
-            <button class="b-register-book-btn" onclick="abrirCadastrarLivro()">Cadastrar Livro</button>
+
+
+      <div class="table-container">
+            <div class="table-title-c">
+                <h1>Movimentações</h1>
+               
+            </div>
+            <div id="table-movimentacoes"></div>
         </div>
-        <div class="content-register-book" id="c-register-books"></div>
-    </div>
-        
-    <div>
+    
+ 
 
     </div>
     <footer>
@@ -59,6 +60,7 @@
                 BookFLy
             </h1>
         </footer>
+        <script src="/Interface/scripts/table.js"></script>
 <script src="/Interface/scripts/h-navbar.js"></script>
 <script src="/Interface/scripts/modal.js"></script>
 </body>

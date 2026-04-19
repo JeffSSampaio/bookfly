@@ -25,7 +25,10 @@ var buttonsProfile = [
 ]
 
 var buttonAdmin =[
-    "<a href='../pages/a-homepage.html'>Homepage</a>",
+    "<a href='../pages/emprestimo.html'>Emprestimo</a>",
+    "<a href='../pages/estoque.html'>Estoque</a>",
+    "<a href='../pages/multas.html'>Multas</a>",
+    "<a href='../pages/movimentacoes.html'>Movimentações</a>",
     "<a href='../pages/login.html'>Desconectar</a>",
 ]
 
@@ -38,19 +41,33 @@ var buttonAdmin =[
     buttonsProfile.splice(index,1)
  };
 
-if (page.pathname.substr(-16).includes('/a-homepage.html')) {
-    var index = buttonAdmin.indexOf("<a href='../pages/a-homepage.html'>HomePage</a>")
-    buttonAdmin.splice(index,0)
+if (page.pathname == '/Interface/pages/emprestimo.html') {
+    index = buttonsProfile.indexOf("<a href='../pages/emprestimo.html'>Emprestimo</a>")
+
  };
 
 
 content = document.getElementById("menu-content")
 
 
-if(page.pathname.substr(-16).startsWith("/a-")){
+if(page.pathname == '/Interface/pages/homepage.html' || page.pathname == '/Interface/pages/perfil.html' || page.pathname == '/Interface/pages/meus-livros.html'){
 
+    
+    buttonsProfile.forEach(element => {
+        
+       
+        content.innerHTML+=
+        ` 
+        <div class='btns-menu'>
+        ${element}
+        </div>
+        `
+        
+    });
+    } else{
+        
         buttonAdmin.forEach(element=>{
-
+    
             content.innerHTML+=
              ` 
             <div class='btns-menu'>
@@ -58,20 +75,6 @@ if(page.pathname.substr(-16).startsWith("/a-")){
                     </div>
     `
         })
-
-    } else{
-    buttonsProfile.forEach(element => {
-   
-   
-    content.innerHTML+=
-    ` 
-    <div class='btns-menu'>
-    ${element}
-    </div>
-    `
-
-});
-
     }
 
 
