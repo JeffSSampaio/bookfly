@@ -23,7 +23,7 @@ public class LivroService {
     }
 
     public List<Livro> findByAutor(Long autorId) {
-        return livroRepository.findByAutorId(autorId);
+        return livroRepository.findByAuthorsId(autorId);
     }
 
     public List<Livro> findAvailable() {
