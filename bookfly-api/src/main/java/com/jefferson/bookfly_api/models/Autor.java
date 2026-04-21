@@ -24,6 +24,11 @@ public class Autor {
     @ManyToMany(mappedBy = "authors")
     private ArrayList<Livro> books;
 
+
+    public Long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }

@@ -25,6 +25,10 @@ public class Estoque {
         this.books = books;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public void addBook(Livro livro) {
         books.add(livro);
         livro.setStock(this);

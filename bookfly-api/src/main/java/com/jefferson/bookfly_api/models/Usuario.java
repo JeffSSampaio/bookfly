@@ -4,6 +4,7 @@ import com.jefferson.bookfly_api.enums.Role;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Usuario")
@@ -24,8 +25,16 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "usuario", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    private ArrayList<Usuario> users;
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    private List<Estante> bookcases;
+
+
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Emprestimo> loans;
+
+    public Long getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -59,5 +68,11 @@ public class Usuario {
         this.role = role;
     }
 
+    public List<Estante> getBookcases() {
+        return bookcases;
+    }
 
+    public void setBookcases(List<Estante> bookcases) {
+        this.bookcases = bookcases;
+    }
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 @Table(name = "livro")
 public class Livro {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -41,6 +41,9 @@ public class Livro {
     @Enumerated(EnumType.STRING)
     private ArrayList<Genero> genders;
 
+    public Long getId() {
+        return id;
+    }
 
     public String getTitle() {
         return title;

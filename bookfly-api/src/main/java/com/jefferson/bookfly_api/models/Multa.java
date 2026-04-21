@@ -24,6 +24,10 @@ public class Multa {
     private Emprestimo loan;
 
 
+    public Long getId() {
+        return id;
+    }
+
     public Boolean getPayed() {
         return payed;
     }

@@ -30,5 +30,44 @@ public class Movimentacao  {
     @CreationTimestamp
     private LocalDate createdDate;
 
-  
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDate getCreatedDate() {
+        return createdDate;
+    }
+
+    public Estoque getStock() {
+        return stock;
+    }
+
+    public void setStock(Estoque stock) {
+        this.stock = stock;
+    }
+
+    public Emprestimo getLoan() {
+        return loan;
+    }
+
+    public void setLoan(Emprestimo loan) {
+        this.loan = loan;
+    }
+
+    public TipoMovimentacao getTypeItem() {
+        return typeItem;
+    }
+
+    public void setTypeItem(TipoMovimentacao typeItem) {
+        this.typeItem = typeItem;
+    }
+
+    public int getQtd() {
+        return qtd;
+    }
+
+    public void setQtd(int qtd) {
+        this.qtd = qtd;
+    }
 }

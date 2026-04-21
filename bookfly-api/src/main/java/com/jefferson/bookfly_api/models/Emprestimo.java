@@ -25,6 +25,13 @@ public class Emprestimo {
     @Enumerated(EnumType.STRING)
     private StatusEmprestimo status;
 
+    @OneToOne(mappedBy = "loan", cascade = CascadeType.ALL)
+    private Multa multa;
+
+    public Long getId() {
+        return id;
+    }
+
     public Usuario getUser() {
         return user;
     }
