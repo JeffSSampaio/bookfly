@@ -81,4 +81,28 @@ public class Livro {
     public void setGenders(ArrayList<Genero> genders) {
         this.genders = genders;
     }
+
+    public int getQtd() {
+        return qtd;
+    }
+
+    public void setQtd(int qtd) {
+        this.qtd = qtd;
+    }
+
+    public boolean isQtdAvailabe() {
+        return qtdAvailabe;
+    }
+
+    public void setQtdAvailabe(boolean qtdAvailabe) {
+        this.qtdAvailabe = qtdAvailabe;
+    }
+
+    public Estoque getStock() {
+        return stock;
+    }
+
+    public void setStock(Estoque stock) {
+        this.stock = stock;
+    }
 }

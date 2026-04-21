@@ -24,4 +24,15 @@ public class Estoque {
     public void setBooks(ArrayList<Livro> books) {
         this.books = books;
     }
+
+    public void addBook(Livro livro) {
+        books.add(livro);
+        livro.setStock(this);
+    }
+
+    public void removeBook(Livro livro) {
+        books.remove(livro);
+        livro.setStock(null);
+    }
+
 }
