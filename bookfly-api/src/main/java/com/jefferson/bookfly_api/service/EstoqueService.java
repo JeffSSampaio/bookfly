@@ -24,7 +24,7 @@ public class EstoqueService {
         return estoqueRepository.findById(ESTOQUE_ID)
                 .orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
     }
-    public void addBookOnStock(ArrayList<Livro> books){
+    public void addBooksOnStock(ArrayList<Livro> books){
         Estoque estoque = getEstoque();
 
         List<Livro> allbooksStock = estoque.getBooks();
@@ -47,12 +47,52 @@ public class EstoqueService {
     }
 
 
+    public void addBookOnStock(Livro newBook) {
+        Estoque estoque = getEstoque();
+
+        List<Livro> allBooksStock = estoque.getBooks();
+
+        Optional<Livro> existBook = allBooksStock.stream()
+                .filter(b -> b.getTitle().equalsIgnoreCase(newBook.getTitle()))
+                .findFirst();
+
+        if (existBook.isPresent()) {
+            Livro book = existBook.get();
+            book.setQtd(book.getQtd() + newBook.getQtd());
+            livroRepository.save(book);
+        } else {
+            estoque.addBook(newBook);
+            estoqueRepository.save(estoque);
+        }
+    }
 
 
+    public void removeBookOnStock(Livro book) {
+        Estoque estoque = getEstoque();
 
+        List<Livro> allBooksStock = estoque.getBooks();
 
+        Optional<Livro> existBook = allBooksStock.stream()
+                .filter(b -> b.getTitle().equalsIgnoreCase(book.getTitle()))
+                .findFirst();
 
+        if (existBook.isPresent()) {
+            Livro existingBook = existBook.get();
 
+            if (existingBook.getQtd() <= 0) {
+                throw new RuntimeException("Livro já está com quantidade zero");
+            }
+
+            estoque.removeBook(existingBook);
+            estoqueRepository.save(estoque);
+        } else {
+            throw new RuntimeException("Livro não encontrado no estoque");
+        }
+    }
+
+    public void removeBooksOnStock(ArrayList<Livro> books) {
+        books.forEach(this::removeBookOnStock);
+    }
 
 
 }
