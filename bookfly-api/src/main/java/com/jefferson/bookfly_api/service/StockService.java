@@ -46,7 +46,13 @@ public class StockService {
     }
 
     public void updateBookQtd(Book book) {
-       bookService.createBook(book);
+
+        if (book.getQtd() > 0){
+            bookService.createBook(book);
+        }
+        throw new RuntimeException("Livro Indisponível no Stock");
+
+
     }
         public void addBookOnStock(Book newBook) {
             Stock stock = getStock();
@@ -93,13 +99,13 @@ public class StockService {
             Book existingBook = existBook.get();
 
             if (existingBook.getQtd() <= 0) {
-                throw new RuntimeException("Book já está com quantidade zero");
+                throw new RuntimeException("Livro já está com quantidade zero");
             }
 
             stock.removeBook(existingBook);
             stockRepository.save(stock);
         } else {
-            throw new RuntimeException("Book não encontrado no stock");
+            throw new RuntimeException("Livro não encontrado no stock");
         }
     }
 

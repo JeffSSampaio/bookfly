@@ -3,6 +3,7 @@ package com.jefferson.bookfly_api.service;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
 import com.jefferson.bookfly_api.models.Loan;
 import com.jefferson.bookfly_api.models.Penalty;
+import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.repository.PenaltyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,11 @@ public class PenaltyService {
 
     public Penalty getPenaltyById(Long id) {
         return penaltyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Penalty não encontrada"));
+                .orElseThrow(() -> new RuntimeException("Multa não encontrada"));
     }
 
 
-    public Optional<Penalty> getMultasByLoan(Loan loan) {
+    public Optional<Penalty> getPenaltiesByLoan(Loan loan) {
         return penaltyRepository.findByLoan(loan);
     }
     public Double calcValuePenaltyByDayPassed(Loan loan) {
@@ -75,7 +76,7 @@ public class PenaltyService {
         Penalty penalty = getPenaltyById(id);
 
         if (penalty.getPayed()) {
-            throw new RuntimeException("Penalty já foi paga");
+            throw new RuntimeException("Multa já foi paga");
         }
 
         penalty.setPayed(true);
@@ -84,5 +85,8 @@ public class PenaltyService {
         penaltyRepository.save(penalty);
     }
 
+    //public Optional<Penalty> getPenaltiesByUser(User user){
+    //    return penaltyRepository.findByPenaltyByUser(user);
+    //}
 
 }

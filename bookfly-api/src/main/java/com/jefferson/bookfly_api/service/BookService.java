@@ -17,7 +17,7 @@ public class BookService {
     }
     public Book findById(Long id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
     }
 
     public List<Book> findAll() {

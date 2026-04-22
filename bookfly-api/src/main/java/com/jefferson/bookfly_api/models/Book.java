@@ -30,7 +30,6 @@ public class Book {
             name = "livro_author",
             joinColumns = @JoinColumn(name = "livro_id"),
             inverseJoinColumns = @JoinColumn(name = "autor_id")
-
     )
     private ArrayList<Author> authors;
 

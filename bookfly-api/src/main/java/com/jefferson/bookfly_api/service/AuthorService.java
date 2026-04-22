@@ -27,7 +27,7 @@ public class AuthorService {
 
     public Author getAuthorById(Long id) {
         return authorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Author não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Autor não encontrado"));
     }
 
     public Optional<Author> findByName(String name){

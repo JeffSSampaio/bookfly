@@ -41,43 +41,39 @@ public class LoanService {
     }
 
     public List<Loan> getLoansByUser(User user) {
-        return loanRepository.findByUsuario(user);
+        return loanRepository.findByUser(user);
     }
 
     public void createLoan(Loan loan, LocalDate returnDate) {
         Stock stock = stockService.getStock();
 
-        Book book = loan.getBook();
-
         Optional<Book> existBook = stock.getBooks().stream()
-                .filter(b -> b.getTitle().equalsIgnoreCase(book.getTitle()))
+                .filter(b -> b.getTitle().equalsIgnoreCase(loan.getBook().getTitle()))
                 .findFirst();
 
         if (existBook.isEmpty()) {
-            throw new RuntimeException("Book não encontrado no stock");
+            throw new RuntimeException("Livro não encontrado no stock");
         }
 
         if (existBook.get().getQtd() <= 0) {
-            throw new RuntimeException("Book sem quantidade disponível");
+            throw new RuntimeException("Livro sem quantidade disponível");
         }
 
-        Book bookStock = existBook.get();
-        bookStock.setQtd(bookStock.getQtd() - 1);
-        stockService.updateBookQtd(bookStock);
+        movimentService.doMoviment( loan, TypeMoviment.SAIDA);
 
         loan.setStatus(StatusLoan.ATIVO);
         loan.setLoanDate(LocalDate.now());
         loan.setReturnDate(returnDate);
         loanRepository.save(loan);
 
-        movimentService.addMoviment(stock, loan, TypeMoviment.SAIDA);
+
     }
 
     public void returnLoan(Long id) {
         Loan loan = getLoanById(id);
 
         if (loan.getStatus() == StatusLoan.DEVOLVIDO) {
-            throw new RuntimeException("Loan já foi devolvido");
+            throw new RuntimeException("Emprestimo já foi devolvido");
         }
 
         Stock stock = stockService.getStock();
@@ -97,7 +93,7 @@ public class LoanService {
         loanRepository.save(loan);
 
         penaltyService.generatePenaltyIfLate(loan);
-        movimentService.addMoviment(stock, loan, TypeMoviment.ENTRADA);
+        movimentService.doMoviment( loan, TypeMoviment.ENTRADA);
     }
 
     public void deleteLoan(Long id) {

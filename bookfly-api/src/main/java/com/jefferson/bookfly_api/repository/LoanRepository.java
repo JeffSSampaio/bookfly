@@ -11,9 +11,11 @@ import java.util.List;
 
 @Repository
 public interface LoanRepository extends JpaRepository<Loan,Long> {
-    List<Loan> findByUsuario(User user);
+
 
     List<Loan> findByStatus(StatusLoan statusLoan);
 
     List<Loan> findByStatusAndReturnDateBefore(StatusLoan statusLoan, LocalDate now);
+
+    List<Loan> findByUser(User user);
 }
