@@ -1,13 +1,13 @@
 package com.jefferson.bookfly_api.models;
 
-import com.jefferson.bookfly_api.enums.Genero;
+import com.jefferson.bookfly_api.enums.Gender;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 
 @Entity
 @Table(name = "livro")
-public class Livro {
+public class Book {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -23,7 +23,7 @@ public class Livro {
     private String cover;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Estoque stock;
+    private Stock stock;
 
     @ManyToMany
     @JoinTable(
@@ -32,14 +32,14 @@ public class Livro {
             inverseJoinColumns = @JoinColumn(name = "autor_id")
 
     )
-    private ArrayList<Autor> authors;
+    private ArrayList<Author> authors;
 
     @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     @JoinColumn(name = "estante_id")
-    private Estante bookcase;
+    private Bookcase bookcase;
 
     @Enumerated(EnumType.STRING)
-    private ArrayList<Genero> genders;
+    private ArrayList<Gender> genders;
 
     public Long getId() {
         return id;
@@ -61,27 +61,27 @@ public class Livro {
         this.cover = cover;
     }
 
-    public ArrayList<Autor> getAuthors() {
+    public ArrayList<Author> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(ArrayList<Autor> authors) {
+    public void setAuthors(ArrayList<Author> authors) {
         this.authors = authors;
     }
 
-    public Estante getBookcase() {
+    public Bookcase getBookcase() {
         return bookcase;
     }
 
-    public void setBookcase(Estante bookcase) {
+    public void setBookcase(Bookcase bookcase) {
         this.bookcase = bookcase;
     }
 
-    public ArrayList<Genero> getGenders() {
+    public ArrayList<Gender> getGenders() {
         return genders;
     }
 
-    public void setGenders(ArrayList<Genero> genders) {
+    public void setGenders(ArrayList<Gender> genders) {
         this.genders = genders;
     }
 
@@ -101,11 +101,11 @@ public class Livro {
         this.qtdAvailabe = qtdAvailabe;
     }
 
-    public Estoque getStock() {
+    public Stock getStock() {
         return stock;
     }
 
-    public void setStock(Estoque stock) {
+    public void setStock(Stock stock) {
         this.stock = stock;
     }
 }

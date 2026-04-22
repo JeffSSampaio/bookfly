@@ -1,65 +1,69 @@
 package com.jefferson.bookfly_api.models;
 
-import com.jefferson.bookfly_api.enums.TipoMovimentacao;
+import com.jefferson.bookfly_api.enums.TypeMoviment;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "movimentacoes")
-public class Movimentacao  {
+public class Moviment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estoque_id")
-    private Estoque stock;
+    private Stock stock;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "emprestimo_id")
-    private Emprestimo loan;
+    private Loan loan;
 
     @Enumerated(EnumType.STRING)
-    private TipoMovimentacao typeItem;
+    private TypeMoviment typeItem;
 
     private int qtd;
 
-    @CreationTimestamp
+
     private LocalDate createdDate;
+
 
 
     public Long getId() {
         return id;
     }
 
+    public void setCreatedDate(LocalDate createdDate) {
+        this.createdDate = createdDate;
+    }
+
     public LocalDate getCreatedDate() {
         return createdDate;
     }
 
-    public Estoque getStock() {
+    public Stock getStock() {
         return stock;
     }
 
-    public void setStock(Estoque stock) {
+    public void setStock(Stock stock) {
         this.stock = stock;
     }
 
-    public Emprestimo getLoan() {
+    public Loan getLoan() {
         return loan;
     }
 
-    public void setLoan(Emprestimo loan) {
+    public void setLoan(Loan loan) {
         this.loan = loan;
     }
 
-    public TipoMovimentacao getTypeItem() {
+    public TypeMoviment getTypeItem() {
         return typeItem;
     }
 
-    public void setTypeItem(TipoMovimentacao typeItem) {
+    public void setTypeItem(TypeMoviment typeItem) {
         this.typeItem = typeItem;
     }
 

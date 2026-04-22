@@ -1,9 +1,10 @@
 package com.jefferson.bookfly_api.repository;
 
-import com.jefferson.bookfly_api.models.Emprestimo;
+import com.jefferson.bookfly_api.models.Stock;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EmprestimoRepository extends JpaRepository<Emprestimo,Long> {
+public interface StockRepository extends JpaRepository<Stock,Long> {
+
 }

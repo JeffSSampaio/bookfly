@@ -1,5 +1,5 @@
 package com.jefferson.bookfly_api.enums;
 
-public enum TipoMovimentacao {
+public enum TypeMoviment {
    ENTRADA,SAIDA
 }

@@ -1,13 +1,13 @@
 package com.jefferson.bookfly_api.models;
 
-import com.jefferson.bookfly_api.enums.StatusMulta;
+import com.jefferson.bookfly_api.enums.StatusPenalty;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "multa")
-public class Multa {
+public class Penalty {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -16,16 +16,25 @@ public class Multa {
     private LocalDate penaltyDate;
 
     @Enumerated(EnumType.STRING)
-    private StatusMulta status;
+    private StatusPenalty status;
 
+    private Double valuePenalty;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "emprestimo_id")
-    private Emprestimo loan;
+    private Loan loan;
 
 
     public Long getId() {
         return id;
+    }
+
+    public Double getValuePenalty() {
+        return valuePenalty;
+    }
+
+    public void setValuePenalty(Double valuePenalty) {
+        this.valuePenalty = valuePenalty;
     }
 
     public Boolean getPayed() {
@@ -52,19 +61,19 @@ public class Multa {
         this.penaltyDate = penaltyDate;
     }
 
-    public StatusMulta getStatus() {
+    public StatusPenalty getStatus() {
         return status;
     }
 
-    public void setStatus(StatusMulta status) {
+    public void setStatus(StatusPenalty status) {
         this.status = status;
     }
 
-    public Emprestimo getLoan() {
+    public Loan getLoan() {
         return loan;
     }
 
-    public void setLoan(Emprestimo loan) {
+    public void setLoan(Loan loan) {
         this.loan = loan;
     }
 }

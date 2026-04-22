@@ -1,15 +1,13 @@
 package com.jefferson.bookfly_api.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 
 
 @Entity
 @Table(name="autor")
-public class Autor {
+public class Author {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,10 +17,10 @@ public class Autor {
 
     @ManyToOne
     @JoinColumn(name = "bookcase_id")
-    private Estante bookcase;
+    private Bookcase bookcase;
 
     @ManyToMany(mappedBy = "authors")
-    private ArrayList<Livro> books;
+    private ArrayList<Book> books;
 
 
     public Long getId() {
@@ -37,19 +35,19 @@ public class Autor {
         this.name = name;
     }
 
-    public Estante getBookcase() {
+    public Bookcase getBookcase() {
         return bookcase;
     }
 
-    public void setBookcase(Estante bookcase) {
+    public void setBookcase(Bookcase bookcase) {
         this.bookcase = bookcase;
     }
 
-    public ArrayList<Livro> getBooks() {
+    public ArrayList<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(ArrayList<Livro> books) {
+    public void setBooks(ArrayList<Book> books) {
         this.books = books;
     }
 }

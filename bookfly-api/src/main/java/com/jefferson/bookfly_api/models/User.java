@@ -3,12 +3,11 @@ package com.jefferson.bookfly_api.models;
 import com.jefferson.bookfly_api.enums.Role;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Usuario")
-public class Usuario {
+@Table(name = "User")
+public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,11 +25,11 @@ public class Usuario {
     private Role role;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    private List<Estante> bookcases;
+    private List<Bookcase> bookcases;
 
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Emprestimo> loans;
+    private List<Loan> loans;
 
     public Long getId() {
         return id;
@@ -68,11 +67,11 @@ public class Usuario {
         this.role = role;
     }
 
-    public List<Estante> getBookcases() {
+    public List<Bookcase> getBookcases() {
         return bookcases;
     }
 
-    public void setBookcases(List<Estante> bookcases) {
+    public void setBookcases(List<Bookcase> bookcases) {
         this.bookcases = bookcases;
     }
 }

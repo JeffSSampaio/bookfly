@@ -1,5 +1,5 @@
 package com.jefferson.bookfly_api.enums;
 
-public enum StatusMulta {
+public enum StatusPenalty {
     PENDENTE, PAGO
 }

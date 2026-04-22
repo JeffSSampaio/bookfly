@@ -1,6 +1,6 @@
 package com.jefferson.bookfly_api.enums;
 
-public enum Genero {
+public enum Gender {
     TERROR,
     AÇÃO,
     FANTASIA,

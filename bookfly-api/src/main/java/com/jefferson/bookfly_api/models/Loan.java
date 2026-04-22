@@ -1,50 +1,50 @@
 package com.jefferson.bookfly_api.models;
 
-import com.jefferson.bookfly_api.enums.StatusEmprestimo;
+import com.jefferson.bookfly_api.enums.StatusLoan;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "emprestimo")
-public class Emprestimo {
+public class Loan {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
-    private Usuario user;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "livro_id")
-    private Livro book;
+    private Book book;
 
     private LocalDate loanDate;
     private LocalDate returnDate;
 
     @Enumerated(EnumType.STRING)
-    private StatusEmprestimo status;
+    private StatusLoan status;
 
     @OneToOne(mappedBy = "loan", cascade = CascadeType.ALL)
-    private Multa multa;
+    private Penalty penalty;
 
     public Long getId() {
         return id;
     }
 
-    public Usuario getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Usuario user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public Livro getBook() {
+    public Book getBook() {
         return book;
     }
 
-    public void setBook(Livro book) {
+    public void setBook(Book book) {
         this.book = book;
     }
 
@@ -64,11 +64,11 @@ public class Emprestimo {
         this.returnDate = returnDate;
     }
 
-    public StatusEmprestimo getStatus() {
+    public StatusLoan getStatus() {
         return status;
     }
 
-    public void setStatus(StatusEmprestimo status) {
+    public void setStatus(StatusLoan status) {
         this.status = status;
     }
 }

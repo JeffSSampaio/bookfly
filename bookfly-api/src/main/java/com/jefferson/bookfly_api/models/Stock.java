@@ -1,27 +1,25 @@
 package com.jefferson.bookfly_api.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 
 
 @Entity
 @Table(name = "estoque")
-public class Estoque {
+public class Stock {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany(mappedBy = "stock", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    private ArrayList<Livro> books;
+    private ArrayList<Book> books;
 
-    public ArrayList<Livro> getBooks() {
+    public ArrayList<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(ArrayList<Livro> books) {
+    public void setBooks(ArrayList<Book> books) {
         this.books = books;
     }
 
@@ -29,14 +27,14 @@ public class Estoque {
         return id;
     }
 
-    public void addBook(Livro livro) {
-        books.add(livro);
-        livro.setStock(this);
+    public void addBook(Book book) {
+        books.add(book);
+        book.setStock(this);
     }
 
-    public void removeBook(Livro livro) {
-        books.remove(livro);
-        livro.setStock(null);
+    public void removeBook(Book book) {
+        books.remove(book);
+        book.setStock(null);
     }
 
 }
