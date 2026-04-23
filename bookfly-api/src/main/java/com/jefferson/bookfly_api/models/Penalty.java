@@ -24,6 +24,18 @@ public class Penalty {
     @JoinColumn(name = "emprestimo_id")
     private Loan loan;
 
+    public Penalty(Long id, Boolean payed, LocalDate payedDate, LocalDate penaltyDate, StatusPenalty status, Double valuePenalty, Loan loan) {
+        this.id = id;
+        this.payed = payed;
+        this.payedDate = payedDate;
+        this.penaltyDate = penaltyDate;
+        this.status = status;
+        this.valuePenalty = valuePenalty;
+        this.loan = loan;
+    }
+
+    public Penalty() {
+    }
 
     public Long getId() {
         return id;

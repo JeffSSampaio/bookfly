@@ -5,12 +5,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
-@Schema(name = "AuthorDTO")
-public record AuthorDTO(
+@Schema(name = "AuthorResponseDTO")
+public record AuthorResponseDTO(
         @Schema(description = " identificador do id")
         Long author_id,
         @Schema(description = "nome do autor")
         String nameAuthor,
         @Schema(description = "nome do livro")
-        List<Book> books
-) {}
+        List<BookResponseDTO> books
+){}

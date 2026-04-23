@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Schema(name = "BookDTO")
-public record BookDTO(
+public record BookResponseDTO(
         @Schema(description = "identificador do livro")
         Long id,
         @Schema(description = "capa do livro/imagem")
@@ -18,7 +18,7 @@ public record BookDTO(
         @Schema(description = "titulo do livro")
         String title,
         @Schema(description = "Autores do livro")
-        List<Author> authors,
+        List<AuthorResponseDTO> authors,
         @Schema(description = "Quantidade disponivel no Estoque")
         int qtd,
         @Schema(description = "generos do livro")

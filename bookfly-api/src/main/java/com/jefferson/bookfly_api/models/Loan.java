@@ -28,6 +28,19 @@ public class Loan {
     @OneToOne(mappedBy = "loan", cascade = CascadeType.ALL)
     private Penalty penalty;
 
+    public Loan() {
+    }
+
+    public Loan(Long id, User user, Book book, LocalDate loanDate, LocalDate returnDate, StatusLoan status, Penalty penalty) {
+        this.id = id;
+        this.user = user;
+        this.book = book;
+        this.loanDate = loanDate;
+        this.returnDate = returnDate;
+        this.status = status;
+        this.penalty = penalty;
+    }
+
     public Long getId() {
         return id;
     }
@@ -70,5 +83,13 @@ public class Loan {
 
     public void setStatus(StatusLoan status) {
         this.status = status;
+    }
+
+    public Penalty getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(Penalty penalty) {
+        this.penalty = penalty;
     }
 }

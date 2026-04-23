@@ -8,7 +8,8 @@ import java.util.List;
 @Table(name = "estante")
 public class Bookcase {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -17,6 +18,15 @@ public class Bookcase {
 
     @OneToMany(mappedBy = "bookcase", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Book> books;
+
+    public Bookcase(Long id, User user, List<Book> books) {
+        this.id = id;
+        this.user = user;
+        this.books = books;
+    }
+
+    public Bookcase() {
+    }
 
     public Long getId() {
         return id;

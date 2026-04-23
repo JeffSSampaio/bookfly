@@ -29,7 +29,17 @@ public class Moviment {
 
     private LocalDate createdDate;
 
+    public Moviment(Long id, Stock stock, Loan loan, TypeMoviment typeItem, int qtd, LocalDate createdDate) {
+        this.id = id;
+        this.stock = stock;
+        this.loan = loan;
+        this.typeItem = typeItem;
+        this.qtd = qtd;
+        this.createdDate = createdDate;
+    }
 
+    public Moviment() {
+    }
 
     public Long getId() {
         return id;

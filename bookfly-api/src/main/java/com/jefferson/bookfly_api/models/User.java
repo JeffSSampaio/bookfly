@@ -31,6 +31,19 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Loan> loans;
 
+    public User() {
+    }
+
+    public User(Long id, String name, String email, String password, Role role, List<Bookcase> bookcases, List<Loan> loans) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.bookcases = bookcases;
+        this.loans = loans;
+    }
+
     public Long getId() {
         return id;
     }

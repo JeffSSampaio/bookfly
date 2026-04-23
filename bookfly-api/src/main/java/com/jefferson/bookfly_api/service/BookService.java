@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.models.Book;
 import com.jefferson.bookfly_api.repository.BookRepository;
+import com.jefferson.bookfly_api.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -13,7 +14,7 @@ public class BookService {
     private final BookRepository bookRepository;
 
     public Book createBook(Book book){
-      return bookRepository.save(book);
+        return bookRepository.save(book);
     }
     public Book findById(Long id) {
         return bookRepository.findById(id)
@@ -33,7 +34,7 @@ public class BookService {
     }
 
     public void removeBook(Long id){
-      bookRepository.deleteById(id);
+            bookRepository.deleteById(id);
     }
 
     public List<Book> findByTitle(String title) {
