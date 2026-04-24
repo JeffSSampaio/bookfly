@@ -16,59 +16,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StockService {
 
-    private final StockRepository stockRepository;
-    private final BookRepository bookRepository;
-    private static final Long ESTOQUE_ID = 1L;
-
-        public Stock getStock() {
-        return stockRepository.findById(ESTOQUE_ID)
-             .orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
-    }
-
-    public List<Stock> getAllStocks(){
-            return stockRepository.findAll();
-    }
-    public Book getBookFromStock(Book book){
-          List<Stock> allBooksFromStock = getAllStocks();
-           Optional<Stock> existBook = allBooksFromStock.stream()
-                   .filter(s-> s.getBook().getTitle().equalsIgnoreCase(book.getTitle()) )
-                   .findFirst();
-           if (existBook.isPresent()){
-               return book;
-           }
-           throw new RuntimeException("Livro Não existe");
-    }
-
-    public Book addBooksFromStock(Book book){
-            Stock stock = getStock();
-            stock.setBook(book);
-            List<Book> allbooks = bookRepository.findAll();
-                // vê se o livro existe dentro dos livros cadastrados
-             Optional<Book> existBook = allbooks.stream()
-                     .filter(b -> b.getTitle().equalsIgnoreCase(stock.getBook().getTitle()))
-                     .findFirst();
-                // vê se o livro existe dentro do estoque
-            List<Stock> allbooksOnStock = stockRepository.findAll();
-                Optional<Stock> existBookOnStock = allbooksOnStock.stream()
-                        .filter(s -> s.getBook().equals(book) )
-                        .findFirst();
-
-        if (existBook.isPresent() && existBookOnStock.isPresent()){
-            stock.setQtd(stock.getQtd() + 1);
-            stockRepository.save(stock);
-        } else if (existBook.isPresent()){
-            stockRepository.save(stock);
-        }
-            return book;
-        }
-
-
-    public Book removeBookFromStock(Book book){
-            Stock stock = getStock();
-            stockRepository.deleteById(stock.getBook().getId());
-            return book;
-    }
-
 
 
 //    private final StockRepository stockRepository;

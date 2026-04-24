@@ -29,9 +29,6 @@ public class BookService {
         return bookRepository.findByAuthorsId(autorId);
     }
 
-    public List<Book> findAvailable() {
-        return bookRepository.findByQtdGreaterThan(0);
-    }
 
     public void removeBook(Long id){
             bookRepository.deleteById(id);

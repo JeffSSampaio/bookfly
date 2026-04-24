@@ -14,17 +14,18 @@ public class Stock {
     private Long id;
 
     @OneToMany(mappedBy = "stock", cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    private Book book;
-
-    private int qtd;
+    private List<StockBook> stockBooks;
 
     public Stock() {
     }
 
-    public Stock(Long id, Book book, int qtd) {
-        this.id = id;
-        this.book = book;
-        this.qtd = qtd;
+
+    public List<StockBook> getStockBooks() {
+        return stockBooks;
+    }
+
+    public void setStockBooks(List<StockBook> stockBooks) {
+        this.stockBooks = stockBooks;
     }
 
     public Long getId() {
@@ -33,21 +34,5 @@ public class Stock {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Book getBook() {
-        return book;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
-    public int getQtd() {
-        return qtd;
-    }
-
-    public void setQtd(int qtd) {
-        this.qtd = qtd;
     }
 }

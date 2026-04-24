@@ -18,8 +18,6 @@ public class Book {
     @Column(nullable = false)
     private String cover;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Stock stock;
 
     @ManyToMany
     @JoinTable(
@@ -33,21 +31,23 @@ public class Book {
     @JoinColumn(name = "estante_id")
     private Bookcase bookcase;
 
+    @ElementCollection
     @Enumerated(EnumType.STRING)
-    private List<Gender> genders;
+    @CollectionTable(name = "livro_genero", joinColumns = @JoinColumn(name = "livro_id"))
+    private List<Gender> genders = new ArrayList<>();
 
     public Book() {
     }
 
-    public Book(Long id, String title, String cover, Stock stock, List<Author> authors, Bookcase bookcase, List<Gender> genders) {
+    public Book(Long id, String title, String cover, List<Author> authors, Bookcase bookcase, List<Gender> genders) {
         this.id = id;
         this.title = title;
         this.cover = cover;
-        this.stock = stock;
         this.authors = authors;
         this.bookcase = bookcase;
         this.genders = genders;
     }
+
 
     public Long getId() {
         return id;
@@ -65,21 +65,12 @@ public class Book {
         this.title = title;
     }
 
-
     public String getCover() {
         return cover;
     }
 
     public void setCover(String cover) {
         this.cover = cover;
-    }
-
-    public Stock getStock() {
-        return stock;
-    }
-
-    public void setStock(Stock stock) {
-        this.stock = stock;
     }
 
     public List<Author> getAuthors() {
