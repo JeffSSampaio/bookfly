@@ -19,6 +19,10 @@ public class Stock {
     public Stock() {
     }
 
+    public Stock(Long id, List<StockBook> stockBooks) {
+        this.id = id;
+        this.stockBooks = stockBooks;
+    }
 
     public List<StockBook> getStockBooks() {
         return stockBooks;

@@ -48,6 +48,17 @@ public class Book {
         this.genders = genders;
     }
 
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", cover='" + cover + '\'' +
+                ", authors=" + authors +
+                ", bookcase=" + bookcase +
+                ", genders=" + genders +
+                '}';
+    }
 
     public Long getId() {
         return id;
