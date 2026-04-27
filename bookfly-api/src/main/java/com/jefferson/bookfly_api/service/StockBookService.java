@@ -1,78 +1,147 @@
 package com.jefferson.bookfly_api.service;
 
-import com.jefferson.bookfly_api.models.Book;
-import com.jefferson.bookfly_api.models.Stock;
-import com.jefferson.bookfly_api.models.StockBook;
-import com.jefferson.bookfly_api.repository.BookRepository;
-import com.jefferson.bookfly_api.repository.StockBookRepository;
+import com.jefferson.bookfly_api.dto.stockbook.StockBookRequest;
+import com.jefferson.bookfly_api.dto.stockbook.StockBookUpdateQtdRequest;
+import com.jefferson.bookfly_api.enums.TypeMoviment;
+import com.jefferson.bookfly_api.models.*;
+import com.jefferson.bookfly_api.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class StockBookService {
+
     private final StockBookRepository stockBookRepository;
-    private final StockService stockService;
+    private final StockRepository stockRepository;
     private final BookRepository bookRepository;
+    private final MovimentRepository movimentRepository;
 
+    private final StockService stockService;
 
+    public StockBook addBookOnStock(StockBookRequest request){
 
-    public StockBook addBookOnStock(Book book, int qtd) {
-
-        Stock stock = stockService.getStock();
-
-        Book existBook = bookRepository.findById(book.getId())
+        Book book = bookRepository.findById(request.bookId())
                 .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
 
-
-
-        Optional<StockBook> existBookOnStock =
-                stockBookRepository.findByStockAndBook(stock, existBook);
-
-        if (existBookOnStock.isPresent()) {
-            StockBook stockBook = existBookOnStock.get();
-            stockBook.setQtd(stockBook.getQtd() + qtd);
-            System.out.println("\n adicionado " + stockBook.getQtd() + " ao Livro: " + stockBook.getBook().toString());
-            return stockBookRepository.save(stockBook);
-        }
-
-        StockBook newStockBook = new StockBook();
-        newStockBook.setStock(stock);
-        newStockBook.setBook(existBook);
-        newStockBook.setQtd(qtd);
-        System.out.println("\n Livro adicionado ao estoque");
-        return stockBookRepository.save(newStockBook);
-    }
-
-
-    public void removeBookFromStock(Book book){
-            Stock stock = stockService.getStock();
-            Book existBook = bookRepository.findById(book.getId()).orElseThrow(()-> new RuntimeException("Livro não encontrado"));
-            Optional<StockBook> existBookOnStock = stockBookRepository.findByStockAndBook(stock,existBook);
-
-            if(existBookOnStock.isPresent()){
-            StockBook stockBook = existBookOnStock.get();
-            stockBookRepository.delete(stockBook);
-            System.out.println("\n Livro retirado do estoque");
-            }
-
-    }
-
-    public StockBook getBookFromStock(Long bookId){
         Stock stock = stockService.getStock();
 
-        StockBook stockBook = stockBookRepository.findByStockAndBookId(stock,bookId)
-                .orElseThrow(()-> new RuntimeException("Livro não esta no estoque"));
+        StockBook stockBook = stockBookRepository
+                .findByStockAndBook(stock, book)
+                .orElse(null);
 
-        return stockBook;
+        if (stockBook != null) {
+            stockBook.setQtd(stockBook.getQtd() + request.qtd());
+        } else {
+            stockBook = new StockBook();
+            stockBook.setStock(stock);
+            stockBook.setBook(book);
+            stockBook.setQtd(request.qtd());
+        }
+
+        StockBook saved = stockBookRepository.save(stockBook);
+
+
+        Moviment moviment = new Moviment();
+        moviment.setStockBook(stockBook);
+        moviment.setQtd(request.qtd());
+        moviment.setTypeItem(TypeMoviment.ENTRADA);
+        moviment.setCreatedDate(LocalDate.now());
+
+        movimentRepository.save(moviment);
+
+        return saved;
     }
 
-    public List<StockBook> getAllBooksFromStock(){
+    public StockBook removeBookFromStock(Long bookId) {
 
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+
+        Stock stock = stockService.getStock();
+
+        StockBook stockBook = stockBookRepository
+                .findByStockAndBook(stock, book)
+                .orElseThrow(() -> new RuntimeException("Livro não existe no estoque"));
+
+        stockBook.setQtd(0);
+
+        return stockBookRepository.save(stockBook);
     }
 
+    public StockBook findByBook(Long bookId) {
+
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+
+        Stock stock = stockService.getStock();
+
+        return stockBookRepository.findByStockAndBook(stock, book)
+                .orElseThrow(() -> new RuntimeException("Livro não está no estoque"));
+    }
+
+
+    public StockBook updateQtd(StockBookUpdateQtdRequest request){
+
+        Book book = bookRepository.findById(request.bookId())
+                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+
+        Stock stock = stockService.getStock();
+
+        StockBook stockBook = stockBookRepository
+                .findByStockAndBook(stock, book)
+                .orElseThrow(() -> new RuntimeException("Livro não está no estoque"));
+
+        int delta = request.qtd();
+
+        if (delta < 0) {
+            int newQtd = stockBook.getQtd() + delta;
+
+            if (newQtd < 0) {
+                throw new RuntimeException("Quantidade insuficiente no estoque");
+            }
+
+            stockBook.setQtd(newQtd);
+
+            Moviment moviment = new Moviment();
+            moviment.setStockBook(stockBook);
+
+            moviment.setQtd(Math.abs(delta));
+            moviment.setTypeItem(TypeMoviment.SAIDA);
+            moviment.setCreatedDate(LocalDate.now());
+
+            movimentRepository.save(moviment);
+        }
+
+
+        else if (delta > 0) {
+            stockBook.setQtd(stockBook.getQtd() + delta);
+            Moviment moviment = new Moviment();
+            moviment.setStockBook(stockBook);
+            moviment.setQtd(delta);
+            moviment.setTypeItem(TypeMoviment.ENTRADA);
+            moviment.setCreatedDate(LocalDate.now());
+
+            movimentRepository.save(moviment);
+        }
+
+        else {
+            return stockBook;
+        }
+
+        return stockBookRepository.save(stockBook);
+    }
+
+
+    public List<StockBook> findAll() {
+
+        Stock stock = stockService.getStock();
+
+        return stockBookRepository.findByStock(stock);
+    }
 
 }

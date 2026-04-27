@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface StockBookRepository extends JpaRepository<StockBook, Long> {
     Optional<StockBook> findByStockAndBook(Stock stock, Book book);
-  //  List<StockBook> findByStock(Stock stock);
     Optional<StockBook> findByStockAndBookId(Stock stock, Long bookId);
     void removeStockBookByBook(Book book);
+    List<StockBook> findByStock(Stock stock);
 }
