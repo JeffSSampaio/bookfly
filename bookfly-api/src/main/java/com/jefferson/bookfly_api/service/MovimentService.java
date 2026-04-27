@@ -27,10 +27,6 @@ public class MovimentService {
     public Moviment doMoviment(MovimentQtdRequest request){
 
 
-        if (request.qtd() <= 0) {
-            throw new RuntimeException("Quantidade deve ser maior que zero");
-        }
-
         Stock stock = stockService.getStock();
 
         Book book = bookRepository.findById(request.bookId())
@@ -53,23 +49,24 @@ public class MovimentService {
            if (newQtd < 0){
                throw new RuntimeException("Quantidade insuficiente no Estoque");
            }
-
-           stockBookRepository.save(bookOnStock);
+           bookOnStock.setQtd(newQtd);
            Moviment moviment = new Moviment();
            moviment.setStockBook(bookOnStock);
            moviment.setUser(user);
            moviment.setTypeItem(TypeMoviment.SAIDA);
-           moviment.setQtdMoviment(request.qtd());
+           moviment.setQtdMoviment(newQtd);
            moviment.setCreatedDate(LocalDate.now());
+           stockBookRepository.save(bookOnStock);
            return movimentRepository.save(moviment);
        } else if (delta > 0){
-           stockBookRepository.save(bookOnStock);
+           bookOnStock.setQtd(newQtd);
            Moviment moviment = new Moviment();
            moviment.setStockBook(bookOnStock);
            moviment.setUser(user);
            moviment.setTypeItem(TypeMoviment.ENTRADA);
-           moviment.setQtdMoviment(request.qtd());
+           moviment.setQtdMoviment(newQtd);
            moviment.setCreatedDate(LocalDate.now());
+           stockBookRepository.save(bookOnStock);
            return movimentRepository.save(moviment);
 
         } else {

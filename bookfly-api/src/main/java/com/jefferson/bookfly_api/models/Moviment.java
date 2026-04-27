@@ -18,7 +18,7 @@ public class Moviment {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "estoque_livro_id", referencedColumnName = "id")
+    @JoinColumn(name = "estoque_livro_id", referencedColumnName = "estoque_id")
     private StockBook stockBook;
 
     @Enumerated(EnumType.STRING)

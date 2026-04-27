@@ -13,7 +13,7 @@ public record MovimentDetail(
         Long id,
         Long stockId,
         TypeMoviment type,
-        int qtd,
+        int qtdMoviment,
         LocalDate createdDate,
         UserSummary user
 
