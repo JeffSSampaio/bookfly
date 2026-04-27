@@ -10,7 +10,9 @@ public record UserMovimentSummary(
 ) {
    public static UserMovimentSummary from(User user){
        return new UserMovimentSummary(
-
+                user.getId(),
+               user.getName(),
+               user.getRole()
        );
    }
 }
