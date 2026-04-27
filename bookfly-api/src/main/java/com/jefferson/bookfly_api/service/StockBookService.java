@@ -17,7 +17,7 @@ import java.util.Optional;
 public class StockBookService {
 
     private final StockBookRepository stockBookRepository;
-    private final StockRepository stockRepository;
+    private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final MovimentRepository movimentRepository;
 
@@ -43,15 +43,27 @@ public class StockBookService {
             stockBook.setQtd(request.qtd());
         }
 
-        StockBook saved = stockBookRepository.save(stockBook);
 
+
+        User user = userRepository.findById(request.userId())
+                .orElseThrow(()-> new RuntimeException("Usuario Não existe"));
+
+        if (user == null){
+            throw new RuntimeException("Usuario Não Pode ser Null");
+        }
+
+        if (request.qtd() < 0){
+            throw new RuntimeException("Quantidade inválida");
+        }
 
         Moviment moviment = new Moviment();
         moviment.setStockBook(stockBook);
-        moviment.setQtd(request.qtd());
+        moviment.setQtdMoviment(request.qtd());
+        moviment.setUser(user);
         moviment.setTypeItem(TypeMoviment.ENTRADA);
         moviment.setCreatedDate(LocalDate.now());
 
+        StockBook saved = stockBookRepository.save(stockBook);
         movimentRepository.save(moviment);
 
         return saved;
@@ -110,7 +122,7 @@ public class StockBookService {
             Moviment moviment = new Moviment();
             moviment.setStockBook(stockBook);
 
-            moviment.setQtd(Math.abs(delta));
+            moviment.setQtdMoviment(Math.abs(delta));
             moviment.setTypeItem(TypeMoviment.SAIDA);
             moviment.setCreatedDate(LocalDate.now());
 
@@ -122,7 +134,7 @@ public class StockBookService {
             stockBook.setQtd(stockBook.getQtd() + delta);
             Moviment moviment = new Moviment();
             moviment.setStockBook(stockBook);
-            moviment.setQtd(delta);
+            moviment.setQtdMoviment(delta);
             moviment.setTypeItem(TypeMoviment.ENTRADA);
             moviment.setCreatedDate(LocalDate.now());
 
@@ -143,5 +155,8 @@ public class StockBookService {
 
         return stockBookRepository.findByStock(stock);
     }
+
+
+
 
 }
