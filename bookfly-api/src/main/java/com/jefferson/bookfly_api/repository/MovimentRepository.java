@@ -10,7 +10,9 @@ import java.util.List;
 
 @Repository
 public interface MovimentRepository extends JpaRepository<Moviment,Long> {
-    List<Moviment> findByStock(Stock stock);
 
-    List<Moviment> findByLoan(Loan loan);
+
+
+
+    Moviment getMovimentById(Long id);
 }

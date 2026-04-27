@@ -14,59 +14,55 @@ public class Moviment {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "estoque_id")
-    private Stock stock;
+    @JoinColumn(name = "usuario_id")
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "emprestimo_id")
-    private Loan loan;
+    @JoinColumn(name = "stock_book_id")
+    private StockBook stockBook;
+
 
     @Enumerated(EnumType.STRING)
     private TypeMoviment typeItem;
 
     private int qtd;
 
-
     private LocalDate createdDate;
 
-    public Moviment(Long id, Stock stock, Loan loan, TypeMoviment typeItem, int qtd, LocalDate createdDate) {
+    public Moviment() {
+    }
+
+    public Moviment(Long id, User user, StockBook stockBook, TypeMoviment typeItem, int qtd, LocalDate createdDate) {
         this.id = id;
-        this.stock = stock;
-        this.loan = loan;
+        this.user = user;
+        this.stockBook = stockBook;
         this.typeItem = typeItem;
         this.qtd = qtd;
         this.createdDate = createdDate;
-    }
-
-    public Moviment() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setCreatedDate(LocalDate createdDate) {
-        this.createdDate = createdDate;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public LocalDate getCreatedDate() {
-        return createdDate;
+    public User getUser() {
+        return user;
     }
 
-    public Stock getStock() {
-        return stock;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public void setStock(Stock stock) {
-        this.stock = stock;
+    public StockBook getStockBook() {
+        return stockBook;
     }
 
-    public Loan getLoan() {
-        return loan;
-    }
-
-    public void setLoan(Loan loan) {
-        this.loan = loan;
+    public void setStockBook(StockBook stockBook) {
+        this.stockBook = stockBook;
     }
 
     public TypeMoviment getTypeItem() {
@@ -83,5 +79,13 @@ public class Moviment {
 
     public void setQtd(int qtd) {
         this.qtd = qtd;
+    }
+
+    public LocalDate getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDate createdDate) {
+        this.createdDate = createdDate;
     }
 }
