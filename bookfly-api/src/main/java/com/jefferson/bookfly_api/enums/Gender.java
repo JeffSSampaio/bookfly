@@ -1,8 +1,8 @@
 package com.jefferson.bookfly_api.enums;
 
 public enum Gender {
+    ACAO,
     TERROR,
-    AÇÃO,
     FANTASIA,
     INFANTIL
 }
