@@ -18,26 +18,28 @@ public class Moviment {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stock_book_id")
+    @JoinColumns({
+            @JoinColumn(name = "estoque_livro_id", referencedColumnName = "id"),
+            @JoinColumn(name = "qtd_total_livro", referencedColumnName = "qtd")
+    })
     private StockBook stockBook;
-
 
     @Enumerated(EnumType.STRING)
     private TypeMoviment typeItem;
 
-    private int qtd;
+    private int qtdMoviment;
 
     private LocalDate createdDate;
 
     public Moviment() {
     }
 
-    public Moviment(Long id, User user, StockBook stockBook, TypeMoviment typeItem, int qtd, LocalDate createdDate) {
+    public Moviment(Long id, User user, StockBook stockBook, TypeMoviment typeItem, int qtdMoviment, LocalDate createdDate) {
         this.id = id;
         this.user = user;
         this.stockBook = stockBook;
         this.typeItem = typeItem;
-        this.qtd = qtd;
+        this.qtdMoviment = qtdMoviment;
         this.createdDate = createdDate;
     }
 
@@ -73,12 +75,12 @@ public class Moviment {
         this.typeItem = typeItem;
     }
 
-    public int getQtd() {
-        return qtd;
+    public int getQtdMoviment() {
+        return qtdMoviment;
     }
 
-    public void setQtd(int qtd) {
-        this.qtd = qtd;
+    public void setQtdMoviment(int qtdMoviment) {
+        this.qtdMoviment = qtdMoviment;
     }
 
     public LocalDate getCreatedDate() {

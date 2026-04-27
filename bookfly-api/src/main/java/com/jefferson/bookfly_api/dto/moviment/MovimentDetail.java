@@ -24,7 +24,7 @@ public record MovimentDetail(
                 moviment.getId(),
                 moviment.getStockBook().getStock().getId(),
                 moviment.getTypeItem(),
-                moviment.getQtd(),
+                moviment.getQtdMoviment(),
                 moviment.getCreatedDate(),
                 UserSummary.from(moviment.getUser())
         );

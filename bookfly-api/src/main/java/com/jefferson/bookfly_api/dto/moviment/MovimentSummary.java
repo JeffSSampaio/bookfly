@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.dto.moviment;
 
+import com.jefferson.bookfly_api.dto.book.BookMovimentSummary;
 import com.jefferson.bookfly_api.dto.book.BookSummary;
 import com.jefferson.bookfly_api.dto.loan.LoanSummary;
 import com.jefferson.bookfly_api.dto.stockbook.StockBookSummary;
@@ -10,18 +11,19 @@ import com.jefferson.bookfly_api.models.Moviment;
 
 public record MovimentSummary(
         Long movimentId,
-        UserMovimentSummary user,
-        BookSummary book,
         int qtdMoved,
-        TypeMoviment type
+        TypeMoviment type,
+        UserMovimentSummary user,
+        BookMovimentSummary book
+
 ) {
     public static MovimentSummary from(Moviment moviment){
         return new MovimentSummary(
                 moviment.getId(),
+                moviment.getQtdMoviment(),
+                moviment.getTypeItem(),
                 UserMovimentSummary.from(moviment.getUser()),
-                BookSummary.from(moviment.getStockBook().getBook()),
-                moviment.getQtd(),
-                moviment.getTypeItem()
+                BookMovimentSummary.from(moviment.getStockBook().getBook())
         );
     }
 }

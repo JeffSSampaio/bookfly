@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.service;
 
+import com.jefferson.bookfly_api.dto.moviment.MovimentQtdRequest;
 import com.jefferson.bookfly_api.dto.moviment.MovimentRequest;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
 import com.jefferson.bookfly_api.models.*;
@@ -23,7 +24,7 @@ public class MovimentService {
     private final StockService stockService;
 
     @Transactional
-    public Moviment doMoviment(MovimentRequest request){
+    public Moviment doMoviment(MovimentQtdRequest request){
 
 
         if (request.qtd() <= 0) {
@@ -33,7 +34,7 @@ public class MovimentService {
         Stock stock = stockService.getStock();
 
         Book book = bookRepository.findById(request.bookId())
-                .orElseThrow(() -> new RuntimeException("Livro não existe no estoque"));
+                .orElseThrow(() -> new RuntimeException("Livro não esta registrado"));
 
         StockBook bookOnStock = stockBookRepository.findByStockAndBook(stock, book)
                 .orElseThrow(() -> new RuntimeException("Livro não existe no estoque"));
@@ -41,29 +42,42 @@ public class MovimentService {
         User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new RuntimeException("Usuário não existe"));
 
+       int delta = request.qtd();
+
+       int newQtd = bookOnStock.getQtd() + delta;
 
 
-        boolean isOutput= request.typeItem() == TypeMoviment.SAIDA;
 
-        if (isOutput) {
-            if (bookOnStock.getQtd() < request.qtd()) {
-                throw new RuntimeException("Estoque insuficiente");
-            }
-            bookOnStock.setQtd(bookOnStock.getQtd() - request.qtd());
+       if(delta < 0){
+
+           if (newQtd < 0){
+               throw new RuntimeException("Quantidade insuficiente no Estoque");
+           }
+
+           stockBookRepository.save(bookOnStock);
+           Moviment moviment = new Moviment();
+           moviment.setStockBook(bookOnStock);
+           moviment.setUser(user);
+           moviment.setTypeItem(TypeMoviment.SAIDA);
+           moviment.setQtdMoviment(request.qtd());
+           moviment.setCreatedDate(LocalDate.now());
+           return movimentRepository.save(moviment);
+       } else if (delta > 0){
+           stockBookRepository.save(bookOnStock);
+           Moviment moviment = new Moviment();
+           moviment.setStockBook(bookOnStock);
+           moviment.setUser(user);
+           moviment.setTypeItem(TypeMoviment.ENTRADA);
+           moviment.setQtdMoviment(request.qtd());
+           moviment.setCreatedDate(LocalDate.now());
+           return movimentRepository.save(moviment);
+
         } else {
-            bookOnStock.setQtd(bookOnStock.getQtd() + request.qtd());
-        }
+           throw new RuntimeException("Não foi possivel fazer movimentação");
+       }
 
-        stockBookRepository.save(bookOnStock);
 
-        Moviment moviment = new Moviment();
-        moviment.setStockBook(bookOnStock);
-        moviment.setUser(user);
-        moviment.setTypeItem(request.typeItem());
-        moviment.setQtd(request.qtd());
-        moviment.setCreatedDate(LocalDate.now());
 
-        return movimentRepository.save(moviment);
     }
 
     public List<Moviment> getAllMoviments(){
@@ -79,7 +93,7 @@ public class MovimentService {
     public Moviment updateMoviment(Long id, MovimentRequest request){
 
         Moviment oldMoviment = movimentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Movimentação não encontrada"));
+                .orElseThrow(() -> new RuntimeException("Movimentação inexistente no estoque"));
 
         StockBook stockBook = oldMoviment.getStockBook();
 
@@ -87,12 +101,12 @@ public class MovimentService {
         boolean wasOutput = oldMoviment.getTypeItem() == TypeMoviment.SAIDA;
 
         if (wasOutput) {
-            stockBook.setQtd(stockBook.getQtd() + oldMoviment.getQtd());
+            stockBook.setQtd(stockBook.getQtd() + oldMoviment.getQtdMoviment());
         } else {
-            if (stockBook.getQtd() < oldMoviment.getQtd()) {
+            if (stockBook.getQtd() < oldMoviment.getQtdMoviment()) {
                 throw new RuntimeException("Erro ao reverter movimentação antiga");
             }
-            stockBook.setQtd(stockBook.getQtd() - oldMoviment.getQtd());
+            stockBook.setQtd(stockBook.getQtd() - oldMoviment.getQtdMoviment());
         }
 
         if (request.qtd() <= 0) {
@@ -112,9 +126,12 @@ public class MovimentService {
 
         stockBookRepository.save(stockBook);
 
+        User user = userRepository.findById(request.userId())
+                .orElseThrow( ()-> new RuntimeException("Usuario não existe"));
 
+        oldMoviment.setUser(user);
         oldMoviment.setTypeItem(request.typeItem());
-        oldMoviment.setQtd(request.qtd());
+        oldMoviment.setQtdMoviment(request.qtd());
 
         return movimentRepository.save(oldMoviment);
     }
@@ -131,12 +148,12 @@ public class MovimentService {
 
 
         if (isOutput) {
-            stockBook.setQtd(stockBook.getQtd() + moviment.getQtd());
+            stockBook.setQtd(stockBook.getQtd() + moviment.getQtdMoviment());
         } else {
-            if (stockBook.getQtd() < moviment.getQtd()) {
+            if (stockBook.getQtd() < moviment.getQtdMoviment()) {
                 throw new RuntimeException("Erro ao reverter movimentação");
             }
-            stockBook.setQtd(stockBook.getQtd() - moviment.getQtd());
+            stockBook.setQtd(stockBook.getQtd() - moviment.getQtdMoviment());
         }
 
         stockBookRepository.save(stockBook);

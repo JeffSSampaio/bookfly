@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.controllers;
 
+import com.jefferson.bookfly_api.dto.moviment.MovimentQtdRequest;
 import com.jefferson.bookfly_api.dto.moviment.MovimentRequest;
 import com.jefferson.bookfly_api.dto.moviment.MovimentSummary;
 import com.jefferson.bookfly_api.models.Moviment;
@@ -28,9 +29,12 @@ public class MovimentController {
     })
     @GetMapping
     public ResponseEntity<List<MovimentSummary>> getAllMoviments(){
+           List<Moviment> allMoviments =  movimentService.getAllMoviments().stream()
+                    .filter(moviment -> (moviment.getId() != null) && (moviment.getUser() != null))
+                    .toList();
+
         return ResponseEntity.ok(
-                movimentService.getAllMoviments()
-                        .stream()
+                allMoviments.stream()
                         .map(MovimentSummary::from)
                         .toList()
         );
@@ -53,7 +57,8 @@ public class MovimentController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos")
     })
     @PostMapping
-    public ResponseEntity<MovimentSummary> createMoviment(@RequestBody MovimentRequest request){
+    public ResponseEntity<MovimentSummary> createMoviment(@RequestBody MovimentQtdRequest request){
+
         Moviment moviment = movimentService.doMoviment(request);
         return ResponseEntity.ok(MovimentSummary.from(moviment));
     }
