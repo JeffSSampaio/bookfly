@@ -34,6 +34,9 @@ public class User {
     public User() {
     }
 
+
+
+
     public User(Long id, String name, String email, String password, Role role, List<Bookcase> bookcases, List<Loan> loans) {
         this.id = id;
         this.name = name;
@@ -48,28 +51,24 @@ public class User {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public List<Loan> getLoans() {
+        return loans;
     }
 
-    public String getEmail() {
-        return email;
+    public void setLoans(List<Loan> loans) {
+        this.loans = loans;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public List<Bookcase> getBookcases() {
+        return bookcases;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setBookcases(List<Bookcase> bookcases) {
+        this.bookcases = bookcases;
     }
 
     public Role getRole() {
@@ -80,11 +79,27 @@ public class User {
         this.role = role;
     }
 
-    public List<Bookcase> getBookcases() {
-        return bookcases;
+    public String getPassword() {
+        return password;
     }
 
-    public void setBookcases(List<Bookcase> bookcases) {
-        this.bookcases = bookcases;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
