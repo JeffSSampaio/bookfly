@@ -1,6 +1,8 @@
 package com.jefferson.bookfly_api.models;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -12,6 +14,9 @@ public class Bookcase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    private String name;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
     private User user;
@@ -19,8 +24,9 @@ public class Bookcase {
     @OneToMany(mappedBy = "bookcase", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Book> books;
 
-    public Bookcase(Long id, User user, List<Book> books) {
+    public Bookcase(Long id, String name, User user, List<Book> books) {
         this.id = id;
+        this.name = name;
         this.user = user;
         this.books = books;
     }
@@ -30,6 +36,18 @@ public class Bookcase {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public User getUser() {
