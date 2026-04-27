@@ -42,7 +42,7 @@ public class BookController {
 
     @Operation(summary = "Listar todos os livros")
     @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<List<BookDetail>> getAllBooks(){
         return ResponseEntity.ok(
                 bookService.findAll()
@@ -56,7 +56,8 @@ public class BookController {
     @Operation(summary = "Buscar livro por ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Livro encontrado"),
-            @ApiResponse(responseCode = "404", description = "Livro não encontrado")
+            @ApiResponse(responseCode = "404", description = "Livro não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Livro não Existe no Estoque")
     })
     @GetMapping("/{id}")
     public ResponseEntity<BookDetail> getBook(@PathVariable Long id){

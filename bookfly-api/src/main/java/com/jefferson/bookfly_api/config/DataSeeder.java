@@ -1,10 +1,13 @@
 package com.jefferson.bookfly_api.config;
 
 import com.jefferson.bookfly_api.enums.Gender;
+import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
+import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.repository.AuthorRepository;
 import com.jefferson.bookfly_api.repository.BookRepository;
+import com.jefferson.bookfly_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +20,26 @@ public class DataSeeder {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
+    private final UserRepository userRepository;
 
     @PostConstruct
     public void seed() {
 
         if (bookRepository.count() > 0) return;
 
+        User admin = new User();
+        admin.setName("admin");
+        admin.setPassword("ad");
+        admin.setEmail("admin@gmail.com");
+        admin.setRole(Role.ADMIN);
+
+        User user = new User();
+        user.setName("user");
+        user.setPassword("us");
+        user.setEmail("user@gmail.com");
+        user.setRole(Role.USER);
+
+        userRepository.saveAll(List.of(user,admin));
 
         Author tolkien = new Author();
         tolkien.setName("J. R. R. Tolkien");
