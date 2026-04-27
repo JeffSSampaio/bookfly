@@ -18,10 +18,7 @@ public class Moviment {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumns({
-            @JoinColumn(name = "estoque_livro_id", referencedColumnName = "id"),
-            @JoinColumn(name = "qtd_total_livro", referencedColumnName = "qtd")
-    })
+    @JoinColumn(name = "estoque_livro_id", referencedColumnName = "id")
     private StockBook stockBook;
 
     @Enumerated(EnumType.STRING)
