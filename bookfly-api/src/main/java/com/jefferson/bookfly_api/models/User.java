@@ -35,8 +35,6 @@ public class User {
     }
 
 
-
-
     public User(Long id, String name, String email, String password, Role role, List<Bookcase> bookcases, List<Loan> loans) {
         this.id = id;
         this.name = name;

@@ -31,6 +31,11 @@ public class StockBook {
         this.qtd = qtd;
     }
 
+    public boolean isBookAvailable(){
+        return getQtd() > 0;
+
+    }
+
     public Long getId() {
         return id;
     }

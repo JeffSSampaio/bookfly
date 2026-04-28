@@ -1,6 +1,7 @@
 package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.dto.book.BookRequest;
+import com.jefferson.bookfly_api.enums.Gender;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
 import com.jefferson.bookfly_api.repository.AuthorRepository;
@@ -38,12 +39,16 @@ public class BookService {
                 authors.add(savedAuthor);
             }
         }
+        List<Gender> genders = request.genders()
+                .stream()
+                .distinct()
+                .toList();
 
         Book book = new Book();
         book.setTitle(request.title());
         book.setCover(request.cover());
         book.setAuthors(authors);
-        book.setGenders(request.genders());
+        book.setGenders(genders);
 
         boolean existBook = bookRepository
                 .existsByTitleIgnoreCaseAndAuthorsIn(book.getTitle(), authors);
