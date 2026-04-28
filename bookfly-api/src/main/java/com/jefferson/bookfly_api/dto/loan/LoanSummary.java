@@ -16,7 +16,7 @@ public record LoanSummary(
     public static LoanSummary from(Loan loan) {
         return new LoanSummary(
                 loan.getId(),
-                loan.getBook().getTitle(),
+                loan.getStockBook().getBook().getTitle(),
                 loan.getLoanDate(),
                 loan.getReturnDate(),
                 loan.getStatus()

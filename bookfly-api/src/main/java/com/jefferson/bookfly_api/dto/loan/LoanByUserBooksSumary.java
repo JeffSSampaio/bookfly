@@ -1,27 +1,26 @@
 package com.jefferson.bookfly_api.dto.loan;
 
-import com.jefferson.bookfly_api.dto.user.UserSummary;
+import com.jefferson.bookfly_api.dto.book.BookMovimentSummary;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.models.Loan;
 
 import java.time.LocalDate;
 
-public record LoanDetail(
-        Long id,
-        String bookTitle,
+public record LoanByUserBooksSumary(
+        Long loanId,
         LocalDate loanDate,
         LocalDate returnDate,
-        StatusLoan status,
-        UserSummary user
+        StatusLoan statusLoan,
+        BookMovimentSummary book
+
 ) {
-    public static LoanDetail from(Loan loan){
-        return new LoanDetail(
+    public static LoanByUserBooksSumary from(Loan loan){
+        return new LoanByUserBooksSumary(
                 loan.getId(),
-                loan.getStockBook().getBook().getTitle(),
                 loan.getLoanDate(),
                 loan.getReturnDate(),
                 loan.getStatus(),
-                UserSummary.from(loan.getUser())
+                BookMovimentSummary.from(loan.getStockBook().getBook())
         );
     }
 }
