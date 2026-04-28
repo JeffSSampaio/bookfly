@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.dto.moviment.MovimentQtdRequest;
 import com.jefferson.bookfly_api.dto.moviment.MovimentRequest;
+import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
@@ -38,41 +39,34 @@ public class MovimentService {
         User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new RuntimeException("Usuário não existe"));
 
-       int delta = request.qtd();
 
-       int newQtd = bookOnStock.getQtd() + delta;
+        int delta = request.qtd();
+        if (delta == 0) throw new RuntimeException("Quantidade não pode ser zero");
+
+        int newQtd = bookOnStock.getQtd() + delta;
+        if (newQtd < 0) throw new RuntimeException("Quantidade insuficiente no Estoque");
 
 
+        bookOnStock.setQtd(newQtd);
+        stockBookRepository.save(bookOnStock);
+        TypeMoviment type;
+        boolean isAdmin = user.getRole().equals(Role.ADMIN);
 
-       if(delta < 0){
-
-           if (newQtd < 0){
-               throw new RuntimeException("Quantidade insuficiente no Estoque");
-           }
-           bookOnStock.setQtd(newQtd);
-           Moviment moviment = new Moviment();
-           moviment.setStockBook(bookOnStock);
-           moviment.setUser(user);
-           moviment.setTypeItem(TypeMoviment.SAIDA);
-           moviment.setQtdMoviment(newQtd);
-           moviment.setCreatedDate(LocalDate.now());
-           stockBookRepository.save(bookOnStock);
-           return movimentRepository.save(moviment);
-       } else if (delta > 0){
-           bookOnStock.setQtd(newQtd);
-           Moviment moviment = new Moviment();
-           moviment.setStockBook(bookOnStock);
-           moviment.setUser(user);
-           moviment.setTypeItem(TypeMoviment.ENTRADA);
-           moviment.setQtdMoviment(newQtd);
-           moviment.setCreatedDate(LocalDate.now());
-           stockBookRepository.save(bookOnStock);
-           return movimentRepository.save(moviment);
-
+        if (delta > 0) {
+            type = isAdmin ? TypeMoviment.ENTRADA_ADMIN : TypeMoviment.ENTRADA;
         } else {
-           throw new RuntimeException("Não foi possivel fazer movimentação");
-       }
+            type = isAdmin ? TypeMoviment.SAIDA_ADMIN : TypeMoviment.SAIDA;
+        }
 
+
+        Moviment moviment = new Moviment();
+        moviment.setStockBook(bookOnStock);
+        moviment.setUser(user);
+        moviment.setTypeItem(type);
+        moviment.setQtdMoviment(Math.abs(delta));
+        moviment.setCreatedDate(LocalDate.now());
+
+        return movimentRepository.save(moviment);
 
 
     }

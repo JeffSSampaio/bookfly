@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.dto.stockbook.StockBookRequest;
 import com.jefferson.bookfly_api.dto.stockbook.StockBookUpdateQtdRequest;
+import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
@@ -56,11 +57,14 @@ public class StockBookService {
             throw new RuntimeException("Quantidade inválida");
         }
 
+        boolean isAdmin = user.getRole().equals(Role.ADMIN);
+        TypeMoviment typeMoviment = isAdmin ? TypeMoviment.ENTRADA_ADMIN : TypeMoviment.ENTRADA;
+
         Moviment moviment = new Moviment();
         moviment.setStockBook(stockBook);
         moviment.setQtdMoviment(request.qtd());
         moviment.setUser(user);
-        moviment.setTypeItem(TypeMoviment.ENTRADA);
+        moviment.setTypeItem(typeMoviment);
         moviment.setCreatedDate(LocalDate.now());
 
         StockBook saved = stockBookRepository.save(stockBook);
