@@ -47,7 +47,7 @@ public class PenaltyService {
         }
 
 
-        Boolean isPassedReturnDate = loanedUser.getReturnDate().isAfter(ChronoLocalDate.from(LocalDateTime.now()));
+        Boolean isPassedReturnDate = loanedUser.getReturnDate().isAfter(LocalDateTime.now());
 
 
         if(isPassedReturnDate){

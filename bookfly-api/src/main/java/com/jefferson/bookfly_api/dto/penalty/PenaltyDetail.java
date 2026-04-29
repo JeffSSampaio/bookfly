@@ -7,19 +7,27 @@ import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
 import com.jefferson.bookfly_api.models.Penalty;
 
+import java.time.LocalDateTime;
+
 public record PenaltyDetail(
         Long penaltyId,
         StatusPenalty statusPenalty,
-        UserMovimentSummary user,
-        LoanByUserBooksSumary loan
+        Long userId,
+        String userName,
+        LocalDateTime loanDate,
+        LocalDateTime returnDate,
+        StatusLoan statusLoan
 
 ) {
     public static PenaltyDetail from(Penalty penalty){
         return new PenaltyDetail(
                 penalty.getId(),
                 penalty.getStatus(),
-                UserMovimentSummary.from(penalty.getLoan().getUser()),
-                LoanByUserBooksSumary.from(penalty.getLoan())
+                penalty.getLoan().getUser().getId(),
+                penalty.getLoan().getUser().getName(),
+                penalty.getLoan().getLoanDate(),
+                penalty.getLoan().getReturnDate(),
+                penalty.getLoan().getStatus()
         );
     }
 }

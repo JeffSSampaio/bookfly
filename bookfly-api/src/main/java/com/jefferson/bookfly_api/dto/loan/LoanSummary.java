@@ -4,12 +4,13 @@ import com.jefferson.bookfly_api.models.Loan;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record LoanSummary(
         Long id,
         String bookTitle,
-        LocalDate loanDate,
-        LocalDate returnDate,
+        LocalDateTime loanDate,
+        LocalDateTime returnDate,
         StatusLoan status
 ) {
 

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -21,9 +22,9 @@ public class Loan {
     @JoinColumn(name = "livro_id")
     private StockBook stockBook;
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate loanDate;
+    private LocalDateTime loanDate;
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate returnDate;
+    private LocalDateTime returnDate;
 
     @Enumerated(EnumType.STRING)
     private StatusLoan status;
@@ -49,7 +50,7 @@ public class Loan {
     public Loan() {
     }
 
-    public Loan(Long id, User user, StockBook stockBook, LocalDate loanDate, LocalDate returnDate, StatusLoan status, List<Moviment> moviments, Penalty penalty) {
+    public Loan(Long id, User user, StockBook stockBook, LocalDateTime loanDate, LocalDateTime returnDate, StatusLoan status, List<Moviment> moviments, Penalty penalty) {
         this.id = id;
         this.user = user;
         this.stockBook = stockBook;
@@ -84,19 +85,19 @@ public class Loan {
         this.stockBook = stockBook;
     }
 
-    public LocalDate getLoanDate() {
+    public LocalDateTime getLoanDate() {
         return loanDate;
     }
 
-    public void setLoanDate(LocalDate loanDate) {
+    public void setLoanDate(LocalDateTime loanDate) {
         this.loanDate = loanDate;
     }
 
-    public LocalDate getReturnDate() {
+    public LocalDateTime getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(LocalDate returnDate) {
+    public void setReturnDate(LocalDateTime returnDate) {
         this.returnDate = returnDate;
     }
 

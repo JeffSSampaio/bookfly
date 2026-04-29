@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -65,7 +66,7 @@ public class LoanService {
             moviment.setCreatedDate(LocalDate.now());
 
 
-            loan.setLoanDate(LocalDate.now());
+            loan.setLoanDate(LocalDateTime.now());
             loan.setReturnDate(request.returnDateBook());
             loan.setMoviments(new ArrayList<>());
             loan.getMoviments().add(moviment);

@@ -5,11 +5,12 @@ import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.models.Loan;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record LoanByUserBooksSumary(
         Long loanId,
-        LocalDate loanDate,
-        LocalDate returnDate,
+        LocalDateTime loanDate,
+        LocalDateTime returnDate,
         StatusLoan statusLoan,
         BookMovimentSummary book
 

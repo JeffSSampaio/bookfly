@@ -46,7 +46,7 @@ public class Penalty {
         this.loan = loan;
     }
 
-    public BigDecimal getPaymentAmount(LocalDate dateReturnDateLoan, LocalDate dateCurrent) {
+    public BigDecimal getPaymentAmount(LocalDateTime dateReturnDateLoan, LocalDateTime dateCurrent) {
         long daysPassed = ChronoUnit.DAYS.between(dateReturnDateLoan, dateCurrent);
         long value = Math.max(0, daysPassed);
 

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Schema(description = "dados para requisitar um emprestimo de um livro")
 public record LoanRequest(
@@ -12,6 +13,6 @@ public record LoanRequest(
         @NotNull
         Long userId,
         @NotNull
-        LocalDate returnDateBook
+        LocalDateTime returnDateBook
 ) {
 }
