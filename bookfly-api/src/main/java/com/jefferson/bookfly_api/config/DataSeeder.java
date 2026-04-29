@@ -4,10 +4,13 @@ import com.jefferson.bookfly_api.enums.Gender;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
+import com.jefferson.bookfly_api.models.StockBook;
 import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.repository.AuthorRepository;
 import com.jefferson.bookfly_api.repository.BookRepository;
+import com.jefferson.bookfly_api.repository.StockBookRepository;
 import com.jefferson.bookfly_api.repository.UserRepository;
+import com.jefferson.bookfly_api.service.StockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +24,8 @@ public class DataSeeder {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final UserRepository userRepository;
+    private final StockService stockService;
+    private final StockBookRepository stockBookRepository;
 
     @PostConstruct
     public void seed() {
@@ -79,5 +84,12 @@ public class DataSeeder {
         book4.setAuthors(List.of(poe));
 
         bookRepository.saveAll(List.of(book1, book2, book3, book4));
+
+        StockBook stockBook1 = new StockBook();
+        stockBook1.setBook(book1);
+        stockBook1.setStock(stockService.getStock());
+        stockBook1.setQtd(10);
+
+        stockBookRepository.save(stockBook1);
     }
 }

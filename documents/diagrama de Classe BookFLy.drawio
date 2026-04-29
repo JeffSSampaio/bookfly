@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.5 Chrome/138.0.7204.251 Electron/37.6.1 Safari/537.36" version="28.2.5">
   <diagram name="Página-1" id="Kx7T9UcbU51RKCMPcttM">
-    <mxGraphModel dx="3733" dy="1780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="2812" dy="1151" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -176,25 +176,31 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="VC9RXPg_d_1Dh3A2mj1C-41" value="Penalty" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="-1560" y="-110" width="280" height="182" as="geometry" />
+          <mxGeometry x="-1670" y="-110" width="390" height="216" as="geometry" />
         </mxCell>
         <mxCell id="VC9RXPg_d_1Dh3A2mj1C-42" value="- Id: Long" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="VC9RXPg_d_1Dh3A2mj1C-41" vertex="1">
-          <mxGeometry y="26" width="280" height="26" as="geometry" />
+          <mxGeometry y="26" width="390" height="26" as="geometry" />
         </mxCell>
         <mxCell id="VC9RXPg_d_1Dh3A2mj1C-47" value="- payed: Boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="VC9RXPg_d_1Dh3A2mj1C-41" vertex="1">
-          <mxGeometry y="52" width="280" height="26" as="geometry" />
+          <mxGeometry y="52" width="390" height="26" as="geometry" />
         </mxCell>
         <mxCell id="VC9RXPg_d_1Dh3A2mj1C-51" value="- Emprestimo loan" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="VC9RXPg_d_1Dh3A2mj1C-41" vertex="1">
-          <mxGeometry y="78" width="280" height="26" as="geometry" />
+          <mxGeometry y="78" width="390" height="26" as="geometry" />
         </mxCell>
         <mxCell id="VC9RXPg_d_1Dh3A2mj1C-48" value="- payedDate: LocalDate" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="VC9RXPg_d_1Dh3A2mj1C-41" vertex="1">
-          <mxGeometry y="104" width="280" height="26" as="geometry" />
+          <mxGeometry y="104" width="390" height="26" as="geometry" />
         </mxCell>
         <mxCell id="dsXsR4ag7PACNrRJgRpK-23" value="- penaltyDate: LocalDate" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="VC9RXPg_d_1Dh3A2mj1C-41" vertex="1">
-          <mxGeometry y="130" width="280" height="26" as="geometry" />
+          <mxGeometry y="130" width="390" height="26" as="geometry" />
         </mxCell>
         <mxCell id="dsXsR4ag7PACNrRJgRpK-22" value="- Status: Enum" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="VC9RXPg_d_1Dh3A2mj1C-41" vertex="1">
-          <mxGeometry y="156" width="280" height="26" as="geometry" />
+          <mxGeometry y="156" width="390" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="6iNbJVJ5Qob1jbJwWPFE-8" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="VC9RXPg_d_1Dh3A2mj1C-41">
+          <mxGeometry y="182" width="390" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="6iNbJVJ5Qob1jbJwWPFE-9" value="+ getValueOfPenalty(LocalDate dateReturn, dateCurrent ): Double" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="VC9RXPg_d_1Dh3A2mj1C-41">
+          <mxGeometry y="190" width="390" height="26" as="geometry" />
         </mxCell>
         <mxCell id="dsXsR4ag7PACNrRJgRpK-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="dsXsR4ag7PACNrRJgRpK-1" target="dsXsR4ag7PACNrRJgRpK-8" edge="1">
           <mxGeometry relative="1" as="geometry">
