@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.models;
 
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,8 +20,9 @@ public class Loan {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "livro_id")
     private StockBook stockBook;
-
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate loanDate;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate returnDate;
 
     @Enumerated(EnumType.STRING)

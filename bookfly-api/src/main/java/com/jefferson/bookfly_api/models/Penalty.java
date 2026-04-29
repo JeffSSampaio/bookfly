@@ -2,8 +2,13 @@ package com.jefferson.bookfly_api.models;
 
 import com.jefferson.bookfly_api.enums.StatusPenalty;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name = "multa")
@@ -11,66 +16,83 @@ public class Penalty {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Boolean payed;
-    private LocalDate payedDate;
-    private LocalDate penaltyDate;
+    private Boolean paid;
+
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDateTime payedDate;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDateTime penaltyDate;
+
+    private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
     private StatusPenalty status;
-
-    private Double valuePenalty;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "emprestimo_id")
     private Loan loan;
 
-    public Penalty(Long id, Boolean payed, LocalDate payedDate, LocalDate penaltyDate, StatusPenalty status, Double valuePenalty, Loan loan) {
+
+    public Penalty() {
+    }
+
+    public Penalty(Long id, Boolean paid, LocalDateTime payedDate, LocalDateTime penaltyDate, BigDecimal amount, StatusPenalty status, Loan loan) {
         this.id = id;
-        this.payed = payed;
+        this.paid = paid;
         this.payedDate = payedDate;
         this.penaltyDate = penaltyDate;
+        this.amount = amount;
         this.status = status;
-        this.valuePenalty = valuePenalty;
         this.loan = loan;
     }
 
-    public Penalty() {
+    public BigDecimal getPaymentAmount(LocalDate dateReturnDateLoan, LocalDate dateCurrent) {
+        long daysPassed = ChronoUnit.DAYS.between(dateReturnDateLoan, dateCurrent);
+        long value = Math.max(0, daysPassed);
+
+        return new BigDecimal(value)
+                .multiply(new BigDecimal("1.50"))
+                .setScale(2, RoundingMode.HALF_UP);
     }
 
     public Long getId() {
         return id;
     }
 
-    public Double getValuePenalty() {
-        return valuePenalty;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setValuePenalty(Double valuePenalty) {
-        this.valuePenalty = valuePenalty;
+    public Boolean getPaid() {
+        return paid;
     }
 
-    public Boolean getPayed() {
-        return payed;
+    public void setPaid(Boolean paid) {
+        this.paid = paid;
     }
 
-    public void setPayed(Boolean payed) {
-        this.payed = payed;
-    }
-
-    public LocalDate getPayedDate() {
+    public LocalDateTime getPayedDate() {
         return payedDate;
     }
 
-    public void setPayedDate(LocalDate payedDate) {
+    public void setPayedDate(LocalDateTime payedDate) {
         this.payedDate = payedDate;
     }
 
-    public LocalDate getPenaltyDate() {
+    public LocalDateTime getPenaltyDate() {
         return penaltyDate;
     }
 
-    public void setPenaltyDate(LocalDate penaltyDate) {
+    public void setPenaltyDate(LocalDateTime penaltyDate) {
         this.penaltyDate = penaltyDate;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
     public StatusPenalty getStatus() {
