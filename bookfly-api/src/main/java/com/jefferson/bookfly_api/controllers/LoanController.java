@@ -32,7 +32,7 @@ public class LoanController {
                 );
     }
 
-    @PostMapping("/do-loan")
+    @PostMapping("/create")
     public ResponseEntity<LoanSummary> createLoan(@RequestBody LoanRequest request){
         Loan loaned= loanService.doLoanBook(request);
         return ResponseEntity
