@@ -70,27 +70,28 @@ public class BookService {
     public Book updateBook(Long id, Book book){
         Book existBook = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Livro não existe"));
-        existBook.setTitle(book.getTitle());
-        existBook.setCover(book.getCover());
-        existBook.setGenders(book.getGenders());
 
-        List<Author> authors = new ArrayList<>();
+        if (book.getTitle() != null) existBook.setTitle(book.getTitle());
+        if (book.getCover() != null) existBook.setCover(book.getCover());
+        if (book.getGenders() != null) existBook.setGenders(book.getGenders());
 
 
-        for (Author author : book.getAuthors()) {
-            Author authorExist = authorRepository
-                    .findByNameIgnoreCase(author.getName())
-                    .orElse(null);
 
-            if (authorExist != null) {
-                authors.add(authorExist);
-            } else {
-                Author newAuthor = new Author();
-                newAuthor.setName(author.getName());
-                authors.add(authorRepository.save(newAuthor));
+        if (book.getAuthors() != null) {
+            List<Author> managedAuthors = new ArrayList<>();
+
+            for (Author author : book.getAuthors()) {
+                Author managedAuthor = authorRepository
+                        .findByNameIgnoreCase(author.getName())
+                        .orElseGet(() -> {
+                            Author newAuthor = new Author();
+                            newAuthor.setName(author.getName());
+                            return authorRepository.save(newAuthor);
+                        });
+                managedAuthors.add(managedAuthor);
             }
+            existBook.setAuthors(managedAuthors);
         }
-        existBook.setAuthors(authors);
 
         return bookRepository.save(existBook);
 

@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.controllers;
 
 import com.jefferson.bookfly_api.dto.book.BookDetail;
 import com.jefferson.bookfly_api.dto.book.BookRequest;
+import com.jefferson.bookfly_api.dto.book.BookUpdateRequest;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
 import com.jefferson.bookfly_api.service.BookService;
@@ -87,18 +88,24 @@ public class BookController {
             @ApiResponse(responseCode = "404", description = "Livro não encontrado")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<BookDetail> updateBook(@PathVariable Long id, @RequestBody @Valid BookRequest request){
+    public ResponseEntity<BookDetail> updateBook(@PathVariable Long id, @RequestBody BookUpdateRequest request) {
 
        Book bookEdit = new Book();
        bookEdit.setCover(request.cover());
-       List<Author> authors = request.authors().stream()
-               .map(name -> {
-                           Author author = new Author();
-                           author.setName(name);
-                           return author;
-                       }
-               ).toList();
-       bookEdit.setAuthors(authors);
+       if (request.authors() != null){
+           List<Author> authors = request.authors().stream()
+                   .map(name -> {
+                               Author author = new Author();
+                               author.setName(name);
+                               return author;
+                           }
+                   ).toList();
+           bookEdit.setAuthors(authors);
+       } else {
+           bookEdit.setAuthors(null);
+       }
+
+
        bookEdit.setTitle(request.title());
        bookEdit.setGenders(request.genders());
 
