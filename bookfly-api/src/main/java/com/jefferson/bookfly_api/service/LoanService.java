@@ -80,9 +80,18 @@ public class LoanService {
         moviment.setStockBook(bookOnStock);
         moviment.setCreatedDate(LocalDate.now());
 
+        LocalDateTime timeNow = LocalDateTime.now();
+
+
+
+
+            if (!request.returnDateBook().isAfter(timeNow)){
+                throw new RuntimeException("A data de retorno deve ser posterior à data atual");
+            }
+
 
         Loan loan = new Loan();
-        loan.setLoanDate(LocalDateTime.now());
+        loan.setLoanDate(timeNow);
         loan.setReturnDate(request.returnDateBook());
         loan.setMoviments(new ArrayList<>());
         loan.getMoviments().add(moviment);
