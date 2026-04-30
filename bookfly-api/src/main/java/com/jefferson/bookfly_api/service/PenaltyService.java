@@ -33,37 +33,43 @@ public class PenaltyService {
 
     public Penalty createPenalty(PenaltyRequest request) {
 
-        User existUser = userRepository.findById(request.userId())
-                .orElseThrow(()-> new RuntimeException("Usuário não existe"));
+
+        userRepository.findById(request.userId())
+                .orElseThrow(() -> new RuntimeException("Usuário não existe"));
 
 
-        Loan loanedUser = loanRepository.findById(existUser.getId())
-                .orElseThrow(()-> new RuntimeException("Emprestimo inexistente"));
+        Loan loan = loanRepository.findById(request.loanId())
+                .orElseThrow(() -> new RuntimeException("Empréstimo inexistente"));
 
-        Optional<Penalty> existPenalty = penaltyRepository.findByLoan(loanedUser);
 
-        if (existPenalty.isPresent()){
+        Optional<Penalty> existPenalty = penaltyRepository.findByLoan(loan);
+        if (existPenalty.isPresent()) {
             throw new RuntimeException("Essa multa já existe");
         }
 
 
-        Boolean isPassedReturnDate = loanedUser.getReturnDate().isAfter(LocalDateTime.now());
+        boolean isOverdue = loan.getReturnDate().isBefore(LocalDateTime.now());
 
-
-        if(isPassedReturnDate){
+        if (isOverdue) {
             Penalty penalty = new Penalty();
             penalty.setPenaltyDate(LocalDateTime.now());
             penalty.setPaid(false);
-            penalty.setLoan(loanedUser);
-            penalty.setAmount(penalty.getPaymentAmount(loanedUser.getLoanDate(),loanedUser.getReturnDate()));
+            penalty.setLoan(loan);
+
+            penalty.setAmount(penalty.getPaymentAmount(
+                    loan.getReturnDate(),
+                    LocalDateTime.now()
+            ));
+
             penalty.setStatus(StatusPenalty.PENDENTE);
-            loanedUser.setStatus(StatusLoan.ATRASADO);
-            loanRepository.save(loanedUser);
+
+            loan.setStatus(StatusLoan.ATRASADO);
+            loanRepository.save(loan);
+
             return penaltyRepository.save(penalty);
         } else {
-            throw new RuntimeException("Não foi possível criar Multa");
+            throw new RuntimeException("Não foi possível criar multa: o prazo de devolução ainda não venceu");
         }
-
     }
 
 
