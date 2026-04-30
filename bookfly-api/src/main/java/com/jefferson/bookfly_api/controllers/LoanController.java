@@ -41,6 +41,13 @@ public class LoanController {
 
     }
 
+    @PutMapping("/return/{loanId}")
+    public ResponseEntity<LoanSummary> updateLoan(@PathVariable long loanId){
+        Loan loanReturned = loanService.returnBook(loanId);
+
+        return ResponseEntity.ok().body(LoanSummary.from(loanReturned));
+    }
+
     @GetMapping("/list-loans-user")
     public ResponseEntity<List<LoanByUserBooksSumary>> getAllLoansByUser(UserOnlyRequest userOnlyRequest){
        List<Loan> existLoan =  loanService.findAllLoansByUser(userOnlyRequest.userId());
