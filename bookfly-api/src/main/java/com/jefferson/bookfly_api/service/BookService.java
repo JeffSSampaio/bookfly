@@ -76,26 +76,23 @@ public class BookService {
         if (book.getGenders() != null) existBook.setGenders(book.getGenders());
 
 
-
         if (book.getAuthors() != null) {
-            List<Author> managedAuthors = new ArrayList<>();
+            for (Author author: book.getAuthors()) {
 
-            for (Author author : book.getAuthors()) {
-                Author managedAuthor = authorRepository
-                        .findByNameIgnoreCase(author.getName())
-                        .orElseGet(() -> {
-                            Author newAuthor = new Author();
-                            newAuthor.setName(author.getName());
-                            return authorRepository.save(newAuthor);
-                        });
-                managedAuthors.add(managedAuthor);
+                if (author.getId() != null) {
+                    Author authorToUpdate = authorRepository.findById(author.getId())
+                            .orElseThrow(() -> new RuntimeException("Autor não encontrado"));
+
+                    authorToUpdate.setName(author.getName());
+                    authorRepository.save(authorToUpdate);
+                }
             }
-            existBook.setAuthors(managedAuthors);
         }
 
         return bookRepository.save(existBook);
-
     }
+
+
 
     public List<Book> findAll() {
         return bookRepository.findAll();
