@@ -2,7 +2,6 @@ package com.jefferson.bookfly_api.controllers;
 
 import com.jefferson.bookfly_api.dto.book.BookDetail;
 import com.jefferson.bookfly_api.dto.book.BookRequest;
-import com.jefferson.bookfly_api.dto.book.BookSummary;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
 import com.jefferson.bookfly_api.service.BookService;
@@ -32,8 +31,24 @@ public class BookController {
     })
     @PostMapping("/create")
     public ResponseEntity<BookDetail> createBook(@RequestBody @Valid BookRequest request){
+        Book book = new Book();
+        book.setTitle(request.title());
 
-        Book saved = bookService.createBook(request);
+        book.setCover(request.cover());
+
+        List<Author> authors = request.authors().stream()
+                .map(name ->{
+                            Author author = new Author();
+                            author.setName(name);
+                            return author;
+                        })
+                .toList();
+
+        book.setAuthors(authors);
+
+        book.setGenders(request.genders());
+
+        Book saved = bookService.createBook(book);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(BookDetail.from(saved));
@@ -73,7 +88,21 @@ public class BookController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<BookDetail> updateBook(@PathVariable Long id, @RequestBody @Valid BookRequest request){
-       Book updatedBook = bookService.updateBook(id, request);
+
+       Book bookEdit = new Book();
+       bookEdit.setCover(request.cover());
+       List<Author> authors = request.authors().stream()
+               .map(name -> {
+                           Author author = new Author();
+                           author.setName(name);
+                           return author;
+                       }
+               ).toList();
+       bookEdit.setAuthors(authors);
+       bookEdit.setTitle(request.title());
+       bookEdit.setGenders(request.genders());
+
+       Book updatedBook = bookService.updateBook(id, bookEdit);
 
        return ResponseEntity.ok(BookDetail.from(updatedBook));
     }

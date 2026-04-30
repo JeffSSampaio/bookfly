@@ -19,39 +19,39 @@ public class BookService {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
 
-    public Book createBook(BookRequest request){
+    public Book createBook(Book book){
 
         List<Author> authors = new ArrayList<>();
 
-        for (String name : request.authors()) {
+        for (Author author : book.getAuthors()) {
 
             Author authorExist = authorRepository
-                    .findByNameIgnoreCase(name)
+                    .findByNameIgnoreCase(author.getName())
                     .orElse(null);
 
             if (authorExist != null) {
                 authors.add(authorExist);
             } else {
                 Author newAuthor = new Author();
-                newAuthor.setName(name);
+                newAuthor.setName(author.getName());
 
                 Author savedAuthor = authorRepository.save(newAuthor);
                 authors.add(savedAuthor);
             }
         }
-        List<Gender> genders = request.genders()
+        List<Gender> genders = book.getGenders()
                 .stream()
                 .distinct()
                 .toList();
 
-        Book book = new Book();
-        book.setTitle(request.title());
-        book.setCover(request.cover());
-        book.setAuthors(authors);
-        book.setGenders(genders);
+        Book bookToSave = new Book();
+        bookToSave.setTitle(book.getTitle());
+        bookToSave.setCover(book.getCover());
+        bookToSave.setAuthors(authors);
+        bookToSave.setGenders(genders);
 
         boolean existBook = bookRepository
-                .existsByTitleIgnoreCaseAndAuthorsIn(book.getTitle(), authors);
+                .existsByTitleIgnoreCaseAndAuthorsIn(bookToSave.getTitle(), authors);
 
         if (existBook){
             throw new RuntimeException("Livro já cadastrado");
@@ -59,7 +59,7 @@ public class BookService {
 
         System.out.println("\nLivro cadastrado " + book);
 
-        return bookRepository.save(book);
+        return bookRepository.save(bookToSave);
     }
 
     public Book findById(Long id) {
@@ -67,26 +67,26 @@ public class BookService {
                 .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
     }
 
-    public Book updateBook(Long id, BookRequest request){
+    public Book updateBook(Long id, Book book){
         Book existBook = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Livro não existe"));
-        existBook.setTitle(request.title());
-        existBook.setCover(request.cover());
-        existBook.setGenders(request.genders());
+        existBook.setTitle(book.getTitle());
+        existBook.setCover(book.getCover());
+        existBook.setGenders(book.getGenders());
 
         List<Author> authors = new ArrayList<>();
 
 
-        for (String name : request.authors()) {
+        for (Author author : book.getAuthors()) {
             Author authorExist = authorRepository
-                    .findByNameIgnoreCase(name)
+                    .findByNameIgnoreCase(author.getName())
                     .orElse(null);
 
             if (authorExist != null) {
                 authors.add(authorExist);
             } else {
                 Author newAuthor = new Author();
-                newAuthor.setName(name);
+                newAuthor.setName(author.getName());
                 authors.add(authorRepository.save(newAuthor));
             }
         }

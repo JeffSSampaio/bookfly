@@ -19,6 +19,7 @@ public class Book {
     private String cover;
 
 
+
     @ManyToMany
     @JoinTable(
             name = "livro_author",

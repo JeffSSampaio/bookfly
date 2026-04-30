@@ -8,8 +8,6 @@ import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 @Schema(description = "Dados para criação de um livro")
 public record BookRequest(
-        @Schema(description = "Identificador de Livro")
-        Long bookId,
         @Schema(description = "Título do livro")
         @NotBlank(message = "Título é obrigatório")
         String title,
