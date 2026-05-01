@@ -56,8 +56,15 @@ public class UserController {
     @PostMapping("/create")
     public ResponseEntity<UserSummary> createUser(
             @RequestBody @Valid UserRequest request){
+
+        User user = new User();
+        user.setPassword(request.password());
+        user.setRole(request.role());
+        user.setName(request.name());
+        user.setEmail(request.email());
+
         return ResponseEntity.ok(
-                UserSummary.from(userService.createUser(request))
+                UserSummary.from(userService.createUser(user))
         );
     }
 
@@ -72,16 +79,13 @@ public class UserController {
             @PathVariable Long id,
             @RequestBody @Valid UserRequest request){
 
-        request = new UserRequest(
-                id,
-                request.name(),
-                request.email(),
-                request.password(),
-                request.role()
-        );
+       User user = new User();
+       user.setEmail(request.email());
+       user.setName(request.name());
+       user.setPassword(request.password());
 
         return ResponseEntity.ok(
-                UserSummary.from(userService.updateUser(request))
+                UserSummary.from(userService.updateUser(user))
         );
     }
 

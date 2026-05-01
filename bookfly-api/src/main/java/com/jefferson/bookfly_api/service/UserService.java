@@ -16,19 +16,19 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User createUser(UserRequest request){
+    public User createUser(User user){
 
-        if (userRepository.findByEmail(request.email())
-                .filter(u -> !u.getId().equals(request.userID()))
+        if (userRepository.findByEmail(user.getEmail())
+                .filter(u -> !u.getId().equals(user.getId()))
                 .isPresent()) {
             throw new RuntimeException("Email já está em uso");
         }
 
-        User user = new User();
-        user.setName(request.name());
-        user.setEmail(request.email());
-        user.setPassword(request.password());
-        user.setRole(request.role());
+        User userToSave = new User();
+        userToSave.setName(user.getName());
+        userToSave.setEmail(user.getEmail());
+        userToSave.setPassword(user.getPassword());
+        userToSave.setRole(user.getRole());
 
         return userRepository.save(user);
     }
@@ -43,28 +43,28 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUser(UserRequest request){
+    public User updateUser(User newUser){
 
-        User user = userRepository.findById(request.userID())
+        User user = userRepository.findById(newUser.getId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        if (userRepository.findByEmail(request.email())
-                .filter(u -> !u.getId().equals(request.userID()))
+        if (userRepository.findByEmail(newUser.getEmail())
+                .filter(u -> !u.getId().equals(newUser.getId()))
                 .isPresent()) {
             throw new RuntimeException("Email já está em uso");
         }
 
 
-        user.setName(request.name());
-        user.setEmail(request.email());
+        user.setName(newUser.getName());
+        user.setEmail(newUser.getEmail());
 
 
-        if (request.password() != null && !request.password().isBlank()) {
-            user.setPassword(request.password());
+        if (newUser.getPassword() != null && !newUser.getPassword().isBlank()) {
+            user.setPassword(newUser.getPassword());
         }
 
-        if (request.role() != null) {
-            user.setRole(request.role());
+        if (newUser.getRole() != null) {
+            user.setRole(newUser.getRole());
         }
 
         return userRepository.save(user);
