@@ -1,7 +1,5 @@
 package com.jefferson.bookfly_api.service;
 
-import com.jefferson.bookfly_api.dto.moviment.MovimentQtdRequest;
-import com.jefferson.bookfly_api.dto.moviment.MovimentRequest;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
 import com.jefferson.bookfly_api.models.*;
@@ -20,74 +18,63 @@ public class MovimentService {
     private final MovimentRepository movimentRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
- 
     private final StockBookRepository stockBookRepository;
     private final StockService stockService;
 
     @Transactional
-    public Moviment doMoviment(MovimentQtdRequest request){
-
-
+    public Moviment doMoviment(Long bookId, Long userId, int qtd) {
         Stock stock = stockService.getStock();
 
-        Book book = bookRepository.findById(request.bookId())
+        Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Livro não esta registrado"));
 
         StockBook bookOnStock = stockBookRepository.findByStockAndBook(stock, book)
                 .orElseThrow(() -> new RuntimeException("Livro não existe no estoque"));
 
-        User user = userRepository.findById(request.userId())
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuário não existe"));
 
+        if (qtd == 0) throw new RuntimeException("Quantidade não pode ser zero");
 
-        int delta = request.qtd();
-        if (delta == 0) throw new RuntimeException("Quantidade não pode ser zero");
-
-        int newQtd = bookOnStock.getQtd() + delta;
+        int newQtd = bookOnStock.getQtd() + qtd;
         if (newQtd < 0) throw new RuntimeException("Quantidade insuficiente no Estoque");
-
 
         bookOnStock.setQtd(newQtd);
         stockBookRepository.save(bookOnStock);
-        TypeMoviment type;
-        boolean isAdmin = user.getRole().equals(Role.ADMIN);
 
-        if (delta > 0) {
+        boolean isAdmin = user.getRole().equals(Role.ADMIN);
+        TypeMoviment type;
+        if (qtd > 0) {
             type = isAdmin ? TypeMoviment.ENTRADA_ADMIN : TypeMoviment.ENTRADA;
         } else {
             type = isAdmin ? TypeMoviment.SAIDA_ADMIN : TypeMoviment.SAIDA;
         }
 
-
         Moviment moviment = new Moviment();
         moviment.setStockBook(bookOnStock);
         moviment.setUser(user);
         moviment.setTypeItem(type);
-        moviment.setQtdMoviment(Math.abs(delta));
+        moviment.setQtdMoviment(Math.abs(qtd));
         moviment.setCreatedDate(LocalDate.now());
 
         return movimentRepository.save(moviment);
-
-
     }
 
-    public List<Moviment> getAllMoviments(){
+    public List<Moviment> getAllMoviments() {
         return movimentRepository.findAll();
     }
 
-    public Moviment getMoviment(Long id){
-        return  movimentRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Movimentação inexistente no estoque") );
+    public Moviment getMoviment(Long id) {
+        return movimentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Movimentação inexistente no estoque"));
     }
 
     @Transactional
-    public Moviment updateMoviment(Long id, MovimentRequest request){
-
+    public Moviment updateMoviment(Long id, Long userId, TypeMoviment typeItem, int qtd) {
         Moviment oldMoviment = movimentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Movimentação inexistente no estoque"));
 
         StockBook stockBook = oldMoviment.getStockBook();
-
 
         boolean wasOutput = oldMoviment.getTypeItem() == TypeMoviment.SAIDA;
 
@@ -100,43 +87,40 @@ public class MovimentService {
             stockBook.setQtd(stockBook.getQtd() - oldMoviment.getQtdMoviment());
         }
 
-        if (request.qtd() <= 0) {
+        if (qtd <= 0) {
             throw new RuntimeException("Quantidade inválida");
         }
 
-        boolean isNewOutput = request.typeItem() == TypeMoviment.SAIDA;
+        boolean isNewOutput = typeItem == TypeMoviment.SAIDA;
 
         if (isNewOutput) {
-            if (stockBook.getQtd() < request.qtd()) {
+            if (stockBook.getQtd() < qtd) {
                 throw new RuntimeException("Estoque insuficiente");
             }
-            stockBook.setQtd(stockBook.getQtd() - request.qtd());
+            stockBook.setQtd(stockBook.getQtd() - qtd);
         } else {
-            stockBook.setQtd(stockBook.getQtd() + request.qtd());
+            stockBook.setQtd(stockBook.getQtd() + qtd);
         }
 
         stockBookRepository.save(stockBook);
 
-        User user = userRepository.findById(request.userId())
-                .orElseThrow( ()-> new RuntimeException("Usuario não existe"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario não existe"));
 
         oldMoviment.setUser(user);
-        oldMoviment.setTypeItem(request.typeItem());
-        oldMoviment.setQtdMoviment(request.qtd());
+        oldMoviment.setTypeItem(typeItem);
+        oldMoviment.setQtdMoviment(qtd);
 
         return movimentRepository.save(oldMoviment);
     }
 
     @Transactional
-    public void deleteMoviment(Long id){
-
+    public void deleteMoviment(Long id) {
         Moviment moviment = movimentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Movimentação não encontrada"));
 
         StockBook stockBook = moviment.getStockBook();
-
         boolean isOutput = moviment.getTypeItem() == TypeMoviment.SAIDA;
-
 
         if (isOutput) {
             stockBook.setQtd(stockBook.getQtd() + moviment.getQtdMoviment());
@@ -148,8 +132,6 @@ public class MovimentService {
         }
 
         stockBookRepository.save(stockBook);
-
         movimentRepository.delete(moviment);
     }
-
 }

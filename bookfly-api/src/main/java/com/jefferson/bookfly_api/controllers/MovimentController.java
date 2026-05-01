@@ -24,14 +24,12 @@ public class MovimentController {
     private final MovimentService movimentService;
 
     @Operation(summary = "Listar todas as movimentações")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Movimentações retornadas com sucesso")
-    })
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Movimentações retornadas com sucesso")})
     @GetMapping
-    public ResponseEntity<List<MovimentSummary>> getAllMoviments(){
-           List<Moviment> allMoviments =  movimentService.getAllMoviments().stream()
-                    .filter(moviment -> (moviment.getId() != null) && (moviment.getUser() != null))
-                    .toList();
+    public ResponseEntity<List<MovimentSummary>> getAllMoviments() {
+        List<Moviment> allMoviments = movimentService.getAllMoviments().stream()
+                .filter(moviment -> (moviment.getId() != null) && (moviment.getUser() != null))
+                .toList();
 
         return ResponseEntity.ok(
                 allMoviments.stream()
@@ -46,7 +44,7 @@ public class MovimentController {
             @ApiResponse(responseCode = "404", description = "Movimentação não encontrada")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<MovimentSummary> getMoviment(@PathVariable Long id){
+    public ResponseEntity<MovimentSummary> getMoviment(@PathVariable Long id) {
         Moviment moviment = movimentService.getMoviment(id);
         return ResponseEntity.ok(MovimentSummary.from(moviment));
     }
@@ -57,9 +55,8 @@ public class MovimentController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos")
     })
     @PostMapping
-    public ResponseEntity<MovimentSummary> createMoviment(@RequestBody MovimentQtdRequest request){
-
-        Moviment moviment = movimentService.doMoviment(request);
+    public ResponseEntity<MovimentSummary> createMoviment(@RequestBody MovimentQtdRequest request) {
+        Moviment moviment = movimentService.doMoviment(request.bookId(), request.userId(), request.qtd());
         return ResponseEntity.ok(MovimentSummary.from(moviment));
     }
 
@@ -72,8 +69,8 @@ public class MovimentController {
     public ResponseEntity<MovimentSummary> updateMoviment(
             @PathVariable Long id,
             @RequestBody MovimentRequest request
-    ){
-        Moviment moviment = movimentService.updateMoviment(id, request);
+    ) {
+        Moviment moviment = movimentService.updateMoviment(id, request.userId(), request.typeItem(), request.qtd());
         return ResponseEntity.ok(MovimentSummary.from(moviment));
     }
 
@@ -83,7 +80,7 @@ public class MovimentController {
             @ApiResponse(responseCode = "404", description = "Movimentação não encontrada")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMoviment(@PathVariable Long id){
+    public ResponseEntity<Void> deleteMoviment(@PathVariable Long id) {
         movimentService.deleteMoviment(id);
         return ResponseEntity.noContent().build();
     }
