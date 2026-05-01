@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.controllers;
 
 import com.jefferson.bookfly_api.dto.stockbook.*;
 import com.jefferson.bookfly_api.models.StockBook;
+import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.service.StockBookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -59,8 +60,7 @@ public class StockBookController {
     public ResponseEntity<StockBookSummary> addbookOnStock(
             @RequestBody @Valid StockBookRequest request
     ) {
-
-        StockBook bookOnStockAdded = stockBookService.addBookOnStock(request);
+        StockBook bookOnStockAdded = stockBookService.addBookOnStock(request.bookId(), request.userId(), request.qtd());
 
         return ResponseEntity.ok(
                 StockBookSummary.from(bookOnStockAdded)
@@ -90,7 +90,7 @@ public class StockBookController {
             @RequestBody @Valid StockBookUpdateQtdRequest request
     ) {
 
-        StockBook stockBook = stockBookService.updateQtd(request);
+        StockBook stockBook = stockBookService.updateQtd(request.bookId(),request.qtd());
 
         return ResponseEntity.ok(
                 StockBookUpdateQtdSummary.from(
