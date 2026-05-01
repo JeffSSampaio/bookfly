@@ -1,6 +1,5 @@
 package com.jefferson.bookfly_api.controllers;
 
-import com.jefferson.bookfly_api.dto.loan.LoanRequest;
 import com.jefferson.bookfly_api.dto.penalty.PenaltyDetail;
 import com.jefferson.bookfly_api.dto.penalty.PenaltyRequest;
 import com.jefferson.bookfly_api.models.Penalty;
@@ -18,21 +17,19 @@ public class PenaltyController {
 
     private final PenaltyService penaltyService;
 
-
     @PostMapping("/create")
-    public ResponseEntity<PenaltyDetail> doPenalty(@RequestBody PenaltyRequest request){
-        Penalty penalty = penaltyService.createPenalty(request);
+    public ResponseEntity<PenaltyDetail> doPenalty(@RequestBody PenaltyRequest request) {
+        Penalty penalty = penaltyService.createPenalty(request.userId(), request.loanId());
         return ResponseEntity.ok().body(PenaltyDetail.from(penalty));
     }
+
     @GetMapping("/list")
-    public ResponseEntity<List<PenaltyDetail>> getAllPenalties(){
-        return ResponseEntity
-                .ok()
+    public ResponseEntity<List<PenaltyDetail>> getAllPenalties() {
+        return ResponseEntity.ok()
                 .body(penaltyService.getAllPenaltys()
                         .stream()
                         .map(PenaltyDetail::from)
                         .toList()
                 );
     }
-
 }
