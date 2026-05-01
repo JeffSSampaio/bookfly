@@ -10,6 +10,8 @@ import com.jefferson.bookfly_api.repository.AuthorRepository;
 import com.jefferson.bookfly_api.repository.BookRepository;
 import com.jefferson.bookfly_api.repository.StockBookRepository;
 import com.jefferson.bookfly_api.repository.UserRepository;
+import com.jefferson.bookfly_api.service.BookService;
+import com.jefferson.bookfly_api.service.StockBookService;
 import com.jefferson.bookfly_api.service.StockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,8 @@ public class DataSeeder {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final UserRepository userRepository;
+    private final StockBookService stockBookService;
+    private final BookService bookService;
     private final StockService stockService;
     private final StockBookRepository stockBookRepository;
 
@@ -44,7 +48,7 @@ public class DataSeeder {
         user.setEmail("user@gmail.com");
         user.setRole(Role.USER);
 
-        userRepository.saveAll(List.of(user,admin));
+        userRepository.saveAll(List.of(user, admin));
 
         Author tolkien = new Author();
         tolkien.setName("J. R. R. Tolkien");
@@ -56,8 +60,6 @@ public class DataSeeder {
         poe.setName("Edgar Allan Poe");
 
         authorRepository.saveAll(List.of(tolkien, king, poe));
-
-
 
         Book book1 = new Book();
         book1.setTitle("O Hobbit");
@@ -83,13 +85,22 @@ public class DataSeeder {
         book4.setGenders(List.of(Gender.TERROR));
         book4.setAuthors(List.of(poe));
 
-        bookRepository.saveAll(List.of(book1, book2, book3, book4));
+        List<Book> savedBooks = List.of(
+                bookService.createBook(book1),
+                bookService.createBook(book2),
+                bookService.createBook(book3),
+                bookService.createBook(book4)
+        );
 
         StockBook stockBook1 = new StockBook();
-        stockBook1.setBook(book1);
+        stockBook1.setBook(savedBooks.get(0));
         stockBook1.setStock(stockService.getStock());
         stockBook1.setQtd(10);
 
-        stockBookRepository.save(stockBook1);
+        stockBookService.addBookOnStock(
+                savedBooks.get(0).getId(),
+                stockBook1.getStock().getId(),
+                stockBook1.getQtd()
+        );
     }
 }
