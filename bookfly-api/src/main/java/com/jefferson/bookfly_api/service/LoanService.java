@@ -1,6 +1,5 @@
 package com.jefferson.bookfly_api.service;
 
-import com.jefferson.bookfly_api.dto.loan.LoanRequest;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
@@ -35,24 +34,22 @@ public class LoanService {
     }
 
     @Transactional
-    public Loan doLoanBook(LoanRequest request) {
+    public Loan doLoanBook(Long bookId, Long userId, LocalDateTime returnDate) {
         Stock stock = stockService.getStock();
 
-        Book book = bookRepository.findById(request.bookId())
+        Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Esse livro não existe"));
 
         StockBook bookOnStock = stockBookRepository.findByStockAndBook(stock, book)
                 .orElseThrow(() -> new RuntimeException("Esse livro não existe dentro do estoque"));
 
-        User user = userRepository.findById(request.userId())
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuário não existe"));
-
 
         Optional<Loan> existLoan = loanRepository.findByUserAndStockBook(user, bookOnStock);
 
         if (existLoan.isPresent()) {
             Loan activeLoan = existLoan.get();
-
 
             Penalty penalty = activeLoan.getPenalty();
             if (penalty != null && !penalty.getPaid()) {
@@ -69,9 +66,7 @@ public class LoanService {
             throw new RuntimeException("Não foi possível fazer empréstimo: livro indisponível no estoque");
         }
 
-
         bookOnStock.setQtd(bookOnStock.getQtd() - 1);
-
 
         Moviment moviment = new Moviment();
         moviment.setUser(user);
@@ -82,17 +77,13 @@ public class LoanService {
 
         LocalDateTime timeNow = LocalDateTime.now();
 
-
-
-
-            if (!request.returnDateBook().isAfter(timeNow)){
-                throw new RuntimeException("A data de retorno deve ser posterior à data atual");
-            }
-
+        if (!returnDate.isAfter(timeNow)) {
+            throw new RuntimeException("A data de retorno deve ser posterior à data atual");
+        }
 
         Loan loan = new Loan();
         loan.setLoanDate(timeNow);
-        loan.setReturnDate(request.returnDateBook());
+        loan.setReturnDate(returnDate);
         loan.setMoviments(new ArrayList<>());
         loan.getMoviments().add(moviment);
         loan.setUser(user);
@@ -104,18 +95,15 @@ public class LoanService {
         return loanRepository.save(loan);
     }
 
-
     @Transactional
     public Loan returnBook(Long loanId) {
 
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
 
-
         if (loan.getStatus() == StatusLoan.FINALIZADO) {
             throw new RuntimeException("Este empréstimo já foi finalizado");
         }
-
 
         Penalty penalty = loan.getPenalty();
         if (penalty != null && !penalty.getPaid()) {
@@ -126,7 +114,6 @@ public class LoanService {
         }
 
         StockBook bookOnStock = loan.getStockBook();
-
 
         bookOnStock.setQtd(bookOnStock.getQtd() + 1);
 
@@ -139,9 +126,7 @@ public class LoanService {
 
         loan.getMoviments().add(movimentEntrada);
 
-
         loan.setStatus(StatusLoan.FINALIZADO);
-
 
         if (penalty != null) {
             penalty.setStatus(StatusPenalty.PAGO);
