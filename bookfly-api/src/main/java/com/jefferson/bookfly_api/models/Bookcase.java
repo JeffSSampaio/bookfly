@@ -1,9 +1,9 @@
 package com.jefferson.bookfly_api.models;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,23 +15,29 @@ public class Bookcase {
     private Long id;
 
     @NotNull
+    @Column(nullable = false)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "bookcase", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Book> books;
+    @ManyToMany
+    @JoinTable(
+            name = "estante_estoque_livro",
+            joinColumns = @JoinColumn(name = "estante_id"),
+            inverseJoinColumns = @JoinColumn(name = "estoque_livro_id")
+    )
+    private List<StockBook> stockBooks = new ArrayList<>();
 
-    public Bookcase(Long id, String name, User user, List<Book> books) {
+    public Bookcase() {
+    }
+
+    public Bookcase(Long id, String name, User user, List<StockBook> stockBooks) {
         this.id = id;
         this.name = name;
         this.user = user;
-        this.books = books;
-    }
-
-    public Bookcase() {
+        this.stockBooks = stockBooks;
     }
 
     public Long getId() {
@@ -58,11 +64,11 @@ public class Bookcase {
         this.user = user;
     }
 
-    public List<Book> getBooks() {
-        return books;
+    public List<StockBook> getStockBooks() {
+        return stockBooks;
     }
 
-    public void setBooks(List<Book> books) {
-        this.books = books;
+    public void setStockBooks(List<StockBook> stockBooks) {
+        this.stockBooks = stockBooks;
     }
 }
