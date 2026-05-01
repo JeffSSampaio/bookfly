@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.repository;
 
+import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
 import com.jefferson.bookfly_api.models.Stock;
 import com.jefferson.bookfly_api.models.StockBook;
@@ -15,5 +16,7 @@ public interface StockBookRepository extends JpaRepository<StockBook, Long> {
     Optional<StockBook> findByStockAndBookId(Stock stock, Long bookId);
     void removeStockBookByBook(Book book);
     List<StockBook> findByStock(Stock stock);
-    Optional<StockBook> findByBook(Book book);
+    List<StockBook> findByBook(Book book);
+
+
 }

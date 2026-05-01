@@ -28,9 +28,6 @@ public class Book {
     )
     private List<Author> authors;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    @JoinColumn(name = "estante_id")
-    private Bookcase bookcase;
 
     @ElementCollection
     @Enumerated(EnumType.STRING)
@@ -40,12 +37,11 @@ public class Book {
     public Book() {
     }
 
-    public Book(Long id, String title, String cover, List<Author> authors, Bookcase bookcase, List<Gender> genders) {
+    public Book(Long id, String title, String cover, List<Author> authors, List<Gender> genders) {
         this.id = id;
         this.title = title;
         this.cover = cover;
         this.authors = authors;
-        this.bookcase = bookcase;
         this.genders = genders;
     }
 
@@ -55,7 +51,6 @@ public class Book {
                 ", title='" + title + '\'' +
                 ", cover='" + cover + '\'' +
                 ", authors=" + authors +
-                ", bookcase=" + bookcase +
                 ", genders=" + genders +
                 '}';
     }
@@ -90,14 +85,6 @@ public class Book {
 
     public void setAuthors(List<Author> authors) {
         this.authors = authors;
-    }
-
-    public Bookcase getBookcase() {
-        return bookcase;
-    }
-
-    public void setBookcase(Bookcase bookcase) {
-        this.bookcase = bookcase;
     }
 
     public List<Gender> getGenders() {
