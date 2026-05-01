@@ -53,4 +53,37 @@ public class PenaltyService {
             throw new RuntimeException("Não foi possível criar multa: o prazo de devolução ainda não venceu");
         }
     }
+
+    public Penalty findById(Long id){
+        return penaltyRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("não existe essa multa"));
+    }
+
+    public Penalty updatePenalty(Long penaltyId, Penalty updatedData) {
+        Penalty existingPenalty = penaltyRepository.findById(penaltyId)
+                .orElseThrow(() -> new RuntimeException("Multa não encontrada"));
+
+
+        if (updatedData.getPenaltyDate() != null) {
+            existingPenalty.setPenaltyDate(updatedData.getPenaltyDate());
+        }
+
+        if (updatedData.getPaid() != null) {
+            existingPenalty.setPaid(updatedData.getPaid());
+        }
+
+        if (updatedData.getAmount() != null) {
+            existingPenalty.setAmount(updatedData.getAmount());
+        }
+
+        if (updatedData.getStatus() != null) {
+            existingPenalty.setStatus(updatedData.getStatus());
+        }
+
+        if (updatedData.getLoan() != null) {
+            existingPenalty.setLoan(updatedData.getLoan());
+        }
+
+        return penaltyRepository.save(existingPenalty);
+    }
 }
