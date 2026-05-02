@@ -34,8 +34,7 @@ public class BookcaseController {
 
         Bookcase bookcase = bookcaseService.createBookcase(
                 request.name(),
-                request.userId(),
-                request.stockBookId()
+                request.userId()
         );
 
         return ResponseEntity.ok(BookcaseResponse.from(bookcase));

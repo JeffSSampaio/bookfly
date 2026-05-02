@@ -79,12 +79,12 @@ body{
     color: var(--marfin);
     font-family: var(--fonte-principal);
     background-color: var(--verde-medio);
-    transition: background-color 1s ease-out;
+    transition: border 1s ease-out;
 }
 
 
 .container-form input:hover{
-    border: 1px solid var(--verde-escuro);
+    border: 0.8px solid var(--verde-escuro);
     transition: border 1s ease-in;
 }
 

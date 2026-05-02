@@ -1,4 +1,4 @@
-
+import api from './apiService.js';
 
 function modalForm({ titulo, campos = [], onSubmit }) {
 
@@ -198,72 +198,112 @@ function abrirModalCadastro(){
 }
 
 
-function abrirModalEstante(){
+window.abrirModalEstante = function() {
+  const usuarioLogado = JSON.parse(sessionStorage.getItem('usuarioLogado'));
 
- modalForm({
-        titulo: "Criar Estante",
-        campos: [
-            { label: "Nome da Estante", type: "text", name: "name" },
-            
-        ],
-        onSubmit: (dado) => {
-            console.log(dado);
+  modalForm({
+    titulo: "Criar Estante",
+    campos: [
+      { label: "Nome da Estante", type: "text", name: "name" },
+    ],
+    onSubmit: async (dado) => {
+      try {
+        const bookcase = document.getElementById('bookcase');
 
+        const novaEstante = await api.createBookcase(
+          dado.name,
+          usuarioLogado.id
+        );
 
-     var bookcase = document.getElementById('bookcase');
+        if (dado.name) {
+          bookcase.innerHTML += `
+            <div class="title-bookase-container">
+              <h1>${novaEstante.name}</h1>
 
-     var name_bookcase = dado.name;
+              <span> 
+                <img src="/Interface/assets/iconAdd.svg" 
+                     onclick="abrirModalAdicionarLivro(${novaEstante.id})">
+              </span>
 
-    if (name_bookcase !== '') {
-        
-                bookcase.innerHTML += `
-                <div class="title-bookase-container">
-                    <h1>${name_bookcase}</h1>
-                    <span> 
-                        <img src="/Interface/assets/iconAdd.svg" onClick="abrirModalEstanteAdicao()" alt="Adicionar">
-                    </span>
-                    <span> 
-                        <img src="/Interface/assets/iconEdit.svg" onClick="abrirModalEstanteEdicao('${name_bookcase}')" alt="Editar">
-                    </span>
-                </div>
-                <div class='books-container'></div>
-                `;
-            }
+              <span> 
+                <img src="/Interface/assets/iconEdit.svg"
+                     onclick="abrirModalEstanteEdicao(${novaEstante.id}, '${novaEstante.name}')">
+              </span>
+            </div>
+
+            <div class='books-container'></div>
+          `;
         }
-    });
-}
 
-function abrirModalEstanteEdicao(title=String){
-modalForm(
-    {
-        titulo:`Editar Livros de "${title}"`,
-        campos:
-        [
-            {label:'Edição',type:'text',name:'edit'}
-        ],
-        onSubmit: (dado)=>{
-            console.log(dado)
-        }
+      } catch (erro) {
+        alert("Erro: " + erro.message);
+      }
     }
-)
+  });
+};
 
-}
-
-function abrirModalEstanteAdicao(){
-modalForm(
-    {
-        titulo:'Adicionar Livros ',
-        campos:
-        [
-            {label:'Edição',type:'text',name:'edit'}
-        ],
-        onSubmit: (dado)=>{
-            console.log(dado)
+window.abrirModalEstanteEdicao = function(bookcaseId, nomeAtual) {
+  modalForm({
+    titulo: `Editar Estante`,
+    campos: [
+      { label: 'Novo nome', type: 'text', name: 'name' }
+    ],
+    onSubmit: async (dados) => {
+      try {
+        if (!dados.name || dados.name.trim() === '') {
+          alert('Nome inválido');
+          return;
         }
-    }
-)
 
-}
+       await api.createBookcase(dado.name, usuarioLogado.id, null);
+
+        alert('Estante atualizada!');
+
+        location.reload();
+
+      } catch (erro) {
+        alert('Erro ao atualizar: ' + erro.message);
+      }
+    }
+  });
+};
+
+window.abrirModalAdicionarLivro = function(bookcaseId) {
+  modalForm({
+    titulo: 'Adicionar Livro à Estante',
+    campos: [
+      { label: 'ID do Livro', type: 'number', name: 'bookId' }
+    ],
+    onSubmit: async (dados) => {
+      try {
+        const bookId = dados.bookId;
+
+        if (!bookId || isNaN(bookId)) {
+          alert('ID inválido');
+          return;
+        }
+
+      
+        const stockBook = await api.getStockByBook(bookId);
+
+        if (!stockBook) {
+          alert('Livro não encontrado no estoque');
+          return;
+        }
+
+    
+        await api.addBookToBookcase(bookcaseId, stockBook.id);
+
+        alert('Livro adicionado com sucesso!');
+
+        location.reload();
+
+      } catch (erro) {
+        alert('Erro: ' + erro.message);
+      }
+    }
+  });
+};
 
 function abrirModalEmprestimo(){
     modalForm(

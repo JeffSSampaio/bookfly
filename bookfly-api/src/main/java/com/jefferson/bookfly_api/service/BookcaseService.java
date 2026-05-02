@@ -22,33 +22,16 @@ public class BookcaseService {
     private final StockBookRepository stockBookRepository;
 
     @Transactional
-    public Bookcase createBookcase(String name, Long userId, Long stockBookId) {
+    public Bookcase createBookcase(String name, Long userId) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        StockBook stockBook = stockBookRepository.findById(stockBookId)
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado no estoque"));
-
-
-        List<Bookcase> existingBookcases = bookcaseRepository.findByUser(user);
-        boolean alreadyExistsInAnyBookcase = existingBookcases.stream()
-                .flatMap(bookcase -> bookcase.getStockBooks().stream())
-                .anyMatch(sb -> sb.getId().equals(stockBookId));
-
-        if (alreadyExistsInAnyBookcase) {
-            throw new RuntimeException("Livro já está em uma estante deste usuário");
-        }
-
         Bookcase bookcase = new Bookcase();
         bookcase.setName(name);
         bookcase.setUser(user);
+        bookcase.setStockBooks(new ArrayList<>());
 
-
-        if (bookcase.getStockBooks() == null) {
-            bookcase.setStockBooks(new ArrayList<>());
-        }
-        bookcase.getStockBooks().add(stockBook);
 
         return bookcaseRepository.save(bookcase);
     }
@@ -138,6 +121,9 @@ public class BookcaseService {
 
         return bookcaseRepository.save(bookcase);
     }
+
+
+
 
     public void deleteBookcase(Long id) {
 

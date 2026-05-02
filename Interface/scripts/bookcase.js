@@ -1,63 +1,9 @@
+import api from './apiService.js';
 
+var usuarioLogado = JSON.parse(sessionStorage.getItem('usuarioLogado'));
 
+var bookcases = await api.getBookcasesByUser(usuarioLogado.id);
 
-var bookcases = [
-    {
-        'name':"Estante 1",
-        'books': [
-        {
-        'cover':'../assets/livro.png',
-        'title':'girassol na Janela',
-        'author':'Ganymédes José',
-         },
-          {
-        'cover':'../assets/livro.png',
-        'title':'girassol na Janela',
-        'author':'Ganymédes José',
-         },
-         {
-        'cover':'../assets/livro.png',
-        'title':'girassol na Janela',
-        'author':'Ganymédes José',
-         },
-         {
-        'cover':'../assets/livro.png',
-        'title':'girassol na Janela',
-        'author':'Ganymédes José',
-         },
-         
-         
-        ]
-    },
-      {
-        'name':"Estante 2",
-        'books': [
-        {
-        'cover':'../assets/livro.png',
-        'title':'girassol na Janela',
-        'author':'Ganymédes José',
-         },
-          {
-        'cover':'../assets/livro.png',
-        'title':'girassol na Janela',
-        'author':'Ganymédes José',
-         },
-         {
-        'cover':'../assets/livro.png',
-        'title':'girassol na Janela',
-        'author':'Ganymédes José',
-         },
-         {
-        'cover':'../assets/livro.png',
-        'title':'girassol na Janela',
-        'author':'Ganymédes José',
-         },
-         
-         
-        ]
-    },
-    
-]
 
 
 var bookcase = document.getElementById('bookcase');
