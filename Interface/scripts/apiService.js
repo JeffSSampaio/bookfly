@@ -78,7 +78,7 @@ const api = {
   getAllBooks: () =>
     fetch(`${BASE_URL}/books/list`).then(handleResponse),
 
-  /** GET /api/books/:id */
+
   getBookById: (id) =>
     fetch(`${BASE_URL}/books/${id}`).then(handleResponse),
 
@@ -220,11 +220,11 @@ const api = {
     fetch(`${BASE_URL}/bookcases/author/${authorId}`).then(handleResponse),
 
  
-  createBookcase: (name, userId, stockBookId) =>
+  createBookcase: (name, userId) =>
     fetch(`${BASE_URL}/bookcases`, {
       method: 'POST',
       headers: postHeaders(),
-      body: JSON.stringify({ name, userId, stockBookId }),
+      body: JSON.stringify({ name, userId }),
     }).then(handleResponse),
 
  

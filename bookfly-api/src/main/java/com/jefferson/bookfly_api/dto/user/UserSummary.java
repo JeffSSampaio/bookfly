@@ -7,6 +7,7 @@ public record UserSummary(
         Long id,
         String name,
         String email,
+        String password,
         Role role
 ) {
 
@@ -15,6 +16,7 @@ public record UserSummary(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
+                user.getPassword(),
                 user.getRole()
         );
     }
