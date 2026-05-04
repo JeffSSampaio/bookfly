@@ -46,3 +46,23 @@ bookcases.forEach(element => {
         </div>
     `;
 });
+
+
+function cardBook(cover,title,author){
+
+    `
+    <div class="c-card-emprestimo">
+          <img src=${element.cover}>
+          <div class="card-info-text">
+          <h1 class="c-emprestimo-text-title">${element.title}</h1>
+          <p class="c-emprestimo-text-author">${element.author}</p>
+          </div>
+        </div>
+    `
+
+
+}
+
+
+
+
