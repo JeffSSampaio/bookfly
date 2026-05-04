@@ -68,9 +68,9 @@ public class LoanController {
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
-    @GetMapping("/list-loans-user")
-    public ResponseEntity<List<LoanByUserBooksSumary>> getAllLoansByUser(@RequestBody UserOnlyRequest userOnlyRequest) {
-        List<Loan> existLoan = loanService.findAllLoansByUser(userOnlyRequest.userId());
+    @GetMapping("/list-loans-user/{userId}")
+    public ResponseEntity<List<LoanByUserBooksSumary>> getAllLoansByUser(@PathVariable Long userId) {
+        List<Loan> existLoan = loanService.findAllLoansByUser(userId);
         return ResponseEntity.ok()
                 .body(
                         existLoan.stream()

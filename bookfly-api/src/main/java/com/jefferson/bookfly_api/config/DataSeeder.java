@@ -63,25 +63,25 @@ public class DataSeeder {
 
         Book book1 = new Book();
         book1.setTitle("O Hobbit");
-        book1.setCover("https://example.com/hobbit.jpg");
+        book1.setCover("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHmkcR1BUTUEMz3gtzlkRM2Lb73oWVcU7S0A&s");
         book1.setGenders(List.of(Gender.FANTASIA));
         book1.setAuthors(List.of(tolkien));
 
         Book book2 = new Book();
         book2.setTitle("O Senhor dos Anéis: A Sociedade do Anel");
-        book2.setCover("https://example.com/lotr.jpg");
+        book2.setCover("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHB8qZ_YJcBCgxXcnR6GhGMoA4IxKtlZnAoQ&s");
         book2.setGenders(List.of(Gender.FANTASIA, Gender.ACAO));
         book2.setAuthors(List.of(tolkien));
 
         Book book3 = new Book();
         book3.setTitle("It: A Coisa");
-        book3.setCover("https://example.com/it.jpg");
+        book3.setCover("https://m.media-amazon.com/images/I/91g9Dvtf+jL._UF1000,1000_QL80_.jpg");
         book3.setGenders(List.of(Gender.TERROR));
         book3.setAuthors(List.of(king));
 
         Book book4 = new Book();
         book4.setTitle("Histórias Extraordinárias");
-        book4.setCover("https://example.com/poe.jpg");
+        book4.setCover("https://m.media-amazon.com/images/I/91J4ze7NJlL._AC_UF1000,1000_QL80_.jpg");
         book4.setGenders(List.of(Gender.TERROR));
         book4.setAuthors(List.of(poe));
 

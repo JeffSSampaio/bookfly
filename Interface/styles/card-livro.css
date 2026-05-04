@@ -67,7 +67,7 @@
 .card-info-text .c-emprestimo-text-title{
     color:var(--verde-escuro);
     font-weight: 700;
-    font-size: 20px;
+    font-size: 17px;
 }
 
 .c-card-emprestimo h1, .c-card-emprestimo span, .c-card-emprestimo p{
@@ -98,4 +98,9 @@
     background-color: var(--badge-verde);
     font-family: var(--font-principal);
     font-size: 15px;
+}
+
+.date{
+   font-size: 12px;
+    color: var(--verde-escuro);
 }

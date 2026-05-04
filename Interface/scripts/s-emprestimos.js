@@ -1,5 +1,10 @@
 'use strict'
 
+import api from './apiService.js'
+var usuarioLogado = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+
+console.log(usuarioLogado)
+
 var books = [
         {
         'cover':'/Interface/assets/livro.png',
@@ -49,103 +54,75 @@ var books = [
 
 ]
 
+var booksLoan = await api.getLoansByUser(usuarioLogado.id);
+const formatador = new  Intl.DateTimeFormat('pt-BR', {
+  dateStyle:'short',
+  timeStyle:'short'
+})
+
+
 var container_emprestimo = document.getElementById('emprestimo');
-var container_devolucao = document.getElementById('devolucao')
+var container_devolucao = document.getElementById('devolucao');
+var container_atrasado = document.getElementById("atrasado");
+var content_atrasado = document.getElementById('c-atrasado').style.display='none'
 
- books.forEach(element => {
+
+ booksLoan.forEach(element => {
     
-    var status = [
-        'style="color: blue ;"',
-        'style="color: red ;"',
-        'style="color: green ;"'    
-        
-    ] 
+  const dataloan = new Date(element.loanDate);
+  const dataFormated = formatador.format(dataloan);
 
-        if(element.situation == 'lending' ){
-
-
-        if(element.status == "Devolvido"){
+        if(element.statusLoan == "ATIVO"){
              container_emprestimo.innerHTML += `
         <div class="c-card-emprestimo">
-          <img src=${element.cover}>
+          <img src=${element.book.cover}>
           <div class="card-info-text">
-          <h1 class="c-emprestimo-text-title">${element.title}</h1>
-          <p class="c-emprestimo-text-author">${element.author}</p>
-          <span class="text-emprestimo-verde">${element.status}</span>
+          <h1 class="c-emprestimo-text-title">${element.book.title}</h1>
+          <p class="c-emprestimo-text-author">${element.book.authors.map(a=> a.name).join(', ') || "sem author"}</p>
+          <span class="text-emprestimo-ongoing">${element.statusLoan}</span>
+          <p class="date">${dataFormated}</p>
           </div>
         </div>
-        `  
-        } else if(element.status == "Em Andamento"){
-             container_emprestimo.innerHTML += `
+        `  }
+      
+
+
+        if(element.statusLoan == "ATRASADO"){
+          container_atrasado.style.display='block'
+             container_atrasado.innerHTML += `
         <div class="c-card-emprestimo">
-          <img src=${element.cover}>
+          <img src=${element.book.cover}>
           <div class="card-info-text">
-          <h1 class="c-emprestimo-text-title">${element.title}</h1>
-          <p class="c-emprestimo-text-author">${element.author}</p>
-          <span class="text-emprestimo-ongoing">${element.status}</span>
+          <h1 class="c-emprestimo-text-title">${element.book.title}</h1>
+          <p class="c-emprestimo-text-author">${element.book.authors.map(a=> a.name).join(', ') || "sem author"}</p>
+          <span class="text-emprestimo-ongoing">${element.statusLoan}</span>
+          <p class="date">${dataFormated}</p>
           </div>
         </div>
-        `  
-        } else if(element.status =="Devolver"){
-             container_emprestimo.innerHTML += `
+        `  }
+
+
+        if(element.statusLoan == "FINALIZADO"){
+             container_devolucao.innerHTML += `
         <div class="c-card-emprestimo">
-          <img src=${element.cover}>
+          <img src=${element.book.cover}>
           <div class="card-info-text">
-          <h1 class="c-emprestimo-text-title">${element.title}</h1>
-          <p class="c-emprestimo-text-author">${element.author}</p>
-          <span class="text-emprestimo-vermelho">${element.status}</span>
+          <h1 class="c-emprestimo-text-title">${element.book.title}</h1>
+          <p class="c-emprestimo-text-author">${element.book.authors.map(a=> a.name).join(', ') || "sem author"}</p>
+          <span class="text-emprestimo-verde">${element.statusLoan}</span>
+          <p class="date">${dataFormated}</p>
           </div>
         </div>
-        `  
+        `   
         } 
 
-          }
-
-            if(element.situation == 'devolution' ){
+          
 
 
-        if(element.status == "Devolvido"){
-             container_devolucao.innerHTML += `
-        <div class="c-card-emprestimo">
-          <img src=${element.cover}>
-          <div class="card-info-text">
-          <h1 class="c-emprestimo-text-title">${element.title}</h1>
-          <p class="c-emprestimo-text-author">${element.author}</p>
-          <span class="text-emprestimo-verde">${element.status}</span>
-          </div>
-        </div>
-        `  
-        } else if(element.status == "Em Andamento"){
-             container_devolucao.innerHTML += `
-        <div class="c-card-emprestimo">
-          <img src=${element.cover}>
-          <div class="card-info-text">
-          <h1 class="c-emprestimo-text-title">${element.title}</h1>
-          <p class="c-emprestimo-text-author">${element.author}</p>
-          <span class="text-emprestimo-ongoing">${element.status}</span>
-          </div>
-        </div>
-        `  
-        } else if(element.status =="Devolver"){
-             container_devolucao.innerHTML += `
-        <div class="c-card-emprestimo">
-          <img src=${element.cover}>
-          <div class="card-info-text">
-          <h1 class="c-emprestimo-text-title">${element.title}</h1>
-          <p class="c-emprestimo-text-author">${element.author}</p>
-          <span class="text-emprestimo-vermelho">${element.status}</span>
-          </div>
-        </div>
-        `  
-        } 
-
-          }
-
-
-
+        }
 
       
-    });
+    );
 
 
 
