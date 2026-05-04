@@ -1,4 +1,5 @@
 
+var usuarioLogado = JSON.parse(sessionStorage.getItem('usuarioLogado'));
 
 function btnMenu(){
 const menu = document.getElementById("icon-menu")
@@ -18,7 +19,7 @@ closeBtn.addEventListener("click", () => {
 } 
 var buttonsProfile = [ 
     "<a href='../pages/perfil.html'>Perfil</a>",
-    "<a href='../pages/a-homepage.html'>HomePage</a>",
+    "<a href='../pages/homepage.html'>HomePage</a>",
     "<a href='../pages/meus-livros.html'>Minhas Estantes</a>",
     "<a href='../pages/login.html'>Desconectar</a>",
 
@@ -34,23 +35,15 @@ var buttonAdmin =[
 
 
 
- var page = new URL(window.location.href)
 
- if (page.pathname == '/Interface/pages/homepage.html') {
-    var index = buttonsProfile.indexOf("<a href='../pages/homepage.html'>HomePage</a>")
-    buttonsProfile.splice(index,1)
- };
 
-if (page.pathname == '/Interface/pages/emprestimo.html') {
-    index = buttonsProfile.indexOf("<a href='../pages/emprestimo.html'>Emprestimo</a>")
 
- };
 
 
 content = document.getElementById("menu-content")
 
 
-if(page.pathname == '/Interface/pages/homepage.html' || page.pathname == '/Interface/pages/perfil.html' || page.pathname == '/Interface/pages/meus-livros.html'){
+if(usuarioLogado.role == 'USER'){
 
     
     buttonsProfile.forEach(element => {
@@ -64,7 +57,7 @@ if(page.pathname == '/Interface/pages/homepage.html' || page.pathname == '/Inter
         `
         
     });
-    } else{
+    } else if(usuarioLogado.role == 'ADMIN'){
         
         buttonAdmin.forEach(element=>{
     
@@ -74,8 +67,10 @@ if(page.pathname == '/Interface/pages/homepage.html' || page.pathname == '/Inter
                 ${element}
                     </div>
     `
-        })
-    }
+        }) 
+    }else{
+            alert('Usuário não reconhecido')
+        }
 
 
 
