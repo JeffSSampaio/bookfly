@@ -14,8 +14,8 @@ public record PenaltyDetail(
         StatusPenalty statusPenalty,
         Long userId,
         String userName,
-        LocalDateTime loanDate,
-        LocalDateTime returnDate,
+        LocalDateTime penaltyDate,
+        LocalDateTime returnLoanDate,
         StatusLoan statusLoan
 
 ) {

@@ -5,7 +5,7 @@ import com.jefferson.bookfly_api.models.Book;
 
 import java.util.List;
 
-public record BookSummary(Long bookId, String title , String cover,List<AuthorSummary> authors) {
+public record BookSummary(Long bookId, String title ,String cover,List<AuthorSummary> authors) {
     public static  BookSummary from(Book book){
             return new BookSummary(
                     book.getId(),

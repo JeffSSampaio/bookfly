@@ -1,3 +1,5 @@
+import api from './apiService.js';
+
 var style_table = {
     header: {
         backgroundColor: 'var(--verde-escuro)',
@@ -18,11 +20,26 @@ var style_table = {
     }
 }
 
-var table_loan = {
-    headers: ['Usuário', 'Livro', 'Data de Empréstimo', 'Data de Devolução', 'Status'],
-    rows: [{ usuario: 'João Silva', livro: 'O Alquimista', dataEmprestimo: '01/10/2024', dataDevolucao: '15/10/2024', status: 'Em Empréstimo' }]
-}
+var allStockBook = await api.getAllStock();
+var allLoans = await api.getAllLoans();
+var allMoviments = await api.getAllMoviments();
+var allPenalties = await api.getAllPenalties();
 
+
+var table_loan = {
+    headers: ['ID','Usuário', 'Livro', 'Data de Empréstimo', 'Data de Devolução', 'Status'],
+    rows: allLoans.map(
+        r => ({
+            id: r.id,
+            user: r.user.name.toUpperCase(),
+            book: r.bookTitle.toUpperCase(),
+            loanDate: r.loanDate,
+            returnDate: r.returnDate,
+            status: r.status
+        })
+    )
+}
+/* 
 var table_penalty = {
     headers: ['Usuário', 'Valor', 'Data de Multa', 'Status'],
     rows: [{ usuario: 'João Silva', valor: 'R$ 50,00', dataMulta: '01/10/2024', status: 'Pendente' },
@@ -31,16 +48,50 @@ var table_penalty = {
                 { usuario: 'Ana Santos', valor: 'R$ 40,00', dataMulta: '15/10/2024', status: 'Pago' },
                     { usuario: 'Pedro Costa', valor: 'R$ 25,00', dataMulta: '20/10/2024', status: 'Pendente' }       
     ]
+} */
+
+    console.log(allPenalties)
+
+var table_penalty = {
+    headers:['Id','Usuário','Data de Multa', 'Data de Entrega do Livro','Status'],
+    rows: allPenalties.map(
+        r =>({
+            id: r.penaltyId,
+            user: r.userName.toUpperCase(),
+            penaltyDate: r.penaltyDate,
+            returnDateLoan: r.returnloanDate,
+            status: r.statusPenalty
+        })
+    )
 }
+
 
 var table_stock = {
-    headers: ['Livro', 'Autor', 'Gênero', 'Quantidade'],
-    rows: [{ livro: 'O Alquimista', autor: 'Paulo Coelho', genero: 'Ficção', quantidade: '5' }]
+    headers: ['Id','Livro', 'Autor','Quantidade'],
+    rows: allStockBook.map(r => ({
+        id: r.stockId,
+        titulo: r.book.title.toUpperCase(), 
+        autor: r.book.author || 'Sem author',
+        quantidade: r.qtd
+    }))
 }
 
+
+console.log(allStockBook)
+
+
+
 var table_moviment = {
-    headers: ['Usuário', 'Livro', 'Quantidade', 'Tipo', 'Status'],
-    rows: [{ usuario: 'João Silva', livro: 'O Alquimista', quantidade: '1', tipo: 'Empréstimo', status: 'Pendente' }]
+    headers: ['Id','Usuário', 'Livro', 'Quantidade', 'Tipo'],
+    rows: allMoviments.map(
+        r=>({
+            id:r.movimentId,
+            user: r.user.name.toUpperCase(),
+            book: r.book.title.toUpperCase(),
+            qtd: r.qtdMoved,
+            type: r.type,
+        })
+    )
 }
 
 
@@ -76,13 +127,6 @@ function table(tableData) {
         let cell = document.createElement('td');
         cell.textContent = value;
         Object.assign(cell.style, style_table.cell);
-
-        cell.addEventListener('mouseover', () => {
-            cell.style.fontWeight = '700';
-        });
-        cell.addEventListener('mouseout', () => {
-            cell.style.fontWeight = 'normal';
-        });
 
         row.appendChild(cell);
 });
@@ -124,14 +168,6 @@ function table_with_actions(tableData) {
         let row = document.createElement('tr');
         Object.assign(row.style, style_table.row);
 
-        Object.values(rowData).forEach(value => {
-            let cell = document.createElement('td');
-            cell.textContent = value;
-            Object.assign(cell.style, style_table.cell);
-            cell.addEventListener('mouseover', () => cell.style.fontWeight = '700');
-            cell.addEventListener('mouseout', () => cell.style.fontWeight = 'normal');
-            row.appendChild(cell);
-        });
 
         tbody.appendChild(row);
         rows.push(row); 
@@ -141,38 +177,7 @@ function table_with_actions(tableData) {
     container.appendChild(tbl);
 
    
-    requestAnimationFrame(() => {
-        const containerTop = container.getBoundingClientRect().top;
-
-        rows.forEach((row, index) => {
-            const rowRect = row.getBoundingClientRect();
-            const topRelative = rowRect.top - containerTop + window.scrollY;
-
-            let btn = document.createElement('img');
-            btn.src = '/Interface/assets/iconVerified.svg';
-            btn.alt = 'Confirmar';
-            btn.style.cursor = 'pointer';
-            btn.style.width = '22px';
-            btn.style.height = '22px';
-            btn.style.position = 'absolute';
-            btn.style.right = '0px';
-            btn.style.top = (topRelative + rowRect.height / 2 - 11) + 'px'; 
-            
-            btn.addEventListener('mouseover', () => btn.style.filter = 'brightness(0.8)');
-            btn.addEventListener('mouseout', () => btn.style.filter = 'none');
-
-
-            btn.onclick = () => {
-                tableData.rows.splice(index, 1);
-                let cont = document.getElementById('table-multas');
-                cont.innerHTML = '';
-                cont.appendChild(table_with_actions(tableData));
-                cont.removeChild(btn);
-            };
-
-            container.appendChild(btn);
-        });
-    });
+  
 
     return container;
 }
@@ -181,7 +186,7 @@ if (document.getElementById('table-emprestimos'))
     document.getElementById('table-emprestimos').appendChild(table(table_loan));
 
 if (document.getElementById('table-multas'))
-    document.getElementById('table-multas').appendChild(table_with_actions(table_penalty));
+    document.getElementById('table-multas').appendChild(table(table_penalty));
 
 if (document.getElementById('table-estoque'))
     document.getElementById('table-estoque').appendChild(table(table_stock));
