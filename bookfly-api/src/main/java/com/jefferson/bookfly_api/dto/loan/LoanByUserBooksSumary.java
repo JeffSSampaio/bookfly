@@ -1,6 +1,7 @@
 package com.jefferson.bookfly_api.dto.loan;
 
 import com.jefferson.bookfly_api.dto.book.BookMovimentSummary;
+import com.jefferson.bookfly_api.dto.book.BookSummary;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.models.Loan;
 
@@ -12,7 +13,7 @@ public record LoanByUserBooksSumary(
         LocalDateTime loanDate,
         LocalDateTime returnDate,
         StatusLoan statusLoan,
-        BookMovimentSummary book
+        BookSummary book
 
 ) {
     public static LoanByUserBooksSumary from(Loan loan){
@@ -21,7 +22,7 @@ public record LoanByUserBooksSumary(
                 loan.getLoanDate(),
                 loan.getReturnDate(),
                 loan.getStatus(),
-                BookMovimentSummary.from(loan.getStockBook().getBook())
+                BookSummary.from(loan.getStockBook().getBook())
         );
     }
 }
