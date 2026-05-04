@@ -1,14 +1,14 @@
 import api from './apiService.js';
 
-function modalForm({ titulo, campos = [], onSubmit }) {
+function modalForm({ title, fields = [], onSubmit }) {
 
     let htmlContent = "";
 
-    campos.forEach(campo => {
+    fields.forEach(field => {
         htmlContent += `
         <div class="f-input-modal">
-            <label for="${campo.name}">${campo.label}</label>
-            <input type="${campo.type}" name="${campo.name}" id="${campo.name}" />
+            <label for="${field.name}">${field.label}</label>
+            <input type="${field.type}" name="${field.name}" id="${field.name}" />
         </div>
         `;
     });
@@ -17,7 +17,7 @@ function modalForm({ titulo, campos = [], onSubmit }) {
     <div class="modal">
         <div class="c-modal">
             <div class="b-modal">
-                <h1>${titulo}</h1>
+                <h1>${title}</h1>
                 <form class="c-modal-form">
                     ${htmlContent}
                 </form>
@@ -45,16 +45,16 @@ function modalForm({ titulo, campos = [], onSubmit }) {
     confirmBtn.addEventListener("click", function () {
 
         const formData = new FormData(form);
-        let dados = {};
+        let data = {};
 
         formData.forEach((value, key) => {
-            dados[key] = value;
+            data[key] = value;
         });
 
-        console.log("Dados capturados:", dados); 
+        console.log("Dados capturados:", data); 
 
         if (onSubmit) {
-            onSubmit(dados);
+            onSubmit(data);
         }
 
         modal.remove(); 
@@ -74,18 +74,18 @@ function modalForm({ titulo, campos = [], onSubmit }) {
 }
 
 // modal so que com o style
-function modalFormStyle({ titulo, campos = [], onSubmit, styles = {} }) {
+function modalFormStyle({ title, fields = [], onSubmit, styles = {} }) {
 
     let htmlContent = "";
 
-    campos.forEach(campo => {
+    fields.forEach(field => {
         htmlContent += `
-        <div class="f-input-modal ${campo.wrapperClass || ""}">
-            <label class="${campo.labelClass || ""}">${campo.label}</label>
+        <div class="f-input-modal ${field.wrapperClass || ""}">
+            <label class="${field.labelClass || ""}">${field.label}</label>
             <input 
-                type="${campo.type}" 
-                name="${campo.name}" 
-                class="${campo.class || ""}"
+                type="${field.type}" 
+                name="${field.name}" 
+                class="${field.class || ""}"
             />
         </div>
         `;
@@ -95,7 +95,7 @@ function modalFormStyle({ titulo, campos = [], onSubmit, styles = {} }) {
     <div class="modal">
         <div class="c-modal">
             <div class="b-modal">
-                <h1>${titulo}</h1>
+                <h1>${title}</h1>
                 <form class="c-modal-form">
                     ${htmlContent}
                 </form>
@@ -123,16 +123,16 @@ function modalFormStyle({ titulo, campos = [], onSubmit, styles = {} }) {
     confirmBtn.addEventListener("click", function () {
 
         const formData = new FormData(form);
-        let dados = {};
+        let data = {};
 
         formData.forEach((value, key) => {
-            dados[key] = value;
+            data[key] = value;
         });
 
-        console.log("Dados capturados:", dados);
+        console.log("Dados capturados:", data);
 
         if (onSubmit) {
-            onSubmit(dados);
+            onSubmit(data);
         }
 
         modal.remove();
@@ -182,141 +182,284 @@ function closeModal(){
     }
 }
 
-function abrirModalCadastro(){
-      modalForm({
-        titulo: "Cadastro",
-        campos: [
-            { label: "Nome", type: "text", name: "nome" },
-            { label: "Email", type: "email", name: "email" }
-        ],
-        onSubmit: (dados) => {
-            console.log(dados);
-            let content = document.getElementById('c-register-books');
-
-        }
-    });
-}
 
 
-window.abrirModalEstante = function() {
-  const usuarioLogado = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+
+window.openBookcaseModal = function () {
+  const loggedUser = JSON.parse(sessionStorage.getItem('usuarioLogado'));
 
   modalForm({
-    titulo: "Criar Estante",
-    campos: [
+    title: "Criar Estante",
+    fields: [
       { label: "Nome da Estante", type: "text", name: "name" },
     ],
-    onSubmit: async (dado) => {
+    onSubmit: async (data) => {
       try {
-        const bookcase = document.getElementById('bookcase');
-
-        const novaEstante = await api.createBookcase(
-          dado.name,
-          usuarioLogado.id
-        );
-
-        if (dado.name) {
-          bookcase.innerHTML += `
-            <div class="title-bookase-container">
-              <h1>${novaEstante.name}</h1>
-
-              <span> 
-                <img src="/Interface/assets/iconAdd.svg" 
-                     onclick="abrirModalAdicionarLivro(${novaEstante.id})">
-              </span>
-
-              <span> 
-                <img src="/Interface/assets/iconEdit.svg"
-                     onclick="abrirModalEstanteEdicao(${novaEstante.id}, '${novaEstante.name}')">
-              </span>
-            </div>
-
-            <div class='books-container'></div>
-          `;
-        }
-
-      } catch (erro) {
-        alert("Erro: " + erro.message);
-      }
-    }
-  });
-};
-
-window.abrirModalEstanteEdicao = function(bookcaseId, nomeAtual) {
-  modalForm({
-    titulo: `Editar Estante`,
-    campos: [
-      { label: 'Novo nome', type: 'text', name: 'name' }
-    ],
-    onSubmit: async (dados) => {
-      try {
-        if (!dados.name || dados.name.trim() === '') {
+        if (!data.name || data.name.trim() === '') {
           alert('Nome inválido');
           return;
         }
 
-       await api.createBookcase(dado.name, usuarioLogado.id, null);
+        const newBookcase = await api.createBookcase(data.name, loggedUser.id);
 
-        alert('Estante atualizada!');
+        const bookcaseEl = document.getElementById('bookcase');
 
-        location.reload();
+        bookcaseEl.innerHTML += `
+          <div class='books-container'>
+            <div class="title-bookase-container">
+              <h1>${newBookcase.name}</h1>
+              <span>
+                <img src="/Interface/assets/iconAdd.svg" alt=""
+                     onclick="openAddBookModal(${newBookcase.id}, '${newBookcase.name}', this)">
+              </span>
+              <span>
+                <img src="/Interface/assets/iconEdit.svg" alt=""
+                     onclick="openBookcaseEditModal(${newBookcase.id}, '${newBookcase.name}', this)">
+              </span>
+            </div>
+            <div class="c-book" id="c-book-${newBookcase.id}">
+            </div>
+          </div>
+        `;
 
-      } catch (erro) {
-        alert('Erro ao atualizar: ' + erro.message);
+      } catch (error) {
+        alert("Erro ao criar estante: " + error.message);
       }
     }
   });
 };
 
-window.abrirModalAdicionarLivro = function(bookcaseId) {
-  modalForm({
-    titulo: 'Adicionar Livro à Estante',
-    campos: [
-      { label: 'ID do Livro', type: 'number', name: 'bookId' }
-    ],
-    onSubmit: async (dados) => {
-      try {
-        const bookId = dados.bookId;
 
-        if (!bookId || isNaN(bookId)) {
-          alert('ID inválido');
-          return;
-        }
 
-      
-        const stockBook = await api.getStockByBook(bookId);
+window.openBookcaseEditModal = function (bookcaseId, currentName, triggerElement) {
+  const modalHTML = `
+    <div class="modal" id="modal-edicao">
+      <div class="c-modal" style="min-width:520px; max-width:620px;">
+        <div class="b-modal">
+          <h1>Alterar</h1>
 
-        if (!stockBook) {
-          alert('Livro não encontrado no estoque');
-          return;
-        }
+          <div class="f-input-modal">
+            <label>Estante</label>
+            <input type="text" id="novo-nome-estante" value="${currentName}" />
+          </div>
 
-    
-        await api.addBookToBookcase(bookcaseId, stockBook.id);
+          <div style="margin: 12px 0;">
+            <div style="display:flex; align-items:center; border:1px solid #ccc; border-radius:8px; padding:6px 10px; gap:8px;">
+              <input type="search" id="busca-livros-edicao" placeholder="Buscar" style="border:none; outline:none; width:100%; font-size:14px;" />
+              <img src="/Interface/assets/iconlupa.svg" style="width:18px; height:18px;">
+            </div>
+          </div>
 
-        alert('Livro adicionado com sucesso!');
+          <div id="grid-livros-edicao" style="
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-height: 320px;
+            overflow-y: auto;
+            padding: 4px;
+          "></div>
 
-        location.reload();
+          <div class="c-modal-btn" style="margin-top:16px;">
+            <button type="button" id="btn-cancelar-edicao">Cancelar</button>
+            <button type="button" id="btn-confirmar-edicao">Adicionar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 
-      } catch (erro) {
-        alert('Erro: ' + erro.message);
-      }
+  document.body.insertAdjacentHTML("beforeend", modalHTML);
+
+  const modal = document.getElementById('modal-edicao');
+  const grid = document.getElementById('grid-livros-edicao');
+  const searchInput = document.getElementById('busca-livros-edicao');
+
+ 
+  api.getBookcaseById(bookcaseId).then(bookcase => {
+    let allBooks = bookcase.books || [];
+
+    function renderBooks(books) {
+      grid.innerHTML = '';
+      books.forEach(book => {
+        grid.innerHTML += `
+          <div class="book" style="position:relative; flex-direction:column; align-items:center; padding:10px;">
+            <img src="${book.cover}" style="width:48px; height:48px;">
+            <div class="book-info" style="text-align:center;">
+              <h3 style="font-size:13px;">${book.title.toUpperCase()}</h3>
+              <p style="font-size:12px;">${book.author}</p>
+            </div>
+            <button 
+              onclick="removeBook(${bookcaseId}, ${book.stockId}, this)"
+              style="position:absolute; top:6px; right:6px; background:none; border:none; cursor:pointer; font-size:16px;"
+              title="Remover">🗑️</button>
+          </div>
+        `;
+      });
+    }
+
+    renderBooks(allBooks);
+
+    searchInput.addEventListener('input', () => {
+      const term = searchInput.value.toLowerCase();
+      const filteredBooks = allBooks.filter(b =>
+        b.title.toLowerCase().includes(term) || b.author.toLowerCase().includes(term)
+      );
+      renderBooks(filteredBooks);
+    });
+  });
+
+  document.getElementById('btn-confirmar-edicao').addEventListener('click', async () => {
+    const newName = document.getElementById('novo-nome-estante').value.trim();
+    if (!newName) { alert('Nome inválido'); return; }
+
+    try {
+      await api.updateBookcase(bookcaseId, newName, null);
+      const titleContainer = triggerElement.closest('.title-bookase-container');
+      const h1 = titleContainer.querySelector('h1');
+      if (h1) h1.textContent = newName;
+      modal.remove();
+    } catch (error) {
+      alert('Erro ao atualizar: ' + error.message);
     }
   });
+
+  document.getElementById('btn-cancelar-edicao').addEventListener('click', () => modal.remove());
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 };
 
-function abrirModalEmprestimo(){
+
+window.openAddBookModal = function (bookcaseId, bookcaseName, triggerElement) {
+  const modalHTML = `
+    <div class="modal" id="modal-adicionar">
+      <div class="c-modal" style="min-width:520px; max-width:620px;">
+        <div class="b-modal">
+          <h1>Adicionar a ${bookcaseName}</h1>
+
+          <div style="margin: 12px 0;">
+            <div style="display:flex; align-items:center; border:1px solid #ccc; border-radius:8px; padding:6px 10px; gap:8px;">
+              <input type="search" id="busca-estoque" placeholder="Buscar" style="border:none; outline:none; width:100%; font-size:14px;" />
+              <img src="/Interface/assets/iconlupa.svg" style="width:18px; height:18px;">
+            </div>
+          </div>
+
+          <div id="grid-estoque" style="
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-height: 320px;
+            overflow-y: auto;
+            padding: 4px;
+          "></div>
+
+          <div class="c-modal-btn" style="margin-top:16px;">
+            <button type="button" id="btn-cancelar-adicao">Cancelar</button>
+            <button type="button" id="btn-confirmar-adicao">Adicionar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML("beforeend", modalHTML);
+
+  const modal = document.getElementById('modal-adicionar');
+  const grid = document.getElementById('grid-estoque');
+  const searchInput = document.getElementById('busca-estoque');
+  let selectedBooks = new Set(); 
+
+  api.getAllStock().then(stock => {
+    let allBooks = stock || [];
+
+    function renderStock(items) {
+      grid.innerHTML = '';
+      items.forEach(book => {
+        const isSelected = selectedBooks.has(book.id);
+        grid.innerHTML += `
+          <div class="book" style="position:relative; flex-direction:column; align-items:center; padding:10px; ${isSelected ? 'outline:2px solid var(--verde-escuro);' : ''}">
+            <img src="${book.book?.cover || book.cover}" style="width:48px; height:48px;">
+            <div class="book-info" style="text-align:center;">
+              <h3 style="font-size:13px;">${(book.book?.title || book.title || '').toUpperCase()}</h3>
+              <p style="font-size:12px;">${book.book?.author || book.author || ''}</p>
+            </div>
+            <button 
+              data-stock-id="${book.id}"
+              onclick="toggleSelectBook(this)"
+              style="position:absolute; top:6px; right:6px; background:none; border:none; cursor:pointer; font-size:18px;"
+              title="Adicionar">${isSelected ? '<img src="/Interface/assets/iconAddRounded.svg" style="width:18px; height:18px;">' : '<img src="/Interface/assets/iconAdd.svg" style="width:18px; height:18px;">'}</button>
+          </div>
+        `;
+      });
+    }
+
+    renderStock(allBooks);
+
+    window.toggleSelectBook = function(btn) {
+      const id = Number(btn.dataset.stockId);
+      const bookCard = btn.closest('.book');
+      if (selectedBooks.has(id)) {
+        selectedBooks.delete(id);
+        if (bookCard) bookCard.style.outline = 'none';
+        btn.innerHTML = '<img src="/Interface/assets/iconAdd.svg" style="width:18px; height:18px;">';
+      } else {
+        selectedBooks.add(id);
+        if (bookCard) bookCard.style.outline = '2px solid var(--verde-escuro)';
+        btn.innerHTML = '<img src="/Interface/assets/iconAddRounded.svg" style="width:18px; height:18px;">';
+      }
+    };
+
+    searchInput.addEventListener('input', () => {
+      const term = searchInput.value.toLowerCase();
+      const filteredBooks = allBooks.filter(s => {
+        const title = (s.book?.title || s.title || '').toLowerCase();
+        const author = (s.book?.author || s.author || '').toLowerCase();
+        return title.includes(term) || author.includes(term);
+      });
+      renderStock(filteredBooks);
+    });
+  });
+
+  document.getElementById('btn-confirmar-adicao').addEventListener('click', async () => {
+    if (selectedBooks.size === 0) { alert('Selecione ao menos um livro'); return; }
+
+    try {
+      for (const stockId of selectedBooks) {
+        await api.addBookToBookcase(bookcaseId, stockId);
+      }
+      alert('Livros adicionados!');
+      location.reload();
+    } catch (error) {
+      alert('Erro: ' + error.message);
+    }
+  });
+
+  document.getElementById('btn-cancelar-adicao').addEventListener('click', () => modal.remove());
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+};
+
+
+window.removeBook = function (bookcaseId, stockBookId, btnEl) {
+  if (!confirm('Remover este livro da estante?')) return;
+
+  api.removeBookFromBookcase(bookcaseId, stockBookId)
+    .then(() => {
+      const bookEl = btnEl.closest('.book');
+      if (bookEl) bookEl.remove();
+    })
+    .catch(error => alert('Erro ao remover: ' + error.message));
+};
+
+function openLoanModal(){
     modalForm(
         {
-            titulo: 'Fazer Emprestimo',
-            campos:[
+            title: 'Fazer Emprestimo',
+            fields:[
                 {label:'Nome do Livro',type:'search', name:'name'}
                 ],
-                onSubmit: (dado)=>{
-                    var container_emprestimo = document.getElementById('emprestimo');
-var container_devolucao = document.getElementById('devolucao')
+                onSubmit: (formData)=>{
+                    var loanContainer = document.getElementById('emprestimo');
+                    var returnContainer = document.getElementById('devolucao');
 
- dado.forEach(element => {
+                    formData.forEach(element => {
     
     var status = [
         'style="color: blue ;"',
@@ -329,7 +472,7 @@ var container_devolucao = document.getElementById('devolucao')
 
 
         if(element.status == "Devolvido"){
-             container_emprestimo.innerHTML += `
+             loanContainer.innerHTML += `
         <div class="c-card-emprestimo">
           <img src=${element.cover}>
           <div class="card-info-text">
@@ -340,7 +483,7 @@ var container_devolucao = document.getElementById('devolucao')
         </div>
         `  
         } else if(element.status == "Em Andamento"){
-             container_emprestimo.innerHTML += `
+             loanContainer.innerHTML += `
         <div class="c-card-emprestimo">
           <img src=${element.cover}>
           <div class="card-info-text">
@@ -351,7 +494,7 @@ var container_devolucao = document.getElementById('devolucao')
         </div>
         `  
         } else if(element.status =="Devolver"){
-             container_emprestimo.innerHTML += `
+             loanContainer.innerHTML += `
         <div class="c-card-emprestimo">
           <img src=${element.cover}>
           <div class="card-info-text">
@@ -369,7 +512,7 @@ var container_devolucao = document.getElementById('devolucao')
 
 
         if(element.status == "Devolvido"){
-             container_devolucao.innerHTML += `
+             returnContainer.innerHTML += `
         <div class="c-card-emprestimo">
           <img src=${element.cover}>
           <div class="card-info-text">
@@ -380,7 +523,7 @@ var container_devolucao = document.getElementById('devolucao')
         </div>
         `  
         } else if(element.status == "Em Andamento"){
-             container_devolucao.innerHTML += `
+             returnContainer.innerHTML += `
         <div class="c-card-emprestimo">
           <img src=${element.cover}>
           <div class="card-info-text">
@@ -391,7 +534,7 @@ var container_devolucao = document.getElementById('devolucao')
         </div>
         `  
         } else if(element.status =="Devolver"){
-             container_devolucao.innerHTML += `
+             returnContainer.innerHTML += `
         <div class="c-card-emprestimo">
           <img src=${element.cover}>
           <div class="card-info-text">
@@ -417,26 +560,26 @@ var container_devolucao = document.getElementById('devolucao')
 
 }
 
-function abrirCadastrarLivro(){
+function openRegisterBookModal(){
     modalForm(
     {
-        titulo:'Cadastrar Livros ',
-        campos:
+        title:'Cadastrar Livros ',
+        fields:
         [
             {label:'Titulo',type:'text',name:'titulo'},
             {label:'Capa',type:'text',name:'capa'},
              {label:'Qtd',type:'text',name:'quantidade'}
 
         ],
-        onSubmit: (dado)=>{
-            console.log(dado)
+        onSubmit: (formData)=>{
+            console.log(formData)
             var content = document.getElementById('c-register-books');
 
                 content.innerHTML += `
                 <div clas="c-book">
-                     <h2>${dado.titulo}</h2>
-                     <img src="${dado.capa}" alt="" />
-                     <p>Quantidade Disponível: ${dado.quantidade}</p>
+                     <h2>${formData.titulo}</h2>
+                     <img src="${formData.capa}" alt="" />
+                     <p>Quantidade Disponível: ${formData.quantidade}</p>
                  </div>
                  `;
             
