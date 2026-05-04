@@ -137,10 +137,8 @@ const api = {
     fetch(`${BASE_URL}/loans/list`).then(handleResponse),
 
   getLoansByUser: (userId) =>
-    fetch(`${BASE_URL}/loans/list-loans-user`, {
-      method: 'GET',
-      headers: postHeaders(),
-      body: JSON.stringify({ userId }),
+    fetch(`${BASE_URL}/loans/list-loans-user/${userId}`, {
+      method: 'GET'
     }).then(handleResponse),
 
 
