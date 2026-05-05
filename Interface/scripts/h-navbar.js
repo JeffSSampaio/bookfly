@@ -50,6 +50,16 @@ var buttonAdmin =[
 
 
 
+const currentPath = window.location.pathname.replace(/\\/g, '/');
+const currentPage = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+
+function shouldShowLink(linkHtml) {
+  const match = linkHtml.match(/href=['"]([^'"]+)['"]/);
+  if (!match) return true;
+  const href = match[1];
+  return !href.endsWith(currentPage);
+}
+
 content = document.getElementById("menu-content")
 
 
@@ -57,8 +67,7 @@ if(usuarioLogado.role == 'USER'){
 
     
     buttonsProfile.forEach(element => {
-        
-       
+        if (!shouldShowLink(element)) return;
         content.innerHTML+=
         ` 
         <div class='btns-menu'>
@@ -70,7 +79,7 @@ if(usuarioLogado.role == 'USER'){
     } else if(usuarioLogado.role == 'ADMIN'){
         
         buttonAdmin.forEach(element=>{
-    
+            if (!shouldShowLink(element)) return;
             content.innerHTML+=
              ` 
             <div class='btns-menu'>
