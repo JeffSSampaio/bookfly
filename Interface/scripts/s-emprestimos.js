@@ -3,7 +3,7 @@
 import api from './apiService.js'
 var usuarioLogado = JSON.parse(sessionStorage.getItem('usuarioLogado'));
 
-console.log(usuarioLogado)
+/* console.log(usuarioLogado)
 
 var books = [
         {
@@ -52,7 +52,7 @@ var books = [
         'situation':'lending',
     }
 
-]
+] */
 
 var booksLoan = await api.getLoansByUser(usuarioLogado.id);
 const formatador = new  Intl.DateTimeFormat('pt-BR', {
@@ -61,10 +61,15 @@ const formatador = new  Intl.DateTimeFormat('pt-BR', {
 })
 
 
+let isLoaned = false;
+let isDevolved = false;
+
 var container_emprestimo = document.getElementById('emprestimo');
 var container_devolucao = document.getElementById('devolucao');
-var container_atrasado = document.getElementById("atrasado");
-var content_atrasado = document.getElementById('c-atrasado').style.display='none'
+
+
+
+
 
 
  booksLoan.forEach(element => {
@@ -72,37 +77,35 @@ var content_atrasado = document.getElementById('c-atrasado').style.display='none
   const dataloan = new Date(element.loanDate);
   const dataFormated = formatador.format(dataloan);
 
-        if(element.statusLoan == "ATIVO"){
-             container_emprestimo.innerHTML += `
-        <div class="c-card-emprestimo">
-          <img src=${element.book.cover}>
-          <div class="card-info-text">
-          <h1 class="c-emprestimo-text-title">${element.book.title}</h1>
-          <p class="c-emprestimo-text-author">${element.book.authors.map(a=> a.name).join(', ') || "sem author"}</p>
-          <span class="text-emprestimo-ongoing">${element.statusLoan}</span>
-          <p class="date">${dataFormated}</p>
-          </div>
-        </div>
-        `  }
+        if(element.statusLoan == "ATIVO" || element.statusLoan == "ATRASADO"){
+            isLoaned = true;
+            const overdue = element.statusLoan == "ATRASADO" || (element.returnDate && new Date(element.returnDate) < new Date());
+            const statusLabel = overdue ? "ATRASADO" : element.statusLoan;
+            const statusClass = overdue ? "text-emprestimo-atrasado" : "text-emprestimo-ongoing";
+            let returnText = "";
+
+            if (element.returnDate) {
+                const formattedReturn = formatador.format(new Date(element.returnDate));
+                returnText = `<p class="date">Entrega prevista: ${formattedReturn}</p>`;
+            }
+
+            container_emprestimo.innerHTML += `
+            <div class="c-card-emprestimo">
+              <img src=${element.book.cover}>
+              <div class="card-info-text">
+              <h1 class="c-emprestimo-text-title">${element.book.title}</h1>
+              <p class="c-emprestimo-text-author">${element.book.authors.map(a=> a.name).join(', ') || "sem author"}</p>
+              <span class="${statusClass}">${statusLabel}</span>
+              ${returnText}
+              </div>
+            </div>
+            `;
+        }
       
 
 
-        if(element.statusLoan == "ATRASADO"){
-          container_atrasado.style.display='block'
-             container_atrasado.innerHTML += `
-        <div class="c-card-emprestimo">
-          <img src=${element.book.cover}>
-          <div class="card-info-text">
-          <h1 class="c-emprestimo-text-title">${element.book.title}</h1>
-          <p class="c-emprestimo-text-author">${element.book.authors.map(a=> a.name).join(', ') || "sem author"}</p>
-          <span class="text-emprestimo-ongoing">${element.statusLoan}</span>
-          <p class="date">${dataFormated}</p>
-          </div>
-        </div>
-        `  }
-
-
         if(element.statusLoan == "FINALIZADO"){
+             isDevolved = true;
              container_devolucao.innerHTML += `
         <div class="c-card-emprestimo">
           <img src=${element.book.cover}>
@@ -123,6 +126,13 @@ var content_atrasado = document.getElementById('c-atrasado').style.display='none
 
       
     );
+
+    if(!isLoaned){
+        container_emprestimo.innerHTML = `<p>Você não tem empréstimos.</p>`;
+    }
+    if(!isDevolved){
+        container_devolucao.innerHTML = `<p>Você não tem devoluções.</p>`;
+    }
 
 
 
