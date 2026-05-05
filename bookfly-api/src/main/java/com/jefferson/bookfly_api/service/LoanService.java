@@ -34,7 +34,7 @@ public class LoanService {
     }
 
     @Transactional
-    public Loan doLoanBook(Long bookId, Long userId, LocalDateTime returnDate) {
+    public Loan doLoanBook(Long bookId, Long userId) {
         Stock stock = stockService.getStock();
 
         Book book = bookRepository.findById(bookId)
@@ -76,10 +76,7 @@ public class LoanService {
         moviment.setCreatedDate(LocalDate.now());
 
         LocalDateTime timeNow = LocalDateTime.now();
-
-        if (!returnDate.isAfter(timeNow)) {
-            throw new RuntimeException("A data de retorno deve ser posterior à data atual");
-        }
+        LocalDateTime returnDate = timeNow.plusDays(7);
 
         Loan loan = new Loan();
         loan.setLoanDate(timeNow);

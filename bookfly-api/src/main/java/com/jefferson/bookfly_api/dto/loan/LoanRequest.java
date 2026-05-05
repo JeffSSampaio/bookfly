@@ -11,8 +11,6 @@ public record LoanRequest(
         @NotNull
         Long bookId,
         @NotNull
-        Long userId,
-        @NotNull
-        LocalDateTime returnDateBook
+        Long userId
 ) {
 }

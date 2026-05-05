@@ -311,35 +311,28 @@ window.removeBook = function (bookcaseId, stockBookId, btnEl) {
 
 
 
-function abrirModalCadastro() {
-    modalForm({
-        titulo: "Cadastro",
-        campos: [
-            { label: "Nome", type: "text", name: "nome" },
-            { label: "Email", type: "email", name: "email" }
-        ],
-        onSubmit: (dados) => { console.log(dados); }
-    });
-}
-
-function abrirCadastrarLivro() {
-    modalForm({
-        titulo: 'Cadastrar Livros',
-        campos: [
-            { label: 'Titulo', type: 'text', name: 'titulo' },
-            { label: 'Capa', type: 'text', name: 'capa' },
-            { label: 'Qtd', type: 'text', name: 'quantidade' }
-        ],
-        onSubmit: (dado) => {
-            const content = document.getElementById('c-register-books');
-            if (content) {
-                content.innerHTML += `
-                <div class="c-book">
-                    <h2>${dado.titulo}</h2>
-                    <img src="${dado.capa}" alt="" />
-                    <p>Quantidade Disponível: ${dado.quantidade}</p>
-                </div>`;
-            }
-        }
+window.openBookModal = function (stockId) {
+    api.getStockById(stockId).then(stock => {
+        const book = stock.book || stock;
+        const autor = book.authors
+            ? book.authors.map(a => a.name).join(', ')
+            : (book.author || 'Autor desconhecido');
+        const modalHTML = `
+        <div class="modal">
+            <div class="c-modal" style="width:400px; max-width:90%; margin:10% auto;">
+                <div class="b-modal" style="padding:20px;">
+                    <img src="${book.cover || '/Interface/assets/livro.png'}" alt="" style="width:100%; height:auto; margin-bottom:20px;">
+                    <h1 style="margin-bottom:10px;">${book.title || 'Título desconhecido'}</h1>
+                    <p style="color:var(--verde-medio); margin-bottom:20px;">${autor}</p>
+                    <p>${book.description || 'Sem descrição disponível.'}</p>
+                    <button style="margin-top:20px;" onclick="this.closest('.modal').remove()">Fechar</button>
+                </div>
+            </div>
+        </div>`;
+        document.body.insertAdjacentHTML("beforeend", modalHTML);
+        const modal = document.querySelector(".modal:last-child");
+        modal.addEventListener("click", e => { if (e.target === modal) modal.remove(); });
+    }).catch(() => {
+        alert('Erro ao carregar detalhes do livro.');
     });
 }

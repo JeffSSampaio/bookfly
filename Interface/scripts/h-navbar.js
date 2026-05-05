@@ -21,6 +21,7 @@ var buttonsProfile = [
     "<a href='../pages/perfil.html'>Perfil</a>",
     "<a href='../pages/homepage.html'>HomePage</a>",
     "<a href='../pages/meus-livros.html'>Minhas Estantes</a>",
+    "<a href='../pages/bookloan.html'>Livros</a>",
     "<a href='../pages/login.html'>Desconectar</a>",
 
 ]

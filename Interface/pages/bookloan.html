@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/Interface/styles/h-navbar.css">
+    <link rel="stylesheet" href="/Interface/styles/root.css">
+    <link rel="stylesheet" href="/Interface/styles/bookloan.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+    <title>BookFLy - Livros</title>
+</head>
+<body>
+    <div id="h-navbar-right" class="menu-right-container">
+        <div id="menu-content" class="body-menu">
+            <div class="menu-header">
+               <img id="close-menu" src="/Interface/assets/iconclose.svg" alt="Fechar menu">
+                <h1>Menu</h1>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay"></div>
+
+    <header class="h-navbar">
+        <div class="title-logo">
+            <img src="/Interface/assets/iconBook.svg" alt="BookFLy">
+            <h1>BookFLy</h1>
+        </div>
+        <div class="h-container-actions-itens">
+            <div class="search-input-container">
+                <input id="search-book" type="search" placeholder="Buscar livros...">
+                <img src="/Interface/assets/iconlupa.svg" alt="Buscar">
+            </div>
+            <img src="/Interface/assets/iconMenu.svg" alt="Menu" class="icon-menu" id="icon-menu" onclick="btnMenu()">
+        </div>
+    </header>
+
+    <main class="bookloan-page">
+        <section class="bookloan-hero">
+            <div>
+                <span class="bookloan-tag">Livros</span>
+                <h2>Procure e faça um empréstimo em até 7 dias.</h2>
+                <p>Escolha o livro que deseja, clique no + e continue para a página de empréstimos.</p>
+            </div>
+            <div class="bookloan-info">
+                <strong>Prazo de devolução:</strong>
+                <span>7 dias após o empréstimo</span>
+            </div>
+        </section>
+
+        <section class="bookloan-grid-section">
+            <div class="bookloan-status-row">
+                <p id="user-message" class="bookloan-user-message"></p>
+                <p id="loading-message" class="bookloan-loading">Carregando livros...</p>
+            </div>
+            <div id="book-grid" class="books-grid"></div>
+            <p id="empty-message" class="bookloan-empty hidden">Nenhum livro encontrado para esse filtro.</p>
+        </section>
+    </main>
+
+    <footer>
+       
+    </footer>
+
+    <script type="module" src="/Interface/scripts/bookloan.js"></script>
+    <script src="/Interface/scripts/h-navbar.js"></script>
+</body>
+</html>

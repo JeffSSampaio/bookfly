@@ -46,8 +46,7 @@ public class LoanController {
     public ResponseEntity<LoanSummary> createLoan(@RequestBody LoanRequest request) {
         Loan loaned = loanService.doLoanBook(
                 request.bookId(),
-                request.userId(),
-                request.returnDateBook()
+                request.userId()
         );
         return ResponseEntity.ok().body(LoanSummary.from(loaned));
     }
