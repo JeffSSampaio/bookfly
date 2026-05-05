@@ -1,6 +1,7 @@
 'use strict'
 import api from './apiService.js';
 
+const loggedUser = JSON.parse(sessionStorage.getItem('usuarioLogado'));
 
 function modalForm({ titulo, campos = [], onSubmit }) {
     let htmlContent = "";
@@ -47,8 +48,8 @@ function modalForm({ titulo, campos = [], onSubmit }) {
 
 
 
-window.abrirModalEstante = function () {
-    const usuarioLogado = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+window.openModalBookcase = function () {
+    
 
     modalForm({
         titulo: "Criar Estante",
@@ -56,7 +57,7 @@ window.abrirModalEstante = function () {
         onSubmit: async (dado) => {
             try {
                 if (!dado.name?.trim()) { alert('Nome inválido'); return; }
-                const novaEstante = await api.createBookcase(dado.name, usuarioLogado.id);
+                const novaEstante = await api.createBookcase(dado.name, loggedUser.id);
                 const bookcase = document.getElementById('bookcase');
                 bookcase.innerHTML += `
                     <div class='books-container'>
@@ -74,6 +75,34 @@ window.abrirModalEstante = function () {
         }
     });
 };
+
+window.openAddItemOnStock = function (){
+
+   modalForm({
+       titulo: "Registrar Livro",
+       campos: [
+                {label:"Nome do Livro", type:"text", name:"bookName"},
+                {label:"Capa do Livro", type:"text", name:"coverBook"},
+                {label:"Autores do livro", type:"text", name:"authorName"},
+                {label:"Genero", type:"text", name:"genderBook"}
+            ],
+        onSubmit: async(data)=> {
+
+            let nameBook = data.bookName;
+            let coverBook = data.coverBook;
+            const authorsName = data.authorName ? data.authorName.split(',').map(a => a.trim()) : [];
+            const gendersBook = data.genderBook ? data.genderBook.split(',').map(g => g.trim()) : [];
+            let book =  {title: nameBook, cover: coverBook,authors: authorsName,genders: gendersBook }
+
+            await api.createBook(book)
+
+
+        }   
+
+       
+    }
+   )
+}
 
 
 

@@ -24,7 +24,7 @@ var allStockBook = await api.getAllStock();
 var allLoans = await api.getAllLoans();
 var allMoviments = await api.getAllMoviments();
 var allPenalties = await api.getAllPenalties();
-
+var allBooks = await api.getAllBooks();
 
 var table_loan = {
     headers: ['ID','Usuário', 'Livro', 'Data de Empréstimo', 'Data de Devolução', 'Status'],
@@ -50,7 +50,7 @@ var table_penalty = {
     ]
 } */
 
-    console.log(allPenalties)
+
 
 var table_penalty = {
     headers:['Id','Usuário','Data de Multa', 'Data de Entrega do Livro','Status'],
@@ -70,14 +70,25 @@ var table_stock = {
     headers: ['Id','Livro', 'Autor','Quantidade'],
     rows: allStockBook.map(r => ({
         id: r.stockId,
-        titulo: r.book.title.toUpperCase(), 
-        autor: r.book.author || 'Sem author',
-        quantidade: r.qtd
+        title: r.book.title.toUpperCase(), 
+        author: r.book.authors.map(a=>a.name).join(',') || 'Sem author',
+        qtd: r.qtd
     }))
 }
 
 
-console.log(allStockBook)
+
+
+var table_books= {
+    headers: ['Id','Livro','Autores','Genero'],
+    rows: allBooks.map(r=>({
+            id: r.bookid,
+            name: r.title,
+            authors: r.authors.map(a=> a.name).join(',') || "autor não identificado",
+            genders: r.genders
+
+    }))
+}
 
 
 
@@ -193,3 +204,6 @@ if (document.getElementById('table-estoque'))
 
 if (document.getElementById('table-movimentacoes'))
     document.getElementById('table-movimentacoes').appendChild(table(table_moviment));
+
+if (document.getElementById('table-livros'))
+    document.getElementById('table-livros').appendChild(table(table_books));

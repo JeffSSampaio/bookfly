@@ -37,6 +37,7 @@ var buttonsProfile = [
 
 var buttonAdmin =[
     "<a href='../pages/emprestimo.html'>Emprestimo</a>",
+    "<a href='../pages/livros.html'>Livros</a>",
     "<a href='../pages/estoque.html'>Estoque</a>",
     "<a href='../pages/multas.html'>Multas</a>",
     "<a href='../pages/movimentacoes.html'>Movimentações</a>",
