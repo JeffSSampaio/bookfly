@@ -49,7 +49,7 @@
 .books-container {
     display: flex;
     flex-direction: column;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 15px;
   
 }
@@ -69,13 +69,13 @@
     font-family: var(--font-principal);
     font-weight: 800;
     font-size: 22px;
-    margin: 0 8px 0 0;
+    margin: 0 9px 0 0;
 }
 
 .title-bookase-container span {
     display: flex;
     align-items: center;
-    margin: 0 3px;
+    margin: 0 1px;
 }
 
 .title-bookase-container span img {
@@ -127,13 +127,14 @@
     width: 56px;
     object-fit: cover;
     border-radius: 5px;
-    flex-shrink: 0;
+    margin: 5px;
+   
 }
 
 .card-book-info {
     display: flex;
     flex-direction: column;
-    padding: 0 10px;
+    align-items: center;
     text-align: left;
     overflow: hidden;
     flex: 1;
@@ -143,7 +144,7 @@
     color: var(--verde-escuro);
     font-weight: 700;
     font-size: 14px;
-    margin: 2px 0;
+
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -153,7 +154,7 @@
     color: var(--verde-medio);
     font-size: 12px;
     opacity: 80%;
-    margin: 2px 0;
+   
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -230,7 +231,7 @@
 .modal-busca-container input {
     border: none;
     outline: none;
-    width: 100%;
+    width: 20%;
     font-family: var(--font-principal);
     font-size: 15px;
     background: transparent;
@@ -263,7 +264,7 @@
     font-family: var(--font-principal);
     font-size: 15px;
     color: white;
-    width: 100%;
+    width: 30%;
     box-sizing: border-box;
     margin-bottom: 8px;
 }
