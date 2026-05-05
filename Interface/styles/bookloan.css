@@ -62,7 +62,7 @@ body {
     border-radius: 20px;
     background: var(--accent-soft);
     color: var(--accent);
-    text-align: right;
+    text-align: center;
 }
 
 .bookloan-info strong {
