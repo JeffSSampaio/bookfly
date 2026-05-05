@@ -1,0 +1,269 @@
+
+.bookcase-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 80px 10px 80px;
+}
+
+.c-btn-bookcase {
+    display: flex;
+    justify-content: flex-end;
+    align-self: flex-end;
+    margin: 10px 20px;
+}
+
+.btn-bookcase {
+    padding: 15px 25px;
+    border: none;
+    border-radius: 20px;
+    background-color: var(--verde-escuro);
+    font-size: 18px;
+    font-family: var(--font-principal);
+    font-weight: 800;
+    color: var(--marfin);
+    box-shadow: var(--box-shadow);
+    cursor: pointer;
+}
+
+.btn-bookcase:hover {
+    background-color: var(--verde-medio);
+    transform: scale(1.05);
+    transition: background-color 0.3s ease-in, transform 0.3s ease-in;
+}
+
+
+.bookcase-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 20px;
+    width: 100%;
+    max-width: 1100px;
+    box-sizing: border-box;
+}
+
+
+
+.books-container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    padding: 15px;
+  
+}
+
+
+
+.title-bookase-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    margin: 5px 10px 10px;
+}
+
+.title-bookase-container h1 {
+    color: var(--verde-escuro);
+    font-family: var(--font-principal);
+    font-weight: 800;
+    font-size: 22px;
+    margin: 0 8px 0 0;
+}
+
+.title-bookase-container span {
+    display: flex;
+    align-items: center;
+    margin: 0 3px;
+}
+
+.title-bookase-container span img {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.title-bookase-container span img:hover {
+    transform: scale(1.2);
+}
+
+
+
+.c-book {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background-color: var(--verde-medio);
+    border-radius: 15px;
+    padding: 12px;
+
+    min-height: 60px;
+}
+
+
+.c-card-book {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: white;
+    box-shadow: var(--box-shadow);
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease-out;
+    position: relative;
+}
+
+.c-card-book:hover {
+    transform: scale(1.03);
+    transition: transform 0.3s ease-in;
+}
+
+.c-card-book img {
+    height: 78px;
+    width: 56px;
+    object-fit: cover;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.card-book-info {
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px;
+    text-align: left;
+    overflow: hidden;
+    flex: 1;
+}
+
+.card-book-title {
+    color: var(--verde-escuro);
+    font-weight: 700;
+    font-size: 14px;
+    margin: 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-book-author {
+    color: var(--verde-medio);
+    font-size: 12px;
+    opacity: 80%;
+    margin: 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+
+.btn-card-remover {
+    position: absolute;
+    top: 5px;
+    right: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.c-card-book:hover .btn-card-remover {
+    opacity: 1;
+}
+
+.btn-card-remover img {
+    width: 15px;
+    height: 15px;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+
+
+.btn-card-adicionar {
+    position: absolute;
+    top: 5px;
+    right: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    transition: transform 0.2s ease;
+}
+
+.btn-card-adicionar:hover {
+    transform: scale(1.2);
+}
+
+.btn-card-adicionar img {
+    width: 20px;
+    height: 20px;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+
+
+.c-card-book.selecionado {
+    outline: 2px solid var(--verde-escuro);
+    background-color: #edf7ed;
+}
+
+
+.modal-busca-container {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 12px;
+    padding: 6px 12px;
+    gap: 8px;
+    margin: 12px 0;
+    box-shadow: var(--box-shadow);
+}
+
+.modal-busca-container input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-family: var(--font-principal);
+    font-size: 15px;
+    background: transparent;
+    color: var(--verde-escuro);
+}
+
+.modal-busca-container img {
+    width: 18px;
+    height: 18px;
+}
+
+
+
+.modal-grid-livros {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    max-height: 340px;
+    overflow-y: auto;
+    padding: 4px 2px;
+}
+
+
+
+.modal-input-nome-estante {
+    background-color: var(--verde-vivo);
+    padding: 7px 14px;
+    border-radius: 15px;
+    border: none;
+    font-family: var(--font-principal);
+    font-size: 15px;
+    color: white;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+}

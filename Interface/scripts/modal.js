@@ -1,15 +1,14 @@
 'use strict'
 import api from './apiService.js';
 
-function modalForm({ title, fields = [], onSubmit }) {
 
+function modalForm({ titulo, campos = [], onSubmit }) {
     let htmlContent = "";
-
-    fields.forEach(field => {
+    campos.forEach(campo => {
         htmlContent += `
         <div class="f-input-modal">
-            <label for="${field.name}">${field.label}</label>
-            <input type="${field.type}" name="${field.name}" id="${field.name}" />
+            <label for="${campo.name}">${campo.label}</label>
+            <input type="${campo.type}" name="${campo.name}" id="${campo.name}" />
         </div>
         `;
     });
@@ -18,596 +17,329 @@ function modalForm({ title, fields = [], onSubmit }) {
     <div class="modal">
         <div class="c-modal">
             <div class="b-modal">
-                <h1>${title}</h1>
-                <form class="c-modal-form">
-                    ${htmlContent}
-                </form>
+                <h1>${titulo}</h1>
+                <form class="c-modal-form">${htmlContent}</form>
                 <div class="c-modal-btn">
-                    <button type="button" class="closeBtn">Fechar</button>
+                    <button type="button" class="closeBtn">Cancelar</button>
                     <button type="button" class="confirmBtn">Confirmar</button>
                 </div>
             </div>
         </div>
-    </div>
-    `;
+    </div>`;
 
-  
     document.body.insertAdjacentHTML("beforeend", modalHTML);
-
-
     const modals = document.querySelectorAll(".modal");
     const modal = modals[modals.length - 1];
-
     const confirmBtn = modal.querySelector(".confirmBtn");
-    const closeBtn = modal.querySelector(".closeBtn");
-    const form = modal.querySelector("form");
+    const closeBtn  = modal.querySelector(".closeBtn");
+    const form      = modal.querySelector("form");
 
-   
     confirmBtn.addEventListener("click", function () {
-
         const formData = new FormData(form);
-        let data = {};
-
-        formData.forEach((value, key) => {
-            data[key] = value;
-        });
-
-        console.log("Dados capturados:", data); 
-
-        if (onSubmit) {
-            onSubmit(data);
-        }
-
-        modal.remove(); 
-    });
-
-   
-    closeBtn.addEventListener("click", function () {
+        let dados = {};
+        formData.forEach((value, key) => { dados[key] = value; });
+        if (onSubmit) onSubmit(dados);
         modal.remove();
     });
-
-    
-    modal.addEventListener("click", function (e) {
-        if (e.target === modal) {
-            modal.remove();
-        }
-    });
+    closeBtn.addEventListener("click", () => modal.remove());
+    modal.addEventListener("click", e => { if (e.target === modal) modal.remove(); });
 }
 
-// modal so que com o style
-function modalFormStyle({ title, fields = [], onSubmit, styles = {} }) {
 
-    let htmlContent = "";
 
-    fields.forEach(field => {
-        htmlContent += `
-        <div class="f-input-modal ${field.wrapperClass || ""}">
-            <label class="${field.labelClass || ""}">${field.label}</label>
-            <input 
-                type="${field.type}" 
-                name="${field.name}" 
-                class="${field.class || ""}"
-            />
-        </div>
-        `;
+window.abrirModalEstante = function () {
+    const usuarioLogado = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+
+    modalForm({
+        titulo: "Criar Estante",
+        campos: [{ label: "Nome da Estante", type: "text", name: "name" }],
+        onSubmit: async (dado) => {
+            try {
+                if (!dado.name?.trim()) { alert('Nome inválido'); return; }
+                const novaEstante = await api.createBookcase(dado.name, usuarioLogado.id);
+                const bookcase = document.getElementById('bookcase');
+                bookcase.innerHTML += `
+                    <div class='books-container'>
+                        <div class="title-bookase-container">
+                            <h1>${novaEstante.name}</h1>
+                            <span><img src="/Interface/assets/iconAdd.svg" alt=""
+                                onclick="openAddBookModal(${novaEstante.id}, '${novaEstante.name}', this)"></span>
+                            <span><img src="/Interface/assets/iconEdit.svg" alt=""
+                                onclick="openBookcaseEditModal(${novaEstante.id}, '${novaEstante.name}', this)"></span>
+                        </div>
+                        <div class="c-book grid-cards-book" id="c-book-${novaEstante.id}"></div>
+                    </div>
+                `;
+            } catch (e) { alert("Erro ao criar estante: " + e.message); }
+        }
     });
+};
+
+
+
+window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
+    const uid = `modal-edit-${bookcaseId}`;
 
     const modalHTML = `
-    <div class="modal">
-        <div class="c-modal">
+    <div class="modal" id="${uid}">
+        <div class="c-modal" style="width:60%; max-width:640px; margin:8% auto;">
             <div class="b-modal">
-                <h1>${title}</h1>
-                <form class="c-modal-form">
-                    ${htmlContent}
-                </form>
-                <div class="c-modal-btn">
-                    <button type="button" class="closeBtn">Fechar</button>
-                    <button type="button" class="confirmBtn">Confirmar</button>
+                <h1>Alterar</h1>
+
+                <div class="f-input-modal" style="margin-bottom:12px;">
+                    <label>Estante</label>
+                    <input class="modal-input-nome-estante" type="text"
+                           id="input-nome-${bookcaseId}" value="${nomeAtual}" />
+                </div>
+
+                <div class="modal-busca-container">
+                    <input type="search" id="busca-edit-${bookcaseId}" placeholder="Buscar livro..." />
+                    <img src="/Interface/assets/iconlupa.svg" alt="">
+                </div>
+
+                <div class="modal-grid-livros" id="grid-edit-${bookcaseId}">
+                    <p style="color:var(--verde-medio); grid-column:1/-1; text-align:center;">Carregando...</p>
+                </div>
+
+                <div class="c-modal-btn" style="margin-top:16px;">
+                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" id="btn-salvar-${uid}">Salvar nome</button>
                 </div>
             </div>
         </div>
-    </div>
-    `;
+    </div>`;
 
     document.body.insertAdjacentHTML("beforeend", modalHTML);
+    const modal = document.getElementById(uid);
+    const grid  = document.getElementById(`grid-edit-${bookcaseId}`);
+    const busca = document.getElementById(`busca-edit-${bookcaseId}`);
 
-    const modals = document.querySelectorAll(".modal");
-    const modal = modals[modals.length - 1];
+   
+    api.getBookcaseById(bookcaseId).then(bookcase => {
+        let todos = bookcase.books || [];
 
-    const confirmBtn = modal.querySelector(".confirmBtn");
-    const closeBtn = modal.querySelector(".closeBtn");
-    const form = modal.querySelector("form");
+        function render(lista) {
+            if (!lista.length) {
+                grid.innerHTML = `<p style="color:var(--verde-medio); grid-column:1/-1; text-align:center;">Estante vazia</p>`;
+                return;
+            }
+            grid.innerHTML = lista.map(book => {
+                const autor = book.authors
+                    ? book.authors.map(a => a.name).join(', ')
+                    : (book.author || '');
 
-  
-    applyStyles(styles, modal);
-
-    confirmBtn.addEventListener("click", function () {
-
-        const formData = new FormData(form);
-        let data = {};
-
-        formData.forEach((value, key) => {
-            data[key] = value;
-        });
-
-        console.log("Dados capturados:", data);
-
-        if (onSubmit) {
-            onSubmit(data);
+                
+                return `
+                    <div class="c-card-emprestimo c-card-book" style="align-items:flex-start;">
+                        <img src="${book.cover || '/Interface/assets/livro.png'}" alt="">
+                        <div class="card-book-info">
+                            <h1 class="c-emprestimo-text-title card-book-title">${(book.title || '').toUpperCase()}</h1>
+                            <p class="c-emprestimo-text-author card-book-author">${autor}</p>
+                        </div>
+                        <button class="btn-card-remover" style="opacity:1;"
+                            title="Remover"
+                            onclick="removeBook(${bookcaseId}, ${book.bookId}, this)">
+                            <img src="/Interface/assets/iconDelete.svg" alt="Remover">
+                        </button>
+                    </div>`;
+            }).join('');
         }
 
-        modal.remove();
+        render(todos);
+
+        busca.addEventListener('input', () => {
+            const t = busca.value.toLowerCase();
+            render(todos.filter(b =>
+                (b.title || '').toLowerCase().includes(t) ||
+                (b.author || '').toLowerCase().includes(t) ||
+                (b.authors || []).some(a => a.name.toLowerCase().includes(t))
+            ));
+        });
+    }).catch(() => {
+        grid.innerHTML = `<p style="color:red; grid-column:1/-1;">Erro ao carregar livros.</p>`;
     });
 
-    closeBtn.addEventListener("click", function () {
-        modal.remove();
-    });
-
-    modal.addEventListener("click", function (e) {
-        if (e.target === modal) {
+   
+    document.getElementById(`btn-salvar-${uid}`).addEventListener('click', async () => {
+        const novoNome = document.getElementById(`input-nome-${bookcaseId}`).value.trim();
+        if (!novoNome) { alert('Nome inválido'); return; }
+        try {
+            await api.updateBookcase(bookcaseId, novoNome, null);
+            const h1 = imgEl.closest('.title-bookase-container')?.querySelector('h1');
+            if (h1) h1.textContent = novoNome;
             modal.remove();
-        }
+        } catch (e) { alert('Erro ao atualizar: ' + e.message); }
     });
-}
+
+    document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+};
 
 
 
-function applyStyles(styles, modal) {
-    if (!styles) return;
+window.openAddBookModal = function (bookcaseId, nomeEstante, imgEl) {
+    const uid = `modal-add-${bookcaseId}`;
+    let selecionados = new Map(); 
 
-    let css = "";
+    const modalHTML = `
+    <div class="modal" id="${uid}">
+        <div class="c-modal" style="width:60%; max-width:640px; margin:8% auto;">
+            <div class="b-modal">
+                <h1>Adicionar a ${nomeEstante}</h1>
 
-    Object.keys(styles).forEach(selector => {
-        css += `${selector} {`;
+                <div class="modal-busca-container">
+                    <input type="search" id="busca-add-${bookcaseId}" placeholder="Buscar livro..." />
+                    <img src="/Interface/assets/iconlupa.svg" alt="">
+                </div>
 
-        Object.keys(styles[selector]).forEach(prop => {
-            css += `${prop}: ${styles[selector][prop]};`;
+                <div class="modal-grid-livros" id="grid-add-${bookcaseId}">
+                    <p style="color:var(--verde-medio); grid-column:1/-1; text-align:center;">Carregando...</p>
+                </div>
+
+                <div class="c-modal-btn" style="margin-top:16px;">
+                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" id="btn-adicionar-${uid}">Adicionar</button>
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+    document.body.insertAdjacentHTML("beforeend", modalHTML);
+    const modal = document.getElementById(uid);
+    const grid  = document.getElementById(`grid-add-${bookcaseId}`);
+    const busca = document.getElementById(`busca-add-${bookcaseId}`);
+
+   
+    api.getAllStock().then(estoque => {
+        let todos = estoque || [];
+
+        function render(lista) {
+            if (!lista.length) {
+                grid.innerHTML = `<p style="color:var(--verde-medio); grid-column:1/-1; text-align:center;">Nenhum livro encontrado</p>`;
+                return;
+            }
+            grid.innerHTML = lista.map(stock => {
+                const book   = stock.book || stock;
+                const titulo = book.title || stock.title || '';
+                const autor  = book.authors
+                    ? book.authors.map(a => a.name).join(', ')
+                    : (book.author || stock.author || '');
+                const cover  = book.cover || stock.cover || '/Interface/assets/livro.png';
+                const sel= selecionados.has(stock.stockId);
+
+                return `
+                    <div class="c-card-emprestimo c-card-book ${sel ? 'selecionado' : ''}"
+                         data-stock-id="${stock.stockId}"
+                         onclick='toggleSelectBook(this, ${stock.stockId}, ${JSON.stringify(titulo)}, ${JSON.stringify(autor)}, ${JSON.stringify(cover)})'>
+                        <img src="${cover}" alt="">
+                        <div class="card-book-info">
+                            <h1 class="c-emprestimo-text-title card-book-title">${titulo.toUpperCase()}</h1>
+                            <p class="c-emprestimo-text-author card-book-author">${autor}</p>
+                        </div>
+                        <button class="btn-card-adicionar" tabindex="-1">
+                            <img src="/Interface/assets/${sel ? 'iconVerified' : 'iconAddRounded'}.svg" alt="">
+                        </button>
+                    </div>`;
+            }).join('');
+        }
+
+        render(todos);
+
+        busca.addEventListener('input', () => {
+            const t = busca.value.toLowerCase();
+            render(todos.filter(s => {
+                const b = s.book || s;
+                return (b.title  || '').toLowerCase().includes(t) ||
+                       (b.author || '').toLowerCase().includes(t) ||
+                       (b.authors || []).some(a => a.name.toLowerCase().includes(t));
+            }));
         });
-
-        css += `}`;
-    });
-
-    const styleTag = document.createElement("style");
-    styleTag.innerHTML = css;
-
-    modal.appendChild(styleTag);
-}
-
-
-function closeModal(){
-    const modals = document.querySelectorAll(".modal");
-    const modal = modals[modals.length - 1];
-
-    if(modal){
-        modal.remove();
-    }
-}
-
-
-
-
-
-function openLoanModal(){
-    modalForm(
-        {
-            title: 'Fazer Emprestimo',
-            fields:[
-                {label:'Nome do Livro',type:'search', name:'name'}
-                ],
-                onSubmit: (formData)=>{
-                    var loanContainer = document.getElementById('emprestimo');
-                    var returnContainer = document.getElementById('devolucao');
-
-                    formData.forEach(element => {
-    
-    var status = [
-        'style="color: blue ;"',
-        'style="color: red ;"',
-        'style="color: green ;"'    
-        
-    ] 
-
-        if(element.situation == 'lending' ){
-
-
-        if(element.status == "Devolvido"){
-             loanContainer.innerHTML += `
-        <div class="c-card-emprestimo">
-          <img src=${element.cover}>
-          <div class="card-info-text">
-          <h1>${element.title.toUpperCase()}</h1>
-          <p>${element.author}</p>
-          <span ${status[2]} >${element.status}</span>
-          </div>
-        </div>
-        `  
-        } else if(element.status == "Em Andamento"){
-             loanContainer.innerHTML += `
-        <div class="c-card-emprestimo">
-          <img src=${element.cover}>
-          <div class="card-info-text">
-          <h1>${element.title.toUpperCase()}</h1>
-          <p>${element.author}</p>
-          <span ${status[0]} >${element.status}</span>
-          </div>
-        </div>
-        `  
-        } else if(element.status =="Devolver"){
-             loanContainer.innerHTML += `
-        <div class="c-card-emprestimo">
-          <img src=${element.cover}>
-          <div class="card-info-text">
-          <h1>${element.title.toUpperCase()}</h1>
-          <p>${element.author}</p>
-          <span ${status[1]} >${element.status}</span>
-          </div>
-        </div>
-        `  
-        } 
-
-          }
-
-            if(element.situation == 'devolution' ){
-
-
-        if(element.status == "Devolvido"){
-             returnContainer.innerHTML += `
-        <div class="c-card-emprestimo">
-          <img src=${element.cover}>
-          <div class="card-info-text">
-          <h1>${element.title.toUpperCase()}</h1>
-          <p>${element.author}</p>
-          <span ${status[2]} >${element.status}</span>
-          </div>
-        </div>
-        `  
-        } else if(element.status == "Em Andamento"){
-             returnContainer.innerHTML += `
-        <div class="c-card-emprestimo">
-          <img src=${element.cover}>
-          <div class="card-info-text">
-          <h1>${element.title.toUpperCase()}</h1>
-          <p>${element.author}</p>
-          <span ${status[0]} >${element.status}</span>
-          </div>
-        </div>
-        `  
-        } else if(element.status =="Devolver"){
-             returnContainer.innerHTML += `
-        <div class="c-card-emprestimo">
-          <img src=${element.cover}>
-          <div class="card-info-text">
-          <h1>${element.title}</h1>
-          <p>${element.author}</p>
-          <span ${status[1]} >${element.status}</span>
-          </div>
-        </div>
-        `  
-        } 
-
-          }
-
-
-
-
-      
-    });
-
-                }
-        }
-    )
-
-}
-
-function openRegisterBookModal(){
-    modalForm(
-    {
-        title:'Cadastrar Livros ',
-        fields:
-        [
-            {label:'Titulo',type:'text',name:'titulo'},
-            {label:'Capa',type:'text',name:'capa'},
-             {label:'Qtd',type:'text',name:'quantidade'}
-
-        ],
-        onSubmit: (formData)=>{
-            console.log(formData)
-            var content = document.getElementById('c-register-books');
-
-                content.innerHTML += `
-                <div clas="c-book">
-                     <h2>${formData.titulo}</h2>
-                     <img src="${formData.capa}" alt="" />
-                     <p>Quantidade Disponível: ${formData.quantidade}</p>
-                 </div>
-                 `;
-            
-
-        }
-    }
-)
-}
-
-
-window.openBookcaseModal = function () {
-  const loggedUser = JSON.parse(sessionStorage.getItem('usuarioLogado'));
-
-  modalForm({
-    title: "Criar Estante",
-    fields: [
-      { label: "Nome da Estante", type: "text", name: "name" },
-    ],
-    onSubmit: async (data) => {
-      try {
-        if (!data.name || data.name.trim() === '') {
-          alert('Nome inválido');
-          return;
-        }
-
-        const newBookcase = await api.createBookcase(data.name, loggedUser.id);
-
-        const bookcaseEl = document.getElementById('bookcase');
-
-        bookcaseEl.innerHTML += `
-          <div class='books-container'>
-            <div class="title-bookase-container">
-              <h1>${newBookcase.name}</h1>
-              <span>
-                <img src="/Interface/assets/iconAdd.svg" alt=""
-                     onclick="openAddBookModal(${newBookcase.id}, '${newBookcase.name}', this)">
-              </span>
-              <span>
-                <img src="/Interface/assets/iconEdit.svg" alt=""
-                     onclick="openBookcaseEditModal(${newBookcase.id}, '${newBookcase.name}', this)">
-              </span>
-            </div>
-            <div class="c-book" id="c-book-${newBookcase.id}">
-            </div>
-          </div>
-        `;
-
-      } catch (error) {
-        alert("Erro ao criar estante: " + error.message);
-      }
-    }
-  });
-};
-
-
-
-window.openBookcaseEditModal = function (bookcaseId, currentName, triggerElement) {
-  const modalHTML = `
-    <div class="modal" id="modal-edicao">
-      <div class="c-modal" style="min-width:520px; max-width:620px;">
-        <div class="b-modal">
-          <h1>Alterar</h1>
-
-          <div class="f-input-modal">
-            <label>Estante</label>
-            <input type="text" id="novo-nome-estante" value="${currentName}" />
-          </div>
-
-          <div style="margin: 12px 0;">
-            <div style="display:flex; align-items:center; border:1px solid #ccc; border-radius:8px; padding:6px 10px; gap:8px;">
-              <input type="search" id="busca-livros-edicao" placeholder="Buscar" style="border:none; outline:none; width:100%; font-size:14px;" />
-              <img src="/Interface/assets/iconlupa.svg" style="width:18px; height:18px;">
-            </div>
-          </div>
-
-          <div id="grid-livros-edicao" style="
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            max-height: 320px;
-            overflow-y: auto;
-            padding: 4px;
-          "></div>
-
-          <div class="c-modal-btn" style="margin-top:16px;">
-            <button type="button" id="btn-cancelar-edicao">Cancelar</button>
-            <button type="button" id="btn-confirmar-edicao">Adicionar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-
-  document.body.insertAdjacentHTML("beforeend", modalHTML);
-
-  const modal = document.getElementById('modal-edicao');
-  const grid = document.getElementById('grid-livros-edicao');
-  const searchInput = document.getElementById('busca-livros-edicao');
-
-
-  searchInput.addEventListener('input', () => {
-      const term = searchInput.value.toLowerCase();
-      const filteredBooks = allBooks.filter(b =>
-        b.title.toLowerCase().includes(term) || b.author.toLowerCase().includes(term)
-      );
-      renderBooks(filteredBooks);
+    }).catch(() => {
+        grid.innerHTML = `<p style="color:red; grid-column:1/-1;">Erro ao carregar estoque.</p>`;
     });
 
 
- 
-  api.getBookcaseById(bookcaseId).then(bookcase => {
-    let allBooks = bookcase.books || [];
-
-    function renderBooks(books) {
-      grid.innerHTML = '';
-      books.forEach(book => {
-        grid.innerHTML += `
-          <div class="book" style="position:relative; flex-direction:column; align-items:center; padding:10px;">
-            <img src="${book.cover}" style="width:48px; height:48px;">
-            <div class="book-info" style="text-align:center;">
-              <h3 style="font-size:13px;">${book.title.toUpperCase()}</h3>
-              <p style="font-size:12px;">${book.author}</p>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    renderBooks(allBooks);
-
-    
-  });
-
-  document.getElementById('btn-confirmar-edicao').addEventListener('click', async () => {
-    const newName = document.getElementById('novo-nome-estante').value.trim();
-    if (!newName) { alert('Nome inválido'); return; }
-
-    try {
-      await api.updateBookcase(bookcaseId, newName, null);
-      const titleContainer = triggerElement.closest('.title-bookase-container');
-      const h1 = titleContainer.querySelector('h1');
-      if (h1) h1.textContent = newName;
-      modal.remove();
-    } catch (error) {
-      alert('Erro ao atualizar: ' + error.message);
-    }
-  });
-
-  document.getElementById('btn-cancelar-edicao').addEventListener('click', () => modal.remove());
-  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
-};
-
-
-window.openAddBookModal = function (bookcaseId, bookcaseName, triggerElement) {
-  const modalHTML = `
-    <div class="modal" id="modal-adicionar">
-      <div class="c-modal" style="min-width:520px; max-width:620px;">
-        <div class="b-modal">
-          <h1>Adicionar a ${bookcaseName}</h1>
-
-          <div style="margin: 12px 0;">
-            <div style="display:flex; align-items:center; border:1px solid #ccc; border-radius:8px; padding:6px 10px; gap:8px;">
-              <input type="search" id="busca-estoque" placeholder="Buscar" style="border:none; outline:none; width:100%; font-size:14px;" />
-              <img src="/Interface/assets/iconlupa.svg" style="width:18px; height:18px;">
-            </div>
-          </div>
-
-          <div id="grid-estoque" style="
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            max-height: 320px;
-            overflow-y: auto;
-            padding: 4px;
-          "></div>
-
-          <div class="c-modal-btn" style="margin-top:16px;">
-            <button type="button" id="btn-cancelar-adicao">Cancelar</button>
-            <button type="button" id="btn-confirmar-adicao">Adicionar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-
-  document.body.insertAdjacentHTML("beforeend", modalHTML);
-
-  const modal = document.getElementById('modal-adicionar');
-  const grid = document.getElementById('grid-estoque');
-  const searchInput = document.getElementById('busca-estoque');
-  let selectedBooks = new Set(); 
-
-  api.getAllStock().then(stock => {
-    let allBooks = stock || [];
-
-
-     window.toggleSelectBook = function(btn) {
-      const rawId = btn.dataset.stockId;
-
-      if(!rawId || rawId == "undefined"){
-        console.error("id não encontrado para este livro")
-        return;
-      }
-
-      const id = Number(rawId);
-
-
-      if (isNaN(id)) {
-        console.error("O ID fornecido não é um número válido:", rawId);
-         return;
-       }
-
-
-      const bookCard = btn.closest('.book');
-      if (selectedBooks.has(id)) {
-        selectedBooks.delete(id);
-        if (bookCard) bookCard.style.outline = 'none';
-        btn.innerHTML = '<img src="/Interface/assets/iconAdd.svg" style="width:18px; height:18px;">';
-      } else {
-        selectedBooks.add(id);
-        if (bookCard) bookCard.style.outline = '2px solid var(--verde-escuro)';
-        btn.innerHTML = '<img src="/Interface/assets/iconAddRounded.svg" style="width:18px; height:18px;">';
-      }
+    window.toggleSelectBook = function (cardEl, stockId, titulo, autor, cover) {
+        if (selecionados.has(stockId)) {
+            selecionados.delete(stockId);
+            cardEl.classList.remove('selecionado');
+            cardEl.querySelector('.btn-card-adicionar img').src = '/Interface/assets/iconAddRounded.svg';
+        } else {
+            selecionados.set(stockId, { titulo, autor, cover });
+            cardEl.classList.add('selecionado');
+            cardEl.querySelector('.btn-card-adicionar img').src = '/Interface/assets/iconVerified.svg';
+        }
     };
 
-    function renderStock(items) {
-      grid.innerHTML = '';
-      items.forEach(i => {
-        const isSelected = selectedBooks.has(i.id);
-        grid.innerHTML += `
-          <div class="book" style="position:relative; flex-direction:column; align-items:center; padding:10px; ${isSelected ? 'outline:2px solid var(--verde-escuro);' : ''}">
-            <img src="${i.book?.cover || i.cover}" style="width:48px; height:48px;">
-            <div class="book-info" style="text-align:center;">
-              <h3 style="font-size:13px;">${(i.book?.title || i.book.title || '').toUpperCase()}</h3>
-              <p style="font-size:12px;">${i.book?.authors.map(a=> a.name).join(',') || i.book.authors.map(a=> a.name).join(',') || ''}</p>
-            </div>
-            <button 
-              data-stock-id="${i.id}"
-              onclick="toggleSelectBook(this)"
-              style="position:absolute; top:6px; right:6px; background:none; border:none; cursor:pointer; font-size:18px;"
-              title="Adicionar">${isSelected ? '<img src="/Interface/assets/iconAddRounded.svg" style="width:18px; height:18px;">' : '<img src="/Interface/assets/iconAdd.svg" style="width:18px; height:18px;">'}</button>
-          </div>
-        `;
-      });
-    }
-
-    renderStock(allBooks);
-
    
-
-    searchInput.addEventListener('input', () => {
-      const term = searchInput.value.toLowerCase();
-      const filteredBooks = allBooks.filter(s => {
-        const title = (s.book?.title || s.title || '').toLowerCase();
-        const author = (s.book?.author || s.author || '').toLowerCase();
-        return title.includes(term) || author.includes(term);
-      });
-      renderStock(filteredBooks);
+    document.getElementById(`btn-adicionar-${uid}`).addEventListener('click', async () => {
+        if (!selecionados.size) { alert('Selecione ao menos um livro'); return; }
+        try {
+            const cBook = document.getElementById(`c-book-${bookcaseId}`);
+            for (const [stockId, book] of selecionados) {
+                await api.addBookToBookcase(bookcaseId, stockId);
+                if (cBook) {
+                    cBook.innerHTML += `
+                        <div class="c-card-emprestimo c-card-book">
+                            <img src="${book.cover}" alt="">
+                            <div class="card-book-info">
+                                <h1 class="c-emprestimo-text-title card-book-title">${book.titulo.toUpperCase()}</h1>
+                                <p class="c-emprestimo-text-author card-book-author">${book.autor}</p>
+                            </div>
+                            <button class="btn-card-remover"
+                                onclick="removeBook(${bookcaseId}, ${stockId}, this)" title="Remover">
+                                <img src="/Interface/assets/iconDelete.svg" alt="Remover">
+                            </button>
+                        </div>`;
+                }
+            }
+            modal.remove();
+        } catch (e) { alert('Erro: ' + e.message); }
     });
-  });
 
-  document.getElementById('btn-confirmar-adicao').addEventListener('click', async () => {
-    if (selectedBooks.size === 0) { alert('Selecione ao menos um livro'); return; }
-
-    try {
-      for (const stockId of selectedBooks) {
-        if(isNaN(stockId)) continue;
-        
-        await api.addBookToBookcase(bookcaseId, stockId);
-      }
-      alert('Livros adicionados!');
-      location.reload();
-    } catch (error) {
-      alert('Erro: ' + error.message);
-    }
-  });
-
-  document.getElementById('btn-cancelar-adicao').addEventListener('click', () => modal.remove());
-  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+    document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 };
 
 
 window.removeBook = function (bookcaseId, stockBookId, btnEl) {
-  if (!confirm('Remover este livro da estante?')) return;
-
-  api.removeBookFromBookcase(bookcaseId, stockBookId)
-    .then(() => {
-      const bookEl = btnEl.closest('.book');
-      if (bookEl) bookEl.remove();
-    })
-    .catch(error => alert('Erro ao remover: ' + error.message));
+    if (!confirm('Remover este livro da estante?')) return;
+    api.removeBookFromBookcase(bookcaseId, stockBookId)
+        .then(() => { btnEl.closest('.c-card-book')?.remove(); })
+        .catch(e => alert('Erro ao remover: ' + e.message));
 };
+
+
+
+function abrirModalCadastro() {
+    modalForm({
+        titulo: "Cadastro",
+        campos: [
+            { label: "Nome", type: "text", name: "nome" },
+            { label: "Email", type: "email", name: "email" }
+        ],
+        onSubmit: (dados) => { console.log(dados); }
+    });
+}
+
+function abrirCadastrarLivro() {
+    modalForm({
+        titulo: 'Cadastrar Livros',
+        campos: [
+            { label: 'Titulo', type: 'text', name: 'titulo' },
+            { label: 'Capa', type: 'text', name: 'capa' },
+            { label: 'Qtd', type: 'text', name: 'quantidade' }
+        ],
+        onSubmit: (dado) => {
+            const content = document.getElementById('c-register-books');
+            if (content) {
+                content.innerHTML += `
+                <div class="c-book">
+                    <h2>${dado.titulo}</h2>
+                    <img src="${dado.capa}" alt="" />
+                    <p>Quantidade Disponível: ${dado.quantidade}</p>
+                </div>`;
+            }
+        }
+    });
+}
