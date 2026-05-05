@@ -99,7 +99,7 @@ public class DataSeeder {
 
         stockBookService.addBookOnStock(
                 savedBooks.get(0).getId(),
-                stockBook1.getStock().getId(),
+               2L,
                 stockBook1.getQtd()
         );
     }
