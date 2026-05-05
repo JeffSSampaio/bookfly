@@ -76,33 +76,6 @@ window.openModalBookcase = function () {
     });
 };
 
-window.openAddItemOnStock = function (){
-
-   modalForm({
-       titulo: "Registrar Livro",
-       campos: [
-                {label:"Nome do Livro", type:"text", name:"bookName"},
-                {label:"Capa do Livro", type:"text", name:"coverBook"},
-                {label:"Autores do livro", type:"text", name:"authorName"},
-                {label:"Genero", type:"text", name:"genderBook"}
-            ],
-        onSubmit: async(data)=> {
-
-            let nameBook = data.bookName;
-            let coverBook = data.coverBook;
-            const authorsName = data.authorName ? data.authorName.split(',').map(a => a.trim()) : [];
-            const gendersBook = data.genderBook ? data.genderBook.split(',').map(g => g.trim()) : [];
-            let book =  {title: nameBook, cover: coverBook,authors: authorsName,genders: gendersBook }
-
-            await api.createBook(book)
-
-
-        }   
-
-       
-    }
-   )
-}
 
 
 
@@ -364,4 +337,86 @@ window.openBookModal = function (stockId) {
     }).catch(() => {
         alert('Erro ao carregar detalhes do livro.');
     });
+}
+
+
+
+window.openRegisterBook= function (){
+
+   modalForm({
+       titulo: "Registrar",
+       campos: [
+                {label:"Nome do Livro", type:"text", name:"bookName"},
+                {label:"Capa do Livro", type:"text", name:"coverBook"},
+                {label:"Autores do livro", type:"text", name:"authorName"},
+                {label:"Genero", type:"text", name:"genderBook"}
+            ],
+        onSubmit: async(data)=> {
+
+            let nameBook = data.bookName;
+            let coverBook = data.coverBook;
+            const authorsName = data.authorName ? data.authorName.split(',').map(a => a.trim()) : [];
+            const gendersBook = data.genderBook ? data.genderBook.split(',').map(g => g.trim()) : [];
+            let book =  {title: nameBook, cover: coverBook,authors: authorsName,genders: gendersBook }
+
+            await api.createBook(book)
+
+        }   
+
+       
+    }
+   )
+}
+
+window.openAddItemOnStock =  async function(){
+
+  
+    const books = await api.getAllBooks();
+
+   
+    const options = books.map(b => 
+        `<option value="${b.bookid}">${b.title}</option>`
+    ).join('');
+
+   
+    const htmlContent = `
+        <select name="selectBook" id="bookSelect" >
+          ${options}
+        </select>
+        <div>
+        <label name="qtd" for="" >Quantidade</label>
+        <input name="qtd" id="" />
+        </div>
+        `;
+
+    const modalHTML = `
+    <div class="modal">
+        <div class="c-modal c-modal-table-livro">
+            <div class="b-modal b-modal-table-livro">
+                <h1 class="t-modal">Adicionar Estoque</h1>
+                <form class="c-modal-form ">${htmlContent}</form>
+                <div class="c-modal-btn">
+                    <button type="button" class="closeBtn">Cancelar</button>
+                    <button type="button" class="confirmBtn">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+    document.body.insertAdjacentHTML("beforeend", modalHTML);
+    const modal = document.querySelector(".modal");
+    const confirmBtn = modal.querySelector(".confirmBtn");
+    const closeBtn= modal.querySelector(".closeBtn");
+    const form= modal.querySelector("form");
+
+    confirmBtn.addEventListener("click", function () {
+        const formData = new FormData(form);
+        let dados = {};
+        formData.forEach((value, key) => { dados[key] = value; });
+        if (onSubmit) onSubmit(dados);
+        modal.remove();
+    });
+    closeBtn.addEventListener("click", () => modal.remove());
+    modal.addEventListener("click", e => { if (e.target === modal) modal.remove(); });
+
 }

@@ -20,13 +20,3 @@
 }
 
 
-.btn-add {
-    padding: 10px 20px;
-    margin: 0 20px;
-    font-weight: 700;
-    border-radius: 20px;
-    border: none;
-    color: var(--marfin);
-    background-color: var(--verde-escuro);
-     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-}

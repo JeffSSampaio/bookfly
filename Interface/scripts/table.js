@@ -90,7 +90,7 @@ var table_books= {
     }))
 }
 
-
+console.log(allBooks)
 
 var table_moviment = {
     headers: ['Id','Usuário', 'Livro', 'Quantidade', 'Tipo'],

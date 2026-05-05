@@ -1,0 +1,44 @@
+.btn-add-livro-stock{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    margin: 20px 40px;
+}
+
+.btn-add {
+    padding: 10px 20px;
+    margin: 0 20px;
+    font-weight: 700;
+    border-radius: 20px;
+    border: none;
+    color: var(--marfin);
+    background-color: var(--verde-medio);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transform: scale(1);
+    transition: background-color 1s ease-out,
+                transform 1s ease-out;
+}
+
+.btn-add:hover{
+    cursor: pointer;
+    background-color:  var(--verde-escuro);
+    transform: scale(1.1);
+    transition: all 1s ease-in;
+
+}
+
+.c-modal-table-livro {
+    width: 30%;
+    height: 30%;
+}
+
+.b-modal-table-livro form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+
+}
+.t-modal{
+        margin-bottom: 30%;
+}

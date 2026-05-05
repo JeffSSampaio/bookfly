@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/Interface/styles/root.css">
     <link rel="stylesheet" href="/Interface/styles/modal.css">
     <link rel="stylesheet" href="/Interface/styles/table.css">
+    <link rel="stylesheet" href="/Interface/styles/table-estoque.css">
     <link rel="stylesheet" href="/Interface/styles/book-register.css">
  <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,7 +45,9 @@
       <div class="table-container">
             <div class="table-title-c">
                 <h1>Estoque</h1>
-                <button class="btn-add">Adicionar no Estoque</button>
+            </div>
+            <div class="btn-add-livro-stock">
+                 <button class="btn-add" onclick="openAddItemOnStock()">Adicionar no Estoque</button>
             </div>
             <div id="table-estoque"></div>
         </div>
