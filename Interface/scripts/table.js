@@ -28,6 +28,11 @@ var allMoviments = await api.getAllMoviments();
 var allPenalties = await api.getAllPenalties();
 var allBooks = await api.getAllBooks();
 
+const formatador = new  Intl.DateTimeFormat('pt-BR', {
+  dateStyle:'short',
+  timeStyle:'short',
+  timeZone: 'America/Sao_Paulo' 
+})
 
 
 var table_loan = {
@@ -37,8 +42,8 @@ var table_loan = {
             id: r.id,
             user: r.user.name.toUpperCase(),
             book: r.bookTitle.toUpperCase(),
-            loanDate: r.loanDate,
-            returnDate: r.returnDate,
+            loanDate:  formatador.format(new Date(r.loanDate)) ,
+            returnDate: formatador.format(new Date(r.returnDate)),
             status: r.status
         })
     )
@@ -62,8 +67,8 @@ var table_penalty = {
         r =>({
             id: r.penaltyId,
             user: r.userName.toUpperCase(),
-            penaltyDate: r.penaltyDate,
-            returnDateLoan: r.returnloanDate,
+            penaltyDate: formatador.format(new Date(r.penaltyDate)), 
+            returnDateLoan: formatador.format(new Date(r.returnloanDate)),
             status: r.statusPenalty
         })
     )
