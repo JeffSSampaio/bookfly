@@ -8,12 +8,14 @@ import java.util.List;
 public record BookMovimentSummary(
         Long bookId,
         String title,
+        String summary,
         List<AuthorSummary> authors
 ) {
     public static BookMovimentSummary from(Book book){
         return new BookMovimentSummary(
                 book.getId(),
                 book.getTitle(),
+                book.getSummary(),
                 book.getAuthors().stream().map(AuthorSummary::from).toList()
         );
     }

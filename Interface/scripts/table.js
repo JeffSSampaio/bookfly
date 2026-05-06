@@ -12,7 +12,9 @@ var style_table = {
     cell: {
         border: '1px solid var(--verde-escuro)',
         padding: '10px',
-        textAlign: 'center' 
+        textAlign: 'center' ,
+        color: 'var(--verde-escuro)',
+        fontWeight: '800'
     },
     row: {
         backgroundColor: 'var(--marfin)',
@@ -25,6 +27,8 @@ var allLoans = await api.getAllLoans();
 var allMoviments = await api.getAllMoviments();
 var allPenalties = await api.getAllPenalties();
 var allBooks = await api.getAllBooks();
+
+
 
 var table_loan = {
     headers: ['ID','Usuário', 'Livro', 'Data de Empréstimo', 'Data de Devolução', 'Status'],
@@ -93,18 +97,19 @@ var table_books= {
 console.log(allBooks)
 
 var table_moviment = {
-    headers: ['Id','Usuário', 'Livro', 'Quantidade', 'Tipo'],
+    headers: ['Id','Usuário','Tipo do Usuário' ,'Livro', 'Quantidade', 'Tipo'],
     rows: allMoviments.map(
         r=>({
             id:r.movimentId,
             user: r.user.name.toUpperCase(),
+            userType: r.user.role,
             book: r.book.title.toUpperCase(),
-            qtd: r.qtdMoved,
-            type: r.type,
+            qtd: (r.type == ('ENTRADA') ||  r.type == ('ENTRADA_ADMIN') )? '+'+ r.qtdMoved : '-'+ r.qtdMoved ,
+            type: r.type.trim(),
         })
     )
 }
-
+console.log(allMoviments)
 
 function table(tableData) {
     let tbl = document.createElement('table');
@@ -148,6 +153,50 @@ function table(tableData) {
     tbl.appendChild(tbody);
     return tbl;
 }
+
+function table_costumize(tableData,styleData) {
+    let tbl = document.createElement('table');
+    tbl.style.width = 'calc(100% - 120px)';
+    tbl.style.borderCollapse = 'collapse';
+    tbl.style.margin = '0 60px';
+
+  
+    let thead = document.createElement('thead');
+    let headerRow = document.createElement('tr');
+
+    tableData.headers.forEach(headerText => {
+        let th = document.createElement('th');
+        th.textContent = headerText;
+        Object.assign(th.style, styleData.header);
+        headerRow.appendChild(th);
+    });
+
+    thead.appendChild(headerRow);
+    tbl.appendChild(thead);
+
+  
+    let tbody = document.createElement('tbody');
+
+    tableData.rows.forEach((rowData, index) => {
+        let row = document.createElement('tr');
+        Object.assign(row.style, styleData.row);
+
+      
+        Object.values(rowData).forEach(value => {
+        let cell = document.createElement('td');
+        cell.textContent = value;
+        Object.assign(cell.style, styleData.cell);
+
+        row.appendChild(cell);
+});
+
+        tbody.appendChild(row);
+    });
+
+    tbl.appendChild(tbody);
+    return tbl;
+}
+
 
 function table_with_actions(tableData) {
     let container = document.createElement('div');

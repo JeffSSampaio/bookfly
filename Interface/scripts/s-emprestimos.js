@@ -71,12 +71,19 @@ var container_devolucao = document.getElementById('devolucao');
 
 
 
+console.log(booksLoan)
+
+
+   
 
  booksLoan.forEach(element => {
     
   const dataloan = new Date(element.loanDate);
   const dataFormated = formatador.format(dataloan);
+   
+    
 
+ 
         if(element.statusLoan == "ATIVO" || element.statusLoan == "ATRASADO"){
             isLoaned = true;
             const overdue = element.statusLoan == "ATRASADO" || (element.returnDate && new Date(element.returnDate) < new Date());
@@ -90,7 +97,7 @@ var container_devolucao = document.getElementById('devolucao');
             }
 
             container_emprestimo.innerHTML += `
-            <div class="c-card-emprestimo">
+            <div class="c-card-emprestimo " onclick="openBookModal(${element.book.bookId})">
               <img src=${element.book.cover}>
               <div class="card-info-text">
               <h1 class="c-emprestimo-text-title">${element.book.title}</h1>
@@ -107,7 +114,7 @@ var container_devolucao = document.getElementById('devolucao');
         if(element.statusLoan == "FINALIZADO"){
              isDevolved = true;
              container_devolucao.innerHTML += `
-        <div class="c-card-emprestimo">
+        <div class="c-card-emprestimo" onclick="openBookModal(${element.book.bookId})">
           <img src=${element.book.cover}>
           <div class="card-info-text">
           <h1 class="c-emprestimo-text-title">${element.book.title}</h1>
@@ -122,17 +129,17 @@ var container_devolucao = document.getElementById('devolucao');
           
 
 
+        if(!isLoaned){
+            container_emprestimo.innerHTML = `<p>Você não tem empréstimos.</p>`;
+        }
+        if(!isDevolved){
+            container_devolucao.innerHTML = `<p>Você não tem devoluções.</p>`;
+        }
         }
 
       
     );
 
-    if(!isLoaned){
-        container_emprestimo.innerHTML = `<p>Você não tem empréstimos.</p>`;
-    }
-    if(!isDevolved){
-        container_devolucao.innerHTML = `<p>Você não tem devoluções.</p>`;
-    }
 
 
 

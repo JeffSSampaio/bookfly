@@ -18,7 +18,7 @@ public class Book {
     @Column(nullable = false)
     private String cover;
 
-
+    private String summary;
 
     @ManyToMany
     @JoinTable(
@@ -34,16 +34,19 @@ public class Book {
     @CollectionTable(name = "livro_genero", joinColumns = @JoinColumn(name = "livro_id"))
     private List<Gender> genders = new ArrayList<>();
 
-    public Book() {
-    }
-
-    public Book(Long id, String title, String cover, List<Author> authors, List<Gender> genders) {
+    public Book(Long id, String title, String cover, String summary, List<Author> authors, List<Gender> genders) {
         this.id = id;
         this.title = title;
         this.cover = cover;
+        this.summary = summary;
         this.authors = authors;
         this.genders = genders;
     }
+
+    public Book() {
+    }
+
+
 
     @Override
     public String toString() {
@@ -77,6 +80,14 @@ public class Book {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public List<Author> getAuthors() {

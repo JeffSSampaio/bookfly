@@ -44,9 +44,12 @@ public class BookService {
                 .distinct()
                 .toList();
 
+        String sumaryExists  = book.getSummary() !=null ? book.getSummary() : "Sem sumario";
+
         Book bookToSave = new Book();
         bookToSave.setTitle(book.getTitle());
         bookToSave.setCover(book.getCover());
+        bookToSave.setSummary(sumaryExists);
         bookToSave.setAuthors(authors);
         bookToSave.setGenders(genders);
 
@@ -71,9 +74,13 @@ public class BookService {
         Book existBook = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Livro não existe"));
 
+
+        String sumaryExists  = book.getSummary() !=null ? book.getSummary() : "Sem sumario";
+
         if (book.getTitle() != null) existBook.setTitle(book.getTitle());
         if (book.getCover() != null) existBook.setCover(book.getCover());
         if (book.getGenders() != null) existBook.setGenders(book.getGenders());
+        if (book.getSummary() != null) existBook.setSummary(sumaryExists);
 
 
         if (book.getAuthors() != null) {

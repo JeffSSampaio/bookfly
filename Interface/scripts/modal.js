@@ -334,7 +334,7 @@ window.openBookModal = function (bookId) {
             : (book.author || 'Autor desconhecido');
         const statusText = (stock?.qtd ?? 0) > 0 ? 'Disponível' : 'Indisponível';
         const statusClass = (stock?.qtd ?? 0) > 0 ? 'status-available' : 'status-unavailable';
-        const description = book.description || 'Sem descrição disponível.';
+        const summary = stock.summary || "Sem sumario";
 
         const modalHTML = `
         <div class="modal">
@@ -350,7 +350,7 @@ window.openBookModal = function (bookId) {
                             <span class="book-detail-status ${statusClass}">${statusText}</span>
                         </div>
                         <p class="book-detail-label">Sumário</p>
-                        <p class="book-detail-description">${description}</p>
+                        <p class="book-detail-description">${summary}</p>
                     </div>
                 </div>
             </div>
@@ -376,6 +376,7 @@ window.openRegisterBook= function (){
                 {label:"Nome do Livro", type:"text", name:"bookName"},
                 {label:"Capa do Livro", type:"text", name:"coverBook"},
                 {label:"Autores do livro", type:"text", name:"authorName"},
+                {label:"Sumario do livro", type:"textArea" ,name:"summaryBook"},
                 {label:"Genero", type:"text", name:"genderBook"}
             ],
         onSubmit: async(data)=> {
@@ -384,6 +385,7 @@ window.openRegisterBook= function (){
             let coverBook = data.coverBook;
             const authorsName = data.authorName ? data.authorName.split(',').map(a => a.trim()) : [];
             const gendersBook = data.genderBook ? data.genderBook.split(',').map(g => g.trim()) : [];
+            let summario = data.summaryBook || 'Sem sumario'
             let book =  {title: nameBook, cover: coverBook,authors: authorsName,genders: gendersBook }
 
             await api.createBook(book)

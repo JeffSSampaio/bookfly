@@ -11,6 +11,7 @@ public record BookDetail(
        Long bookid,
        String title,
        String cover,
+       String summary,
        List<AuthorSummary> authors,
        List<Gender> genders
 ) {
@@ -20,6 +21,7 @@ public record BookDetail(
                 book.getId(),
                 book.getTitle(),
                 book.getCover(),
+                book.getSummary(),
                 book.getAuthors().stream().map(AuthorSummary::from).toList(),
                 book.getGenders()
         );

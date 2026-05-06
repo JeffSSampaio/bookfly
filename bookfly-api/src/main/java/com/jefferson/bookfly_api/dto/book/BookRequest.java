@@ -16,6 +16,9 @@ public record BookRequest(
         @NotBlank(message = "Cover é obrigatória")
         String cover,
 
+        @Schema(description = "Sumario do livro")
+        String summary,
+
         @Schema(description = "Lista de autores")
         @NotEmpty(message = "Deve ter pelo menos um autor")
         List<String> authors,
