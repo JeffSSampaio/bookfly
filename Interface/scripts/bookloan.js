@@ -44,7 +44,7 @@ function renderBooks(stockList) {
 
 
     const isAlreadyLoaned = loanedBookIds.has(book.bookId);
-    const availableText = quantity > 0 ? `Disponível: ${quantity}` : 'Indisponível';
+    const availableText = quantity > 0 ? `Disponível` : 'Indisponível';
     const returnText = isAlreadyLoaned ? 'Você fez o empréstimo desse livro' : 'Disponível para empréstimo';
 
     const buttonMarkup = !isAlreadyLoaned && quantity > 0
