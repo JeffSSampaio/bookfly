@@ -368,33 +368,55 @@ window.openRegisterBook= function (){
    )
 }
 
-window.openAddItemOnStock =  async function(){
-
-  
+window.openAddItemOnStock = async function() {
     const books = await api.getAllBooks();
+    const uid = 'modal-add-stock';
+    const selectedBooks = new Set();
+    let allCards = books.map(book => {
+        const bookId = book.bookid ?? book.id;
+        const cover = book.cover || '/Interface/assets/livro.png';
+        const title = (book.title || 'Título desconhecido').replace(/"/g, '&quot;');
+        const author = book.authors
+            ? book.authors.map(a => a.name).join(', ')
+            : (book.author || 'Autor desconhecido');
 
-   
-    const options = books.map(b => 
-        `<option value="${b.bookid}">${b.title}</option>`
-    ).join('');
-
-   
-    const htmlContent = `
-        <select name="selectBook" id="bookSelect" >
-          ${options}
-        </select>
-        <div>
-        <label name="qtd" for="" >Quantidade</label>
-        <input name="qtd" id="" />
-        </div>
-        `;
+        return {
+            bookId,
+            cover,
+            title: title.replace(/&quot;/g, '"'),
+            author,
+            html: `
+            <div class="card-select-book" data-book-id="${bookId}">
+                <div class="card-select-indicator">
+                    <img src="/Interface/assets/iconAddRounded.svg" alt="Selecionar" />
+                </div>
+                <img src="${cover}" alt="${title}" />
+                <div class="card-select-book-info">
+                    <div class="card-select-book-title">${title}</div>
+                    <div class="card-select-book-author">${author}</div>
+                </div>
+                <div class="card-select-qty-container">
+                    <label for="qty-${bookId}">Qtd</label>
+                    <input id="qty-${bookId}" class="card-book-qtd" type="number" min="1" value="1" data-book-id="${bookId}" />
+                </div>
+            </div>`
+        };
+    });
 
     const modalHTML = `
-    <div class="modal">
-        <div class="c-modal c-modal-table-livro">
-            <div class="b-modal b-modal-table-livro">
+    <div class="modal" id="${uid}">
+        <div class="c-modal c-modal-table-estoque">
+            <div class="b-modal b-modal-table-estoque">
                 <h1 class="t-modal">Adicionar Estoque</h1>
-                <form class="c-modal-form ">${htmlContent}</form>
+                <div class="modal-content-wrapper">
+                    <div class="modal-add-stock-search">
+                        <input type="text" id="search-stock" placeholder="Buscar livro..." />
+                        <img src="/Interface/assets/iconlupa.svg" alt="Buscar" />
+                    </div>
+                    <div class="modal-add-stock-grid" id="grid-add-stock">
+                        ${allCards.map(c => c.html).join('') || '<p style="color:var(--verde-medio); text-align:center;">Nenhum livro encontrado.</p>'}
+                    </div>
+                </div>
                 <div class="c-modal-btn">
                     <button type="button" class="closeBtn">Cancelar</button>
                     <button type="button" class="confirmBtn">Confirmar</button>
@@ -403,20 +425,70 @@ window.openAddItemOnStock =  async function(){
         </div>
     </div>`;
 
-    document.body.insertAdjacentHTML("beforeend", modalHTML);
-    const modal = document.querySelector(".modal");
-    const confirmBtn = modal.querySelector(".confirmBtn");
-    const closeBtn= modal.querySelector(".closeBtn");
-    const form= modal.querySelector("form");
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    const modal = document.getElementById(uid);
+    const grid = modal.querySelector('#grid-add-stock');
+    const searchInput = modal.querySelector('#search-stock');
+    const confirmBtn = modal.querySelector('.confirmBtn');
+    const closeBtn = modal.querySelector('.closeBtn');
 
-    confirmBtn.addEventListener("click", function () {
-        const formData = new FormData(form);
-        let dados = {};
-        formData.forEach((value, key) => { dados[key] = value; });
-        if (onSubmit) onSubmit(dados);
-        modal.remove();
+    // Filtro de pesquisa
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        const filtered = allCards.filter(card => 
+            card.title.toLowerCase().includes(searchTerm) ||
+            card.author.toLowerCase().includes(searchTerm)
+        );
+        grid.innerHTML = filtered.length > 0 
+            ? filtered.map(c => c.html).join('')
+            : '<p style="color:var(--verde-medio); text-align:center; padding:20px;">Nenhum livro encontrado.</p>';
     });
-    closeBtn.addEventListener("click", () => modal.remove());
-    modal.addEventListener("click", e => { if (e.target === modal) modal.remove(); });
 
+    // Clique nos cards
+    grid.addEventListener('click', e => {
+        if (e.target.closest('.card-book-qtd')) return;
+        const card = e.target.closest('.card-select-book');
+        if (!card) return;
+
+        const bookId = card.dataset.bookId;
+        const indicator = card.querySelector('.card-select-indicator img');
+
+        if (selectedBooks.has(bookId)) {
+            selectedBooks.delete(bookId);
+            card.classList.remove('selected');
+            indicator.src = '/Interface/assets/iconAddRounded.svg';
+        } else {
+            selectedBooks.add(bookId);
+            card.classList.add('selected');
+            indicator.src = '/Interface/assets/iconVerified.svg';
+        }
+    });
+
+    confirmBtn.addEventListener('click', async () => {
+        if (!selectedBooks.size) {
+            alert('Selecione ao menos um livro.');
+            return;
+        }
+
+        const userId = loggedUser?.id || loggedUser?.userId;
+        if (!userId) {
+            alert('Usuário não logado. Faça login antes de continuar.');
+            return;
+        }
+
+        try {
+            for (const bookId of selectedBooks) {
+                const qtyInput = modal.querySelector(`.card-book-qtd[data-book-id="${bookId}"]`);
+                const quantidade = Number(qtyInput?.value) || 1;
+                await api.addBookToStock(bookId, userId, quantidade);
+            }
+            alert('Livros adicionados ao estoque com sucesso.');
+            modal.remove();
+        } catch (e) {
+            alert('Erro ao adicionar livros ao estoque: ' + e.message);
+        }
+    });
+
+    closeBtn.addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 }

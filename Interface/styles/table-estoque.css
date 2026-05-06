@@ -26,19 +26,3 @@
     transition: all 1s ease-in;
 
 }
-
-.c-modal-table-livro {
-    width: 30%;
-    height: 30%;
-}
-
-.b-modal-table-livro form{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
-
-}
-.t-modal{
-        margin-bottom: 30%;
-}
