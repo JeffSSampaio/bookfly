@@ -84,11 +84,11 @@ window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
 
     const modalHTML = `
     <div class="modal" id="${uid}">
-        <div class="c-modal" style="width:60%; max-width:640px; margin:8% auto;">
+        <div class="c-modal modal-bookcase-edit">
             <div class="b-modal">
                 <h1>Alterar</h1>
 
-                <div class="f-input-modal" style="margin-bottom:12px;">
+                <div class="f-input-modal modal-input-container">
                     <label>Estante</label>
                     <input class="modal-input-nome-estante" type="text"
                            id="input-nome-${bookcaseId}" value="${nomeAtual}" />
@@ -100,11 +100,12 @@ window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
                 </div>
 
                 <div class="modal-grid-livros" id="grid-edit-${bookcaseId}">
-                    <p style="color:var(--verde-medio); grid-column:1/-1; text-align:center;">Carregando...</p>
+                    <p class="modal-loading-text">Carregando...</p>
                 </div>
 
-                <div class="c-modal-btn" style="margin-top:16px;">
-                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                <div class="c-modal-btn modal-btn-container">
+                <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                <button type="button" id="btn-delete-${uid}" class="btn-delete-bookcase">Excluir estante</button>
                     <button type="button" id="btn-salvar-${uid}">Salvar nome</button>
                 </div>
             </div>
@@ -122,7 +123,7 @@ window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
 
         function render(lista) {
             if (!lista.length) {
-                grid.innerHTML = `<p style="color:var(--verde-medio); grid-column:1/-1; text-align:center;">Estante vazia</p>`;
+                grid.innerHTML = `<p class="modal-loading-text">Estante vazia</p>`;
                 return;
             }
             grid.innerHTML = lista.map(book => {
@@ -132,13 +133,13 @@ window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
 
                 
                 return `
-                    <div class="c-card-emprestimo c-card-book" style="align-items:flex-start;">
+                    <div class="c-card-emprestimo c-card-book card-book-edit">
                         <img src="${book.cover || '/Interface/assets/livro.png'}" alt="">
                         <div class="card-book-info">
                             <h1 class="c-emprestimo-text-title card-book-title">${(book.title || '').toUpperCase()}</h1>
                             <p class="c-emprestimo-text-author card-book-author">${autor}</p>
                         </div>
-                        <button class="btn-card-remover" style="opacity:1;"
+                        <button class="btn-card-remover btn-card-remover-edit"
                             title="Remover"
                             onclick="removeBook(${bookcaseId}, ${book.bookId}, this)">
                             <img src="/Interface/assets/iconDelete.svg" alt="Remover">
@@ -173,6 +174,18 @@ window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
         } catch (e) { alert('Erro ao atualizar: ' + e.message); }
     });
 
+    document.getElementById(`btn-delete-${uid}`).addEventListener('click', async () => {
+        if (!confirm('Deseja realmente excluir esta estante?')) return;
+        try {
+            await api.deleteBookcase(bookcaseId);
+            const container = imgEl.closest('.books-container');
+            if (container) container.remove();
+            modal.remove();
+        } catch (e) {
+            alert('Erro ao excluir estante: ' + e.message);
+        }
+    });
+
     document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 };
@@ -185,7 +198,7 @@ window.openAddBookModal = function (bookcaseId, nomeEstante, imgEl) {
 
     const modalHTML = `
     <div class="modal" id="${uid}">
-        <div class="c-modal" style="width:60%; max-width:640px; margin:8% auto;">
+        <div class="c-modal modal-bookcase-add">
             <div class="b-modal">
                 <h1>Adicionar a ${nomeEstante}</h1>
 
@@ -195,10 +208,10 @@ window.openAddBookModal = function (bookcaseId, nomeEstante, imgEl) {
                 </div>
 
                 <div class="modal-grid-livros" id="grid-add-${bookcaseId}">
-                    <p style="color:var(--verde-medio); grid-column:1/-1; text-align:center;">Carregando...</p>
+                    <p class="modal-loading-text">Carregando...</p>
                 </div>
 
-                <div class="c-modal-btn" style="margin-top:16px;">
+                <div class="c-modal-btn modal-btn-container">
                     <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
                     <button type="button" id="btn-adicionar-${uid}">Adicionar</button>
                 </div>
@@ -217,7 +230,7 @@ window.openAddBookModal = function (bookcaseId, nomeEstante, imgEl) {
 
         function render(lista) {
             if (!lista.length) {
-                grid.innerHTML = `<p style="color:var(--verde-medio); grid-column:1/-1; text-align:center;">Nenhum livro encontrado</p>`;
+                grid.innerHTML = `<p class="modal-loading-text">Nenhum livro encontrado</p>`;
                 return;
             }
             grid.innerHTML = lista.map(stock => {

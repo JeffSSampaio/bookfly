@@ -212,3 +212,44 @@
     border-radius: 15px;
     border: none;
 }
+
+/* Modal Bookcase Edit Styles */
+.modal-bookcase-edit {
+    width: 60%;
+    max-width: 640px;
+    margin: 8% auto;
+}
+
+.modal-input-container {
+    margin-bottom: 12px;
+}
+
+.modal-loading-text {
+    color: var(--verde-medio);
+    grid-column: 1/-1;
+    text-align: center;
+}
+
+.modal-btn-container {
+    margin-top: 16px;
+}
+
+.card-book-edit {
+    align-items: flex-start;
+}
+
+.btn-card-remover-edit {
+    opacity: 1;
+}
+
+.btn-delete-bookcase {
+    background: #c0392b;
+    border: 1px solid #a93226;
+}
+
+/* Modal Bookcase Add Styles */
+.modal-bookcase-add {
+    width: 60%;
+    max-width: 640px;
+    margin: 8% auto;
+}

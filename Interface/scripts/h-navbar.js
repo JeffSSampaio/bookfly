@@ -5,7 +5,7 @@ if (!usuarioLogadoRaw) {
 }
 var usuarioLogado = JSON.parse(usuarioLogadoRaw);
 
-function btnMenu(){
+window.btnMenu = function(){
 const menu = document.getElementById("icon-menu")
 const navbar= document.getElementById("h-navbar-right")
 const closeBtn = document.getElementById("close-menu");
@@ -61,7 +61,7 @@ function shouldShowLink(linkHtml) {
   return !href.endsWith(currentPage);
 }
 
-content = document.getElementById("menu-content")
+let content = document.getElementById("menu-content")
 
 
 if(usuarioLogado.role == 'USER'){
