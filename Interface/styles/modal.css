@@ -26,7 +26,7 @@
 
 .book-detail-modal {
     position: relative;
-    width: min(900px, 90%);
+    width: min(670px, 90%);
     margin: 6% auto;
     padding: 32px;
     border-radius: 32px;
