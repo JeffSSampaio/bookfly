@@ -385,8 +385,8 @@ window.openRegisterBook= function (){
             let coverBook = data.coverBook;
             const authorsName = data.authorName ? data.authorName.split(',').map(a => a.trim()) : [];
             const gendersBook = data.genderBook ? data.genderBook.split(',').map(g => g.trim()) : [];
-            let summario = data.summaryBook || 'Sem sumario'
-            let book =  {title: nameBook, cover: coverBook,authors: authorsName,genders: gendersBook }
+            let summaryBook = data.summaryBook || 'Sem sumario'
+            let book =  {title: nameBook, cover: coverBook,summary:summaryBook,authors: authorsName,genders: gendersBook }
 
             await api.createBook(book)
 
@@ -396,6 +396,76 @@ window.openRegisterBook= function (){
     }
    )
 }
+
+
+window.openEditNameProfile = function(userId){
+    modalForm({
+        titulo:"Editar Nome",
+        campos: [
+            {label:'Novo Nome', type:'text',name:'newName'}
+        ],
+        onSubmit: async(data)=>{
+          let newName = data.newName;
+    let userUpdate = { id: userId, name: newName };
+
+    try {
+       
+        const updatedUser = await api.updateUser(userId, userUpdate);
+
+    
+        profile.name = updatedUser.name; 
+
+      
+        sessionStorage.setItem('usuarioLogado', JSON.stringify(profile));
+
+        alert("Perfil atualizado!");
+        
+     
+        location.reload(); 
+
+    } catch (e) {
+        alert("Erro ao atualizar: " + e);
+    }
+
+        }
+    })
+}
+
+
+window.openEditEmailProfile = function(userId){
+    modalForm({
+        titulo:"Editar Email",
+        campos: [
+            {label:'Novo Email', type:'text',name:'newEmail'}
+        ],
+        onSubmit: async(data)=>{
+          let newEmail = data.newName;
+    let userUpdate = { id: userId, email: newEmail};
+
+    try {
+       
+        const updatedUser = await api.updateUser(userId, userUpdate);
+
+    
+        profile.name = updatedUser.name; 
+
+      
+        sessionStorage.setItem('usuarioLogado', JSON.stringify(profile));
+
+        alert("Perfil atualizado!");
+        
+     
+        location.reload(); 
+
+    } catch (e) {
+        alert("Erro ao atualizar: " + e);
+    }
+
+        }
+    })
+}
+
+
 
 window.openAddItemOnStock = async function() {
     const books = await api.getAllBooks();

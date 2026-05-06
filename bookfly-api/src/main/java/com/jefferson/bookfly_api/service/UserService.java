@@ -45,7 +45,7 @@ public class UserService {
     @Transactional
     public User updateUser(User newUser){
 
-        User user = userRepository.findById(newUser.getId())
+        User userExist = userRepository.findById(newUser.getId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         if (userRepository.findByEmail(newUser.getEmail())
@@ -55,19 +55,18 @@ public class UserService {
         }
 
 
-        user.setName(newUser.getName());
-        user.setEmail(newUser.getEmail());
-
+       if (newUser.getName() != null)  userExist.setName(newUser.getName());
+       if (newUser.getEmail() != null) userExist.setEmail(newUser.getEmail());
 
         if (newUser.getPassword() != null && !newUser.getPassword().isBlank()) {
-            user.setPassword(newUser.getPassword());
+            userExist.setPassword(newUser.getPassword());
         }
 
         if (newUser.getRole() != null) {
-            user.setRole(newUser.getRole());
+            userExist.setRole(newUser.getRole());
         }
 
-        return userRepository.save(user);
+        return userRepository.save(userExist);
     }
 
 //    @Transactional

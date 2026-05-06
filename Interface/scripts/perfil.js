@@ -1,22 +1,24 @@
+
 'use strict'
 
+const loggedUser = sessionStorage.getItem('usuarioLogado');
 
 
-
-var perfil ={
-        'name': 'Jefferson',
-        'email':'jeff@gmail.com'
-};
-
-var profile = document.getElementById('profile');
+const profile = JSON.parse(loggedUser)
 
 
-profile.innerHTML+=`
-    <div>
-    <h3>Nome:${perfil.name}</h3>
-    <h3> Email:${perfil.email.toLowerCase()}</h3>
-    </div>
-   
-    `;
+var profileHtml = document.getElementById('profile');
+
+if(profile){
+
+        profileHtml.innerHTML+=`
+        <h3 onclick="openEditNameProfile(${profile.id})"> Nome: ${profile.name}</h3>
+        <h3 onclick="openEditEmailProfile(${profile.id})" >Email: ${profile.email}</h3> 
+        `;
+        } else{
+                console.error("Usuário não enontrado")
+        }
+
+
 
 

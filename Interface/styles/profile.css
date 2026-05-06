@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
 
-    margin: 15% 39%;
+    margin: 15% 35%;
     border: none;
     padding: 20px;
     border-radius: 20px;
@@ -11,17 +11,23 @@
 }
 
 .c-profile h3{
-    margin: 0;
+    margin: 8px;
     text-align: left;
-    color: var(--ambar-dourado);
+    color: white;
      padding:0;
+     transform: scale(1);
+     transition: transform 1s ease-out;
+}
+
+.c-profile h3:hover{
+
+    transform: scale(1.05);
+    transition: all 1s ease-in;
 }
 
 .btn-back{
- 
     margin: 30px;
     border: none;
-   
     padding: 10px;
     color: var(--marfin);
     background-color: var(--verde-medio);
@@ -35,3 +41,4 @@
     background-color: var(--verde-escuro);
     transition: all 1s ease-in-out;
 }
+

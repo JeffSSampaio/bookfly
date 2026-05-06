@@ -1,6 +1,7 @@
 package com.jefferson.bookfly_api.controllers;
 
 import com.jefferson.bookfly_api.dto.user.UserRequest;
+import com.jefferson.bookfly_api.dto.user.UserRequestUpdate;
 import com.jefferson.bookfly_api.dto.user.UserSummary;
 import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.service.UserService;
@@ -77,15 +78,16 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserSummary> updateUser(
             @PathVariable Long id,
-            @RequestBody @Valid UserRequest request){
-
-       User user = new User();
-       user.setEmail(request.email());
-       user.setName(request.name());
-       user.setPassword(request.password());
+            @RequestBody @Valid UserRequestUpdate request){
+        User userData = new User();
+        userData.setId(id);
+        userData.setName(request.name());
+        userData.setEmail(request.email());
+        userData.setPassword(request.password());
+        userData.setRole(request.role());
 
         return ResponseEntity.ok(
-                UserSummary.from(userService.updateUser(user))
+                UserSummary.from(userService.updateUser(userData))
         );
     }
 
