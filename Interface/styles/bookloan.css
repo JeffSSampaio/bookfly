@@ -1,16 +1,6 @@
-:root {
-    --book-bg: #f5f0e4;
-    --card-bg: #ffffff;
-    --card-border: #e8dfcc;
-    --card-shadow: 0 12px 24px rgba(16, 46, 30, 0.08);
-    --text-dark: #203224;
-    --text-muted: #64706c;
-    --accent: #2f5f41;
-    --accent-soft: #d8e8d6;
-}
 
 body {
-    background: var(--book-bg);
+    background: var(--marfin);
 }
 
 .bookloan-page {
@@ -81,6 +71,7 @@ body {
 .bookloan-grid-section {
     display: grid;
     gap: 18px;
+    margin: 20px;
 }
 
 .bookloan-status-row {
@@ -116,11 +107,13 @@ body {
     padding: 16px 18px;
     box-shadow: var(--card-shadow);
     min-height: 130px;
+    transform: translateY(0);
+    transition: transform 0.2s ease-out;
 }
 
 .book-card:hover {
     transform: translateY(-2px);
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease-in;
 }
 
 .book-card-cover {
@@ -144,7 +137,8 @@ body {
 .book-card-title {
     font-size: 18px;
     line-height: 1.2;
-    color: var(--text-dark);
+    font-weight: 800;
+    color: var(--verde-escuro);
     margin: 0;
 }
 
@@ -152,8 +146,16 @@ body {
 .book-card-stock,
 .book-card-return {
     font-size: 13px;
-    color: var(--text-muted);
+    color: var(--verde-medio);
     margin: 0;
+}
+
+.book-card-rented {
+    background-color: #b0e4c9;
+    border-radius: 20px;
+    padding: 4px 8px;
+    color: #1f4b34;
+    font-weight: 700;
 }
 
 .loan-button {

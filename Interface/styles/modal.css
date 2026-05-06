@@ -24,6 +24,134 @@
     background-color: var(--marfin);
 }
 
+.book-detail-modal {
+    position: relative;
+    width: min(900px, 90%);
+    margin: 6% auto;
+    padding: 32px;
+    border-radius: 32px;
+    background-color: #f6f0e5;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+}
+
+.book-detail-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: #1f4b34;
+    color: white;
+    font-size: 26px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.18);
+}
+
+.book-detail-card {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.book-detail-cover {
+    width: 260px;
+    max-width: 100%;
+    border-radius: 24px;
+    object-fit: cover;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+}
+
+.book-detail-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.book-detail-title {
+    margin: 0;
+    font-size: 32px;
+    line-height: 1.05;
+    color: #2a3e2d;
+    text-align: center;
+}
+
+.book-detail-authors {
+    margin: 0;
+    color: #4d6a54;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.book-detail-status-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.book-detail-label {
+    margin: 0;
+    color: #2f462f;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.book-detail-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-available {
+    background: #d9ecd8;
+    color: #1f4b34;
+}
+
+.status-unavailable {
+    background: #f4d2cf;
+    color: #a32c24;
+}
+
+.book-detail-description {
+    margin: 0;
+    color: #4b4b4b;
+    line-height: 1.8;
+    font-size: 15px;
+}
+
+@media (max-width: 760px) {
+    .book-detail-modal {
+        padding: 22px;
+    }
+
+    .book-detail-card {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .book-detail-title,
+    .book-detail-authors {
+        text-align: center;
+    }
+
+    .book-detail-close {
+        top: 12px;
+        right: 12px;
+    }
+}
+
 .c-modal-btn{
     display: flex;
     flex-direction: row;

@@ -9,7 +9,14 @@
     --badge-vermelho: #FAD4D4;
     --font-principal :  "League Spartan", sans-serif;
     --box-shadow: 0 4px 6px rgba(0,0,0,0.2); /*  box-shadow: 0 4px 6px rgba(0,0,0,0.2);*/
-
+    --book-bg: #f5f0e4;
+    --card-bg: #ffffff;
+    --card-border: #e8dfcc;
+    --card-shadow: 0 12px 24px rgba(16, 46, 30, 0.08);
+    --text-dark: #203224;
+    --text-muted: #64706c;
+    --accent: #2f5f41;
+    --accent-soft: #d8e8d6;
 }
 
 

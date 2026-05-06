@@ -313,26 +313,40 @@ window.removeBook = function (bookcaseId, stockBookId, btnEl) {
 
 
 
-window.openBookModal = function (stockId) {
-    api.getStockById(stockId).then(stock => {
+window.openBookModal = function (bookId) {
+    api.getStockByBook(bookId).then(stock => {
         const book = stock.book || stock;
         const autor = book.authors
             ? book.authors.map(a => a.name).join(', ')
             : (book.author || 'Autor desconhecido');
+        const statusText = (stock?.qtd ?? 0) > 0 ? 'Disponível' : 'Indisponível';
+        const statusClass = (stock?.qtd ?? 0) > 0 ? 'status-available' : 'status-unavailable';
+        const description = book.description || 'Sem descrição disponível.';
+
         const modalHTML = `
         <div class="modal">
-            <div class="c-modal" style="width:400px; max-width:90%; margin:10% auto;">
-                <div class="b-modal" style="padding:20px;">
-                    <img src="${book.cover || '/Interface/assets/livro.png'}" alt="" style="width:100%; height:auto; margin-bottom:20px;">
-                    <h1 style="margin-bottom:10px;">${book.title || 'Título desconhecido'}</h1>
-                    <p style="color:var(--verde-medio); margin-bottom:20px;">${autor}</p>
-                    <p>${book.description || 'Sem descrição disponível.'}</p>
-                    <button style="margin-top:20px;" onclick="this.closest('.modal').remove()">Fechar</button>
+            <div class="book-detail-modal">
+                <button class="book-detail-close" type="button">×</button>
+                <div class="book-detail-card">
+                    <img class="book-detail-cover" src="${book.cover || '/Interface/assets/livro.png'}" alt="${book.title || 'Capa do livro'}">
+                    <div class="book-detail-info">
+                        <h1 class="book-detail-title">${book.title || 'Título desconhecido'}</h1>
+                        <p class="book-detail-authors">${autor}</p>
+                        <div class="book-detail-status-row">
+                            <span class="book-detail-label">Status</span>
+                            <span class="book-detail-status ${statusClass}">${statusText}</span>
+                        </div>
+                        <p class="book-detail-label">Sumário</p>
+                        <p class="book-detail-description">${description}</p>
+                    </div>
                 </div>
             </div>
         </div>`;
+
         document.body.insertAdjacentHTML("beforeend", modalHTML);
         const modal = document.querySelector(".modal:last-child");
+        const closeBtn = modal.querySelector('.book-detail-close');
+        closeBtn.addEventListener('click', () => modal.remove());
         modal.addEventListener("click", e => { if (e.target === modal) modal.remove(); });
     }).catch(() => {
         alert('Erro ao carregar detalhes do livro.');
