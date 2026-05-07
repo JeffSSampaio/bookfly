@@ -7,6 +7,7 @@ import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
 import com.jefferson.bookfly_api.models.Penalty;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record PenaltyDetail(
@@ -14,6 +15,7 @@ public record PenaltyDetail(
         StatusPenalty statusPenalty,
         Long userId,
         String userName,
+        BigDecimal amount,
         LocalDateTime penaltyDate,
         LocalDateTime returnLoanDate,
         StatusLoan statusLoan
@@ -25,6 +27,7 @@ public record PenaltyDetail(
                 penalty.getStatus(),
                 penalty.getLoan().getUser().getId(),
                 penalty.getLoan().getUser().getName(),
+                penalty.getAmount(),
                 penalty.getLoan().getLoanDate(),
                 penalty.getLoan().getReturnDate(),
                 penalty.getLoan().getStatus()

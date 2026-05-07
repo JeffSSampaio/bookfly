@@ -36,7 +36,7 @@ const formatador = new  Intl.DateTimeFormat('pt-BR', {
 
 
 var table_loan = {
-    headers: ['ID','Usuário', 'Livro', 'Data de Empréstimo', 'Data de Devolução', 'Status'],
+    headers: ['ID','Usuário', 'Livro' ,'Data de Empréstimo', 'Data de Devolução', 'Status'],
     rows: allLoans.map(
         r => ({
             id: r.id,
@@ -60,13 +60,15 @@ var table_penalty = {
 } */
 
 
+    
 
 var table_penalty = {
-    headers:['Id','Usuário','Data de Multa', 'Data de Entrega do Livro','Status'],
+    headers:['Id','Usuário','Valor da Multa','Data de Multa', 'Data de Entrega do Livro','Status'],
     rows: allPenalties.map(
         r =>({
             id: r.penaltyId,
             user: r.userName.toUpperCase(),
+            amount: r.amount || "sem valor",
             penaltyDate: formatador.format(new Date(r.penaltyDate)), 
             returnDateLoan: formatador.format(new Date(r.returnloanDate)),
             status: r.statusPenalty
