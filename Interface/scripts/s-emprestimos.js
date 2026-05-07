@@ -128,19 +128,19 @@ console.log(booksLoan)
 
           
 
+   }
+     
 
-        if(!isLoaned){
+      
+    );
+
+   if(!isLoaned){
             container_emprestimo.innerHTML = `<p>Você não tem empréstimos.</p>`;
         }
         if(!isDevolved){
             container_devolucao.innerHTML = `<p>Você não tem devoluções.</p>`;
         }
-        }
-
-      
-    );
-
-
+     
 
 
 
