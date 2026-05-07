@@ -57,5 +57,4 @@ INSERT INTO movimentacoes (usuario_id, estoque_livro_id, type_item, qtd_moviment
                                                                                                    (2, 1, 'ENTRADA_ADMIN', 10, '2026-01-10'),
                                                                                                    (2, 2, 'ENTRADA_ADMIN', 8,  '2026-01-10'),
                                                                                                    (2, 3, 'ENTRADA_ADMIN', 5,  '2026-01-10'),
-                                                                                                   (2, 4, 'ENTRADA_ADMIN', 6,  '2026-01-10'),
-                                                                    
+                                                                                                   (2, 4, 'ENTRADA_ADMIN', 6,  '2026-01-10')
