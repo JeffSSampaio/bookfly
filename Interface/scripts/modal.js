@@ -405,62 +405,79 @@ window.openEditNameProfile = function(userId){
             {label:'Novo Nome', type:'text',name:'newName'}
         ],
         onSubmit: async(data)=>{
-          let newName = data.newName;
-    let userUpdate = { id: userId, name: newName };
+            const newName = data.newName?.trim();
+            if (!newName) {
+                alert('Informe um nome válido.');
+                return;
+            }
 
-    try {
-       
-        const updatedUser = await api.updateUser(userId, userUpdate);
-
-    
-        profile.name = updatedUser.name; 
-
-      
-        sessionStorage.setItem('usuarioLogado', JSON.stringify(profile));
-
-        alert("Perfil atualizado!");
-        
-     
-        location.reload(); 
-
-    } catch (e) {
-        alert("Erro ao atualizar: " + e);
-    }
-
+            try {
+                const userUpdate = { id: userId, name: newName };
+                const updatedUser = await api.updateUser(userId, userUpdate);
+                sessionStorage.setItem('usuarioLogado', JSON.stringify(updatedUser));
+                alert('Perfil atualizado!');
+                location.reload();
+            } catch (e) {
+                alert('Erro ao atualizar: ' + (e.message || e));
+            }
         }
     })
 }
-
 
 window.openEditEmailProfile = function(userId){
     modalForm({
         titulo:"Editar Email",
         campos: [
-            {label:'Novo Email', type:'text',name:'newEmail'}
+            {label:'Novo Email', type:'email',name:'newEmail'}
         ],
         onSubmit: async(data)=>{
-          let newEmail = data.newName;
-    let userUpdate = { id: userId, email: newEmail};
+            const newEmail = data.newEmail?.trim();
+            if (!newEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+                alert('Informe um email válido.');
+                return;
+            }
 
-    try {
-       
-        const updatedUser = await api.updateUser(userId, userUpdate);
+            try {
+                const userUpdate = { id: userId, email: newEmail };
+                const updatedUser = await api.updateUser(userId, userUpdate);
+                sessionStorage.setItem('usuarioLogado', JSON.stringify(updatedUser));
+                alert('Perfil atualizado!');
+                location.reload();
+            } catch (e) {
+                alert('Erro ao atualizar: ' + (e.message || e));
+            }
+        }
+    })
+}
 
-    
-        profile.name = updatedUser.name; 
+window.openEditPasswordProfile = function(userId){
+    modalForm({
+        titulo:"Editar Senha",
+        campos: [
+            {label:'Nova Senha', type:'password',name:'newPassword'},
+            {label:'Confirmar Senha', type:'password',name:'confirmPassword'}
+        ],
+        onSubmit: async(data)=>{
+            const password = data.newPassword?.trim();
+            const confirm = data.confirmPassword?.trim();
+            if (!password || password.length < 6) {
+                alert('A senha deve ter pelo menos 6 caracteres.');
+                return;
+            }
+            if (password !== confirm) {
+                alert('As senhas não conferem.');
+                return;
+            }
 
-      
-        sessionStorage.setItem('usuarioLogado', JSON.stringify(profile));
-
-        alert("Perfil atualizado!");
-        
-     
-        location.reload(); 
-
-    } catch (e) {
-        alert("Erro ao atualizar: " + e);
-    }
-
+            try {
+                const userUpdate = { id: userId, password };
+                const updatedUser = await api.updateUser(userId, userUpdate);
+                sessionStorage.setItem('usuarioLogado', JSON.stringify(updatedUser));
+                alert('Senha atualizada!');
+                location.reload();
+            } catch (e) {
+                alert('Erro ao atualizar: ' + (e.message || e));
+            }
         }
     })
 }
