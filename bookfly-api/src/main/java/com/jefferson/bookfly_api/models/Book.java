@@ -18,6 +18,7 @@ public class Book {
     @Column(nullable = false)
     private String cover;
 
+    @Column(columnDefinition = "TEXT")
     private String summary;
 
     @ManyToMany
