@@ -334,7 +334,7 @@ window.openBookModal = function (bookId) {
             : (book.author || 'Autor desconhecido');
         const statusText = (stock?.qtd ?? 0) > 0 ? 'Disponível' : 'Indisponível';
         const statusClass = (stock?.qtd ?? 0) > 0 ? 'status-available' : 'status-unavailable';
-        const summary = stock.summary || "Sem sumario";
+        const summary = stock.book.summary || "Sem sumario";
 
         const modalHTML = `
         <div class="modal">
@@ -548,7 +548,7 @@ window.openAddItemOnStock = async function() {
     const confirmBtn = modal.querySelector('.confirmBtn');
     const closeBtn = modal.querySelector('.closeBtn');
 
-    // Filtro de pesquisa
+   
     searchInput.addEventListener('input', () => {
         const searchTerm = searchInput.value.toLowerCase();
         const filtered = allCards.filter(card => 
@@ -560,7 +560,7 @@ window.openAddItemOnStock = async function() {
             : '<p style="color:var(--verde-medio); text-align:center; padding:20px;">Nenhum livro encontrado.</p>';
     });
 
-    // Clique nos cards
+  
     grid.addEventListener('click', e => {
         if (e.target.closest('.card-book-qtd')) return;
         const card = e.target.closest('.card-select-book');

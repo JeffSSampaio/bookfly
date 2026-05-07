@@ -76,7 +76,7 @@
 
 .book-detail-title {
     margin: 0;
-    font-size: 32px;
+    font-size: 17px;
     line-height: 1.05;
     color: #2a3e2d;
     text-align: center;
@@ -85,7 +85,7 @@
 .book-detail-authors {
     margin: 0;
     color: #4d6a54;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     text-align: center;
 }
@@ -99,9 +99,9 @@
 
 .book-detail-label {
     margin: 0;
-    color: #2f462f;
+    color: var(--verde-escuro);
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .book-detail-status {
@@ -127,8 +127,13 @@
 
 .book-detail-description {
     margin: 0;
-    color: #4b4b4b;
+    padding: 10px;
+    background-color: var(--badge-verde);
+    color: var(--verde-escuro);
+    text-align: justify;
+    border-radius: 20px;
     line-height: 1.8;
+    font-weight: 600;
     font-size: 15px;
 }
 

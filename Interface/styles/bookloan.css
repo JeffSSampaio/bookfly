@@ -9,6 +9,40 @@ body {
     padding: 0 20px;
 }
 
+.search-input-container{
+    position: relative;
+  
+}
+
+.search-input-container input {
+  width: 100%;
+  padding: 12px 40px 12px 15px; 
+  border: none;
+  border-radius: 10px;
+  background: var(--verde-medio);
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+.search-input-container input::placeholder {
+  color: var(--marfin);
+  font-family: var(--fonte-principal);
+  font-weight: bold;
+  font-size: 20px;
+  opacity: 80%;
+}
+
+.search-input-container img {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  pointer-events: none; 
+}
+
+
 .bookloan-hero {
     display: flex;
     justify-content: space-between;
@@ -179,6 +213,37 @@ body {
 
 .loan-button img {
     background-color: white;
+    border-radius: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.loan-cancel-button{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.9s ease-out, background-color 0.9s ease-out;
+}
+
+.loan-cancel-button:hover{
+    transform: scale(1.05);
+    background-color:  #1f4b34;
+    transition: all 0.9s ease-in;
+}
+
+.loan-cancel-button span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bolder;
     border-radius: 20px;
     width: 20px;
     height: 20px;

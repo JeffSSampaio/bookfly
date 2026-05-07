@@ -64,38 +64,7 @@ body{
     justify-content: center;
 }
 
-.search-input-container{
-    position: relative;
-  
-}
 
-.search-input-container input {
-  width: 100%;
-  padding: 12px 40px 12px 15px; 
-  border: none;
-  border-radius: 10px;
-  background: var(--verde-medio);
-  font-size: 18px;
-  font-weight: bold;
-  color: #5a4a2e;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-}
-.search-input-container input::placeholder {
-  color: var(--marfin);
-  font-family: var(--fonte-principal);
-  font-weight: bold;
-  font-size: 20px;
-  opacity: 80%;
-}
-
-.search-input-container img {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 30px;
-  pointer-events: none; 
-}
 
 .menu-right-container{
   position: fixed;

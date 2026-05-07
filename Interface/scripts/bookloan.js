@@ -24,11 +24,13 @@ function renderBooks(stockList) {
     return title.includes(search) || authors.includes(search);
   });
 
+  let textSearched = searchInput.value 
+
   bookGrid.innerHTML = '';
   emptyMessage.classList.add('hidden');
 
   if (!filtered.length) {
-    emptyMessage.textContent = 'Nenhum livro encontrado para esse filtro.';
+    emptyMessage.textContent = `Nenhum livro chamado "${textSearched}" encontrado `;
     emptyMessage.classList.remove('hidden');
     return;
   }
@@ -39,14 +41,20 @@ function renderBooks(stockList) {
     const title = book.title || 'Título indisponível';
     const authors = (book.authors || []).map(a => a.name).join(', ') || 'Autor desconhecido';
     const quantity = stock.qtd ?? 0;
-
-   
-
-
+    
+    
+    
     const isAlreadyLoaned = loanedBookIds.has(book.bookId);
     const availableText = quantity > 0 ? `Disponível` : 'Indisponível';
     const returnText = isAlreadyLoaned ? 'Você fez o empréstimo desse livro' : 'Disponível para empréstimo';
-
+    
+    const btnCancelLoan = isAlreadyLoaned && quantity> 0 ?
+     `<button class="loan-cancel-button" type='button' data-book-id="${book.bookId}" data-stock-id="${stock.stockId}" data-user-id="${loggedUser.id}">
+        <span>x</span>
+     </button>`:
+     
+     '';
+    
     const buttonMarkup = !isAlreadyLoaned && quantity > 0
       ? `
       <button class="loan-button" type="button" data-book-id="${book.bookId}" data-stock-id="${stock.stockId}">
@@ -61,6 +69,7 @@ function renderBooks(stockList) {
     card.dataset.stockId = stock.stockId;
 
     const stockRow = isAlreadyLoaned ? '' : `<p class="book-card-stock">${availableText}</p>`;
+    const btnSwitch = isAlreadyLoaned ? btnCancelLoan : buttonMarkup;
     
     card.innerHTML = `
       <img class="book-card-cover" src="${cover}" alt="${title}">
@@ -70,7 +79,7 @@ function renderBooks(stockList) {
         ${stockRow}
         <p class="book-card-return ${isAlreadyLoaned ? 'book-card-rented' : ''}">${returnText}</p>
       </div>
-      ${buttonMarkup}
+      ${btnSwitch}
     `;
 
     
