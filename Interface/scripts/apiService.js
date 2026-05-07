@@ -120,11 +120,11 @@ const api = {
     }).then(handleResponse),
 
 
-  updateStockQtd: (bookId, qtd) =>
+  updateStockQtd: (bookId, userId, qtd) =>
     fetch(`${BASE_URL}/stock/update-qtd`, {
       method: 'PUT',
       headers: postHeaders(),
-      body: JSON.stringify({ bookId, qtd }),
+      body: JSON.stringify({ bookId, userId, qtd }),
     }).then(handleResponse),
 
 

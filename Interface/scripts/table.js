@@ -76,9 +76,10 @@ var table_penalty = {
 
 
 var table_stock = {
-    headers: ['Id','Livro', 'Autor','Quantidade'],
+    headers: ['Id','Identificador','Livro', 'Autor','Quantidade'],
     rows: allStockBook.map(r => ({
         id: r.stockId,
+        bookId: r.book.bookId ?? r.book.bookid,
         title: r.book.title.toUpperCase(), 
         author: r.book.authors.map(a=>a.name).join(',') || 'Sem author',
         qtd: r.qtd
@@ -247,6 +248,164 @@ function table_with_actions(tableData) {
     return container;
 }
 
+function table_with_edit(tableData, onEdit) {
+
+    let wrapper = document.createElement('div');
+    wrapper.style.display = 'flex';
+    wrapper.style.alignItems = 'flex-start';
+    wrapper.style.gap = '8px';
+
+    let tbl = document.createElement('table');
+    tbl.style.width = 'calc(100% - 120px)';
+    tbl.style.borderCollapse = 'collapse';
+    tbl.style.margin = '0 0 0 60px';
+
+    let thead = document.createElement('thead');
+    let headerRow = document.createElement('tr');
+
+    tableData.headers.forEach(headerText => {
+        let th = document.createElement('th');
+        th.textContent = headerText;
+        Object.assign(th.style, style_table.header);
+        headerRow.appendChild(th);
+    });
+
+    thead.appendChild(headerRow);
+    tbl.appendChild(thead);
+
+    let tbody = document.createElement('tbody');
+
+    let actionsColumn = document.createElement('div');
+    actionsColumn.style.display = 'flex';
+    actionsColumn.style.flexDirection = 'column';
+    actionsColumn.style.marginTop = '42px';
+    actionsColumn.style.gap = '2px';
+
+    tableData.rows.forEach((rowData, index) => {
+
+        let row = document.createElement('tr');
+
+        Object.values(rowData).forEach(value => {
+            let cell = document.createElement('td');
+            cell.textContent = value;
+            Object.assign(cell.style, style_table.cell);
+            row.appendChild(cell);
+        });
+
+        tbody.appendChild(row);
+
+        let btn = document.createElement('button');
+
+        btn.innerHTML = `
+            <img 
+                src="/Interface/assets/iconEdit.svg" 
+                alt="Editar"
+               style="width:10px;height:10px;"
+            >
+        `;
+
+        btn.style.padding = '10px';
+        btn.style.border = '1px solid rgba(0,0,0,0.08)';
+        btn.style.backgroundColor = 'var(--verde-medio)';
+        btn.style.borderRadius = '4px';
+        btn.style.cursor = 'pointer';
+        btn.style.height = '100%';
+
+        btn.onmouseover = () => {
+            btn.style.backgroundColor = 'var(--verde-escuro)';
+        };
+
+        btn.onmouseout = () => {
+            btn.style.backgroundColor = 'var(--verde-medio)';
+        };
+
+        btn.onclick = () => {
+            if (onEdit) onEdit(rowData, index, row);
+        };
+
+        actionsColumn.appendChild(btn);
+    });
+
+    tbl.appendChild(tbody);
+
+    wrapper.appendChild(tbl);
+    wrapper.appendChild(actionsColumn);
+
+    return wrapper;
+}
+
+window.openEditStockModal = function(stockData, index, rowElement) {
+    const loggedUser = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+    const uid = `modal-edit-stock-${stockData.id}`;
+
+    const modalHTML = `
+    <div class="modal" id="${uid}">
+        <div class="c-modal" style="width: 50%; max-width: 500px; margin: 8% auto;">
+            <div class="b-modal">
+                <h1>Editar Estoque</h1>
+                
+                <div class="f-input-modal">
+                    <label>Livro</label>
+                    <input type="text" value="${stockData.title}" disabled style="opacity: 0.6;">
+                </div>
+
+                <div class="f-input-modal">
+                    <label>Quantidade Atual</label>
+                    <input type="number" id="qtd-atual-${stockData.id}" value="${stockData.qtd}" disabled style="opacity: 0.6;">
+                </div>
+
+                <div class="f-input-modal">
+                    <label>Nova Quantidade</label>
+                    <input type="number" id="qtd-nova-${stockData.id}" value="${stockData.qtd}" min="0">
+                </div>
+
+                <div class="c-modal-btn">
+                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" id="btn-salvar-${uid}">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    const modal = document.getElementById(uid);
+    const inputNovaQtd = document.getElementById(`qtd-nova-${stockData.id}`);
+    const inputQtdAtual = document.getElementById(`qtd-atual-${stockData.id}`);
+
+    document.getElementById(`btn-salvar-${uid}`).addEventListener('click', async () => {
+        const novaQtd = parseInt(inputNovaQtd.value);
+        const qtdAtual = parseInt(inputQtdAtual.value);
+
+        if (isNaN(novaQtd) || novaQtd < 0) {
+            alert('Informe uma quantidade válida.');
+            return;
+        }
+
+        try {
+            const diferenca = novaQtd - qtdAtual;
+
+            if (diferenca !== 0) {
+                await api.updateStockQtd(stockData.bookId, loggedUser.id, diferenca);
+
+                if (rowElement) {
+                    const cells = rowElement.querySelectorAll('td');
+                    if (cells.length > 0) {
+                        cells[cells.length - 1].textContent = novaQtd;
+                    }
+                }
+            }
+
+            alert('Estoque atualizado com sucesso!');
+            modal.remove();
+        } catch (e) {
+            alert('Erro ao atualizar: ' + (e.message || e));
+        }
+    });
+
+    document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+};
+
 if (document.getElementById('table-emprestimos'))
     document.getElementById('table-emprestimos').appendChild(table(table_loan));
 
@@ -254,7 +413,7 @@ if (document.getElementById('table-multas'))
     document.getElementById('table-multas').appendChild(table(table_penalty));
 
 if (document.getElementById('table-estoque'))
-    document.getElementById('table-estoque').appendChild(table(table_stock));
+    document.getElementById('table-estoque').appendChild(table_with_edit(table_stock, window.openEditStockModal));
 
 if (document.getElementById('table-movimentacoes'))
     document.getElementById('table-movimentacoes').appendChild(table(table_moviment));
