@@ -111,6 +111,7 @@ const api = {
   getStockByBook: (bookId) =>
     fetch(`${BASE_URL}/stock/book/${bookId}`).then(handleResponse),
 
+
  
   addBookToStock: (bookId, userId, qtd) =>
     fetch(`${BASE_URL}/stock/addbook`, {
@@ -154,6 +155,12 @@ const api = {
     fetch(`${BASE_URL}/loans/return/${loanId}`, {
       method: 'PUT',
     }).then(handleResponse),
+  
+  cancelLoan:(loanId) =>
+    fetch(`${BASE_URL}/loans/cancel/${loanId}`, {
+      method:'PUT',
+    }).then(handleResponse)
+    ,
 
 
   getAllPenalties: () =>

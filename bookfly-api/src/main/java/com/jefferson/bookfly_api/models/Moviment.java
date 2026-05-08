@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.models;
 
 import com.jefferson.bookfly_api.enums.TypeMoviment;
 import jakarta.persistence.*;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
@@ -32,6 +33,7 @@ public class Moviment {
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate createdDate;
+
 
     public Moviment() {
     }

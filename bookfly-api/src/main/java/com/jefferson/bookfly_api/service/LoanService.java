@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.service;
 
+import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
@@ -141,9 +142,68 @@ public class LoanService {
         return loanRepository.save(loan);
     }
 
+    @Transactional
+    public Moviment cancelLoan(Long loanId){
+        Loan existLoan = loanRepository.findById(loanId)
+            .orElseThrow(()-> new RuntimeException("Este Emprestimo Não Existe"));
+        StockBook bookOnStock = stockBookRepository.findById(existLoan.getStockBook().getId())
+                .orElseThrow(() -> new RuntimeException("Esse Livro não existe no stock"));
+
+//        List<Moviment> movimentsFromExistLoan =  existLoan.getMoviments()
+//                .stream()
+//                .filter((moviment -> moviment != null))
+//                .toList();
+
+
+
+        Moviment moviment = new Moviment();
+        moviment.setUser(existLoan.getUser());
+        moviment.setQtdMoviment(1);
+        moviment.setCreatedDate(LocalDate.now());
+
+        bookOnStock.setQtd(bookOnStock.getQtd() + moviment.getQtdMoviment());
+        moviment.setStockBook(bookOnStock);
+
+        Boolean isUserAdmin = existLoan.getUser().getRole().equals(Role.ADMIN);
+        String description ="";
+        TypeMoviment type ;
+        if (isUserAdmin){
+
+            description ="Admin Cancelou Emprestimo de Livro " + existLoan.getStockBook().getBook().getTitle();
+            type = TypeMoviment.ENTRADA_ADMIN;
+        }else {
+            description="Usuario Cancelou Emprestimo de Livro " + existLoan.getStockBook().getBook().getTitle();
+            type = TypeMoviment.ENTRADA;
+        }
+
+        moviment.setTypeItem(type);
+        moviment.setDescription(description);
+
+
+
+        movimentRepository.save(moviment);
+        stockBookRepository.save(bookOnStock);
+        loanRepository.delete(existLoan);
+        return moviment;
+
+
+//        movimentsFromExistLoan.forEach(moviment -> {
+//
+//            moviment.setStockBook(existLoan.getStockBook());
+//            moviment.setQtdMoviment(moviment.getQtdMoviment() + 1);
+//            moviment.setDescription("Emprestimo Cancelado por Usuario:" + moviment.getUser());
+//            moviment.setTypeItem(TypeMoviment.ENTRADA);
+//
+//        });
+
+
+    }
+
     public List<Loan> findAllLoansByUser(long userId) {
         User existUser = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Este usuário não existe"));
         return loanRepository.findByUser(existUser);
     }
+
+
 }

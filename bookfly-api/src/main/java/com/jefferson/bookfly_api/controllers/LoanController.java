@@ -1,10 +1,12 @@
 package com.jefferson.bookfly_api.controllers;
 
+import com.jefferson.bookfly_api.dto.loan.CancelLoanResponse;
 import com.jefferson.bookfly_api.dto.loan.LoanRequest;
 import com.jefferson.bookfly_api.dto.loan.LoanSummary;
 import com.jefferson.bookfly_api.dto.loan.LoanByUserBooksSumary;
 import com.jefferson.bookfly_api.dto.user.UserOnlyRequest;
 import com.jefferson.bookfly_api.models.Loan;
+import com.jefferson.bookfly_api.models.Moviment;
 import com.jefferson.bookfly_api.service.LoanService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -60,6 +62,18 @@ public class LoanController {
     public ResponseEntity<LoanSummary> updateLoan(@PathVariable long loanId) {
         Loan loanReturned = loanService.returnBook(loanId);
         return ResponseEntity.ok().body(LoanSummary.from(loanReturned));
+    }
+
+
+    @Operation(summary = "Cancelar Emprestimo")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Emprestimo de livro cancelado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado")
+    })
+    @PutMapping("/cancel/{loanId}")
+    public ResponseEntity<CancelLoanResponse> cancelLoan(@PathVariable long loanId) {
+       Moviment loanCanceled = loanService.cancelLoan(loanId);
+        return ResponseEntity.ok().body(CancelLoanResponse.from(loanId,loanCanceled));
     }
 
     @Operation(summary = "Listar empréstimos por usuário")

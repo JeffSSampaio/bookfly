@@ -13,7 +13,9 @@ const returnDate = new Date();
 returnDate.setDate(returnDate.getDate() + 7);
 const returnDateString = returnDate.toISOString();
 
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 let allStock = [];
+let allLoans = [];
 let loanedBookIds = new Set();
 
 function renderBooks(stockList) {
@@ -45,11 +47,15 @@ function renderBooks(stockList) {
     
     
     const isAlreadyLoaned = loanedBookIds.has(book.bookId);
-    const availableText = quantity > 0 ? `Disponível` : 'Indisponível';
-    const returnText = isAlreadyLoaned ? 'Você fez o empréstimo desse livro' : 'Disponível para empréstimo';
     
+    const returnText = isAlreadyLoaned ? 'Você fez o empréstimo desse livro' : 'Disponível para empréstimo';
+   const loanObject = allLoans.find(l => 
+        (l.book?.bookId || l.bookId) === book.bookId && l.statusLoan !== 'FINALIZADO'
+    );
+    const loanId = loanObject ? (loanObject.id || loanObject.loanId): null;
+
     const btnCancelLoan = isAlreadyLoaned && quantity> 0 ?
-     `<button class="loan-cancel-button" type='button' data-book-id="${book.bookId}" data-stock-id="${stock.stockId}" data-user-id="${loggedUser.id}">
+     `<button class="loan-cancel-button" type='button' data-loan-id="${loanId}">
         <span>x</span>
      </button>`:
      
@@ -68,7 +74,6 @@ function renderBooks(stockList) {
     card.dataset.bookId = book.bookId;
     card.dataset.stockId = stock.stockId;
 
-    const stockRow = isAlreadyLoaned ? '' : `<p class="book-card-stock">${availableText}</p>`;
     const btnSwitch = isAlreadyLoaned ? btnCancelLoan : buttonMarkup;
     
     card.innerHTML = `
@@ -76,8 +81,7 @@ function renderBooks(stockList) {
       <div class="book-card-info">
         <h3 class="book-card-title">${title}</h3>
         <p class="book-card-author">${authors}</p>
-        ${stockRow}
-        <p class="book-card-return ${isAlreadyLoaned ? 'book-card-rented' : ''}">${returnText}</p>
+        <p class="book-card-return ${'book-card-rented'} ">${returnText}</p>
       </div>
       ${btnSwitch}
     `;
@@ -101,8 +105,10 @@ async function loadBooks() {
       api.getLoansByUser(loggedUser.id),
     ]);
 
-    loanedBookIds = new Set(
-      (loans || [])
+      allLoans = loans || [];
+
+   loanedBookIds = new Set(
+      allLoans
         .filter(loan => loan.statusLoan !== 'FINALIZADO')
         .map(loan => loan.book?.bookId || loan.bookId)
     );
@@ -118,11 +124,46 @@ async function loadBooks() {
 
 bookGrid.addEventListener('click', async event => {
   const button = event.target.closest('.loan-button');
+  const cancelLoan = event.target.closest('.loan-cancel-button')
   const card = event.target.closest('.book-card');
   if (!card) return;
 
   const bookId = Number(card.dataset.bookId);
   if (!bookId) return;
+
+  if (cancelLoan) {
+    if (cancelLoan.disabled) return;
+    cancelLoan.disabled = true;
+    cancelLoan.style.opacity = '0.5';
+
+    try {
+      const loanId = cancelLoan.dataset.loanId;
+      
+      if (!loanId || loanId === "undefined") {
+        throw new Error("ID do empréstimo inválido.");
+      }
+
+      await api.cancelLoan(loanId);
+      
+      loanedBookIds.delete(bookId);
+
+      const returnText = card.querySelector('.book-card-return');
+      if (returnText) {
+        returnText.textContent = "Você Cancelou Esse Empréstimo";
+        await sleep(5000);
+        returnText.textContent = "Disponível para Empréstimo";
+        returnText.classList.add('book-card-rented');
+      }
+      cancelLoan.remove();
+
+    } catch (error) {
+      alert('Erro ao Cancelar Emprestimo: ' + (error.message || error));
+      console.error(error);
+      cancelLoan.disabled = false;
+      cancelLoan.style.opacity = '1';
+    }
+    return;
+  }
 
   if (button) {
     button.disabled = true;

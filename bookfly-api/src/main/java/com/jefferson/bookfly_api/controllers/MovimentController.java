@@ -29,9 +29,7 @@ public class MovimentController {
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Movimentações retornadas com sucesso")})
     @GetMapping
     public ResponseEntity<List<MovimentSummary>> getAllMoviments() {
-        List<Moviment> allMoviments = movimentService.getAllMoviments().stream()
-                .filter(moviment -> (moviment.getId() != null) && (moviment.getUser() != null))
-                .toList();
+        List<Moviment> allMoviments = movimentService.getAllMoviments();
 
         return ResponseEntity.ok(
                 allMoviments.stream()
