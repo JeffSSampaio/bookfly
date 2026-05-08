@@ -7,6 +7,7 @@ import com.jefferson.bookfly_api.enums.TypeMoviment;
 import com.jefferson.bookfly_api.models.Moviment;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record MovimentDetail(
 
@@ -14,7 +15,7 @@ public record MovimentDetail(
         Long stockId,
         TypeMoviment type,
         int qtdMoviment,
-        LocalDate createdDate,
+        LocalDateTime createdTime,
         UserSummary user
 
 ) {
@@ -25,7 +26,7 @@ public record MovimentDetail(
                 moviment.getStockBook().getStock().getId(),
                 moviment.getTypeItem(),
                 moviment.getQtdMoviment(),
-                moviment.getCreatedDate(),
+                moviment.getCreatedTime(),
                 UserSummary.from(moviment.getUser())
         );
     }

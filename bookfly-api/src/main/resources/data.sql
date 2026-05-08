@@ -68,11 +68,11 @@ SELECT * FROM (VALUES
 WHERE NOT EXISTS (SELECT 1 FROM estoque_livro LIMIT 1);
 
 
-INSERT INTO movimentacoes (usuario_id, estoque_livro_id, type_item, qtd_moviment, created_date, description)
+INSERT INTO movimentacoes (usuario_id, estoque_livro_id, type_item, qtd_moviment, created_time, description)
 SELECT * FROM (VALUES
-                   (2, 1, 'ENTRADA_ADMIN', 10, DATE '2026-01-10', 'Entrada inicial de estoque do livro O Hobbit'),
-                   (2, 2, 'ENTRADA_ADMIN', 8,  DATE '2026-01-10', 'Entrada inicial de estoque do livro O Senhor dos Anéis'),
-                   (2, 3, 'ENTRADA_ADMIN', 5,  DATE '2026-01-10', 'Entrada inicial de estoque do livro It: A Coisa'),
-                   (2, 4, 'ENTRADA_ADMIN', 6,  DATE '2026-01-10', 'Entrada inicial de estoque do livro Histórias Extraordinárias')
-              ) AS v(usuario_id, estoque_livro_id, type_item, qtd_moviment, created_date, description)
+                   (2, 1, 'ENTRADA_ADMIN', 10, TIMESTAMP '2026-01-10 10:00:00', 'Entrada inicial de estoque do livro O Hobbit'),
+                   (2, 2, 'ENTRADA_ADMIN', 8,  TIMESTAMP '2026-01-10 10:00:00', 'Entrada inicial de estoque do livro O Senhor dos Anéis'),
+                   (2, 3, 'ENTRADA_ADMIN', 5,  TIMESTAMP '2026-01-10 10:00:00', 'Entrada inicial de estoque do livro It: A Coisa'),
+                   (2, 4, 'ENTRADA_ADMIN', 6,  TIMESTAMP '2026-01-10 10:00:00', 'Entrada inicial de estoque do livro Histórias Extraordinárias')
+              ) AS v(usuario_id, estoque_livro_id, type_item, qtd_moviment, created_time, description)
 WHERE NOT EXISTS (SELECT 1 FROM movimentacoes LIMIT 1);

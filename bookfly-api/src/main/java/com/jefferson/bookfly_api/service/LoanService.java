@@ -77,7 +77,7 @@ public class LoanService {
         moviment.setTypeItem(TypeMoviment.SAIDA);
         moviment.setStockBook(bookOnStock);
         moviment.setDescription(description);
-        moviment.setCreatedDate(LocalDate.now());
+        moviment.setCreatedTime(LocalDateTime.now());
 
         LocalDateTime timeNow = LocalDateTime.now();
         LocalDateTime returnDate = timeNow.plusDays(7);
@@ -128,7 +128,7 @@ public class LoanService {
         movimentEntrada.setTypeItem(TypeMoviment.ENTRADA);
         movimentEntrada.setStockBook(bookOnStock);
         movimentEntrada.setDescription(description);
-        movimentEntrada.setCreatedDate(LocalDate.now());
+        movimentEntrada.setCreatedTime(LocalDateTime.now());
 
         loan.getMoviments().add(movimentEntrada);
         loan.setStatus(StatusLoan.FINALIZADO);
@@ -159,7 +159,7 @@ public class LoanService {
         Moviment moviment = new Moviment();
         moviment.setUser(existLoan.getUser());
         moviment.setQtdMoviment(1);
-        moviment.setCreatedDate(LocalDate.now());
+        moviment.setCreatedTime(LocalDateTime.now());
 
         bookOnStock.setQtd(bookOnStock.getQtd() + moviment.getQtdMoviment());
         moviment.setStockBook(bookOnStock);

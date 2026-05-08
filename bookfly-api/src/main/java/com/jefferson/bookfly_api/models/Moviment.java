@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "movimentacoes")
@@ -26,26 +27,29 @@ public class Moviment {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDateTime createdTime;
+
     @Enumerated(EnumType.STRING)
     private TypeMoviment typeItem;
 
     private int qtdMoviment;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate createdDate;
+
 
 
     public Moviment() {
     }
 
-    public Moviment(Long id, User user, StockBook stockBook, String description, TypeMoviment typeItem, int qtdMoviment, LocalDate createdDate) {
+    public Moviment(Long id, User user, StockBook stockBook, String description, LocalDateTime createdTime, TypeMoviment typeItem, int qtdMoviment) {
         this.id = id;
         this.user = user;
         this.stockBook = stockBook;
         this.description = description;
+        this.createdTime = createdTime;
         this.typeItem = typeItem;
         this.qtdMoviment = qtdMoviment;
-        this.createdDate = createdDate;
+
     }
 
     public Long getId() {
@@ -80,6 +84,14 @@ public class Moviment {
         this.description = description;
     }
 
+    public LocalDateTime getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(LocalDateTime createdTime) {
+        this.createdTime = createdTime;
+    }
+
     public TypeMoviment getTypeItem() {
         return typeItem;
     }
@@ -96,11 +108,4 @@ public class Moviment {
         this.qtdMoviment = qtdMoviment;
     }
 
-    public LocalDate getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDate createdDate) {
-        this.createdDate = createdDate;
-    }
 }

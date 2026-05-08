@@ -9,9 +9,12 @@ import com.jefferson.bookfly_api.dto.user.UserSummary;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
 import com.jefferson.bookfly_api.models.Moviment;
 
+import java.time.LocalDateTime;
+
 public record MovimentSummary(
         Long movimentId,
         int qtdMoved,
+        LocalDateTime createdTime,
         TypeMoviment type,
         String description,
         UserMovimentSummary user,
@@ -23,6 +26,7 @@ public record MovimentSummary(
         return new MovimentSummary(
                 moviment.getId(),
                 moviment.getQtdMoviment(),
+                moviment.getCreatedTime(),
                 moviment.getTypeItem(),
                 moviment.getDescription(),
                 UserMovimentSummary.from(moviment.getUser()),

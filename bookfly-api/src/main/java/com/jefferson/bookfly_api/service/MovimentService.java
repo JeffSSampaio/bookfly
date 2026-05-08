@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -62,7 +63,7 @@ public class MovimentService {
         moviment.setUser(user);
         moviment.setTypeItem(type);
         moviment.setQtdMoviment(Math.abs(qtd));
-        moviment.setCreatedDate(LocalDate.now());
+        moviment.setCreatedTime(LocalDateTime.now());
 
         return movimentRepository.save(moviment);
     }

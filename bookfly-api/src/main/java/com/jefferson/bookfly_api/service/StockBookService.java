@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -52,7 +53,7 @@ public class StockBookService {
         moviment.setQtdMoviment(qtd);
         moviment.setUser(user);
         moviment.setTypeItem(typeMoviment);
-        moviment.setCreatedDate(LocalDate.now());
+        moviment.setCreatedTime(LocalDateTime.now());
 
         StockBook saved = stockBookRepository.save(stockBook);
         movimentRepository.save(moviment);
@@ -117,7 +118,7 @@ public class StockBookService {
         moviment.setTypeItem(type);
         moviment.setDescription(description);
         moviment.setUser(admin);
-        moviment.setCreatedDate(LocalDate.now());
+        moviment.setCreatedTime(LocalDateTime.now());
         movimentRepository.save(moviment);
 
         return stockBookRepository.save(stockBook);

@@ -105,10 +105,11 @@ var table_books= {
 
 
 var table_moviment = {
-    headers: ['Id','Usuário','Tipo do Usuário' ,'Livro', 'Quantidade', 'Tipo','Descrição'],
+    headers: ['Id','Data de Criação','Usuário','Tipo do Usuário' ,'Livro', 'Quantidade', 'Tipo','Descrição'],
     rows: allMoviments.map(
         r=>({
             id:r.movimentId,
+            createdTime: formatador.format(new Date(r.createdTime)) || "sem data de criação",
             user: r.user.name.toUpperCase(),
             userType: r.user.role,
             book: r.book.title.toUpperCase(),
