@@ -1,0 +1,23 @@
+.search-emprestimo {
+    margin-bottom: 20px;
+}
+
+.tbl-emprestimo {
+    display: row;
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+}
+.search-emprestimo input {
+    width: 50%;
+    padding: 12px 40px 12px 15px; 
+    border: none;
+    border-radius: 10px;
+    background: var(--verde-medio);
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}

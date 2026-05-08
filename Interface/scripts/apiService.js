@@ -183,11 +183,11 @@ const api = {
   getMoviment: (id) =>
     fetch(`${BASE_URL}/moviments/${id}`).then(handleResponse),
 
-  createMoviment: (bookId, userId, qtd) =>
+  createMoviment: (bookId, userId, qtd, description = '') =>
     fetch(`${BASE_URL}/moviments`, {
       method: 'POST',
       headers: postHeaders(),
-      body: JSON.stringify({ bookId, userId, qtd }),
+      body: JSON.stringify({ bookId, userId, qtd, description }),
     }).then(handleResponse),
 
  

@@ -105,7 +105,7 @@ var table_books= {
 
 
 var table_moviment = {
-    headers: ['Id','Usuário','Tipo do Usuário' ,'Livro', 'Quantidade', 'Tipo'],
+    headers: ['Id','Usuário','Tipo do Usuário' ,'Livro', 'Quantidade', 'Tipo','Descrição'],
     rows: allMoviments.map(
         r=>({
             id:r.movimentId,
@@ -114,6 +114,7 @@ var table_moviment = {
             book: r.book.title.toUpperCase(),
             qtd: (r.type == ('ENTRADA') ||  r.type == ('ENTRADA_ADMIN') )? '+'+ r.qtdMoved : '-'+ r.qtdMoved ,
             type: r.type.trim(),
+            description: r.description
         })
     )
 }
@@ -408,17 +409,27 @@ window.openEditStockModal = function(stockData, index, rowElement) {
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 };
 
-if (document.getElementById('table-emprestimos'))
+if (document.getElementById('table-emprestimos')) {
     document.getElementById('table-emprestimos').appendChild(table(table_loan));
+    if (window.setupLoanSearch) window.setupLoanSearch(allLoans);
+}
 
-if (document.getElementById('table-multas'))
+if (document.getElementById('table-multas')) {
     document.getElementById('table-multas').appendChild(table(table_penalty));
+    if (window.setupPenaltySearch) window.setupPenaltySearch(allPenalties);
+}
 
-if (document.getElementById('table-estoque'))
+if (document.getElementById('table-estoque')) {
     document.getElementById('table-estoque').appendChild(table_with_edit(table_stock, window.openEditStockModal));
+    if (window.setupStockSearch) window.setupStockSearch(allStockBook);
+}
 
-if (document.getElementById('table-movimentacoes'))
+if (document.getElementById('table-movimentacoes')) {
     document.getElementById('table-movimentacoes').appendChild(table(table_moviment));
+    if (window.setupMovementSearch) window.setupMovementSearch(allMoviments);
+}
 
-if (document.getElementById('table-livros'))
+if (document.getElementById('table-livros')) {
     document.getElementById('table-livros').appendChild(table(table_books));
+    if (window.setupBooksSearch) window.setupBooksSearch(allBooks);
+}
