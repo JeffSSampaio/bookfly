@@ -1,7 +1,7 @@
-// Cache das tabelas originais para filtragem
+
 let originalTableData = {};
 
-// Função genérica de busca
+
 function searchTable(searchTerm, tableData, fieldsToSearch) {
     if (!searchTerm.trim()) {
         return tableData;
@@ -151,7 +151,7 @@ window.setupPenaltySearch = function(allPenalties) {
     const searchPenaltyInput = document.getElementById('search-penalties');
     if (searchPenaltyInput) {
         searchPenaltyInput.addEventListener('input', (e) => {
-            const filtered = searchTable(e.target.value, penaltiesData, ['user', 'status', 'amount']);
+            const filtered = searchTable(e.target.value, penaltiesData, ['user', 'status', 'amount','id']);
             renderFilteredTable('table-multas', filtered, tableConfig);
         });
     }
@@ -190,7 +190,7 @@ window.setupStockSearch = function(allStockBook) {
     const searchStockInput = document.getElementById('search-stock');
     if (searchStockInput) {
         searchStockInput.addEventListener('input', (e) => {
-            const filtered = searchTable(e.target.value, stockData, ['title', 'author']);
+            const filtered = searchTable(e.target.value, stockData, ['title', 'author','id']);
             // Aqui você pode renderizar a tabela filtrada
             renderFilteredTable('table-estoque', filtered, tableConfig);
         });
@@ -223,7 +223,7 @@ window.setupMovementSearch = function(allMoviments) {
     const searchMovementInput = document.getElementById('search-movements');
     if (searchMovementInput) {
         searchMovementInput.addEventListener('input', (e) => {
-            const filtered = searchTable(e.target.value, movementsData, ['user', 'book', 'type', 'description']);
+            const filtered = searchTable(e.target.value, movementsData, ['user', 'book', 'type', 'description','id']);
             renderFilteredTable('table-movimentacoes', filtered, tableConfig);
         });
     }
@@ -252,7 +252,7 @@ window.setupBooksSearch = function(allBooks) {
     const searchBooksInput = document.getElementById('search-books');
     if (searchBooksInput) {
         searchBooksInput.addEventListener('input', (e) => {
-            const filtered = searchTable(e.target.value, booksData, ['name', 'authors', 'genders']);
+            const filtered = searchTable(e.target.value, booksData, ['name', 'authors', 'genders','id']);
             renderFilteredTable('table-livros', filtered, tableConfig);
         });
     }

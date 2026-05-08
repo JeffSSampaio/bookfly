@@ -124,7 +124,7 @@ function table(tableData) {
     let tbl = document.createElement('table');
     tbl.style.width = 'calc(100% - 120px)';
     tbl.style.borderCollapse = 'collapse';
-    tbl.style.margin = '0 60px';
+    tbl.style.margin = '70px 60px';
 
   
     let thead = document.createElement('thead');
