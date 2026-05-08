@@ -110,7 +110,7 @@ public class StockBookService {
         }
 
         TypeMoviment type = delta > 0 ? TypeMoviment.ENTRADA_ADMIN : TypeMoviment.SAIDA_ADMIN;
-        String description = "Admin " + admin.getName() + " realizou " + type + " de " + Math.abs(delta) + " unidade(s)";
+        String description = "ALTERAÇÃO: Admin " + admin.getName() + " realizou " + type + " de " + Math.abs(delta) + " unidade(s)";
 
         Moviment moviment = new Moviment();
         moviment.setStockBook(stockBook);
