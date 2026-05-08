@@ -3,7 +3,9 @@ package com.jefferson.bookfly_api.controllers;
 import com.jefferson.bookfly_api.dto.moviment.MovimentQtdRequest;
 import com.jefferson.bookfly_api.dto.moviment.MovimentRequest;
 import com.jefferson.bookfly_api.dto.moviment.MovimentSummary;
+import com.jefferson.bookfly_api.dto.moviment.MovimentUpdateRequest;
 import com.jefferson.bookfly_api.models.Moviment;
+import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.service.MovimentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +58,7 @@ public class MovimentController {
     })
     @PostMapping
     public ResponseEntity<MovimentSummary> createMoviment(@RequestBody MovimentQtdRequest request) {
-        Moviment moviment = movimentService.doMoviment(request.bookId(), request.userId(), request.qtd());
+        Moviment moviment = movimentService.doMoviment(request.bookId(), request.userId(), request.qtd(),request.description());
         return ResponseEntity.ok(MovimentSummary.from(moviment));
     }
 
@@ -68,10 +70,18 @@ public class MovimentController {
     @PutMapping("/{id}")
     public ResponseEntity<MovimentSummary> updateMoviment(
             @PathVariable Long id,
-            @RequestBody MovimentRequest request
+            @RequestBody MovimentUpdateRequest request
     ) {
-        Moviment moviment = movimentService.updateMoviment(id, request.userId(), request.typeItem(), request.qtd());
-        return ResponseEntity.ok(MovimentSummary.from(moviment));
+        Moviment moviment = new Moviment();
+        User user = new User();
+        user.setId(request.userId());
+        moviment.setUser(user);
+        moviment.setDescription(request.description());
+        moviment.setQtdMoviment(request.qtdMoviment());
+        moviment.setTypeItem(request.typeItem());
+
+
+        return ResponseEntity.ok(MovimentSummary.from(movimentService.updateMoviment(id,moviment)));
     }
 
     @Operation(summary = "Remover movimentação")

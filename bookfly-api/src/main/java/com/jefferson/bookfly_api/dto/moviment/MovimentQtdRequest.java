@@ -14,6 +14,8 @@ public record MovimentQtdRequest(
         @NotNull
         Long userId,
 
+        String description,
+
         @Schema(description = "Quantidade de itens", examples = { "2", "-2"  })
         @NotNull
         Integer qtd

@@ -13,8 +13,10 @@ public record MovimentSummary(
         Long movimentId,
         int qtdMoved,
         TypeMoviment type,
+        String description,
         UserMovimentSummary user,
         BookMovimentSummary book
+
 
 ) {
     public static MovimentSummary from(Moviment moviment){
@@ -22,8 +24,10 @@ public record MovimentSummary(
                 moviment.getId(),
                 moviment.getQtdMoviment(),
                 moviment.getTypeItem(),
+                moviment.getDescription(),
                 UserMovimentSummary.from(moviment.getUser()),
                 BookMovimentSummary.from(moviment.getStockBook().getBook())
+
         );
     }
 }

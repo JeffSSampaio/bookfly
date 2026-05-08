@@ -89,14 +89,14 @@ public class StockBookController {
     public ResponseEntity<StockBookUpdateQtdSummary> updateQtd(
             @RequestBody @Valid StockBookUpdateQtdRequest request
     ) {
-
-        StockBook stockBook = stockBookService.updateQtd(request.bookId(),request.qtd());
+        StockBook stockBook = stockBookService.updateQtd(request.bookId(),request.qtd(), request.userId());
 
         return ResponseEntity.ok(
                 StockBookUpdateQtdSummary.from(
                         stockBook,
                         request.qtd(),
-                        request.qtd() > 0 ? "ENTRADA" : "SAIDA"
+                        request.qtd() > 0 ? "ENTRADA" : "SAIDA",
+                        request.userId()
                 )
         );
     }

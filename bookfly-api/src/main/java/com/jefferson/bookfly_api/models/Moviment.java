@@ -22,6 +22,9 @@ public class Moviment {
     @JoinColumn(name = "estoque_livro_id", referencedColumnName = "id")
     private StockBook stockBook;
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @Enumerated(EnumType.STRING)
     private TypeMoviment typeItem;
 
@@ -33,10 +36,11 @@ public class Moviment {
     public Moviment() {
     }
 
-    public Moviment(Long id, User user, StockBook stockBook, TypeMoviment typeItem, int qtdMoviment, LocalDate createdDate) {
+    public Moviment(Long id, User user, StockBook stockBook, String description, TypeMoviment typeItem, int qtdMoviment, LocalDate createdDate) {
         this.id = id;
         this.user = user;
         this.stockBook = stockBook;
+        this.description = description;
         this.typeItem = typeItem;
         this.qtdMoviment = qtdMoviment;
         this.createdDate = createdDate;
@@ -64,6 +68,14 @@ public class Moviment {
 
     public void setStockBook(StockBook stockBook) {
         this.stockBook = stockBook;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public TypeMoviment getTypeItem() {

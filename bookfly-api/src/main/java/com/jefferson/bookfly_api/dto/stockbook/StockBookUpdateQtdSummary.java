@@ -9,16 +9,19 @@ public record StockBookUpdateQtdSummary(
         int qtdCurrent,
         int qtdUpdated,
         String type,
-        BookMovimentSummary book
+        BookMovimentSummary book,
+        Long userId
+
 
 ) {
-    public static  StockBookUpdateQtdSummary from(StockBook stockBook, int qtdAlterada, String type){
+    public static  StockBookUpdateQtdSummary from(StockBook stockBook, int qtdAlterada, String type, Long userId){
         return new StockBookUpdateQtdSummary(
                 stockBook.getId(),
                 stockBook.getQtd(),
                 qtdAlterada,
                 type,
-                BookMovimentSummary.from(stockBook.getBook())
+                BookMovimentSummary.from(stockBook.getBook()),
+                userId
 
         );
     }

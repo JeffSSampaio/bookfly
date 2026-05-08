@@ -85,7 +85,7 @@ public class StockBookService {
                 .orElseThrow(() -> new RuntimeException("Livro não está no estoque"));
     }
 
-    public StockBook updateQtd(Long bookId, int delta) {
+    public StockBook updateQtd(Long bookId, int delta, Long adminId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
 
@@ -95,32 +95,30 @@ public class StockBookService {
                 .findByStockAndBook(stock, book)
                 .orElseThrow(() -> new RuntimeException("Livro não está no estoque"));
 
+        User admin = userRepository.findById(adminId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (delta == 0) return stockBook;
+
         if (delta < 0) {
             int newQtd = stockBook.getQtd() + delta;
             if (newQtd < 0) throw new RuntimeException("Quantidade insuficiente no estoque");
-
             stockBook.setQtd(newQtd);
-
-            Moviment moviment = new Moviment();
-            moviment.setStockBook(stockBook);
-            moviment.setQtdMoviment(Math.abs(delta));
-            moviment.setTypeItem(TypeMoviment.SAIDA);
-            moviment.setCreatedDate(LocalDate.now());
-            movimentRepository.save(moviment);
-
-        } else if (delta > 0) {
-            stockBook.setQtd(stockBook.getQtd() + delta);
-
-            Moviment moviment = new Moviment();
-            moviment.setStockBook(stockBook);
-            moviment.setQtdMoviment(delta);
-            moviment.setTypeItem(TypeMoviment.ENTRADA);
-            moviment.setCreatedDate(LocalDate.now());
-            movimentRepository.save(moviment);
-
         } else {
-            return stockBook;
+            stockBook.setQtd(stockBook.getQtd() + delta);
         }
+
+        TypeMoviment type = delta > 0 ? TypeMoviment.ENTRADA_ADMIN : TypeMoviment.SAIDA_ADMIN;
+        String description = "Admin " + admin.getName() + " realizou " + type + " de " + Math.abs(delta) + " unidade(s)";
+
+        Moviment moviment = new Moviment();
+        moviment.setStockBook(stockBook);
+        moviment.setQtdMoviment(Math.abs(delta));
+        moviment.setTypeItem(type);
+        moviment.setDescription(description);
+        moviment.setUser(admin);
+        moviment.setCreatedDate(LocalDate.now());
+        movimentRepository.save(moviment);
 
         return stockBookRepository.save(stockBook);
     }

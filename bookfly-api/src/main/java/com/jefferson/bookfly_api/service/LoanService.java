@@ -68,11 +68,14 @@ public class LoanService {
 
         bookOnStock.setQtd(bookOnStock.getQtd() - 1);
 
+        String description = "Usuário " + user.getName() + " realizou empréstimo do livro " + book.getTitle();
+
         Moviment moviment = new Moviment();
         moviment.setUser(user);
         moviment.setQtdMoviment(1);
         moviment.setTypeItem(TypeMoviment.SAIDA);
         moviment.setStockBook(bookOnStock);
+        moviment.setDescription(description);
         moviment.setCreatedDate(LocalDate.now());
 
         LocalDateTime timeNow = LocalDateTime.now();
@@ -111,18 +114,22 @@ public class LoanService {
         }
 
         StockBook bookOnStock = loan.getStockBook();
+        User user = loan.getUser();
+        String bookTitle = bookOnStock.getBook().getTitle();
 
         bookOnStock.setQtd(bookOnStock.getQtd() + 1);
 
+        String description = "Usuário " + user.getName() + " devolveu o livro " + bookTitle;
+
         Moviment movimentEntrada = new Moviment();
-        movimentEntrada.setUser(loan.getUser());
+        movimentEntrada.setUser(user);
         movimentEntrada.setQtdMoviment(1);
         movimentEntrada.setTypeItem(TypeMoviment.ENTRADA);
         movimentEntrada.setStockBook(bookOnStock);
+        movimentEntrada.setDescription(description);
         movimentEntrada.setCreatedDate(LocalDate.now());
 
         loan.getMoviments().add(movimentEntrada);
-
         loan.setStatus(StatusLoan.FINALIZADO);
 
         if (penalty != null) {
