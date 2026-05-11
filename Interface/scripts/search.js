@@ -28,7 +28,7 @@ function renderFilteredTable(tableId, filteredData, tableConfig) {
     const tbl = document.createElement('table');
     tbl.style.width = 'calc(100% - 120px)';
     tbl.style.borderCollapse = 'collapse';
-    tbl.style.margin = '0 60px';
+    tbl.style.margin = ' 20px 60px';
 
     const style_table = {
         header: {
@@ -191,7 +191,6 @@ window.setupStockSearch = function(allStockBook) {
     if (searchStockInput) {
         searchStockInput.addEventListener('input', (e) => {
             const filtered = searchTable(e.target.value, stockData, ['title', 'author','id']);
-            // Aqui você pode renderizar a tabela filtrada
             renderFilteredTable('table-estoque', filtered, tableConfig);
         });
     }
@@ -199,8 +198,13 @@ window.setupStockSearch = function(allStockBook) {
 
 
 window.setupMovementSearch = function(allMoviments) {
+     const formatador = new Intl.DateTimeFormat('pt-BR', {
+        dateStyle: 'short',
+        timeStyle: 'short',
+        timeZone: 'America/Sao_Paulo'
+    });
     const tableConfig = {
-        headers: ['Id', 'Usuário', 'Tipo do Usuário', 'Livro', 'Quantidade', 'Tipo', 'Descrição'],
+        headers: ['Id', 'Usuário', 'Tipo do Usuário', 'Livro', 'Quantidade', 'Tipo', 'Descrição','Data de Criação'],
     };
 
     const movementsData = allMoviments.map(r => ({
@@ -210,7 +214,8 @@ window.setupMovementSearch = function(allMoviments) {
         book: r.book.title.toUpperCase(),
         qtd: (r.type === 'ENTRADA' || r.type === 'ENTRADA_ADMIN') ? '+' + r.qtdMoved : '-' + r.qtdMoved,
         type: r.type.trim(),
-        description: r.description || ''
+        description: r.description || '',
+        createdTime: formatador.format(new Date(r.createdTime))
     }));
 
     originalTableData.movements = movementsData;
@@ -223,7 +228,7 @@ window.setupMovementSearch = function(allMoviments) {
     const searchMovementInput = document.getElementById('search-movements');
     if (searchMovementInput) {
         searchMovementInput.addEventListener('input', (e) => {
-            const filtered = searchTable(e.target.value, movementsData, ['user', 'book', 'type', 'description','id']);
+            const filtered = searchTable(e.target.value, movementsData, ['user', 'book', 'type', 'description','id','createdTime','qtd']);
             renderFilteredTable('table-movimentacoes', filtered, tableConfig);
         });
     }

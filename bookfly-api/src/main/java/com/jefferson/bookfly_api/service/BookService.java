@@ -84,16 +84,18 @@ public class BookService {
 
 
         if (book.getAuthors() != null) {
-            for (Author author: book.getAuthors()) {
+            List<Author> updatedAuthors = new ArrayList<>();
 
-                if (author.getId() != null) {
-                    Author authorToUpdate = authorRepository.findById(author.getId())
-                            .orElseThrow(() -> new RuntimeException("Autor não encontrado"));
-
-                    authorToUpdate.setName(author.getName());
-                    authorRepository.save(authorToUpdate);
-                }
+            for (Author author : book.getAuthors()) {
+                Author managedAuthor = authorRepository.findByName(author.getName())
+                        .orElseGet(() -> {
+                            Author newAuthor = new Author();
+                            newAuthor.setName(author.getName());
+                            return authorRepository.save(newAuthor);
+                        });
+                updatedAuthors.add(managedAuthor);
             }
+            existBook.setAuthors(updatedAuthors);
         }
 
         return bookRepository.save(existBook);

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/Interface/styles/root.css">
     <link rel="stylesheet" href="/Interface/styles/modal.css">
     <link rel="stylesheet" href="/Interface/styles/table.css">
+    <link rel="stylesheet" href="/Interface/styles/table-moviment.css">
     <link rel="stylesheet" href="/Interface/styles/book-register.css">
  <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,11 +34,7 @@
             <h1>BookFLy</h1>
         </div>
         <div class="h-container-actions-itens">
-            <div class="search-input-container">
-               
-                <input type="search" name="" id="" placeholder="Buscar">
-                <img src="/Interface/assets/iconlupa.svg" alt="" srcset="">
-            </div>
+        
             <img src="/Interface/assets/iconMenu.svg" alt="" class="icon-menu" id="icon-menu" onclick="btnMenu()">
         </div>
     </header>
@@ -45,9 +42,13 @@
 
 
       <div class="table-container">
-            <div class="table-title-c">
+            <div class="table-title-c table-title-c-moviments">
                 <h1>Movimentações</h1>
+                   <div class="search-input-container">
                
+                <input type="search" name="" id="" placeholder="Buscar">
+                <img src="/Interface/assets/iconlupa.svg" alt="" srcset="">
+            </div>
             </div>
             <div id="table-movimentacoes"></div>
         </div>

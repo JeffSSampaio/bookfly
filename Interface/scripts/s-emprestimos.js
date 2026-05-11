@@ -69,11 +69,6 @@ var container_devolucao = document.getElementById('devolucao');
 
 
 
-
-
-console.log(booksLoan)
-
-
    
 
  booksLoan.forEach(element => {

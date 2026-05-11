@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="/Interface/styles/h-navbar.css">
     <link rel="stylesheet" href="/Interface/styles/root.css">
+   <link rel="stylesheet" href="/Interface/styles/modal-livros.css">
     <link rel="stylesheet" href="/Interface/styles/modal.css">
     <link rel="stylesheet" href="/Interface/styles/table.css">
      <link rel="stylesheet" href="/Interface/styles/table-livro.css">
@@ -34,11 +35,7 @@
             <h1>BookFLy</h1>
         </div>
         <div class="h-container-actions-itens">
-            <div class="search-input-container">
-               
-                <input type="search" name="" id="" placeholder="Buscar">
-                <img src="/Interface/assets/iconlupa.svg" alt="" srcset="">
-            </div>
+          
             <img src="/Interface/assets/iconMenu.svg" alt="" class="icon-menu" id="icon-menu" onclick="btnMenu()">
         </div>
     </header>
@@ -51,6 +48,11 @@
                 <h1>Livros</h1>
             </div>
             <div class="c-btn-book">
+                  <div class="search-input-container">
+               
+                <input type="search" name="" id="" placeholder="Buscar">
+                <img src="/Interface/assets/iconlupa.svg" alt="" srcset="">
+            </div>
                 <button onclick="openRegisterBook()">
                 Registrar Livro
                 </button>

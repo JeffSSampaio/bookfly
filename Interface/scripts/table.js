@@ -95,9 +95,9 @@ var table_books= {
     headers: ['Id','Livro','Autores','Genero'],
     rows: allBooks.map(r=>({
             id: r.bookid,
-            name: r.title,
+            title: r.title,
             authors: r.authors.map(a=> a.name).join(',') || "autor não identificado",
-            genders: r.genders
+            genders: r.genders.map(g=>g.name || g).join(', ') || 'Sem Gênero'.toUpperCase()
 
     }))
 }
@@ -125,7 +125,7 @@ function table(tableData) {
     let tbl = document.createElement('table');
     tbl.style.width = 'calc(100% - 120px)';
     tbl.style.borderCollapse = 'collapse';
-    tbl.style.margin = '70px 60px';
+    tbl.style.margin = '20px 60px';
 
   
     let thead = document.createElement('thead');
@@ -410,6 +410,97 @@ window.openEditStockModal = function(stockData, index, rowElement) {
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 };
 
+console.log(allBooks)
+
+
+
+window.openEditBookModal = function(BookData, index, rowElement) {
+    const loggedUser = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+    const uid = `modal-edit-book-${BookData.bookId}`;
+
+   
+   
+
+
+    const authorsList =  BookData.authors =! null ? BookData.authors.split(',') : [];
+    const gendersList = typeof BookData.genders ==='string' ? BookData.genders.split(',') : [];
+    const titleText = typeof BookData.title ==='string' ? BookData.title : 'sem titulo encontrado';
+
+    const authorsText = Array.isArray(authorsList) ? authorsList.join(', ') : "sem autores";
+    const gendersText = Array.isArray(gendersList) ? gendersList.join(', ') : "sem autores";
+
+
+
+    const modalHTML = `
+    <div class="modal" id="${uid}">
+        <div class="c-modal modal-livro-edit">
+            <div class="b-modal">
+                <h1>Editar Livro</h1>
+                
+                <div class="f-input-modal">
+                    <label>Livro Atual</label>
+                    <input type="text" value="${titleText}" disabled style="opacity: 0.6;">
+                </div>
+                  
+
+                <div class="f-input-modal">
+                    <label>Novo titulo</label>
+                    <input type="text" id="titulo-novo-${BookData.id}" value="${titleText}">
+                </div>
+
+              
+                 <div class="f-input-modal">
+                    <label>Novos Autores</label>
+                    <input type="text" id="autores-novo-${BookData.id}" value="${authorsText}">
+                </div>
+
+                  <div class="f-input-modal">
+                    <label>Novos generos</label>
+                    <input type="text" id="generos-novo-${BookData.id}" value="${gendersText}">
+                </div>
+
+                <div class="c-modal-btn">
+                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" id="btn-salvar-${uid}">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    const modal = document.getElementById(uid);
+    // const inputNovaQtd = document.getElementById(`qtd-nova-${stockData.id}`);
+    // const inputQtdAtual = document.getElementById(`qtd-atual-${stockData.id}`);
+    const inputNewTitle = document.getElementById(`titulo-novo-${BookData.id}`);
+    const inputNewAuthors = document.getElementById(`autores-novo-${BookData.id}`);
+    const inputNewGenders = document.getElementById(`autores-novo-${BookData.id}`);
+
+    document.getElementById(`btn-salvar-${uid}`).addEventListener('click', async () => {
+         const title = inputNewTitle.value.toUpperCase() ;
+        
+         const authorsNames = inputNewAuthors.value.split(',');
+        const authorsObjects = authorsNames.map(name => ({ name: name.trim() }));
+        const gendersNames = inputNewGenders.value.split(',');
+        const gendersObjects = gendersNames.map(name => ({ name: name.trim() }));
+        try {
+
+        let book = { 
+        title: title, 
+        authors: authorsObjects, 
+        genders: gendersObjects 
+            };
+            api.updateBook(BookData.id,book);
+            alert('Estoque atualizado com sucesso!');
+            modal.remove();
+        } catch (e) {
+            alert('Erro ao atualizar: ' + (e.message || e));
+        }
+    });
+
+    document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+};
+
 if (document.getElementById('table-emprestimos')) {
     document.getElementById('table-emprestimos').appendChild(table(table_loan));
     if (window.setupLoanSearch) window.setupLoanSearch(allLoans);
@@ -431,6 +522,6 @@ if (document.getElementById('table-movimentacoes')) {
 }
 
 if (document.getElementById('table-livros')) {
-    document.getElementById('table-livros').appendChild(table(table_books));
+    document.getElementById('table-livros').appendChild(table_with_edit(table_books,window.openEditBookModal));
     if (window.setupBooksSearch) window.setupBooksSearch(allBooks);
 }

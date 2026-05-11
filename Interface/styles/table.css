@@ -1,6 +1,6 @@
 
 .table-container {
-    margin: 50px 0;
+    margin: 50px 0 90px 0;
     text-align: center;
 }
 .table-container h1 {
@@ -8,7 +8,7 @@
     font-weight: 900;
     font-size: 32px;
     color: var(--verde-escuro);
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 }
 .table-title-c{
     display: flex;
@@ -16,7 +16,7 @@
     justify-content: center;
     align-items: center;
    
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 

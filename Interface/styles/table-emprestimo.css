@@ -1,6 +1,15 @@
-.search-emprestimo {
-    margin-bottom: 20px;
+
+.table-title-c-emprestimos{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
 }
+
+ .table-title-c-emprestimos h1 {
+    margin: 0;
+ }
+
 
 .tbl-emprestimo {
     display: row;
@@ -11,7 +20,7 @@
     box-shadow: var(--card-shadow);
 }
 .search-emprestimo input {
-    width: 50%;
+    width: 100%;
     padding: 12px 40px 12px 15px; 
     border: none;
     border-radius: 10px;
