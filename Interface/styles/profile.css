@@ -85,7 +85,7 @@
 .profile-edit-btn {
     opacity: 0;
     border: none;
-    background: transparent;
+    background-color:  white;
     cursor: pointer;
     transition: opacity 0.2s ease;
     padding: 8px;

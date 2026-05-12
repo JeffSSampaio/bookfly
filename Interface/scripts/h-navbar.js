@@ -21,7 +21,7 @@ closeBtn.addEventListener("click", () => {
 
 }
 
-function logout() {
+window.logout = function() {
   sessionStorage.removeItem('usuarioLogado');
   window.location.replace('/Interface/pages/login.html');
 }

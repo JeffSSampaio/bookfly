@@ -121,7 +121,7 @@ var table_moviment = {
 }
 console.log(allMoviments)
 
-function table(tableData) {
+window.table = function(tableData) {
     let tbl = document.createElement('table');
     tbl.style.width = 'calc(100% - 120px)';
     tbl.style.borderCollapse = 'collapse';
@@ -164,7 +164,7 @@ function table(tableData) {
     return tbl;
 }
 
-function table_costumize(tableData,styleData) {
+window.table_costumize = function(tableData,styleData) {
     let tbl = document.createElement('table');
     tbl.style.width = 'calc(100% - 120px)';
     tbl.style.borderCollapse = 'collapse';
@@ -208,7 +208,7 @@ function table_costumize(tableData,styleData) {
 }
 
 
-function table_with_actions(tableData) {
+window.table_with_actions = function(tableData) {
     let container = document.createElement('div');
     container.style.margin = '0 60px';
     container.style.paddingRight = '50px';
@@ -252,7 +252,7 @@ function table_with_actions(tableData) {
     return container;
 }
 
-function table_with_edit(tableData, onEdit) {
+window.table_with_edit = function(tableData, onEdit) {
 
     let wrapper = document.createElement('div');
     wrapper.style.display = 'flex';

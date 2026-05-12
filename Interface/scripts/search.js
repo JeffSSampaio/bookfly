@@ -191,7 +191,16 @@ window.setupStockSearch = function(allStockBook) {
     if (searchStockInput) {
         searchStockInput.addEventListener('input', (e) => {
             const filtered = searchTable(e.target.value, stockData, ['title', 'author','id']);
-            renderFilteredTable('table-estoque', filtered, tableConfig);
+            const container = document.getElementById('table-estoque');
+             if (!container) return;
+            container.innerHTML = '';
+             container.appendChild(
+                table_with_edit(
+                    { headers: tableConfig.headers, rows: filtered },
+                    window.openEditStockModal
+                )
+            );
+            // renderFilteredTable('table-estoque', filtered, tableConfig);
         });
     }
 };
@@ -258,7 +267,15 @@ window.setupBooksSearch = function(allBooks) {
     if (searchBooksInput) {
         searchBooksInput.addEventListener('input', (e) => {
             const filtered = searchTable(e.target.value, booksData, ['name', 'authors', 'genders','id']);
-            renderFilteredTable('table-livros', filtered, tableConfig);
+              const container = document.getElementById('table-livros');
+            if (!container) return;
+            container.innerHTML = '';
+            container.appendChild(
+                table_with_edit(
+                    { headers: tableConfig.headers, rows: filtered },
+                    window.openEditBookModal
+                )
+            );
         });
     }
 };
