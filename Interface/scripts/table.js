@@ -119,7 +119,86 @@ var table_moviment = {
         })
     )
 }
-console.log(allMoviments)
+
+
+async function refreshTables() {
+    allLoans = await api.getAllLoans();
+    allPenalties = await api.getAllPenalties();
+    allStockBook = await api.getAllStock();
+    allMoviments = await api.getAllMoviments();
+    allBooks = await api.getAllBooks();
+
+    if (document.getElementById('table-emprestimos')) {
+        const container = document.getElementById('table-emprestimos');
+        container.innerHTML = '';
+        const rows = allLoans.map(r => ({
+            id: r.id,
+            user: r.user.name.toUpperCase(),
+            book: r.bookTitle.toUpperCase(),
+            loanDate: formatador.format(new Date(r.loanDate)),
+            returnDate: formatador.format(new Date(r.returnDate)),
+            status: r.status
+        }));
+        container.appendChild(window.table({ headers: table_loan.headers, rows }));
+    }
+
+    if (document.getElementById('table-multas')) {
+        const container = document.getElementById('table-multas');
+        container.innerHTML = '';
+        const rows = allPenalties.map(r => ({
+            id: r.penaltyId,
+            user: r.userName.toUpperCase(),
+            amount: r.amount || 'sem valor',
+            penaltyDate: formatador.format(new Date(r.penaltyDate)),
+            returnDateLoan: formatador.format(new Date(r.returnloanDate)),
+            status: r.statusPenalty
+        }));
+        container.appendChild(window.table({ headers: table_penalty.headers, rows }));
+    }
+
+    if (document.getElementById('table-estoque')) {
+        const container = document.getElementById('table-estoque');
+        container.innerHTML = '';
+        const rows = allStockBook.map(r => ({
+            id: r.stockId,
+            bookId: r.book.bookId ?? r.book.bookid,
+            title: r.book.title.toUpperCase(),
+            author: r.book.authors.map(a => a.name).join(',') || 'Sem author',
+            qtd: r.qtd
+        }));
+        container.appendChild(window.table_with_edit({ headers: table_stock.headers, rows }, window.openEditStockModal));
+    }
+
+    if (document.getElementById('table-livros')) {
+        const container = document.getElementById('table-livros');
+        container.innerHTML = '';
+        const rows = allBooks.map(r => ({
+            id: r.bookid,
+            title: r.title,
+            authors: r.authors.map(a => a.name).join(',') || 'autor não identificado',
+            genders: r.genders.map(g => g.name || g).join(', ') || 'Sem Gênero'
+        }));
+        container.appendChild(window.table_with_edit({ headers: table_books.headers, rows }, window.openEditBookModal));
+    }
+
+    if (document.getElementById('table-movimentacoes')) {
+        const container = document.getElementById('table-movimentacoes');
+        container.innerHTML = '';
+        const rows = allMoviments.map(r => ({
+            id: r.movimentId,
+            createdTime: formatador.format(new Date(r.createdTime)),
+            user: r.user.name.toUpperCase(),
+            userType: r.user.role,
+            book: r.book.title.toUpperCase(),
+            qtd: (r.type === 'ENTRADA' || r.type === 'ENTRADA_ADMIN') ? '+' + r.qtdMoved : '-' + r.qtdMoved,
+            type: r.type.trim(),
+            description: r.description
+        }));
+        container.appendChild(window.table({ headers: table_moviment.headers, rows }));
+    }
+}
+
+setInterval(refreshTables, 30000);
 
 window.table = function(tableData) {
     let tbl = document.createElement('table');
@@ -410,7 +489,7 @@ window.openEditStockModal = function(stockData, index, rowElement) {
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 };
 
-console.log(allBooks)
+
 
 
 
