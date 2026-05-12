@@ -137,55 +137,52 @@ bookGrid.addEventListener('click', async event => {
     cancelLoan.style.opacity = '0.5';
 
     try {
-      const loanId = cancelLoan.dataset.loanId;
-      
-      if (!loanId || loanId === "undefined") {
-        throw new Error("ID do empréstimo inválido.");
-      }
+        const loanId = cancelLoan.dataset.loanId;
+        
+        if (!loanId || loanId === "undefined") {
+            throw new Error("ID do empréstimo inválido.");
+        }
 
-      await api.cancelLoan(loanId);
-      
-      loanedBookIds.delete(bookId);
-
-      const returnText = card.querySelector('.book-card-return');
-      if (returnText) {
-        returnText.textContent = "Você Cancelou Esse Empréstimo";
-        await sleep(5000);
-        returnText.textContent = "Disponível para Empréstimo";
-        returnText.classList.add('book-card-rented');
-      }
-      cancelLoan.remove();
-
+        await api.cancelLoan(loanId);
+        
+  
+        loanedBookIds.delete(bookId);
+        allLoans = allLoans.filter(l => String(l.id || l.loanId) !== String(loanId));
+        
+        renderBooks(allStock); 
+        alert('Empréstimo cancelado com sucesso.');
     } catch (error) {
-      alert('Erro ao Cancelar Emprestimo: ' + (error.message || error));
-      console.error(error);
-      cancelLoan.disabled = false;
-      cancelLoan.style.opacity = '1';
+        alert('Erro ao Cancelar Emprestimo: ' + (error.message || error));
+        console.error(error);
+        cancelLoan.disabled = false;
+        cancelLoan.style.opacity = '1';
     }
     return;
-  }
+}
 
-  if (button) {
+ if (button) {
     button.disabled = true;
     button.style.opacity = '0.65';
 
     try {
-      await api.createLoan(bookId, loggedUser.id, returnDateString);
-      loanedBookIds.add(bookId);
-
-      const returnText = card.querySelector('.book-card-return');
-      if (returnText) {
-        returnText.textContent = 'Você fez o empréstimo desse livro';
-        returnText.classList.add('book-card-rented');
-      }
-      button.remove();
+        const loanResponse = await api.createLoan(bookId, loggedUser.id, returnDateString);
+        console.log('loanResponse:', loanResponse);
+        loanedBookIds.add(bookId);
+        allLoans.push({
+          ...loanResponse,
+          book: { bookId: bookId },   
+          statusLoan: loanResponse.status  
+              });
+        
+        renderBooks(allStock); 
+        alert('Empréstimo realizado com sucesso.');
     } catch (error) {
-      alert('Erro ao fazer empréstimo: ' + (error.message || error));
-      console.error(error);
-      button.disabled = false;
-      button.style.opacity = '1';
+        alert('Erro ao fazer empréstimo: ' + (error.message || error));
+        console.error(error);
+        button.disabled = false;
+        button.style.opacity = '1';
     }
-  } else {
+} else {
     if (typeof window.openBookModal === 'function') {
       window.openBookModal(bookId);
     }
