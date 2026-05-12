@@ -1,0 +1,63 @@
+.modal-movimentacoes {
+    width: 35%;
+    height: 45%;
+    min-height: 30%;
+}
+
+.b-modal-movimentacoes {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.b-modal-movimentacoes h1{
+    font-size: 20px;
+}
+
+.f-input-modal-moviment {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.f-input-modal-moviment label {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.select-moviment-books, 
+.f-input-modal-moviment input {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-family: var(--font-principal);
+}
+
+.select-moviment-books {
+    outline: none;
+    padding: 10px 20px;
+    font-weight: 800;
+    background-color: var(--verde-vivo);
+    color: white;
+    border: none;
+    appearance: none;
+}
+
+.f-input-modal-moviment input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    height: 40px;
+    color: white;
+    font-family: var(--font-principal);
+    font-weight: 700;
+}
+
+.c-btn-act-moviments{
+    gap: 80px;
+}

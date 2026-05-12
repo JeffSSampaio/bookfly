@@ -6,6 +6,7 @@
    <link rel="stylesheet" href="/Interface/styles/h-navbar.css">
     <link rel="stylesheet" href="/Interface/styles/root.css">
     <link rel="stylesheet" href="/Interface/styles/modal.css">
+    <link rel="stylesheet" href="/Interface/styles/modal-moviments.css">
     <link rel="stylesheet" href="/Interface/styles/table.css">
     <link rel="stylesheet" href="/Interface/styles/table-moviment.css">
     <link rel="stylesheet" href="/Interface/styles/book-register.css">
@@ -44,22 +45,21 @@
       <div class="table-container">
             <div class="table-title-c table-title-c-moviments">
                 <h1>Movimentações</h1>
-                   <div class="search-input-container">
-               
-                <input type="search" name="" id="" placeholder="Buscar">
-                <img src="/Interface/assets/iconlupa.svg" alt="" srcset="">
-            </div>
+
+                <div class="act-moviment">
+                    <button class="btn-act-moviment" onclick="openAddMoviment()">Fazer Movimentação</button>
+                    <div class="search-input-container search-table-moviment">
+                        <input type="search" name="" id="" placeholder="Buscar">
+                    </div>
+                </div>
             </div>
             <div id="table-movimentacoes"></div>
         </div>
     
- 
+
 
     </div>
-    <footer>
-            <h1>
-                BookFLy
-            </h1>
+        <footer>
         </footer>
         <script src="/Interface/scripts/authGuard.js"></script>
         <script src="/Interface/scripts/search.js"></script>

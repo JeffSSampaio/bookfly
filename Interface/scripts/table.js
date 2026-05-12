@@ -489,7 +489,61 @@ window.openEditStockModal = function(stockData, index, rowElement) {
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 };
 
+console.log(api.getAllStock())
 
+
+window.openAddMoviment = async function() {
+    const books = await api.getAllBooks();
+    const stock = await api.getAllStock;
+    const uid = 'modal-add-moviment';
+    
+  
+
+    let options = "";
+    
+    books.forEach(book => {
+       options += `<option value="${book.bookId}">${book.title} - ${book.authors.map(a=> a.name).join(',')}</option>`
+    });
+
+      let selectedBooks = `
+     <select name="" id="select-${uid}" class="select-moviment-books">
+            ${options}
+     </select>
+    `;
+    
+    const modalHTML =`
+    <div class="modal" id="${uid}">
+        <div class="c-modal modal-movimentacoes">
+            <div class="b-modal b-modal-movimentacoes">
+                <h1>Adicionar Movimentação</h1>
+
+
+                 <div class="f-input-modal  f-input-modal-moviment">
+                <label> Selecionar Livro</label>
+                ${selectedBooks}
+                </div>
+                <div class="f-input-modal f-input-modal-moviment">
+                    <label>Quantidade</label>
+                    <input type="number">
+                </div>
+                <div class="f-input-modal f-input-modal-moviment">
+                    <label>Descrição</label>
+                    <input type="text">
+                </div>
+                <div class="c-modal-btn c-btn-act-moviments">
+                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" id="btn-salvar-${uid}">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+     document.body.insertAdjacentHTML('beforeend', modalHTML);
+    const modal = document.getElementById(uid);
+
+    document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+}
 
 
 
