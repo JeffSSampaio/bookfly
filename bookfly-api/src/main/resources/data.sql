@@ -53,7 +53,8 @@ SELECT * FROM (VALUES
                    (1, 'FANTASIA'),
                    (2, 'FANTASIA'),
                    (2, 'ACAO'),
-                   (3, 'TERROR')
+                   (3, 'TERROR'),
+                   (4, 'TERROR')
               ) AS v(livro_id, genders)
 WHERE NOT EXISTS (SELECT 1 FROM livro_genero LIMIT 1);
 
