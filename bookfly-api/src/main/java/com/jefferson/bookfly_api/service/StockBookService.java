@@ -47,12 +47,19 @@ public class StockBookService {
                 .orElseThrow(() -> new RuntimeException("Usuario não existe"));
 
         boolean isAdmin = user.getRole().equals(Role.ADMIN);
-        TypeMoviment typeMoviment = isAdmin ? TypeMoviment.ENTRADA_ADMIN : TypeMoviment.ENTRADA;
+        TypeMoviment typeMoviment = TypeMoviment.ENTRADA_ADMIN;
+        String description = "";
+        if(isAdmin){
+            description = "Admin realizou " + typeMoviment + " em " + book.getTitle() + " com " + qtd + " unidade(s)";
+        } else{
+            throw new RuntimeException("Usuario não autorizado");
+        }
 
         Moviment moviment = new Moviment();
         moviment.setStockBook(stockBook);
         moviment.setQtdMoviment(qtd);
         moviment.setUser(user);
+        moviment.setDescription(description.toUpperCase());
         moviment.setTypeItem(typeMoviment);
         moviment.setCreatedTime(LocalDateTime.now());
 
