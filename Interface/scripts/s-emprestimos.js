@@ -130,10 +130,10 @@ var container_devolucao = document.getElementById('devolucao');
     );
 
    if(!isLoaned){
-            container_emprestimo.innerHTML = `<p>Você não tem empréstimos.</p>`;
+            container_emprestimo.innerHTML = `<p class="no-loans">Você não tem empréstimos.</p>`;
         }
         if(!isDevolved){
-            container_devolucao.innerHTML = `<p>Você não tem devoluções.</p>`;
+            container_devolucao.innerHTML = `<p class="no-devolutions">Você não tem devoluções.</p>`;
         }
      
 
