@@ -113,7 +113,7 @@ public class StockBookService {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         TypeMoviment type = delta > 0 ? TypeMoviment.ENTRADA_ADMIN : TypeMoviment.SAIDA_ADMIN;
-        if (description == null ) description = "ALTERAÇÃO: Admin " + admin.getName() + " realizou " + type + " de " + Math.abs(delta) + " unidade(s)";
+        if (description == null || description.equals("")) description = "ALTERAÇÃO: Admin " + admin.getName() + " realizou " + type + " de " + Math.abs(delta) + " unidade(s)";
 
         stockBook.setQtd(newQtd);
         Moviment moviment = new Moviment();
