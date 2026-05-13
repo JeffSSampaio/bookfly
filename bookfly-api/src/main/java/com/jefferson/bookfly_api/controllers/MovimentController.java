@@ -78,8 +78,7 @@ public class MovimentController {
         moviment.setQtdMoviment(request.qtdMoviment());
         moviment.setTypeItem(request.typeItem());
 
-
-        return ResponseEntity.ok(MovimentSummary.from(movimentService.updateMoviment(id,moviment)));
+        return ResponseEntity.ok(MovimentSummary.from(movimentService.editMoviment(id,moviment)));
     }
 
     @Operation(summary = "Remover movimentação")

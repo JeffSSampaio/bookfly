@@ -82,7 +82,7 @@ public class MovimentService {
     }
 
     @Transactional
-    public Moviment updateMoviment(Long id, Moviment newMoviment) {
+    public Moviment editMoviment(Long id, Moviment newMoviment) {
         Moviment oldMoviment = movimentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Movimentação inexistente no estoque"));
 
@@ -115,12 +115,12 @@ public class MovimentService {
             stockBook.setQtd(stockBook.getQtd() + newMoviment.getQtdMoviment());
         }
 
-        stockBookRepository.save(stockBook);
-
-        oldMoviment.setUser(user);
+        if (newMoviment.getUser() != null) oldMoviment.setUser(user);
         if (newMoviment.getTypeItem() != null) oldMoviment.setTypeItem(newMoviment.getTypeItem());
         if (newMoviment.getDescription() != null) oldMoviment.setDescription(newMoviment.getDescription());
+        if (newMoviment.getQtdMoviment() != oldMoviment.getQtdMoviment() ) oldMoviment.setQtdMoviment(newMoviment.getQtdMoviment());
 
+        stockBookRepository.save(stockBook);
         return movimentRepository.save(oldMoviment);
     }
 
