@@ -613,25 +613,30 @@ window.openEditBookModal = function(BookData, index, rowElement) {
     // const inputQtdAtual = document.getElementById(`qtd-atual-${stockData.id}`);
     const inputNewTitle = document.getElementById(`titulo-novo-${BookData.id}`);
     const inputNewAuthors = document.getElementById(`autores-novo-${BookData.id}`);
-    const inputNewGenders = document.getElementById(`autores-novo-${BookData.id}`);
+    const inputNewGenders = document.getElementById(`generos-novo-${BookData.id}`);
 
     document.getElementById(`btn-salvar-${uid}`).addEventListener('click', async () => {
          const title = inputNewTitle.value.toUpperCase() ;
         
-         const authorsNames = inputNewAuthors.value.split(',');
-        const authorsObjects = authorsNames.map(name => ({ name: name.trim() }));
-        const gendersNames = inputNewGenders.value.split(',');
-        const gendersObjects = gendersNames.map(name => ({ name: name.trim() }));
+       
+        const authors = inputNewAuthors.value.split(',')
+                                    .map(a => a.trim())
+                                    .filter(a => a !== "");
+       const genders = inputNewGenders.value.split(',')
+                                    .map(g => g.trim().toUpperCase())
+                                    .filter(g => g !== "");
+       
         try {
 
         let book = { 
         title: title, 
-        authors: authorsObjects, 
-        genders: gendersObjects 
+        authors: authors, 
+        genders: genders
             };
-            api.updateBook(BookData.id,book);
+           await api.updateBook(BookData.id,book);
             alert('Estoque atualizado com sucesso!');
             modal.remove();
+            location.reload();
         } catch (e) {
             alert('Erro ao atualizar: ' + (e.message || e));
         }
