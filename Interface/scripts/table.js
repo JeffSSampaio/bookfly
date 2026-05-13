@@ -341,7 +341,7 @@ window.table_with_edit = function(tableData, onEdit) {
     let tbl = document.createElement('table');
     tbl.style.width = 'calc(100% - 120px)';
     tbl.style.borderCollapse = 'collapse';
-    tbl.style.margin = '0 0 0 60px';
+    tbl.style.margin = '0 0 0 55px';
 
     let thead = document.createElement('thead');
     let headerRow = document.createElement('tr');
@@ -361,8 +361,10 @@ window.table_with_edit = function(tableData, onEdit) {
     let actionsColumn = document.createElement('div');
     actionsColumn.style.display = 'flex';
     actionsColumn.style.flexDirection = 'column';
-    actionsColumn.style.marginTop = '42px';
-    actionsColumn.style.gap = '2px';
+    actionsColumn.style.justifyContent ='center';
+    actionsColumn.style.alignItems ='center';
+    actionsColumn.style.marginTop = '45px';
+    actionsColumn.style.gap = '13px';
 
     tableData.rows.forEach((rowData, index) => {
 
@@ -381,18 +383,19 @@ window.table_with_edit = function(tableData, onEdit) {
 
         btn.innerHTML = `
             <img 
-                src="/Interface/assets/iconEdit.svg" 
+                src="/Interface/assets/iconEditWhite.svg" 
                 alt="Editar"
                style="width:10px;height:10px;"
             >
         `;
 
-        btn.style.padding = '10px';
+        btn.style.padding = '5px';
         btn.style.border = '1px solid rgba(0,0,0,0.08)';
         btn.style.backgroundColor = 'var(--verde-medio)';
         btn.style.borderRadius = '4px';
         btn.style.cursor = 'pointer';
         btn.style.height = '100%';
+        
 
         btn.onmouseover = () => {
             btn.style.backgroundColor = 'var(--verde-escuro)';
@@ -496,7 +499,7 @@ window.openEditStockModal = function(stockData, index, rowElement) {
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 };
 
-console.log(api.getAllStock())
+
 
 
 window.openAddMoviment = async function() {
@@ -558,17 +561,18 @@ window.openEditBookModal = function(BookData, index, rowElement) {
     const loggedUser = JSON.parse(sessionStorage.getItem('usuarioLogado'));
     const uid = `modal-edit-book-${BookData.bookId}`;
 
-   
-   
+    const authorsList = Array.isArray(BookData.authors) 
+    ? BookData.authors.map(a => a.name || a) 
+    : (typeof BookData.authors === 'string' ? BookData.authors.split(',') : []);
 
+    const gendersList = Array.isArray(BookData.genders) 
+         ? BookData.genders 
+    : (typeof BookData.genders === 'string' ? BookData.genders.split(',') : []);
 
-    const authorsList =  BookData.authors =! null ? BookData.authors.split(',') : [];
-    const gendersList = typeof BookData.genders ==='string' ? BookData.genders.split(',') : [];
-    const titleText = typeof BookData.title ==='string' ? BookData.title : 'sem titulo encontrado';
+    const titleText = typeof BookData.title === 'string' ? BookData.title : 'sem titulo encontrado';
 
-    const authorsText = Array.isArray(authorsList) ? authorsList.join(', ') : "sem autores";
-    const gendersText = Array.isArray(gendersList) ? gendersList.join(', ') : "sem autores";
-
+    const authorsText = authorsList.length > 0 ? authorsList.join(', ') : "sem autores";
+    const gendersText = gendersList.length > 0 ? gendersList.join(', ') : "sem autores";
 
 
     const modalHTML = `
