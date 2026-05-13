@@ -1,7 +1,7 @@
 .modal-movimentacoes {
-    width: 35%;
-    height: 45%;
-    min-height: 30%;
+    width: 19%;
+    height: 35%;
+   
 }
 
 .b-modal-movimentacoes {
@@ -9,7 +9,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
 }
 
 .b-modal-movimentacoes h1{
@@ -50,7 +50,7 @@
 }
 
 .f-input-modal-moviment input {
-    padding: 10px;
+    padding: 10px 10px;
     border: 1px solid #ccc;
     height: 40px;
     color: white;
@@ -59,5 +59,11 @@
 }
 
 .c-btn-act-moviments{
-    gap: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 10px;
+    gap: 100px;
 }

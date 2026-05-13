@@ -22,11 +22,14 @@ var style_table = {
     }
 }
 
+
 var allStockBook = await api.getAllStock();
 var allLoans = await api.getAllLoans();
 var allMoviments = await api.getAllMoviments();
 var allPenalties = await api.getAllPenalties();
 var allBooks = await api.getAllBooks();
+
+const loggedUser = JSON.parse(sessionStorage.getItem('usuarioLogado'));
 
 const formatador = new  Intl.DateTimeFormat('pt-BR', {
   dateStyle:'short',
@@ -420,8 +423,45 @@ window.table_with_edit = function(tableData, onEdit) {
     return wrapper;
 }
 
+window.openEditMoviment = function(movimentData,index,rowElement){ 
+    const uid = `modal-edit-moviment-${movimentData.id}`;
+
+    const modalHTML = ` 
+        <div class="modal" id="${uid}">
+            <div class="c-modal modal-movimentacoes"> 
+              <div class="b-modal b-modal-movimentacoes ">
+                <h1>Editar Movimentação N°${movimentData.id} </h1>
+                <div class="f-input-modal f-input-modal-moviment">
+                <label> Descrição </label>
+                 <input type="text" value="${movimentData.description}" >
+                <div>
+
+                <div class="c-modal-btn c-btn-act-moviments">
+                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" id="btn-salvar-${uid}">Salvar</button>
+                </div>
+              </div>
+            </div>
+        </div>
+    
+    `
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    const modal = document.getElementById(uid);
+
+    document.getElementById(`btn-salvar-${uid}`).addEventListener('click', async () => {
+
+
+     modal.remove()   
+    });
+
+    document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+
+}
+
 window.openEditStockModal = function(stockData, index, rowElement) {
-    const loggedUser = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+    
     const uid = `modal-edit-stock-${stockData.id}`;
 
     const modalHTML = `
@@ -449,8 +489,6 @@ window.openEditStockModal = function(stockData, index, rowElement) {
                     <label>Descrição</label>
                     <textarea name="" id="description-${stockData.id}"></textarea>
                 </div>
-
-
 
                 <div class="c-modal-btn">
                     <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
@@ -666,7 +704,7 @@ if (document.getElementById('table-estoque')) {
 }
 
 if (document.getElementById('table-movimentacoes')) {
-    document.getElementById('table-movimentacoes').appendChild(table(table_moviment));
+    document.getElementById('table-movimentacoes').appendChild(table_with_edit(table_moviment, window.openEditMoviment));
     if (window.setupMovementSearch) window.setupMovementSearch(allMoviments);
 }
 
