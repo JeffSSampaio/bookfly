@@ -89,7 +89,7 @@ public class StockBookController {
     public ResponseEntity<StockBookUpdateQtdSummary> updateQtd(
             @RequestBody @Valid StockBookUpdateQtdRequest request
     ) {
-        StockBook stockBook = stockBookService.updateQtd(request.bookId(),request.qtd(), request.userId());
+        StockBook stockBook = stockBookService.updateQtd(request.bookId(),request.qtd(), request.userId(), request.description());
 
         return ResponseEntity.ok(
                 StockBookUpdateQtdSummary.from(

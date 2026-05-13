@@ -217,9 +217,21 @@
     padding: 7px 12px;
     border-radius: 15px;
     border: none;
+    font-family: var(--fonte-principal);
+    color: white;
 }
 
-/* Modal Bookcase Edit Styles */
+.f-input-modal textarea{
+    resize: none;
+    padding: 10px 20px;
+    background-color: var(--verde-vivo);
+    border: none;
+    border-radius: 10px;
+    font-family: var(--fonte-principal);
+    color: white;
+    font-size: 15px;
+}
+
 .modal-bookcase-edit {
     width: 60%;
     max-width: 640px;
@@ -253,7 +265,7 @@
     border: 1px solid #a93226;
 }
 
-/* Modal Bookcase Add Styles */
+
 .modal-bookcase-add {
     width: 60%;
     max-width: 640px;

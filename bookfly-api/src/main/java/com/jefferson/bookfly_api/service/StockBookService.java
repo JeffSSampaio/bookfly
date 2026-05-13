@@ -95,7 +95,7 @@ public class StockBookService {
     }
 
     @Transactional
-    public StockBook updateQtd(Long bookId, int delta, Long adminId) {
+    public StockBook updateQtd(Long bookId, int delta, Long adminId , String description) {
 
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
@@ -113,7 +113,8 @@ public class StockBookService {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         TypeMoviment type = delta > 0 ? TypeMoviment.ENTRADA_ADMIN : TypeMoviment.SAIDA_ADMIN;
-        String description = "ALTERAÇÃO: Admin " + admin.getName() + " realizou " + type + " de " + Math.abs(delta) + " unidade(s)";
+        if (description == null ) description = "ALTERAÇÃO: Admin " + admin.getName() + " realizou " + type + " de " + Math.abs(delta) + " unidade(s)";
+
         stockBook.setQtd(newQtd);
         Moviment moviment = new Moviment();
         moviment.setStockBook(stockBook);

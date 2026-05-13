@@ -442,6 +442,13 @@ window.openEditStockModal = function(stockData, index, rowElement) {
                     <input type="number" id="qtd-nova-${stockData.id}" value="${stockData.qtd}" min="0">
                 </div>
 
+                  <div class="f-input-modal">
+                    <label>Descrição</label>
+                    <textarea name="" id="description-${stockData.id}"></textarea>
+                </div>
+
+
+
                 <div class="c-modal-btn">
                     <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
                     <button type="button" id="btn-salvar-${uid}">Salvar</button>
@@ -452,28 +459,28 @@ window.openEditStockModal = function(stockData, index, rowElement) {
 
     document.body.insertAdjacentHTML('beforeend', modalHTML);
     const modal = document.getElementById(uid);
-    const inputNovaQtd = document.getElementById(`qtd-nova-${stockData.id}`);
-    const inputQtdAtual = document.getElementById(`qtd-atual-${stockData.id}`);
-
+    const inputNewQtd = document.getElementById(`qtd-nova-${stockData.id}`);
+    const inputQtdCurrent = document.getElementById(`qtd-atual-${stockData.id}`);
+    const inputDescription = document.getElementById(`description-${stockData.id}`);
     document.getElementById(`btn-salvar-${uid}`).addEventListener('click', async () => {
-        const novaQtd = parseInt(inputNovaQtd.value);
-        const qtdAtual = parseInt(inputQtdAtual.value);
-
-        if (isNaN(novaQtd) || novaQtd < 0) {
+        const newQtd = parseInt(inputNewQtd.value);
+        const qtdCurrent = parseInt(inputQtdCurrent.value);
+        const description = inputDescription.value
+        if (isNaN(newQtd) || newQtd < 0) {
             alert('Informe uma quantidade válida.');
             return;
         }
 
         try {
-            const diferenca = novaQtd - qtdAtual;
+            const diference = newQtd - qtdCurrent;
 
-            if (diferenca !== 0) {
-                await api.updateStockQtd(stockData.bookId, loggedUser.id, diferenca);
+            if (diference !== 0) {
+                await api.updateStockQtd(stockData.bookId, loggedUser.id, diference,description);
 
                 if (rowElement) {
                     const cells = rowElement.querySelectorAll('td');
                     if (cells.length > 0) {
-                        cells[cells.length - 1].textContent = novaQtd;
+                        cells[cells.length - 1].textContent = newQtd;
                     }
                 }
             }

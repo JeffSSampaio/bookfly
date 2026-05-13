@@ -12,9 +12,10 @@ public record StockBookUpdateQtdRequest(
         @Schema(description = "quantidade de livro a repor")
         @NotNull
         int qtd,
-
         @Schema(description = "Usuario que fez a movimentação")
         @NotNull
-        Long userId
+        Long userId,
+
+        String description
 ) {
 }
