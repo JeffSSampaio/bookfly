@@ -197,7 +197,7 @@ window.setupStockSearch = function(allStockBook) {
              container.appendChild(
                 table_with_edit(
                     { headers: tableConfig.headers, rows: filtered },
-                    window.openEditStockModal
+                    window.openEditBookModal,'8px','40px','10px','10px','6px'
                 )
             );
             // renderFilteredTable('table-estoque', filtered, tableConfig);
@@ -282,7 +282,7 @@ window.setupBooksSearch = function(allBooks) {
             container.appendChild(
                 table_with_edit(
                     { headers: tableConfig.headers, rows: filtered },
-                    window.openEditBookModal
+                    window.openEditBookModal,'8px','40px','10px','10px','6px'
                 )
             );
         });

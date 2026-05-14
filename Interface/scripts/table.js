@@ -169,7 +169,7 @@ async function refreshTables() {
             author: r.book.authors.map(a => a.name).join(',') || 'Sem author',
             qtd: r.qtd
         }));
-        container.appendChild(window.table_with_edit({ headers: table_stock.headers, rows }, window.openEditStockModal));
+        container.appendChild(window.table_with_edit({ headers: table_stock.headers, rows }, window.openEditBookModal,'8px','40px','10px','10px','6px'));
     }
 
     if (document.getElementById('table-livros')) {
@@ -181,7 +181,7 @@ async function refreshTables() {
             authors: r.authors.map(a => a.name).join(',') || 'autor não identificado',
             genders: r.genders.map(g => g.name || g).join(', ') || 'Sem Gênero'
         }));
-        container.appendChild(window.table_with_edit({ headers: table_books.headers, rows }, window.openEditBookModal));
+        container.appendChild(window.table_with_edit({ headers: table_books.headers, rows },window.openEditBookModal,'8px','40px','10px','10px','6px'));
     }
 
     if (document.getElementById('table-movimentacoes')) {
@@ -197,7 +197,7 @@ async function refreshTables() {
             type: r.type.trim(),
             description: r.description
         }));
-        container.appendChild(window.table({ headers: table_moviment.headers, rows }));
+        container.appendChild(window.table_with_edit({ headers: table_moviment.headers, rows }, window.openEditMoviment));
     }
 }
 
@@ -334,7 +334,7 @@ window.table_with_actions = function(tableData) {
     return container;
 }
 
-window.table_with_edit = function(tableData, onEdit) {
+window.table_with_edit = function(tableData, onEdit, marginTopBtn='20px',marginTopActionColumns='45px',btnWidth='10px',btnHeight='10px',btnPadding='10px') {
 
     let wrapper = document.createElement('div');
     wrapper.style.display = 'flex';
@@ -366,8 +366,8 @@ window.table_with_edit = function(tableData, onEdit) {
     actionsColumn.style.flexDirection = 'column';
     actionsColumn.style.justifyContent ='center';
     actionsColumn.style.alignItems ='center';
-    actionsColumn.style.marginTop = '45px';
-    actionsColumn.style.gap = '13px';
+    actionsColumn.style.marginTop = marginTopActionColumns;
+    
 
     tableData.rows.forEach((rowData, index) => {
 
@@ -388,16 +388,17 @@ window.table_with_edit = function(tableData, onEdit) {
             <img 
                 src="/Interface/assets/iconEditWhite.svg" 
                 alt="Editar"
-               style="width:10px;height:10px;"
+               style="width:${btnWidth};height:${btnHeight};"
             >
         `;
 
-        btn.style.padding = '5px';
+        btn.style.padding = btnPadding;
         btn.style.border = '1px solid rgba(0,0,0,0.08)';
         btn.style.backgroundColor = 'var(--verde-medio)';
         btn.style.borderRadius = '4px';
         btn.style.cursor = 'pointer';
         btn.style.height = '100%';
+        btn.style.marginTop=marginTopBtn;
         
 
         btn.onmouseover = () => {
@@ -808,7 +809,7 @@ if (document.getElementById('table-multas')) {
 }
 
 if (document.getElementById('table-estoque')) {
-    document.getElementById('table-estoque').appendChild(table_with_edit(table_stock, window.openEditStockModal));
+    document.getElementById('table-estoque').appendChild(table_with_edit(table_stock, window.openEditBookModal,'8px','40px','10px','10px','6px'));
     if (window.setupStockSearch) window.setupStockSearch(allStockBook);
 }
 
@@ -818,6 +819,6 @@ if (document.getElementById('table-movimentacoes')) {
 }
 
 if (document.getElementById('table-livros')) {
-    document.getElementById('table-livros').appendChild(table_with_edit(table_books,window.openEditBookModal));
+    document.getElementById('table-livros').appendChild(table_with_edit(table_books,window.openEditBookModal,'8px','40px','10px','10px','6px'));
     if (window.setupBooksSearch) window.setupBooksSearch(allBooks);
 }
