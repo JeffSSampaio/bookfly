@@ -20,7 +20,7 @@
 
   const redirectToLogin = () => window.location.replace('/Interface/pages/login.html');
   const redirectToUserHome = () => window.location.replace('/Interface/pages/homepage.html');
-  const redirectToAdminHome = () => window.location.replace('/Interface/pages/emprestimo.html');
+  const redirectToAdminHome = () => window.location.replace('/Interface/pages/estoque.html');
 
   if (!usuarioLogado) {
     if (!publicPages.some(p => path.endsWith(p))) {
