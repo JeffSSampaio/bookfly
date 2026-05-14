@@ -423,40 +423,149 @@ window.table_with_edit = function(tableData, onEdit) {
     return wrapper;
 }
 
-window.openEditMoviment = function(movimentData,index,rowElement){ 
+window.openEditMoviment = async function(movimentData,index,rowElement){ 
+
     const uid = `modal-edit-moviment-${movimentData.id}`;
+
+    const currentQtd = parseInt(
+        String(movimentData.qtd).replace('+','').replace('-','')
+    );
 
     const modalHTML = ` 
         <div class="modal" id="${uid}">
             <div class="c-modal modal-movimentacoes"> 
               <div class="b-modal b-modal-movimentacoes ">
-                <h1>Editar Movimentação N°${movimentData.id} </h1>
+                
+                <h1>Editar Movimentação N°${movimentData.id}</h1>
+
                 <div class="f-input-modal f-input-modal-moviment">
-                <label> Descrição </label>
-                 <input type="text" value="${movimentData.description}" >
-                <div>
+                    <label>Quantidade</label>
+
+                    <input 
+                        type="number" 
+                        id="qtd-${uid}" 
+                        value="${currentQtd}"
+                        min="1"
+                    >
+                </div>
+
+                <div class="f-input-modal f-input-modal-moviment">
+                    <label>Tipo da Movimentação</label>
+
+                    <select id="type-${uid}" class="select-moviment-books">
+
+                        <option 
+                            value="ENTRADA"
+                            ${movimentData.type.includes('ENTRADA') ? 'selected' : ''}
+                        >
+                            ENTRADA
+                        </option>
+
+                        <option 
+                            value="SAIDA"
+                            ${movimentData.type.includes('SAIDA') ? 'selected' : ''}
+                        >
+                            SAIDA
+                        </option>
+
+                    </select>
+                </div>
+
+                <div class="f-input-modal f-input-modal-moviment">
+                    <label>Descrição</label>
+
+                    <input 
+                        type="text" 
+                        id="description-${uid}"
+                        value="${movimentData.description || ''}"
+                    >
+                </div>
 
                 <div class="c-modal-btn c-btn-act-moviments">
-                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
-                    <button type="button" id="btn-salvar-${uid}">Salvar</button>
+
+                    <button 
+                        type="button" 
+                        id="btn-cancelar-${uid}"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button 
+                        type="button" 
+                        id="btn-salvar-${uid}"
+                    >
+                        Salvar
+                    </button>
+
                 </div>
+
               </div>
             </div>
         </div>
-    
-    `
+    `;
 
     document.body.insertAdjacentHTML('beforeend', modalHTML);
+
     const modal = document.getElementById(uid);
 
-    document.getElementById(`btn-salvar-${uid}`).addEventListener('click', async () => {
+    document.getElementById(`btn-salvar-${uid}`)
+    .addEventListener('click', async () => {
 
+        try {
 
-     modal.remove()   
+            const qtd = parseInt(
+                document.getElementById(`qtd-${uid}`).value
+            );
+
+            const type = document.getElementById(`type-${uid}`).value;
+
+            const description = document.getElementById(`description-${uid}`).value;
+
+            if (isNaN(qtd) || qtd <= 0) {
+                alert('Quantidade inválida');
+                return;
+            }
+
+            const movimentUpdated = {
+                 userId: loggedUser.id,
+                qtdMoviment: qtd,
+
+                typeItem: type,
+
+                description: description
+
+            };
+
+            await api.updateMoviment(
+                movimentData.id,
+                movimentUpdated
+            );
+
+            alert('Movimentação atualizada com sucesso!');
+
+            modal.remove();
+
+            refreshTables();
+
+        } catch(e) {
+
+            alert(
+                'Erro ao atualizar movimentação: ' + 
+                (e.message || e)
+            );
+
+        }
+
     });
 
-    document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
-    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+    document.getElementById(`btn-cancelar-${uid}`)
+    .addEventListener('click', () => modal.remove());
+
+    modal.addEventListener('click', e => { 
+        
+        if (e.target === modal) modal.remove(); 
+    
+    });
 
 }
 
@@ -466,8 +575,8 @@ window.openEditStockModal = function(stockData, index, rowElement) {
 
     const modalHTML = `
     <div class="modal" id="${uid}">
-        <div class="c-modal" style="width: 50%; max-width: 500px; margin: 8% auto;">
-            <div class="b-modal">
+        <div class="c-modal modal-movimentacoes" >
+            <div class="b-modal b-modal-movimentacoes">
                 <h1>Editar Estoque</h1>
                 
                 <div class="f-input-modal">
@@ -516,7 +625,7 @@ window.openEditStockModal = function(stockData, index, rowElement) {
             const diference = newQtd - qtdCurrent;
 
             if (diference !== 0) {
-                await api.updateStockQtd(stockData.bookId, loggedUser.id, diference,description);
+                await api.updateMoviment(stockData.bookId, loggedUser.id, diference,description);
 
                 if (rowElement) {
                     const cells = rowElement.querySelectorAll('td');

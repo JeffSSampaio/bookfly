@@ -1,4 +1,4 @@
-
+'use strict';
 let originalTableData = {};
 
 
@@ -238,7 +238,16 @@ window.setupMovementSearch = function(allMoviments) {
     if (searchMovementInput) {
         searchMovementInput.addEventListener('input', (e) => {
             const filtered = searchTable(e.target.value, movementsData, ['user', 'book', 'type', 'description','id','createdTime','qtd']);
-            renderFilteredTable('table-movimentacoes', filtered, tableConfig);
+                const container = document.getElementById('table-movimentacoes');
+                if (!container) return;
+            container.innerHTML = '';
+             container.appendChild(
+                table_with_edit(
+                    { headers: tableConfig.headers, rows: filtered },
+                    window.openEditMoviment
+                )
+
+            )
         });
     }
 };

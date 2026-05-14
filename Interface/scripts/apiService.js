@@ -198,13 +198,12 @@ const api = {
     }).then(handleResponse),
 
  
-  updateMoviment: (id, userId, typeItem, qtd) =>
-    fetch(`${BASE_URL}/moviments/${id}`, {
-      method: 'PUT',
-      headers: postHeaders(),
-      body: JSON.stringify({ userId, typeItem, qtd }),
-    }).then(handleResponse),
-
+updateMoviment: (id, moviment) =>
+  fetch(`${BASE_URL}/moviments/${id}`, {
+    method: 'PUT',
+    headers: postHeaders(),
+    body: JSON.stringify(moviment),
+  }).then(handleResponse),
 
   deleteMoviment: (id) =>
     fetch(`${BASE_URL}/moviments/${id}`, { method: 'DELETE' }).then(handleResponse),
