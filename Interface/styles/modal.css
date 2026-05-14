@@ -268,6 +268,7 @@
 
 .modal-bookcase-add {
     width: 60%;
-    max-width: 640px;
+    height: 60%;
+    max-width: 540px;
     margin: 8% auto;
 }

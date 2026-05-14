@@ -50,7 +50,7 @@
     display: flex;
     flex-direction: column;
     border-radius: 10px;
-    padding: 15px;
+    padding: 25px;
   
 }
 
@@ -247,11 +247,11 @@
 
 .modal-grid-livros {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr ;
     gap: 10px;
-    max-height: 340px;
+    max-height: 540px;
     overflow-y: auto;
-    padding: 4px 2px;
+    padding: 8% auto;
 }
 
 
