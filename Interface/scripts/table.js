@@ -638,6 +638,7 @@ window.openEditStockModal = function(stockData, index, rowElement) {
 
             alert('Estoque atualizado com sucesso!');
             modal.remove();
+            location.reload()
         } catch (e) {
             alert('Erro ao atualizar: ' + (e.message || e));
         }

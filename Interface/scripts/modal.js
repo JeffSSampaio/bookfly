@@ -368,7 +368,7 @@ window.openBookModal = function (bookId) {
 
 
 
-window.openRegisterBook= function (){
+window.openRegisterBook= async function (){
 
    modalForm({
        titulo: "Registrar",
