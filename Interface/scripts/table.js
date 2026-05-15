@@ -5,16 +5,18 @@ var style_table = {
         backgroundColor: 'var(--verde-escuro)',
         color: 'var(--marfin)',
         fontWeight: 'bold',
-        textAlign: 'left',
         padding: '10px',
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'var(--font-principal)'
     },
     cell: {
         border: '1px solid var(--verde-escuro)',
-        padding: '10px',
+        padding: '8px 6px',
         textAlign: 'center' ,
         color: 'var(--verde-escuro)',
-        fontWeight: '800'
+        fontWeight: '700',
+        fontFamily: 'var(--font-principal)',
+        fontSize:'15px'
     },
     row: {
         backgroundColor: 'var(--marfin)',
@@ -66,7 +68,7 @@ var table_penalty = {
     
 
 var table_penalty = {
-    headers:['Id','Usuário','Valor da Multa','Data de Multa', 'Data de Entrega do Livro','Status'],
+    headers:['ID','Usuário','Valor da Multa','Data de Multa', 'Data de Entrega do Livro','Status'],
     rows: allPenalties.map(
         r =>({
             id: r.penaltyId,
@@ -81,10 +83,10 @@ var table_penalty = {
 
 
 var table_stock = {
-    headers: ['Id','Identificador','Livro', 'Autor','Quantidade'],
+    headers: ['ID','Livro', 'Autor','Quantidade'],
     rows: allStockBook.map(r => ({
         id: r.stockId,
-        bookId: r.book.bookId ?? r.book.bookid,
+        _bookId: r.book.bookId ?? r.book.bookid ?? r.id,
         title: r.book.title.toUpperCase(), 
         author: r.book.authors.map(a=>a.name).join(',') || 'Sem author',
         qtd: r.qtd
@@ -95,7 +97,7 @@ var table_stock = {
 
 
 var table_books= {
-    headers: ['Id','Livro','Autores','Genero'],
+    headers: ['ID','Livro','Autores','Genero'],
     rows: allBooks.map(r=>({
             id: r.bookid,
             title: r.title,
@@ -108,7 +110,7 @@ var table_books= {
 
 
 var table_moviment = {
-    headers: ['Id','Data de Criação','Usuário','Tipo do Usuário' ,'Livro', 'Quantidade', 'Tipo','Descrição'],
+    headers: ['ID','Data de Criação','Usuário','Tipo do Usuário' ,'Livro', 'Quantidade', 'Tipo','Descrição'],
     rows: allMoviments.map(
         r=>({
             id:r.movimentId,
@@ -124,84 +126,84 @@ var table_moviment = {
 }
 
 
-async function refreshTables() {
-    allLoans = await api.getAllLoans();
-    allPenalties = await api.getAllPenalties();
-    allStockBook = await api.getAllStock();
-    allMoviments = await api.getAllMoviments();
-    allBooks = await api.getAllBooks();
+// async function refreshTables() {
+//     allLoans = await api.getAllLoans();
+//     allPenalties = await api.getAllPenalties();
+//     allStockBook = await api.getAllStock();
+//     allMoviments = await api.getAllMoviments();
+//     allBooks = await api.getAllBooks();
 
-    if (document.getElementById('table-emprestimos')) {
-        const container = document.getElementById('table-emprestimos');
-        container.innerHTML = '';
-        const rows = allLoans.map(r => ({
-            id: r.id,
-            user: r.user.name.toUpperCase(),
-            book: r.bookTitle.toUpperCase(),
-            loanDate: formatador.format(new Date(r.loanDate)),
-            returnDate: formatador.format(new Date(r.returnDate)),
-            status: r.status
-        }));
-        container.appendChild(window.table({ headers: table_loan.headers, rows }));
-    }
+//     if (document.getElementById('table-emprestimos')) {
+//         const container = document.getElementById('table-emprestimos');
+//         container.innerHTML = '';
+//         const rows = allLoans.map(r => ({
+//             id: r.id,
+//             user: r.user.name.toUpperCase(),
+//             book: r.bookTitle.toUpperCase(),
+//             loanDate: formatador.format(new Date(r.loanDate)),
+//             returnDate: formatador.format(new Date(r.returnDate)),
+//             status: r.status
+//         }));
+//         container.appendChild(window.table({ headers: table_loan.headers, rows }));
+//     }
 
-    if (document.getElementById('table-multas')) {
-        const container = document.getElementById('table-multas');
-        container.innerHTML = '';
-        const rows = allPenalties.map(r => ({
-            id: r.penaltyId,
-            user: r.userName.toUpperCase(),
-            amount: r.amount || 'sem valor',
-            penaltyDate: formatador.format(new Date(r.penaltyDate)),
-            returnDateLoan: formatador.format(new Date(r.returnloanDate)),
-            status: r.statusPenalty
-        }));
-        container.appendChild(window.table({ headers: table_penalty.headers, rows }));
-    }
+//     if (document.getElementById('table-multas')) {
+//         const container = document.getElementById('table-multas');
+//         container.innerHTML = '';
+//         const rows = allPenalties.map(r => ({
+//             id: r.penaltyId,
+//             user: r.userName.toUpperCase(),
+//             amount: r.amount || 'sem valor',
+//             penaltyDate: formatador.format(new Date(r.penaltyDate)),
+//             returnDateLoan: formatador.format(new Date(r.returnloanDate)),
+//             status: r.statusPenalty
+//         }));
+//         container.appendChild(window.table({ headers: table_penalty.headers, rows }));
+//     }
 
-    if (document.getElementById('table-estoque')) {
-        const container = document.getElementById('table-estoque');
-        container.innerHTML = '';
-        const rows = allStockBook.map(r => ({
-            id: r.stockId,
-            bookId: r.book.bookId ?? r.book.bookid,
-            title: r.book.title.toUpperCase(),
-            author: r.book.authors.map(a => a.name).join(',') || 'Sem author',
-            qtd: r.qtd
-        }));
-        container.appendChild(window.table_with_edit({ headers: table_stock.headers, rows }, window.openEditBookModal,'8px','40px','10px','10px','6px'));
-    }
+//     if (document.getElementById('table-estoque')) {
+//         const container = document.getElementById('table-estoque');
+//         container.innerHTML = '';
+//         const rows = allStockBook.map(r => ({
+//             id: r.stockId,
+//             bookId: r.book.bookId ?? r.book.bookid,
+//             title: r.book.title.toUpperCase(),
+//             author: r.book.authors.map(a => a.name).join(',') || 'Sem author',
+//             qtd: r.qtd
+//         }));
+//         container.appendChild(window.table_with_edit({ headers: table_stock.headers, rows }, window.openEditBookModal,'8px','40px','10px','10px','6px'));
+//     }
 
-    if (document.getElementById('table-livros')) {
-        const container = document.getElementById('table-livros');
-        container.innerHTML = '';
-        const rows = allBooks.map(r => ({
-            id: r.bookid,
-            title: r.title,
-            authors: r.authors.map(a => a.name).join(',') || 'autor não identificado',
-            genders: r.genders.map(g => g.name || g).join(', ') || 'Sem Gênero'
-        }));
-        container.appendChild(window.table_with_edit({ headers: table_books.headers, rows },window.openEditBookModal,'8px','40px','10px','10px','6px'));
-    }
+//     if (document.getElementById('table-livros')) {
+//         const container = document.getElementById('table-livros');
+//         container.innerHTML = '';
+//         const rows = allBooks.map(r => ({
+//             id: r.bookid,
+//             title: r.title,
+//             authors: r.authors.map(a => a.name).join(',') || 'autor não identificado',
+//             genders: r.genders.map(g => g.name || g).join(', ') || 'Sem Gênero'
+//         }));
+//         container.appendChild(window.table_with_edit({ headers: table_books.headers, rows },window.openEditBookModal,'8px','40px','10px','10px','6px'));
+//     }
 
-    if (document.getElementById('table-movimentacoes')) {
-        const container = document.getElementById('table-movimentacoes');
-        container.innerHTML = '';
-        const rows = allMoviments.map(r => ({
-            id: r.movimentId,
-            createdTime: formatador.format(new Date(r.createdTime)),
-            user: r.user.name.toUpperCase(),
-            userType: r.user.role,
-            book: r.book.title.toUpperCase(),
-            qtd: (r.type === 'ENTRADA' || r.type === 'ENTRADA_ADMIN') ? '+' + r.qtdMoved : '-' + r.qtdMoved,
-            type: r.type.trim(),
-            description: r.description
-        }));
-        container.appendChild(window.table_with_edit({ headers: table_moviment.headers, rows }, window.openEditMoviment));
-    }
-}
+//     if (document.getElementById('table-movimentacoes')) {
+//         const container = document.getElementById('table-movimentacoes');
+//         container.innerHTML = '';
+//         const rows = allMoviments.map(r => ({
+//             id: r.movimentId,
+//             createdTime: formatador.format(new Date(r.createdTime)),
+//             user: r.user.name.toUpperCase(),
+//             userType: r.user.role,
+//             book: r.book.title.toUpperCase(),
+//             qtd: (r.type === 'ENTRADA' || r.type === 'ENTRADA_ADMIN') ? '+' + r.qtdMoved : '-' + r.qtdMoved,
+//             type: r.type.trim(),
+//             description: r.description
+//         }));
+//         container.appendChild(window.table_with_edit({ headers: table_moviment.headers, rows }, window.openEditMoviment));
+//     }
+// }
 
-setInterval(refreshTables, 30000);
+// setInterval(refreshTables, 30000);
 
 window.table = function(tableData) {
     let tbl = document.createElement('table');
@@ -334,17 +336,11 @@ window.table_with_actions = function(tableData) {
     return container;
 }
 
-window.table_with_edit = function(tableData, onEdit, marginTopBtn='20px',marginTopActionColumns='45px',btnWidth='10px',btnHeight='10px',btnPadding='10px') {
-
-    let wrapper = document.createElement('div');
-    wrapper.style.display = 'flex';
-    wrapper.style.alignItems = 'flex-start';
-    wrapper.style.gap = '8px';
-
+window.table_with_edit = function(tableData, onEdit, btnWidth='16px', btnHeight='16px', btnPadding='2px',style_table_edit = style_table) {
     let tbl = document.createElement('table');
     tbl.style.width = 'calc(100% - 120px)';
     tbl.style.borderCollapse = 'collapse';
-    tbl.style.margin = '0 0 0 55px';
+    tbl.style.margin = '10px 60px';
 
     let thead = document.createElement('thead');
     let headerRow = document.createElement('tr');
@@ -352,43 +348,42 @@ window.table_with_edit = function(tableData, onEdit, marginTopBtn='20px',marginT
     tableData.headers.forEach(headerText => {
         let th = document.createElement('th');
         th.textContent = headerText;
-        Object.assign(th.style, style_table.header);
+        Object.assign(th.style, style_table_edit.header);
         headerRow.appendChild(th);
     });
+
+    let thActions = document.createElement('th');
+    thActions.textContent = 'Ações';
+    Object.assign(thActions.style, style_table_edit.header);
+    headerRow.appendChild(thActions);
 
     thead.appendChild(headerRow);
     tbl.appendChild(thead);
 
     let tbody = document.createElement('tbody');
 
-    let actionsColumn = document.createElement('div');
-    actionsColumn.style.display = 'flex';
-    actionsColumn.style.flexDirection = 'column';
-    actionsColumn.style.justifyContent ='center';
-    actionsColumn.style.alignItems ='center';
-    actionsColumn.style.marginTop = marginTopActionColumns;
-    
-
     tableData.rows.forEach((rowData, index) => {
-
         let row = document.createElement('tr');
+        Object.assign(row.style, style_table.row);
 
-        Object.values(rowData).forEach(value => {
+        Object.keys(rowData).forEach(key => {
+            if (key.startsWith('_')) return;
             let cell = document.createElement('td');
-            cell.textContent = value;
-            Object.assign(cell.style, style_table.cell);
+            cell.textContent = rowData[key];
+            Object.assign(cell.style, style_table_edit.cell);
             row.appendChild(cell);
         });
 
-        tbody.appendChild(row);
+        let actionsCell = document.createElement('td');
+        Object.assign(actionsCell.style, style_table_edit.cell);
 
         let btn = document.createElement('button');
-
         btn.innerHTML = `
+            <h3>Editar </h3>
             <img 
                 src="/Interface/assets/iconEditWhite.svg" 
                 alt="Editar"
-               style="width:${btnWidth};height:${btnHeight};"
+                style="width:${btnWidth};height:${btnHeight};display:block;"
             >
         `;
 
@@ -397,9 +392,13 @@ window.table_with_edit = function(tableData, onEdit, marginTopBtn='20px',marginT
         btn.style.backgroundColor = 'var(--verde-medio)';
         btn.style.borderRadius = '4px';
         btn.style.cursor = 'pointer';
-        btn.style.height = '100%';
-        btn.style.marginTop=marginTopBtn;
-        
+        btn.style.display = 'inline-flex';
+        btn.style.alignItems = 'center';
+        btn.style.justifyContent = 'center';
+        btn.style.margin = '0 auto';
+        btn.style.height='20px'
+        btn.style.fontSize='10px'
+        btn.style.color ='white'
 
         btn.onmouseover = () => {
             btn.style.backgroundColor = 'var(--verde-escuro)';
@@ -413,16 +412,16 @@ window.table_with_edit = function(tableData, onEdit, marginTopBtn='20px',marginT
             if (onEdit) onEdit(rowData, index, row);
         };
 
-        actionsColumn.appendChild(btn);
+        actionsCell.appendChild(btn);
+        row.appendChild(actionsCell);
+        tbody.appendChild(row);
     });
 
     tbl.appendChild(tbody);
+    return tbl;
+};
 
-    wrapper.appendChild(tbl);
-    wrapper.appendChild(actionsColumn);
 
-    return wrapper;
-}
 
 window.openEditMoviment = async function(movimentData,index,rowElement){ 
 
@@ -626,7 +625,7 @@ window.openEditStockModal = function(stockData, index, rowElement) {
             const diference = newQtd - qtdCurrent;
 
             if (diference !== 0) {
-                await api.updateMoviment(stockData.bookId, loggedUser.id, diference,description);
+                await api.updateStockQtd(stockData._bookId, loggedUser.id, diference, description);
 
                 if (rowElement) {
                     const cells = rowElement.querySelectorAll('td');
@@ -728,7 +727,7 @@ window.openEditBookModal = function(BookData, index, rowElement) {
     <div class="modal" id="${uid}">
         <div class="c-modal modal-livro-edit">
             <div class="b-modal">
-                <h1>Editar Livro</h1>
+                <h1>Editar Livro N°${BookData.id}</h1>
                 
                 <div class="f-input-modal">
                     <label>Livro Atual</label>
@@ -810,7 +809,7 @@ if (document.getElementById('table-multas')) {
 }
 
 if (document.getElementById('table-estoque')) {
-    document.getElementById('table-estoque').appendChild(table_with_edit(table_stock, window.openEditBookModal,'8px','40px','10px','10px','6px'));
+    document.getElementById('table-estoque').appendChild(table_with_edit(table_stock, window.openEditStockModal));
     if (window.setupStockSearch) window.setupStockSearch(allStockBook);
 }
 
@@ -820,6 +819,6 @@ if (document.getElementById('table-movimentacoes')) {
 }
 
 if (document.getElementById('table-livros')) {
-    document.getElementById('table-livros').appendChild(table_with_edit(table_books,window.openEditBookModal,'8px','40px','10px','10px','6px'));
+    document.getElementById('table-livros').appendChild(table_with_edit(table_books, window.openEditBookModal));
     if (window.setupBooksSearch) window.setupBooksSearch(allBooks);
 }

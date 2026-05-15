@@ -129,7 +129,7 @@ window.setupPenaltySearch = function(allPenalties) {
     });
 
     const tableConfig = {
-        headers: ['Id', 'Usuário', 'Valor da Multa', 'Data de Multa', 'Data de Entrega do Livro', 'Status'],
+        headers: ['ID', 'Usuário', 'Valor da Multa', 'Data de Multa', 'Data de Entrega do Livro', 'Status'],
     };
 
     const penaltiesData = allPenalties.map(r => ({
@@ -160,12 +160,11 @@ window.setupPenaltySearch = function(allPenalties) {
 
 window.setupStockSearch = function(allStockBook) {
     const tableConfig = {
-        headers: ['Id', 'Identificador', 'Livro', 'Autor', 'Quantidade'],
+        headers: ['ID','Livro', 'Autor', 'Quantidade'],
     };
 
     const stockData = allStockBook.map(r => ({
         id: r.stockId,
-        bookId: r.book.bookId ?? r.book.bookid,
         title: r.book.title.toUpperCase(),
         author: r.book.authors.map(a => a.name).join(',') || 'Sem author',
         qtd: r.qtd
@@ -197,7 +196,7 @@ window.setupStockSearch = function(allStockBook) {
              container.appendChild(
                 table_with_edit(
                     { headers: tableConfig.headers, rows: filtered },
-                    window.openEditBookModal,'8px','40px','10px','10px','6px'
+                    window.openEditBookModal
                 )
             );
             // renderFilteredTable('table-estoque', filtered, tableConfig);
@@ -213,18 +212,18 @@ window.setupMovementSearch = function(allMoviments) {
         timeZone: 'America/Sao_Paulo'
     });
     const tableConfig = {
-        headers: ['Id', 'Usuário', 'Tipo do Usuário', 'Livro', 'Quantidade', 'Tipo', 'Descrição','Data de Criação'],
+        headers: ['ID', 'Data de Criação','Usuário', 'Tipo do Usuário', 'Livro', 'Quantidade', 'Tipo', 'Descrição'],
     };
 
     const movementsData = allMoviments.map(r => ({
         id: r.movimentId,
+         createdTime: formatador.format(new Date(r.createdTime)),
         user: r.user.name.toUpperCase(),
         userType: r.user.role,
         book: r.book.title.toUpperCase(),
         qtd: (r.type === 'ENTRADA' || r.type === 'ENTRADA_ADMIN') ? '+' + r.qtdMoved : '-' + r.qtdMoved,
         type: r.type.trim(),
-        description: r.description || '',
-        createdTime: formatador.format(new Date(r.createdTime))
+        description: r.description || ''
     }));
 
     originalTableData.movements = movementsData;
@@ -237,7 +236,7 @@ window.setupMovementSearch = function(allMoviments) {
     const searchMovementInput = document.getElementById('search-movements');
     if (searchMovementInput) {
         searchMovementInput.addEventListener('input', (e) => {
-            const filtered = searchTable(e.target.value, movementsData, ['user', 'book', 'type', 'description','id','createdTime','qtd']);
+            const filtered = searchTable(e.target.value, movementsData, ['id','createdTime','user','type','book','qtd', 'description']);
                 const container = document.getElementById('table-movimentacoes');
                 if (!container) return;
             container.innerHTML = '';
@@ -282,7 +281,7 @@ window.setupBooksSearch = function(allBooks) {
             container.appendChild(
                 table_with_edit(
                     { headers: tableConfig.headers, rows: filtered },
-                    window.openEditBookModal,'8px','40px','10px','10px','6px'
+                    window.openEditBookModal
                 )
             );
         });
