@@ -36,11 +36,13 @@ body {
 
 h1, h2 ,h3 ,h4 ,p, a {
     font-family: var(--font-principal) !important;
+    font-weight: 500;
 }
 
 button{
     font-family: var(--font-principal) !important;
     background-color: var(--verde-medio) ;
+    font-size: 12px !important;
 }
 
 

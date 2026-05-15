@@ -7,11 +7,13 @@ var style_table = {
         fontWeight: 'bold',
         padding: '10px',
         textAlign: 'center',
-        fontFamily: 'var(--font-principal)'
+        fontFamily: 'var(--font-principal)',
+        border: '1px solid var(--verde-escuro)'
+
     },
     cell: {
         border: '1px solid var(--verde-escuro)',
-        padding: '8px 6px',
+        padding: '8px',
         textAlign: 'center' ,
         color: 'var(--verde-escuro)',
         fontWeight: '700',

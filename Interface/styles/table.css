@@ -1,22 +1,22 @@
 
 .table-container {
-    margin: 50px 0 90px 0;
+    margin: 5px 0 90px 0;
     text-align: center;
 }
 .table-container h1 {
     font-family: var(--fonte-principal);
-    font-weight: 900;
+    font-weight: 700;
     font-size: 32px;
     color: var(--verde-escuro);
-    margin-bottom: 2px;
+
 }
 .table-title-c{
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
-   
-    margin-bottom: 10px;
+    margin-left: 10px;
+
 }
 
 

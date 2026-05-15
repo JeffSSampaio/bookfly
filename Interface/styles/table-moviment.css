@@ -4,19 +4,32 @@
     align-items: center;
     gap: 10px;
 }
-.table-title-c-moviments h1{
-    margin: 5px;
-    text-align: center;
-}
 
- .table-title-c-moviments .act-moviment{
+
+ /* .table-title-c-moviments .act-moviment{
     display: flex;
     flex-direction: row;
-    justify-content: right;
+       width: 100%;
+} */
+
+.table-title-c-moviments {
+      display: flex;
+      flex-direction: row;
+ justify-content: left;
     align-items: center;
     margin-right: 7%;
     width: 100%;
+
 }
+.act-moviment{
+    display: flex;
+    justify-content: right;
+    flex-direction: row;
+    align-items: center;
+      margin: 5px 50px;
+      padding: 5px;
+}
+
 
 .search-table-moviment{
     padding: 5px;
