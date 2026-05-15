@@ -35,9 +35,13 @@ body {
 
 
 h1, h2 ,h3 ,h4 ,p, a {
-    font-family: var(--font-principal);
+    font-family: var(--font-principal) !important;
 }
 
+button{
+    font-family: var(--font-principal) !important;
+    background-color: var(--verde-medio) ;
+}
 
 
 /* Footer global    */
