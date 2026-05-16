@@ -48,7 +48,7 @@ function renderBooks(stockList) {
     
     const isAlreadyLoaned = loanedBookIds.has(book.bookId);
     
-    const returnText = isAlreadyLoaned ? 'You have borrowed this book' : 'Available for loan';
+    const returnText = isAlreadyLoaned ? 'Você ja tem este livro emprestado' : 'Disponível para empréstimo';
    const loanObject = allLoans.find(l => 
         (l.book?.bookId || l.bookId) === book.bookId && l.statusLoan !== 'FINALIZADO'
     );
