@@ -1,4 +1,4 @@
-.btn-add-livro-stock{
+.stock-actions{
     display: flex;
     align-items: center;
     justify-content: end;
@@ -11,8 +11,8 @@
     font-weight: 700;
     border-radius: 20px;
     border: none;
-    color: var(--marfin);
-    background-color: var(--verde-medio);
+    color: var(--color-ivory);
+    background-color: var(--color-mid-green);
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     transform: scale(1);
     transition: background-color 1s ease-out,
@@ -21,12 +21,12 @@
 
 .btn-add:hover{
     cursor: pointer;
-    background-color:  var(--verde-escuro);
+    background-color:  var(--color-dark-green);
     transform: scale(1.1);
     transition: all 1s ease-in;
 
 }
 
-.table-title-c-estoque{
+.table-header-stock{
     gap: 20px;
 }

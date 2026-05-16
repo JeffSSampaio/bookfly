@@ -1,5 +1,5 @@
 
-.c-card-emprestimo{
+.loan-card{
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -15,21 +15,21 @@
       box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
-.s-emprestimo-body{
+.home-loans-body{
     margin: 5px;
     padding: 20px;
     display:grid;
     grid-template-columns: 1fr 1fr ;
 }
 
-.s-emprestimo-container{
+.home-loans-section{
   
     margin: 50px 20px;
 }
 
-.s-emprestimo{
+.home-loans-grid{
     display: grid;
-      background-color: var(--verde-medio);
+      background-color: var(--color-mid-green);
     grid-template-columns: 1fr 1fr ;
     gap: 10px;
     padding: 2px;
@@ -39,73 +39,73 @@
 }
 
 
-.s-emprestimo-container h1{
+.home-loans-section h1{
      text-align: left;
      margin: 20px;
      border: none;
-     font-family: var(--fonte-principal);
+     font-family: var(--font-primary);
     font-weight: 800;
     font-size: 25px;
-    color: var(--verde-escuro);
+    color: var(--color-dark-green);
 }
 
-.c-card-emprestimo img {
+.loan-card img {
     height: 100px;
     border-radius: 5px;
 }
-.card-info-text{
+.loan-card-info{
     padding: 0px;
     text-align: left;
-    font-family: var(--font-principal);
+    font-family: var(--font-primary);
     font-weight: 700;
 }
 
-.card-info-text .c-emprestimo-text-author{
-    color: var(--verde-medio);
-    font-size: 15px;
+.loan-card-info .loan-card-author{
+    color: var(--color-mid-green);
+    font-size: 10px;
     opacity: 80%;
 }
-.card-info-text .c-emprestimo-text-title{
-    color:var(--verde-escuro);
+.loan-card-info .loan-card-title{
+    color:var(--color-dark-green);
     font-weight: 700;
-    font-size: 17px;
+    font-size: 12px;
 }
 
-.c-card-emprestimo h1, .c-card-emprestimo span, .c-card-emprestimo p{
+.loan-card h1, .loan-card span, .loan-card p{
     margin: 4px ;
     padding: 1px ;
 }
 
-.card-info-text .text-emprestimo-ongoing{
-    color: var(--ambar-dourado);
+.loan-card-info .badge-status-active{
+    color: var(--color-golden);
     font-weight: 700;
-    background-color: var(--badge-amarelo);
-    font-family: var(--font-principal);
+    background-color: var(--badge-yellow);
+    font-family: var(--font-primary);
     font-size: 13px;
 }
 
 
-.card-info-text .text-emprestimo-vermelho{
+.loan-card-info .badge-status-overdue{
     color: red;
     font-weight: 700;
-    background-color: var(--badge-vermelho);
-    font-family: var(--font-principal);
+    background-color: var(--badge-red);
+    font-family: var(--font-primary);
     font-size: 15px;
 }
 
-.card-info-text .text-emprestimo-verde{
+.loan-card-info .badge-status-returned{
     color: green;
     font-weight: 700;
-    background-color: var(--badge-verde);
-    font-family: var(--font-principal);
+    background-color: var(--badge-green);
+    font-family: var(--font-primary);
     font-size: 15px;
 }
 
 .date{
    font-size: 13px;
-    color: var(--verde-escuro);
+    color: var(--color-dark-green);
 }
-.no-loans, .no-devolutions{
+.empty-loans, .empty-returns{
     margin: 20px;
     display: flex;
     align-items: center;
@@ -113,7 +113,7 @@
     font-size: 18px;
     color: white;
     font-weight: 700;
-    font-family: var(--font-principal);
+    font-family: var(--font-primary);
     text-align: center;
     
 }

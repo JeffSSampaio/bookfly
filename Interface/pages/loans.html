@@ -5,20 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="/Interface/styles/h-navbar.css">
     <link rel="stylesheet" href="/Interface/styles/root.css">
-    <link rel="stylesheet" href="/Interface/styles/profile.css">
     <link rel="stylesheet" href="/Interface/styles/modal.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="/Interface/styles/table.css">
+    <link rel="stylesheet" href="/Interface/styles/book-register.css">
+    <link rel="stylesheet" href="/Interface/styles/table-loans.css">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
  
-    <title>Home</title>
+    <title>BookFly - Loans</title>
 </head>
 <body>
 
     <div id="h-navbar-right" class="menu-right-container">
         <div id="menu-content" class="body-menu">
             <div class="menu-header">
-               <img  id="close-menu" src="/Interface/assets/iconclose.svg" alt="" srcset="">
+               <img  id="close-menu" src="/Interface/assets/iconClose.svg" alt="" srcset="">
                 <h1>Menu</h1>
             </div>
         </div>
@@ -32,22 +34,34 @@
             <h1>BookFLy</h1>
         </div>
         <div class="h-container-actions-itens">
-            <div class="search-input-container">
-               
-                <input type="search" name="" id="" placeholder="Buscar">
-                <img src="/Interface/assets/iconlupa.svg" alt="" srcset="">
-            </div>
+           
             <img src="/Interface/assets/iconMenu.svg" alt="" class="icon-menu" id="icon-menu" onclick="btnMenu()">
         </div>
     </header>
-   
-        <div class="c-profile" id="profile">
+
+  
+    <div class="table-container">
+
+        <div class="table-container table-loans">
+            
+            <div class="table-title-c table-header-loans">
+                <h1 class="table-title-c" >Empréstimos</h1>
+                 <div class="search-input-container search-loans">
+                <input type="search" name="" id="" placeholder="Buscar">
+                <img src="/Interface/assets/iconSearch.svg" alt="" srcset="">
+            </div>
+            </div>
+            <div id="table-loans"></div>
         </div>
-        
-        <footer>
-        </footer>
-<script src="/Interface/scripts/authGuard.js"></script>
-<script type="module" src="/Interface/scripts/perfil.js"></script>
+            
+    </div>
+
+    </div>
+
+    
+        <script src="/Interface/scripts/authGuard.js"></script>
+        <script src="/Interface/scripts/search.js"></script>
+        <script type="module" src="/Interface/scripts/table.js"></script>
 <script src="/Interface/scripts/h-navbar.js"></script>
 <script type="module" src="/Interface/scripts/modal.js"></script>
 </body>

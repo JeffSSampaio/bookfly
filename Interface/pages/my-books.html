@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../styles/card-livro.css">
+    <link rel="stylesheet" href="../styles/card-loan.css">
     <link rel="stylesheet" href="../styles/modal.css">
     <link rel="stylesheet" href="../styles/bookcase.css">
     <link rel="stylesheet" href="../styles/root.css">
@@ -11,14 +11,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
-    <title>Meus Livros</title>
+    <title>BookFly - My Books</title>
 </head>
 <body>
 
     <div id="h-navbar-right" class="menu-right-container">
         <div id="menu-content" class="body-menu">
             <div class="menu-header">
-                <img id="close-menu" src="/Interface/assets/iconclose.svg" alt="">
+                <img id="close-menu" src="/Interface/assets/iconClose.svg" alt="">
                 <h1>Menu</h1>
             </div>
         </div>
@@ -34,22 +34,21 @@
         <div class="h-container-actions-itens">
             <div class="search-input-container">
                 <input type="search" placeholder="Buscar">
-                <img src="/Interface/assets/iconlupa.svg" alt="">
+                <img src="/Interface/assets/iconSearch.svg" alt="">
             </div>
             <img src="/Interface/assets/iconMenu.svg" alt="" class="icon-menu" id="icon-menu" onclick="btnMenu()">
         </div>
     </header>
 
     <div class="bookcase-container">
-        <div class="c-btn-bookcase">
-            <button class="btn-bookcase" onclick="openModalBookcase()">Criar Estante</button>
+        <div class="shelf-actions">
+            <button class="btn-create-shelf" onclick="openModalBookcase()">Criar Estante</button>
         </div>
 
         <div class="bookcase-body" id="bookcase"></div>
     </div>
 
-    <footer>
-    </footer>
+    
 
     <script type="module" src="/Interface/scripts/authGuard.js"></script>
     <script type="module" src="/Interface/scripts/modal.js"></script>

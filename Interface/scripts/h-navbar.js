@@ -1,9 +1,9 @@
 
-var usuarioLogadoRaw = sessionStorage.getItem('usuarioLogado');
-if (!usuarioLogadoRaw) {
+var loggedUserRaw = sessionStorage.getItem('loggedUser');
+if (!loggedUserRaw) {
   window.location.replace('/Interface/pages/login.html');
 }
-var usuarioLogado = JSON.parse(usuarioLogadoRaw);
+var loggedUser = JSON.parse(loggedUserRaw);
 
 window.btnMenu = function(){
 const menu = document.getElementById("icon-menu")
@@ -22,25 +22,25 @@ closeBtn.addEventListener("click", () => {
 }
 
 window.logout = function() {
-  sessionStorage.removeItem('usuarioLogado');
+  sessionStorage.removeItem('loggedUser');
   window.location.replace('/Interface/pages/login.html');
 }
 
-var buttonsProfile = [ 
-    "<a href='../pages/perfil.html'>Perfil</a>",
+var userMenuLinks = [ 
+    "<a href='../pages/profile.html'>Perfil</a>",
     "<a href='../pages/homepage.html'>HomePage</a>",
-    "<a href='../pages/meus-livros.html'>Minhas Estantes</a>",
+    "<a href='../pages/my-books.html'>Minhas Estantes</a>",
     "<a href='../pages/bookloan.html'>Livros</a>",
     "<a href='#' onclick='logout()'>Desconectar</a>",
 
 ]
 
-var buttonAdmin =[
-    "<a href='../pages/emprestimo.html'>Emprestimo</a>",
-    "<a href='../pages/livros.html'>Livros</a>",
-    "<a href='../pages/estoque.html'>Estoque</a>",
-    "<a href='../pages/multas.html'>Multas</a>",
-    "<a href='../pages/movimentacoes.html'>Movimentações</a>",
+var adminMenuLinks =[
+    "<a href='../pages/loans.html'>Emprestimo</a>",
+    "<a href='../pages/books.html'>Livros</a>",
+    "<a href='../pages/stock.html'>Estoque</a>",
+    "<a href='../pages/fines.html'>Multas</a>",
+    "<a href='../pages/movements.html'>Movimentações</a>",
     "<a href='#' onclick='logout()'>Desconectar</a>",
 ]
 
@@ -64,10 +64,10 @@ function shouldShowLink(linkHtml) {
 let content = document.getElementById("menu-content")
 
 
-if(usuarioLogado.role == 'USER'){
+if(loggedUser.role == 'USER'){
 
     
-    buttonsProfile.forEach(element => {
+    userMenuLinks.forEach(element => {
         if (!shouldShowLink(element)) return;
         content.innerHTML+=
         ` 
@@ -77,9 +77,9 @@ if(usuarioLogado.role == 'USER'){
         `
         
     });
-    } else if(usuarioLogado.role == 'ADMIN'){
+    } else if(loggedUser.role == 'ADMIN'){
         
-        buttonAdmin.forEach(element=>{
+        adminMenuLinks.forEach(element=>{
             if (!shouldShowLink(element)) return;
             content.innerHTML+=
              ` 

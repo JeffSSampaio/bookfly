@@ -21,7 +21,7 @@
     border-radius: 20px;
     width: 20%;
     height: 45%;
-    background-color: var(--marfin);
+    background-color: var(--color-ivory);
 }
 
 .book-detail-modal {
@@ -99,7 +99,7 @@
 
 .book-detail-label {
     margin: 0;
-    color: var(--verde-escuro);
+    color: var(--color-dark-green);
     font-size: 14px;
     font-weight: 600;
 }
@@ -128,8 +128,8 @@
 .book-detail-description {
     margin: 0;
     padding: 10px;
-    background-color: var(--badge-verde);
-    color: var(--verde-escuro);
+    background-color: var(--badge-green);
+    color: var(--color-dark-green);
     text-align: justify;
     border-radius: 20px;
     line-height: 1.8;
@@ -170,26 +170,26 @@
 .c-modal-btn button{
     display: flex;
     padding: 10px;
-    background-color: var(--verde-medio);
+    background-color: var(--color-mid-green);
     border: none;
     border-radius: 20px;
-    font-family: var(--fonte-principal);
-    color: var(--marfin);
+    font-family: var(--font-primary);
+    color: var(--color-ivory);
     font-weight: bolder;
-    border: 2px solid var(--marfin);
+    border: 2px solid var(--color-ivory);
 
 }
 
 
 .c-modal-btn button:hover{
-    background-color: var(--verde-escuro);
+    background-color: var(--color-dark-green);
     transition: background-color 1s ease-in-out;
 }
 
 .b-modal h1{
     text-align: center;
-    color: var(--verde-escuro);
-    font-family: var(--fonte-principal);
+    color: var(--color-dark-green);
+    font-family: var(--font-primary);
     margin: 20px;
 }
 
@@ -202,8 +202,8 @@
 }
 
 .f-input-modal label {
-    font-family: var(--fonte-principal);
-    color: var(--verde-escuro);
+    font-family: var(--font-primary);
+    color: var(--color-dark-green);
     font-weight: bolder;
     margin: 5px 20px;
     text-align: left;
@@ -213,27 +213,28 @@
 
 .f-input-modal input {
   
-    background-color: var(--verde-vivo);
+    background-color: var(--color-bright-green);
     padding: 7px 12px;
     border-radius: 15px;
     border: none;
-    font-family: var(--fonte-principal);
+    font-family: var(--font-primary);
     color: white;
 }
 
 .f-input-modal textarea{
     resize: none;
     padding: 10px 20px;
-    background-color: var(--verde-vivo);
+    background-color: var(--color-bright-green);
     border: none;
     border-radius: 10px;
-    font-family: var(--fonte-principal);
+    font-family: var(--font-primary);
     color: white;
     font-size: 15px;
 }
 
 .modal-bookcase-edit {
     width: 60%;
+    height: 60%;
     max-width: 640px;
     margin: 8% auto;
 }
@@ -243,7 +244,7 @@
 }
 
 .modal-loading-text {
-    color: var(--verde-medio);
+    color: var(--color-mid-green);
     grid-column: 1/-1;
     text-align: center;
 }
@@ -256,7 +257,7 @@
     align-items: flex-start;
 }
 
-.btn-card-remover-edit {
+.btn-remove-book-edit {
     opacity: 1;
 }
 
@@ -268,7 +269,7 @@
 
 .modal-bookcase-add {
     width: 60%;
-    height: 60%;
+    height: 70%;
     max-width: 540px;
     margin: 8% auto;
 }

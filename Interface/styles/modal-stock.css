@@ -86,7 +86,7 @@
     border-radius: 8px;
     border: 1px solid #dce2e7;
     text-align: center;
-    font-family: var(--fonte-principal);
+    font-family: var(--font-primary);
 }
 
 .modal-add-stock-grid {
@@ -130,7 +130,7 @@
     padding: 8px 12px;
     border: 1px solid #dce2e7;
     border-radius: 8px;
-    font-family: var(--fonte-principal);
+    font-family: var(--font-primary);
     font-size: 0.95rem;
 }
 
@@ -156,20 +156,20 @@
 }
 
 
-.c-modal-table-estoque {
+.modal-stock-table {
     padding: 20px;
     border-radius: 20px;
     margin: 15% auto;
     width: 70%;
     max-width: 750px;
     height: 75%;
-    background-color: var(--marfin);
+    background-color: var(--color-ivory);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.b-modal-table-estoque {
+.modal-stock-body {
     width: 100%;
     height: 100%;
     display: flex;
@@ -177,7 +177,7 @@
     padding: 12px;
 }
 
-.b-modal-table-estoque form {
+.modal-stock-body form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -187,7 +187,7 @@
 .t-modal {
     margin: 0 0 12px 0;
     text-align: center;
-    color: var(--verde-escuro);
-    font-family: var(--fonte-principal);
+    color: var(--color-dark-green);
+    font-family: var(--font-primary);
     font-weight: 700;
 }

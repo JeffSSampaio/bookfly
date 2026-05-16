@@ -1,4 +1,4 @@
-.modal-emprestimo{
+.modal-loan{
     display: none;
     position: fixed;
     z-index: 1;
@@ -10,7 +10,7 @@
     background-color: rgba(0, 0,0,0.4);
 }
 
-.c-modal-emprestimo{
+.modal-loan-inner{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -18,47 +18,47 @@
     padding: 20px;
     border-radius: 5px;
     width: 20%;
-    background-color: var(--cor-pastel-clara);
+    background-color: var(--color-pastel-light);
 
 }
 
-.c-emprestimo-btn button{
+.modal-loan-actions button{
     display: flex;
     padding: 10px;
-    background-color: var(--cor-pastel-escuro);
+    background-color: var(--color-pastel-dark);
     border: none;
     border-radius: 20px;
-    font-family: var(--fonte-principal);
-    color: var(--cor-marrom);
+    font-family: var(--font-primary);
+    color: var(--color-brown);
     font-weight: 500;
-    border: 2px solid var(--cor-marrom);
+    border: 2px solid var(--color-brown);
 
 }
 
-.c-emprestimo-btn button:hover{
-    background-color: var(--cor-pastel-clara);
+.modal-loan-actions button:hover{
+    background-color: var(--color-pastel-light);
     transition: background-color 1s ease-in-out;
 }
 
-.c-b-modal-emprestimo h1{
+.modal-loan-header h1{
     text-align: center;
-    color: var(--cor-marrom);
-    font-family: var(--fonte-principal);
+    color: var(--color-brown);
+    font-family: var(--font-primary);
     margin: 20px    
 }
 
-.form-emprestimo input{
+.form-loan input{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--cor-branco-fraco);
+    background-color: var(--color-off-white);
     padding: 7px;
     border-radius: 15px;
     border: none;
 
 
 }
-.f-input-emprestimo{
+.modal-loan-field{
     display: flex;
     flex-direction: column;
     margin: 0 26px;
@@ -66,16 +66,16 @@
 
 }
 
-.f-input-emprestimo label{
+.modal-loan-field label{
     margin-left: 4px;
     margin-bottom: 5px;
   text-align: left;
-  font-family: var(--fonte-principal);
-  color: var(--cor-marrom);
+  font-family: var(--font-primary);
+  color: var(--color-brown);
   font-weight: 500;
 }
 
-.c-emprestimo-btn{
+.modal-loan-actions{
      display: flex;
     flex-direction: row;
     justify-content:space-around;

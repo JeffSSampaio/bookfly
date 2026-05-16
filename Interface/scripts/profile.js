@@ -1,11 +1,11 @@
 
 'use strict'
 
-const loggedUserRaw = sessionStorage.getItem('usuarioLogado');
-const profileHtml = document.getElementById('profile');
+const loggedUserRaw = sessionStorage.getItem('loggedUser');
+const profileHtml = document.getElementById('profile-container');
 
 if (!loggedUserRaw || !profileHtml) {
-    console.error('Usuário não encontrado ou elemento de perfil ausente');
+    console.error('User not found or profile element missing');
 } else {
     const profile = JSON.parse(loggedUserRaw);
 

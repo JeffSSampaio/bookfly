@@ -1,53 +1,53 @@
 (function() {
-  const publicPages = ['/Interface/pages/login.html', '/Interface/pages/cadastro.html'];
+  const publicPages = ['/Interface/pages/login.html', '/Interface/pages/register.html'];
   const userPages = [
     '/Interface/pages/homepage.html',
-    '/Interface/pages/meus-livros.html',
+    '/Interface/pages/my-books.html',
     '/Interface/pages/bookloan.html',
-    '/Interface/pages/perfil.html',
+    '/Interface/pages/profile.html',
     '/Interface/pages/livro.html'
   ];
   const adminPages = [
-    '/Interface/pages/emprestimo.html',
-    '/Interface/pages/estoque.html',
-    '/Interface/pages/multas.html',
-    '/Interface/pages/movimentacoes.html'
+    '/Interface/pages/loans.html',
+    '/Interface/pages/stock.html',
+    '/Interface/pages/fines.html',
+    '/Interface/pages/movements.html'
   ];
 
   const path = window.location.pathname.replace(/\\/g, '/');
   const page = publicPages.concat(userPages, adminPages).find(p => path.endsWith(p)) || path;
-  const usuarioLogado = sessionStorage.getItem('usuarioLogado');
+  const loggedUser = sessionStorage.getItem('loggedUser');
 
-  const redirectToLogin = () => window.location.replace('/Interface/pages/login.html');
-  const redirectToUserHome = () => window.location.replace('/Interface/pages/homepage.html');
-  const redirectToAdminHome = () => window.location.replace('/Interface/pages/estoque.html');
+  const redirectToLoginPage = () => window.location.replace('/Interface/pages/login.html');
+  const redirectToUserHomePage = () => window.location.replace('/Interface/pages/homepage.html');
+  const redirectToAdminHomePage = () => window.location.replace('/Interface/pages/stock.html');
 
-  if (!usuarioLogado) {
+  if (!loggedUser) {
     if (!publicPages.some(p => path.endsWith(p))) {
-      redirectToLogin();
+      redirectToLoginPage();
     }
     return;
   }
 
-  const user = JSON.parse(usuarioLogado);
+  const user = JSON.parse(loggedUser);
   const role = user.role || 'USER';
 
   if (publicPages.some(p => path.endsWith(p))) {
     if (role === 'ADMIN') {
-      redirectToAdminHome();
+      redirectToAdminHomePage();
     } else {
-      redirectToUserHome();
+      redirectToUserHomePage();
     }
     return;
   }
 
   if (userPages.some(p => path.endsWith(p)) && role !== 'USER') {
-    redirectToAdminHome();
+    redirectToAdminHomePage();
     return;
   }
 
   if (adminPages.some(p => path.endsWith(p)) && role !== 'ADMIN') {
-    redirectToUserHome();
+    redirectToUserHomePage();
     return;
   }
 })();

@@ -1,15 +1,15 @@
 'use strict'
 import api from './apiService.js';
 
-const loggedUser = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+const loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'));
 
-function modalForm({ titulo, campos = [], onSubmit }) {
+function modalForm({ title, fields = [], onSubmit }) {
     let htmlContent = "";
-    campos.forEach(campo => {
+    fields.forEach(field => {
         htmlContent += `
         <div class="f-input-modal">
-            <label for="${campo.name}">${campo.label}</label>
-            <input type="${campo.type}" name="${campo.name}" id="${campo.name}" />
+            <label for="${field.name}">${field.label}</label>
+            <input type="${field.type}" name="${field.name}" id="${field.name}" />
         </div>
         `;
     });
@@ -18,7 +18,7 @@ function modalForm({ titulo, campos = [], onSubmit }) {
     <div class="modal">
         <div class="c-modal">
             <div class="b-modal">
-                <h1>${titulo}</h1>
+                <h1>${title}</h1>
                 <form class="c-modal-form">${htmlContent}</form>
                 <div class="c-modal-btn">
                     <button type="button" class="closeBtn">Cancelar</button>
@@ -37,9 +37,9 @@ function modalForm({ titulo, campos = [], onSubmit }) {
 
     confirmBtn.addEventListener("click", function () {
         const formData = new FormData(form);
-        let dados = {};
-        formData.forEach((value, key) => { dados[key] = value; });
-        if (onSubmit) onSubmit(dados);
+        let data = {};
+        formData.forEach((value, key) => { data[key] = value; });
+        if (onSubmit) onSubmit(data);
         modal.remove();
     });
     closeBtn.addEventListener("click", () => modal.remove());
@@ -52,26 +52,27 @@ window.openModalBookcase = function () {
     
 
     modalForm({
-        titulo: "Criar Estante",
-        campos: [{ label: "Nome da Estante", type: "text", name: "name" }],
+        title: "Criar Estante",
+        fields: [{ label: "Nome da Estante", type: "text", name: "name" }],
         onSubmit: async (dado) => {
             try {
-                if (!dado.name?.trim()) { alert('Nome inválido'); return; }
-                const novaEstante = await api.createBookcase(dado.name, loggedUser.id);
+                if (!dado.name?.trim()) { alert('Invalid name'); return; }
+                const novaShelf = await api.createBookcase(dado.name, loggedUser.id);
                 const bookcase = document.getElementById('bookcase');
                 bookcase.innerHTML += `
                     <div class='books-container'>
-                        <div class="title-bookase-container">
-                            <h1>${novaEstante.name}</h1>
+                        <div class="shelf-header">
+                            <h1>${novaShelf.name}</h1>
                             <span><img src="/Interface/assets/iconAdd.svg" alt=""
-                                onclick="openAddBookModal(${novaEstante.id}, '${novaEstante.name}', this)"></span>
+                                onclick="openAddBookModal(${novaShelf.id}, '${novaShelf.name}', this)"></span>
                             <span><img src="/Interface/assets/iconEdit.svg" alt=""
-                                onclick="openBookcaseEditModal(${novaEstante.id}, '${novaEstante.name}', this)"></span>
+                                onclick="openBookcaseEditModal(${novaShelf.id}, '${novaShelf.name}', this)"></span>
                         </div>
-                        <div class="c-book grid-cards-book" id="c-book-${novaEstante.id}"></div>
+                        <div class="c-book grid-cards-book" id="c-book-${novaShelf.id}"></div>
                     </div>
                 `;
-            } catch (e) { alert("Erro ao criar estante: " + e.message); }
+                location.reload();
+            } catch (e) { alert("Error creating shelf: " + e.message); }
         }
     });
 };
@@ -86,27 +87,27 @@ window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
     <div class="modal" id="${uid}">
         <div class="c-modal modal-bookcase-edit">
             <div class="b-modal">
-                <h1>Alterar</h1>
+                <h1>Editar Estante</h1>
 
                 <div class="f-input-modal modal-input-container">
-                    <label>Estante</label>
-                    <input class="modal-input-nome-estante" type="text"
+                    <label>Nome da Estante</label>
+                    <input class="modal-shelf-name-input" type="text"
                            id="input-nome-${bookcaseId}" value="${nomeAtual}" />
                 </div>
 
-                <div class="modal-busca-container">
-                    <input type="search" id="busca-edit-${bookcaseId}" placeholder="Buscar livro..." />
-                    <img src="/Interface/assets/iconlupa.svg" alt="">
+                <div class="modal-search-container">
+                    <input type="search" id="search-shelf-edit-${bookcaseId}" placeholder="Buscar livros..." />
+                    <img src="/Interface/assets/iconSearch.svg" alt="">
                 </div>
 
-                <div class="modal-grid-livros" id="grid-edit-${bookcaseId}">
+                <div class="modal-books-grid" id="grid-edit-${bookcaseId}">
                     <p class="modal-loading-text">Carregando...</p>
                 </div>
 
                 <div class="c-modal-btn modal-btn-container">
                 <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
                 <button type="button" id="btn-delete-${uid}" class="btn-delete-bookcase">Excluir estante</button>
-                    <button type="button" id="btn-salvar-${uid}">Salvar nome</button>
+                    <button type="button" id="btn-salvar-${uid}">Salvar</button>
                 </div>
             </div>
         </div>
@@ -115,11 +116,11 @@ window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
     document.body.insertAdjacentHTML("beforeend", modalHTML);
     const modal = document.getElementById(uid);
     const grid  = document.getElementById(`grid-edit-${bookcaseId}`);
-    const busca = document.getElementById(`busca-edit-${bookcaseId}`);
+    const busca = document.getElementById(`search-shelf-edit-${bookcaseId}`);
 
    
     api.getBookcaseById(bookcaseId).then(bookcase => {
-        let todos = bookcase.books || [];
+        let allItems = bookcase.books || [];
 
         function render(lista) {
             if (!lista.length) {
@@ -133,13 +134,13 @@ window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
 
                 
                 return `
-                    <div class="c-card-emprestimo c-card-book card-book-edit">
-                        <img src="${book.cover || '/Interface/assets/livro.png'}" alt="">
-                        <div class="card-book-info">
-                            <h1 class="c-emprestimo-text-title card-book-title">${(book.title || '').toUpperCase()}</h1>
-                            <p class="c-emprestimo-text-author card-book-author">${autor}</p>
+                    <div class="loan-card c-card-book card-book-edit">
+                        <img src="${book.cover || '/Interface/assets/book.png'}" alt="">
+                        <div class="shelf-book-info">
+                            <h1 class="loan-card-title card-book-title">${(book.title || '').toUpperCase()}</h1>
+                            <p class="loan-card-author card-book-author">${autor}</p>
                         </div>
-                        <button class="btn-card-remover btn-card-remover-edit"
+                        <button class="btn-remove-book"
                             title="Remover"
                             onclick="removeBook(${bookcaseId}, ${book.bookId}, this)">
                             <img src="/Interface/assets/iconDelete.svg" alt="Remover">
@@ -148,30 +149,31 @@ window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
             }).join('');
         }
 
-        render(todos);
+        render(allItems);
 
         busca.addEventListener('input', () => {
             const t = busca.value.toLowerCase();
-            render(todos.filter(b =>
+            render(allItems.filter(b =>
                 (b.title || '').toLowerCase().includes(t) ||
                 (b.author || '').toLowerCase().includes(t) ||
                 (b.authors || []).some(a => a.name.toLowerCase().includes(t))
             ));
         });
     }).catch(() => {
-        grid.innerHTML = `<p style="color:red; grid-column:1/-1;">Erro ao carregar livros.</p>`;
+        grid.innerHTML = `<p style="color:red; grid-column:1/-1;">Error loading books.</p>`;
     });
 
    
     document.getElementById(`btn-salvar-${uid}`).addEventListener('click', async () => {
         const novoNome = document.getElementById(`input-nome-${bookcaseId}`).value.trim();
-        if (!novoNome) { alert('Nome inválido'); return; }
+        if (!novoNome) { alert('Invalid name'); return; }
         try {
             await api.updateBookcase(bookcaseId, novoNome, null);
             const h1 = imgEl.closest('.title-bookase-container')?.querySelector('h1');
             if (h1) h1.textContent = novoNome;
             modal.remove();
-        } catch (e) { alert('Erro ao atualizar: ' + e.message); }
+            location.reload();
+        } catch (e) { alert('Error performing atualizar: ' + e.message); }
     });
 
     document.getElementById(`btn-delete-${uid}`).addEventListener('click', async () => {
@@ -182,7 +184,7 @@ window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
             if (container) container.remove();
             modal.remove();
         } catch (e) {
-            alert('Erro ao excluir estante: ' + e.message);
+            alert('Error performing excluir estante: ' + e.message);
         }
     });
 
@@ -192,27 +194,27 @@ window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
 
 
 
-window.openAddBookModal = function (bookcaseId, nomeEstante, imgEl) {
+window.openAddBookModal = function (bookcaseId, nomeShelf, imgEl) {
     const uid = `modal-add-${bookcaseId}`;
-    let selecionados = new Map(); 
+    let selected = new Map(); 
 
     const modalHTML = `
     <div class="modal" id="${uid}">
         <div class="c-modal modal-bookcase-add">
             <div class="b-modal">
-                <h1>Adicionar a ${nomeEstante}</h1>
+                <h1>Adicionar a ${nomeShelf}</h1>
 
-                <div class="modal-busca-container">
-                    <input type="search" id="busca-add-${bookcaseId}" placeholder="Buscar livro..." />
-                    <img src="/Interface/assets/iconlupa.svg" alt="">
+                <div class="modal-search-container">
+                    <input type="search" id="search-shelf-add-${bookcaseId}" placeholder="Procurar livro" />
+                    <img src="/Interface/assets/iconSearch.svg" alt="">
                 </div>
 
-                <div class="modal-grid-livros" id="grid-add-${bookcaseId}">
+                <div class="modal-books-grid" id="grid-add-${bookcaseId}">
                     <p class="modal-loading-text">Carregando...</p>
                 </div>
 
                 <div class="c-modal-btn modal-btn-container">
-                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" id="btn-cancelar-${uid}">Cancel</button>
                     <button type="button" id="btn-adicionar-${uid}">Adicionar</button>
                 </div>
             </div>
@@ -222,11 +224,11 @@ window.openAddBookModal = function (bookcaseId, nomeEstante, imgEl) {
     document.body.insertAdjacentHTML("beforeend", modalHTML);
     const modal = document.getElementById(uid);
     const grid  = document.getElementById(`grid-add-${bookcaseId}`);
-    const busca = document.getElementById(`busca-add-${bookcaseId}`);
+    const search = document.getElementById(`search-shelf-add-${bookcaseId}`);
 
    
-    api.getAllStock().then(estoque => {
-        let todos = estoque || [];
+    api.getAllStock().then(stockData => {
+        let allItems = stockData || [];
 
         function render(lista) {
             if (!lista.length) {
@@ -239,30 +241,30 @@ window.openAddBookModal = function (bookcaseId, nomeEstante, imgEl) {
                 const autor  = book.authors
                     ? book.authors.map(a => a.name).join(', ')
                     : (book.author || stock.author || '');
-                const cover  = book.cover || stock.cover || '/Interface/assets/livro.png';
-                const sel= selecionados.has(stock.stockId);
+                const cover  = book.cover || stock.cover || '/Interface/assets/book.png';
+                const sel= selected.has(stock.stockId);
 
                 return `
-                    <div class="c-card-emprestimo c-card-book ${sel ? 'selecionado' : ''}"
+                    <div class="loan-card c-card-book ${sel ? 'selected' : ''}"
                          data-stock-id="${stock.stockId}"
                          onclick='toggleSelectBook(this, ${stock.stockId}, ${JSON.stringify(titulo)}, ${JSON.stringify(autor)}, ${JSON.stringify(cover)})'>
                         <img src="${cover}" alt="">
-                        <div class="card-book-info">
-                            <h1 class="c-emprestimo-text-title card-book-title">${titulo.toUpperCase()}</h1>
-                            <p class="c-emprestimo-text-author card-book-author">${autor}</p>
+                        <div class="shelf-book-info">
+                            <h1 class="loan-card-title card-book-title">${titulo.toUpperCase()}</h1>
+                            <p class="loan-card-author card-book-author">${autor}</p>
                         </div>
-                        <button class="btn-card-adicionar" tabindex="-1">
+                        <button class="btn-add-book" tabindex="-1">
                             <img src="/Interface/assets/${sel ? 'iconVerified' : 'iconAddRounded'}.svg" alt="">
                         </button>
                     </div>`;
             }).join('');
         }
 
-        render(todos);
+        render(allItems);
 
-        busca.addEventListener('input', () => {
-            const t = busca.value.toLowerCase();
-            render(todos.filter(s => {
+        search.addEventListener('input', () => {
+            const t = search.value.toLowerCase();
+            render(allItems.filter(s => {
                 const b = s.book || s;
                 return (b.title  || '').toLowerCase().includes(t) ||
                        (b.author || '').toLowerCase().includes(t) ||
@@ -270,38 +272,39 @@ window.openAddBookModal = function (bookcaseId, nomeEstante, imgEl) {
             }));
         });
     }).catch(() => {
-        grid.innerHTML = `<p style="color:red; grid-column:1/-1;">Erro ao carregar estoque.</p>`;
+        grid.innerHTML = `<p style="color:red; grid-column:1/-1;">Error loading stock.</p>`;
     });
 
 
     window.toggleSelectBook = function (cardEl, stockId, titulo, autor, cover) {
-        if (selecionados.has(stockId)) {
-            selecionados.delete(stockId);
-            cardEl.classList.remove('selecionado');
-            cardEl.querySelector('.btn-card-adicionar img').src = '/Interface/assets/iconAddRounded.svg';
+        const icon = cardEl.querySelector('.btn-add-book img');
+        if (selected.has(stockId)) {
+            selected.delete(stockId);
+            cardEl.classList.remove('selected');
+            icon.src = '/Interface/assets/iconAddRounded.svg';
         } else {
-            selecionados.set(stockId, { titulo, autor, cover });
-            cardEl.classList.add('selecionado');
-            cardEl.querySelector('.btn-card-adicionar img').src = '/Interface/assets/iconVerified.svg';
+            selected.set(stockId, { titulo, autor, cover });
+            cardEl.classList.add('selected');
+              icon.src = '/Interface/assets/iconVerified.svg';
         }
     };
 
    
     document.getElementById(`btn-adicionar-${uid}`).addEventListener('click', async () => {
-        if (!selecionados.size) { alert('Selecione ao menos um livro'); return; }
+        if (!selected.size) { alert('Select at least one book'); return; }
         try {
             const cBook = document.getElementById(`c-book-${bookcaseId}`);
-            for (const [stockId, book] of selecionados) {
+            for (const [stockId, book] of selected) {
                 await api.addBookToBookcase(bookcaseId, stockId);
                 if (cBook) {
                     cBook.innerHTML += `
-                        <div class="c-card-emprestimo c-card-book">
+                        <div class="loan-card c-card-book">
                             <img src="${book.cover}" alt="">
-                            <div class="card-book-info">
-                                <h1 class="c-emprestimo-text-title card-book-title">${book.titulo.toUpperCase()}</h1>
-                                <p class="c-emprestimo-text-author card-book-author">${book.autor}</p>
+                            <div class="shelf-book-info">
+                                <h1 class="loan-card-title card-book-title">${book.titulo.toUpperCase()}</h1>
+                                <p class="loan-card-author card-book-author">${book.autor}</p>
                             </div>
-                            <button class="btn-card-remover"
+                            <button class="btn-remove-book"
                                 onclick="removeBook(${bookcaseId}, ${stockId}, this)" title="Remover">
                                 <img src="/Interface/assets/iconDelete.svg" alt="Remover">
                             </button>
@@ -321,7 +324,7 @@ window.removeBook = function (bookcaseId, stockBookId, btnEl) {
     if (!confirm('Remover este livro da estante?')) return;
     api.removeBookFromBookcase(bookcaseId, stockBookId)
         .then(() => { btnEl.closest('.c-card-book')?.remove(); })
-        .catch(e => alert('Erro ao remover: ' + e.message));
+        .catch(e => alert('Error performing remover: ' + e.message));
 };
 
 
@@ -341,7 +344,7 @@ window.openBookModal = function (bookId) {
             <div class="book-detail-modal">
                 <button class="book-detail-close" type="button">×</button>
                 <div class="book-detail-card">
-                    <img class="book-detail-cover" src="${book.cover || '/Interface/assets/livro.png'}" alt="${book.title || 'Capa do livro'}">
+                    <img class="book-detail-cover" src="${book.cover || '/Interface/assets/book.png'}" alt="${book.title || 'Book cover'}">
                     <div class="book-detail-info">
                         <h1 class="book-detail-title">${book.title || 'Título desconhecido'}</h1>
                         <p class="book-detail-authors">${autor}</p>
@@ -362,7 +365,7 @@ window.openBookModal = function (bookId) {
         closeBtn.addEventListener('click', () => modal.remove());
         modal.addEventListener("click", e => { if (e.target === modal) modal.remove(); });
     }).catch(() => {
-        alert('Erro ao carregar detalhes do livro.');
+        alert('Error performing carregar detalhes do livro.');
     });
 }
 
@@ -371,12 +374,12 @@ window.openBookModal = function (bookId) {
 window.openRegisterBook= async function (){
 
    modalForm({
-       titulo: "Registrar",
-       campos: [
+       title: "Registrar",
+       fields: [
                 {label:"Nome do Livro", type:"text", name:"bookName"},
                 {label:"Capa do Livro", type:"text", name:"coverBook"},
-                {label:"Autores do livro", type:"text", name:"authorName"},
-                {label:"Sumario do livro", type:"textArea" ,name:"summaryBook"},
+                {label:"Book Authors", type:"text", name:"authorName"},
+                {label:"Book Summary", type:"textArea" ,name:"summaryBook"},
                 {label:"Genero", type:"text", name:"genderBook"}
             ],
         onSubmit: async(data)=> {
@@ -400,8 +403,8 @@ window.openRegisterBook= async function (){
 
 window.openEditNameProfile = function(userId){
     modalForm({
-        titulo:"Editar Nome",
-        campos: [
+        title:"Editar Nome",
+        fields: [
             {label:'Novo Nome', type:'text',name:'newName'}
         ],
         onSubmit: async(data)=>{
@@ -414,11 +417,11 @@ window.openEditNameProfile = function(userId){
             try {
                 const userUpdate = { id: userId, name: newName };
                 const updatedUser = await api.updateUser(userId, userUpdate);
-                sessionStorage.setItem('usuarioLogado', JSON.stringify(updatedUser));
+                sessionStorage.setItem('loggedUser', JSON.stringify(updatedUser));
                 alert('Perfil atualizado!');
                 location.reload();
             } catch (e) {
-                alert('Erro ao atualizar: ' + (e.message || e));
+                alert('Error performing atualizar: ' + (e.message || e));
             }
         }
     })
@@ -426,8 +429,8 @@ window.openEditNameProfile = function(userId){
 
 window.openEditEmailProfile = function(userId){
     modalForm({
-        titulo:"Editar Email",
-        campos: [
+        title:"Editar Email",
+        fields: [
             {label:'Novo Email', type:'email',name:'newEmail'}
         ],
         onSubmit: async(data)=>{
@@ -440,11 +443,11 @@ window.openEditEmailProfile = function(userId){
             try {
                 const userUpdate = { id: userId, email: newEmail };
                 const updatedUser = await api.updateUser(userId, userUpdate);
-                sessionStorage.setItem('usuarioLogado', JSON.stringify(updatedUser));
+                sessionStorage.setItem('loggedUser', JSON.stringify(updatedUser));
                 alert('Perfil atualizado!');
                 location.reload();
             } catch (e) {
-                alert('Erro ao atualizar: ' + (e.message || e));
+                alert('Error performing atualizar: ' + (e.message || e));
             }
         }
     })
@@ -452,10 +455,10 @@ window.openEditEmailProfile = function(userId){
 
 window.openEditPasswordProfile = function(userId){
     modalForm({
-        titulo:"Editar Senha",
-        campos: [
+        title:"Editar Senha",
+        fields: [
             {label:'Nova Senha', type:'password',name:'newPassword'},
-            {label:'Confirmar Senha', type:'password',name:'confirmPassword'}
+            {label:'Confirm Senha', type:'password',name:'confirmPassword'}
         ],
         onSubmit: async(data)=>{
             const password = data.newPassword?.trim();
@@ -472,11 +475,11 @@ window.openEditPasswordProfile = function(userId){
             try {
                 const userUpdate = { id: userId, password };
                 const updatedUser = await api.updateUser(userId, userUpdate);
-                sessionStorage.setItem('usuarioLogado', JSON.stringify(updatedUser));
+                sessionStorage.setItem('loggedUser', JSON.stringify(updatedUser));
                 alert('Senha atualizada!');
                 location.reload();
             } catch (e) {
-                alert('Erro ao atualizar: ' + (e.message || e));
+                alert('Error performing atualizar: ' + (e.message || e));
             }
         }
     })
@@ -490,7 +493,7 @@ window.openAddItemOnStock = async function() {
     const selectedBooks = new Set();
     let allCards = books.map(book => {
         const bookId = book.bookid ?? book.id;
-        const cover = book.cover || '/Interface/assets/livro.png';
+        const cover = book.cover || '/Interface/assets/book.png';
         const title = (book.title || 'Título desconhecido').replace(/"/g, '&quot;');
         const author = book.authors
             ? book.authors.map(a => a.name).join(', ')
@@ -521,21 +524,21 @@ window.openAddItemOnStock = async function() {
 
     const modalHTML = `
     <div class="modal" id="${uid}">
-        <div class="c-modal c-modal-table-estoque">
-            <div class="b-modal b-modal-table-estoque">
+        <div class="c-modal modal-stock-table">
+            <div class="b-modal modal-stock-body">
                 <h1 class="t-modal">Adicionar Estoque</h1>
                 <div class="modal-content-wrapper">
                     <div class="modal-add-stock-search">
-                        <input type="text" id="search-stock" placeholder="Buscar livro..." />
-                        <img src="/Interface/assets/iconlupa.svg" alt="Buscar" />
+                        <input type="text" id="search-stock" placeholder="Search book..." />
+                        <img src="/Interface/assets/iconSearch.svg" alt="Buscar" />
                     </div>
                     <div class="modal-add-stock-grid" id="grid-add-stock">
-                        ${allCards.map(c => c.html).join('') || '<p style="color:var(--verde-medio); text-align:center;">Nenhum livro encontrado.</p>'}
+                        ${allCards.map(c => c.html).join('') || '<p style="color:var(--color-mid-green); text-align:center;">Nenhum livro encontrado.</p>'}
                     </div>
                 </div>
                 <div class="c-modal-btn">
-                    <button type="button" class="closeBtn">Cancelar</button>
-                    <button type="button" class="confirmBtn">Confirmar</button>
+                    <button type="button" class="closeBtn">Cancel</button>
+                    <button type="button" class="confirmBtn">Confirm</button>
                 </div>
             </div>
         </div>
@@ -557,7 +560,7 @@ window.openAddItemOnStock = async function() {
         );
         grid.innerHTML = filtered.length > 0 
             ? filtered.map(c => c.html).join('')
-            : '<p style="color:var(--verde-medio); text-align:center; padding:20px;">Nenhum livro encontrado.</p>';
+            : '<p style="color:var(--color-mid-green); text-align:center; padding:20px;">Nenhum livro encontrado.</p>';
     });
 
   
@@ -582,7 +585,7 @@ window.openAddItemOnStock = async function() {
 
     confirmBtn.addEventListener('click', async () => {
         if (!selectedBooks.size) {
-            alert('Selecione ao menos um livro.');
+            alert('Select at least one book.');
             return;
         }
 
@@ -598,10 +601,10 @@ window.openAddItemOnStock = async function() {
                 const quantidade = Number(qtyInput?.value) || 1;
                 await api.addBookToStock(bookId, userId, quantidade);
             }
-            alert('Livros adicionados ao estoque com sucesso.');
+            alert('Books successfully added to stock.');
             modal.remove();
         } catch (e) {
-            alert('Erro ao adicionar livros ao estoque: ' + e.message);
+            alert('Error adding books to stock: ' + e.message);
         }
     });
 

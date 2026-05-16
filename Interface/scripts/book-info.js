@@ -5,7 +5,7 @@ var container_book_info = document.getElementById('book-info-container');
 
 
 var book = {
-        'cover':'/Interface/assets/livro.png',
+        'cover':'/Interface/assets/book.png',
         'title':'girassol na Janela',
         'author':'Ganymédes José',
         'status':'Indisponivel',
@@ -20,16 +20,16 @@ var book = {
 
 container_book_info.innerHTML+=`
     <img src=${book.cover} alt="">
-      <div class="b-book-info">
+      <div class="book-info-body">
 
-            <h1 class="t-book">${book.title.toUpperCase()}</h1>
-            <h2 class="t-author">${book.author}</h2>
+            <h1 class="book-main-title">${book.title.toUpperCase()}</h1>
+            <h2 class="book-author-title">${book.author}</h2>
 
-           <div class="s-book-status">
+           <div class="book-status-row">
                 <h2>Status</h2>
-                    <p class="s-field-status">${book.status.toUpperCase()}</p>
+                    <p class="book-status-badge">${book.status.toUpperCase()}</p>
            </div> 
-            <div class="s-book">
+            <div class="book-summary">
                 <h2>Sumario</h2>
                 <p class="s-field-status ">${book.summary}</p>
            </div> 

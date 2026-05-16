@@ -1,50 +1,50 @@
 import api from './apiService.js';
 
-const form = document.querySelector('.login-container-form');
-const emailInput = document.getElementById('email-login');
-const senhaInput = document.getElementById('senha-login');
-const btnEntrar = form.querySelector('button');
+const form = document.querySelector('.auth-form');
+const emailInput = document.getElementById('login-email');
+const passwordInput = document.getElementById('login-password');
+const btnEnter = form.querySelector('button');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   await doLogin();
 });
 
-btnEntrar.addEventListener('click', async (e) => {
+btnEnter.addEventListener('click', async (e) => {
   e.preventDefault();
   await doLogin();
 });
 
 async function doLogin() {
   const email = emailInput.value.trim();
-  const senha = senhaInput.value.trim();
+  const password = passwordInput.value.trim();
 
-  if (!email || !senha) {
+  if (!email || !password) {
     alert('Preencha email e senha.');
     return;
   }
 
   try {
    
-    const usuarios = await api.getAllUsers();
-    const usuario = usuarios.find(u => u.email === email);
+    const users = await api.getAllUsers();
+    const user = users.find(u => u.email === email);
 
-    if (!usuario) {
+    if (!user) {
       alert('Usuário não encontrado.');
       return;
     }
 
    
-    if (usuario.password !== senha) {
+    if (user.password !== password) {
       alert('Senha incorreta.');
       return;
     }
 
-    sessionStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+    sessionStorage.setItem('loggedUser', JSON.stringify(user));
 
     window.location.href = '/Interface/pages/homepage.html';
 
-  } catch (erro) {
+  } catch (error) {
     alert('Erro ao fazer login: ' + erro.message);
   }
 }

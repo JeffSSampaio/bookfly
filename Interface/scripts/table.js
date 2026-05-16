@@ -1,62 +1,62 @@
 import api from './apiService.js';
 
-var style_table = {
+const tableStyles = {
     header: {
-        backgroundColor: 'var(--verde-escuro)',
-        color: 'var(--marfin)',
+        backgroundColor: 'var(--color-dark-green)',
+        color: 'var(--color-ivory)',
         fontWeight: 'bold',
         padding: '10px',
         textAlign: 'center',
-        fontFamily: 'var(--font-principal)',
-        border: '1px solid var(--verde-escuro)'
+        fontFamily: 'var(--font-primary)',
+        border: '1px solid var(--color-dark-green)'
 
     },
     cell: {
-        border: '1px solid var(--verde-escuro)',
+        border: '1px solid var(--color-dark-green)',
         padding: '8px',
         textAlign: 'center' ,
-        color: 'var(--verde-escuro)',
+        color: 'var(--color-dark-green)',
         fontWeight: '700',
-        fontFamily: 'var(--font-principal)',
+        fontFamily: 'var(--font-primary)',
         fontSize:'15px'
     },
     row: {
-        backgroundColor: 'var(--marfin)',
-        color: 'var(--verde-escuro)'
+        backgroundColor: 'var(--color-ivory)',
+        color: 'var(--color-dark-green)'
     }
 }
 
 
-var allStockBook = await api.getAllStock();
+var allStock = await api.getAllStock();
 var allLoans = await api.getAllLoans();
-var allMoviments = await api.getAllMoviments();
-var allPenalties = await api.getAllPenalties();
+var allMovements = await api.getAllMoviments();
+var allFines = await api.getAllPenalties();
 var allBooks = await api.getAllBooks();
 
-const loggedUser = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+const loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'));
 
-const formatador = new  Intl.DateTimeFormat('pt-BR', {
+const dateFormatter = new  Intl.DateTimeFormat('pt-BR', {
   dateStyle:'short',
   timeStyle:'short',
   timeZone: 'America/Sao_Paulo' 
 })
 
 
-var table_loan = {
+const loanTableConfig = {
     headers: ['ID','Usuário', 'Livro' ,'Data de Empréstimo', 'Data de Devolução', 'Status'],
     rows: allLoans.map(
         r => ({
             id: r.id,
             user: r.user.name.toUpperCase(),
             book: r.bookTitle.toUpperCase(),
-            loanDate:  formatador.format(new Date(r.loanDate)) ,
-            returnDate: formatador.format(new Date(r.returnDate)),
+            loanDate:  dateFormatter.format(new Date(r.loanDate)) ,
+            returnDate: dateFormatter.format(new Date(r.returnDate)),
             status: r.status
         })
     )
 }
 /* 
-var table_penalty = {
+const finesTableConfig = {
     headers: ['Usuário', 'Valor', 'Data de Multa', 'Status'],
     rows: [{ usuario: 'João Silva', valor: 'R$ 50,00', dataMulta: '01/10/2024', status: 'Pendente' },
         { usuario: 'Maria Oliveira', valor: 'R$ 30,00', dataMulta: '05/10/2024', status: 'Pago' },
@@ -69,24 +69,24 @@ var table_penalty = {
 
     
 
-var table_penalty = {
+const finesTableConfig = {
     headers:['ID','Usuário','Valor da Multa','Data de Multa', 'Data de Entrega do Livro','Status'],
-    rows: allPenalties.map(
+    rows: allFines.map(
         r =>({
             id: r.penaltyId,
             user: r.userName.toUpperCase(),
             amount: r.amount || "sem valor",
-            penaltyDate: formatador.format(new Date(r.penaltyDate)), 
-            returnDateLoan: formatador.format(new Date(r.returnloanDate)),
+            penaltyDate: dateFormatter.format(new Date(r.penaltyDate)), 
+            returnDateLoan: dateFormatter.format(new Date(r.returnloanDate)),
             status: r.statusPenalty
         })
     )
 }
 
 
-var table_stock = {
+const stockTableConfig = {
     headers: ['ID','Livro', 'Autor','Quantidade'],
-    rows: allStockBook.map(r => ({
+    rows: allStock.map(r => ({
         id: r.stockId,
         _bookId: r.book.bookId ?? r.book.bookid ?? r.id,
         title: r.book.title.toUpperCase(), 
@@ -113,10 +113,10 @@ var table_books= {
 
 var table_moviment = {
     headers: ['ID','Data de Criação','Usuário','Tipo do Usuário' ,'Livro', 'Quantidade', 'Tipo','Descrição'],
-    rows: allMoviments.map(
+    rows: allMovements.map(
         r=>({
             id:r.movimentId,
-            createdTime: formatador.format(new Date(r.createdTime)) || "sem data de criação",
+            createdTime: dateFormatter.format(new Date(r.createdTime)) || "sem data de criação",
             user: r.user.name.toUpperCase(),
             userType: r.user.role,
             book: r.book.title.toUpperCase(),
@@ -130,54 +130,54 @@ var table_moviment = {
 
 // async function refreshTables() {
 //     allLoans = await api.getAllLoans();
-//     allPenalties = await api.getAllPenalties();
-//     allStockBook = await api.getAllStock();
-//     allMoviments = await api.getAllMoviments();
+//     allFines = await api.getAllPenalties();
+//     allStock = await api.getAllStock();
+//     allMovements = await api.getAllMoviments();
 //     allBooks = await api.getAllBooks();
 
-//     if (document.getElementById('table-emprestimos')) {
-//         const container = document.getElementById('table-emprestimos');
+//     if (document.getElementById('table-loans')) {
+//         const container = document.getElementById('table-loans');
 //         container.innerHTML = '';
 //         const rows = allLoans.map(r => ({
 //             id: r.id,
 //             user: r.user.name.toUpperCase(),
 //             book: r.bookTitle.toUpperCase(),
-//             loanDate: formatador.format(new Date(r.loanDate)),
-//             returnDate: formatador.format(new Date(r.returnDate)),
+//             loanDate: dateFormatter.format(new Date(r.loanDate)),
+//             returnDate: dateFormatter.format(new Date(r.returnDate)),
 //             status: r.status
 //         }));
-//         container.appendChild(window.table({ headers: table_loan.headers, rows }));
+//         container.appendChild(window.table({ headers: loanTableConfig.headers, rows }));
 //     }
 
-//     if (document.getElementById('table-multas')) {
-//         const container = document.getElementById('table-multas');
+//     if (document.getElementById('table-fines')) {
+//         const container = document.getElementById('table-fines');
 //         container.innerHTML = '';
-//         const rows = allPenalties.map(r => ({
+//         const rows = allFines.map(r => ({
 //             id: r.penaltyId,
 //             user: r.userName.toUpperCase(),
 //             amount: r.amount || 'sem valor',
-//             penaltyDate: formatador.format(new Date(r.penaltyDate)),
-//             returnDateLoan: formatador.format(new Date(r.returnloanDate)),
+//             penaltyDate: dateFormatter.format(new Date(r.penaltyDate)),
+//             returnDateLoan: dateFormatter.format(new Date(r.returnloanDate)),
 //             status: r.statusPenalty
 //         }));
-//         container.appendChild(window.table({ headers: table_penalty.headers, rows }));
+//         container.appendChild(window.table({ headers: finesTableConfig.headers, rows }));
 //     }
 
-//     if (document.getElementById('table-estoque')) {
-//         const container = document.getElementById('table-estoque');
+//     if (document.getElementById('table-stock')) {
+//         const container = document.getElementById('table-stock');
 //         container.innerHTML = '';
-//         const rows = allStockBook.map(r => ({
+//         const rows = allStock.map(r => ({
 //             id: r.stockId,
 //             bookId: r.book.bookId ?? r.book.bookid,
 //             title: r.book.title.toUpperCase(),
 //             author: r.book.authors.map(a => a.name).join(',') || 'Sem author',
 //             qtd: r.qtd
 //         }));
-//         container.appendChild(window.table_with_edit({ headers: table_stock.headers, rows }, window.openEditBookModal,'8px','40px','10px','10px','6px'));
+//         container.appendChild(window.table_with_edit({ headers: stockTableConfig.headers, rows }, window.openEditBookModal,'8px','40px','10px','10px','6px'));
 //     }
 
-//     if (document.getElementById('table-livros')) {
-//         const container = document.getElementById('table-livros');
+//     if (document.getElementById('table-books')) {
+//         const container = document.getElementById('table-books');
 //         container.innerHTML = '';
 //         const rows = allBooks.map(r => ({
 //             id: r.bookid,
@@ -188,12 +188,12 @@ var table_moviment = {
 //         container.appendChild(window.table_with_edit({ headers: table_books.headers, rows },window.openEditBookModal,'8px','40px','10px','10px','6px'));
 //     }
 
-//     if (document.getElementById('table-movimentacoes')) {
-//         const container = document.getElementById('table-movimentacoes');
+//     if (document.getElementById('table-movements')) {
+//         const container = document.getElementById('table-movements');
 //         container.innerHTML = '';
-//         const rows = allMoviments.map(r => ({
+//         const rows = allMovements.map(r => ({
 //             id: r.movimentId,
-//             createdTime: formatador.format(new Date(r.createdTime)),
+//             createdTime: dateFormatter.format(new Date(r.createdTime)),
 //             user: r.user.name.toUpperCase(),
 //             userType: r.user.role,
 //             book: r.book.title.toUpperCase(),
@@ -220,7 +220,7 @@ window.table = function(tableData) {
     tableData.headers.forEach(headerText => {
         let th = document.createElement('th');
         th.textContent = headerText;
-        Object.assign(th.style, style_table.header);
+        Object.assign(th.style, tableStyles.header);
         headerRow.appendChild(th);
     });
 
@@ -232,13 +232,13 @@ window.table = function(tableData) {
 
     tableData.rows.forEach((rowData, index) => {
         let row = document.createElement('tr');
-        Object.assign(row.style, style_table.row);
+        Object.assign(row.style, tableStyles.row);
 
       
         Object.values(rowData).forEach(value => {
         let cell = document.createElement('td');
         cell.textContent = value;
-        Object.assign(cell.style, style_table.cell);
+        Object.assign(cell.style, tableStyles.cell);
 
         row.appendChild(cell);
 });
@@ -310,7 +310,7 @@ window.table_with_actions = function(tableData) {
     tableData.headers.forEach(headerText => {
         let th = document.createElement('th');
         th.textContent = headerText;
-        Object.assign(th.style, style_table.header);
+        Object.assign(th.style, tableStyles.header);
         headerRow.appendChild(th);
     });
 
@@ -322,7 +322,7 @@ window.table_with_actions = function(tableData) {
 
     tableData.rows.forEach((rowData, index) => {
         let row = document.createElement('tr');
-        Object.assign(row.style, style_table.row);
+        Object.assign(row.style, tableStyles.row);
 
 
         tbody.appendChild(row);
@@ -338,7 +338,7 @@ window.table_with_actions = function(tableData) {
     return container;
 }
 
-window.table_with_edit = function(tableData, onEdit, btnWidth='16px', btnHeight='16px', btnPadding='2px',style_table_edit = style_table) {
+window.table_with_edit = function(tableData, onEdit, btnWidth='16px', btnHeight='16px', btnPadding='2px',tableStyles_edit = tableStyles) {
     let tbl = document.createElement('table');
     tbl.style.width = 'calc(100% - 120px)';
     tbl.style.borderCollapse = 'collapse';
@@ -350,13 +350,13 @@ window.table_with_edit = function(tableData, onEdit, btnWidth='16px', btnHeight=
     tableData.headers.forEach(headerText => {
         let th = document.createElement('th');
         th.textContent = headerText;
-        Object.assign(th.style, style_table_edit.header);
+        Object.assign(th.style, tableStyles_edit.header);
         headerRow.appendChild(th);
     });
 
     let thActions = document.createElement('th');
     thActions.textContent = 'Ações';
-    Object.assign(thActions.style, style_table_edit.header);
+    Object.assign(thActions.style, tableStyles_edit.header);
     headerRow.appendChild(thActions);
 
     thead.appendChild(headerRow);
@@ -366,18 +366,18 @@ window.table_with_edit = function(tableData, onEdit, btnWidth='16px', btnHeight=
 
     tableData.rows.forEach((rowData, index) => {
         let row = document.createElement('tr');
-        Object.assign(row.style, style_table.row);
+        Object.assign(row.style, tableStyles.row);
 
         Object.keys(rowData).forEach(key => {
             if (key.startsWith('_')) return;
             let cell = document.createElement('td');
             cell.textContent = rowData[key];
-            Object.assign(cell.style, style_table_edit.cell);
+            Object.assign(cell.style, tableStyles_edit.cell);
             row.appendChild(cell);
         });
 
         let actionsCell = document.createElement('td');
-        Object.assign(actionsCell.style, style_table_edit.cell);
+        Object.assign(actionsCell.style, tableStyles_edit.cell);
 
         let btn = document.createElement('button');
         btn.innerHTML = `
@@ -391,7 +391,7 @@ window.table_with_edit = function(tableData, onEdit, btnWidth='16px', btnHeight=
 
         btn.style.padding = btnPadding;
         btn.style.border = '1px solid rgba(0,0,0,0.08)';
-        btn.style.backgroundColor = 'var(--verde-medio)';
+        btn.style.backgroundColor = 'var(--color-mid-green)';
         btn.style.borderRadius = '4px';
         btn.style.cursor = 'pointer';
         btn.style.display = 'inline-flex';
@@ -403,11 +403,11 @@ window.table_with_edit = function(tableData, onEdit, btnWidth='16px', btnHeight=
         btn.style.color ='white'
 
         btn.onmouseover = () => {
-            btn.style.backgroundColor = 'var(--verde-escuro)';
+            btn.style.backgroundColor = 'var(--color-dark-green)';
         };
 
         btn.onmouseout = () => {
-            btn.style.backgroundColor = 'var(--verde-medio)';
+            btn.style.backgroundColor = 'var(--color-mid-green)';
         };
 
         btn.onclick = () => {
@@ -435,12 +435,12 @@ window.openEditMoviment = async function(movimentData,index,rowElement){
 
     const modalHTML = ` 
         <div class="modal" id="${uid}">
-            <div class="c-modal modal-movimentacoes"> 
-              <div class="b-modal b-modal-movimentacoes ">
+            <div class="c-modal modal-movements"> 
+              <div class="b-modal b-modal-movements ">
                 
                 <h1>Editar Movimentação N°${movimentData.id}</h1>
 
-                <div class="f-input-modal f-input-modal-moviment">
+                <div class="f-input-modal modal-movements-field">
                     <label>Quantidade</label>
 
                     <input 
@@ -451,10 +451,10 @@ window.openEditMoviment = async function(movimentData,index,rowElement){
                     >
                 </div>
 
-                <div class="f-input-modal f-input-modal-moviment">
+                <div class="f-input-modal modal-movements-field">
                     <label>Tipo da Movimentação</label>
 
-                    <select id="type-${uid}" class="select-moviment-books">
+                    <select id="type-${uid}" class="select-movement-books">
 
                         <option 
                             value="ENTRADA"
@@ -473,7 +473,7 @@ window.openEditMoviment = async function(movimentData,index,rowElement){
                     </select>
                 </div>
 
-                <div class="f-input-modal f-input-modal-moviment">
+                <div class="f-input-modal modal-movements-field">
                     <label>Descrição</label>
 
                     <input 
@@ -483,13 +483,13 @@ window.openEditMoviment = async function(movimentData,index,rowElement){
                     >
                 </div>
 
-                <div class="c-modal-btn c-btn-act-moviments">
+                <div class="c-modal-btn modal-movements-actions">
 
                     <button 
                         type="button" 
                         id="btn-cancelar-${uid}"
                     >
-                        Cancelar
+                        Cancel
                     </button>
 
                     <button 
@@ -577,8 +577,8 @@ window.openEditStockModal = function(stockData, index, rowElement) {
 
     const modalHTML = `
     <div class="modal" id="${uid}">
-        <div class="c-modal modal-movimentacoes" >
-            <div class="b-modal b-modal-movimentacoes">
+        <div class="c-modal modal-movements" >
+            <div class="b-modal b-modal-movements">
                 <h1>Editar Estoque</h1>
                 
                 <div class="f-input-modal">
@@ -602,7 +602,7 @@ window.openEditStockModal = function(stockData, index, rowElement) {
                 </div>
 
                 <div class="c-modal-btn">
-                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" id="btn-cancelar-${uid}">Cancel</button>
                     <button type="button" id="btn-salvar-${uid}">Salvar</button>
                 </div>
             </div>
@@ -666,32 +666,32 @@ window.openAddMoviment = async function() {
     });
 
       let selectedBooks = `
-     <select name="" id="select-${uid}" class="select-moviment-books">
+     <select name="" id="select-${uid}" class="select-movement-books">
             ${options}
      </select>
     `;
     
     const modalHTML =`
     <div class="modal" id="${uid}">
-        <div class="c-modal modal-movimentacoes">
-            <div class="b-modal b-modal-movimentacoes">
+        <div class="c-modal modal-movements">
+            <div class="b-modal b-modal-movements">
                 <h1>Adicionar Movimentação</h1>
 
 
-                 <div class="f-input-modal  f-input-modal-moviment">
+                 <div class="f-input-modal  modal-movements-field">
                 <label> Selecionar Livro</label>
                 ${selectedBooks}
                 </div>
-                <div class="f-input-modal f-input-modal-moviment">
+                <div class="f-input-modal modal-movements-field">
                     <label>Quantidade</label>
                     <input type="number">
                 </div>
-                <div class="f-input-modal f-input-modal-moviment">
+                <div class="f-input-modal modal-movements-field">
                     <label>Descrição</label>
                     <input type="text">
                 </div>
-                <div class="c-modal-btn c-btn-act-moviments">
-                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                <div class="c-modal-btn modal-movements-actions">
+                    <button type="button" id="btn-cancelar-${uid}">Cancel</button>
                     <button type="button" id="btn-salvar-${uid}">Salvar</button>
                 </div>
             </div>
@@ -708,7 +708,7 @@ window.openAddMoviment = async function() {
 
 
 window.openEditBookModal = function(BookData, index, rowElement) {
-    const loggedUser = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+    const loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'));
     const uid = `modal-edit-book-${BookData.bookId}`;
 
     const authorsList = Array.isArray(BookData.authors) 
@@ -727,7 +727,7 @@ window.openEditBookModal = function(BookData, index, rowElement) {
 
     const modalHTML = `
     <div class="modal" id="${uid}">
-        <div class="c-modal modal-livro-edit">
+        <div class="c-modal modal-book-edit">
             <div class="b-modal">
                 <h1>Editar Livro N°${BookData.id}</h1>
                 
@@ -754,7 +754,7 @@ window.openEditBookModal = function(BookData, index, rowElement) {
                 </div>
 
                 <div class="c-modal-btn">
-                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" id="btn-cancelar-${uid}">Cancel</button>
                     <button type="button" id="btn-salvar-${uid}">Salvar</button>
                 </div>
             </div>
@@ -800,27 +800,27 @@ window.openEditBookModal = function(BookData, index, rowElement) {
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 };
 
-if (document.getElementById('table-emprestimos')) {
-    document.getElementById('table-emprestimos').appendChild(table(table_loan));
+if (document.getElementById('table-loans')) {
+    document.getElementById('table-loans').appendChild(table(loanTableConfig));
     if (window.setupLoanSearch) window.setupLoanSearch(allLoans);
 }
 
-if (document.getElementById('table-multas')) {
-    document.getElementById('table-multas').appendChild(table(table_penalty));
-    if (window.setupPenaltySearch) window.setupPenaltySearch(allPenalties);
+if (document.getElementById('table-fines')) {
+    document.getElementById('table-fines').appendChild(table(finesTableConfig));
+    if (window.setupPenaltySearch) window.setupPenaltySearch(allFines);
 }
 
-if (document.getElementById('table-estoque')) {
-    document.getElementById('table-estoque').appendChild(table_with_edit(table_stock, window.openEditStockModal));
-    if (window.setupStockSearch) window.setupStockSearch(allStockBook);
+if (document.getElementById('table-stock')) {
+    document.getElementById('table-stock').appendChild(table_with_edit(stockTableConfig, window.openEditStockModal));
+    if (window.setupStockSearch) window.setupStockSearch(allStock);
 }
 
-if (document.getElementById('table-movimentacoes')) {
-    document.getElementById('table-movimentacoes').appendChild(table_with_edit(table_moviment, window.openEditMoviment));
-    if (window.setupMovementSearch) window.setupMovementSearch(allMoviments);
+if (document.getElementById('table-movements')) {
+    document.getElementById('table-movements').appendChild(table_with_edit(table_moviment, window.openEditMoviment));
+    if (window.setupMovementSearch) window.setupMovementSearch(allMovements);
 }
 
-if (document.getElementById('table-livros')) {
-    document.getElementById('table-livros').appendChild(table_with_edit(table_books, window.openEditBookModal));
+if (document.getElementById('table-books')) {
+    document.getElementById('table-books').appendChild(table_with_edit(table_books, window.openEditBookModal));
     if (window.setupBooksSearch) window.setupBooksSearch(allBooks);
 }

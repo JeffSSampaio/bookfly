@@ -1,18 +1,18 @@
 
-.b-register-book{
+.register-book-wrapper{
     display: flex;
     flex-direction: column;
 }
 
-.b-register-book h1{
+.register-book-wrapper h1{
     margin-top: 30px;
     text-align: center;
-    font-family: var(--font-principal);
+    font-family: var(--font-primary);
     font-weight: 800;
-    color: var(--verde-escuro);
+    color: var(--color-dark-green);
 }
 
-.c-register-book-btn{
+.register-book-actions{
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
@@ -21,15 +21,15 @@
     margin: 2% 20%;
     
 }
-.b-register-book-btn{
-    background-color: var(--verde-escuro);
+.register-book-wrapper-btn{
+    background-color: var(--color-dark-green);
     border: none;
     border-radius: 20px;
     text-align: center;
-    font-family: var(--font-principal);
+    font-family: var(--font-primary);
     font-weight: 800;
     font-size: 19px;
-    color: var(--marfin);
+    color: var(--color-ivory);
     padding: 10px;
     transition: background-color 1s ease-out,
     color 1s ease-out
@@ -39,19 +39,19 @@
 
 
 
-.b-register-book-input{
+.register-book-wrapper-input{
     padding: 13px;
-    background-color: var(--verde-medio);
+    background-color: var(--color-mid-green);
     border-radius: 20px;
     border: none;
     font: 700;
-    color: var(--marfin);
+    color: var(--color-ivory);
     box-shadow: var(--box-shadow);
 }
 
-.b-register-book-input::placeholder{
-    font-family: var(--font-principal);
-    color: var(--cor-marrom);
+.register-book-wrapper-input::placeholder{
+    font-family: var(--font-primary);
+    color: var(--color-brown);
     font-size: 15px;
     font-weight: bold;
     opacity: 90%;
@@ -59,20 +59,20 @@
 
 
 
-.b-register-book-btn:hover{
+.register-book-wrapper-btn:hover{
     cursor: pointer;
-    color: var(--cor-branco-fraco);
-    background-color: var(--cor-marrom);
+    color: var(--color-off-white);
+    background-color: var(--color-brown);
     transition: all 1s ease-in;
 }
 
 
-.content-register-book{
+.register-book-content{
     padding: 20px;
     margin: 1px 20%;
     border-radius: 20px;
     background-color: white;
 }
 .c-book{
-    background-color: var(--marfin);
+    background-color: var(--color-ivory);
 }

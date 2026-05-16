@@ -1,4 +1,4 @@
-.c-profile{
+.profile-container{
     display: flex;
     flex-direction: column;
 
@@ -6,11 +6,11 @@
     border: none;
     padding: 20px;
     border-radius: 20px;
-    background-color: var(--verde-escuro);
+    background-color: var(--color-dark-green);
     box-shadow: var(--box-shadow);
 }
 
-.c-profile h3{
+.profile-container h3{
     margin: 8px;
     text-align: left;
     color: white;
@@ -19,7 +19,7 @@
      transition: transform 1s ease-out;
 }
 
-.c-profile h3:hover{
+.profile-container h3:hover{
 
     transform: scale(1.05);
     transition: all 1s ease-in;
@@ -29,16 +29,16 @@
     margin: 30px;
     border: none;
     padding: 10px;
-    color: var(--marfin);
-    background-color: var(--verde-medio);
+    color: var(--color-ivory);
+    background-color: var(--color-mid-green);
     font-weight: 700;
-    font-family: var(--fonte-principal);
+    font-family: var(--font-primary);
     font-size: 30px;
     border-radius: 20px;
     transition: background-color 1s ease-in-out;
 }
 .btn-back:hover{
-    background-color: var(--verde-escuro);
+    background-color: var(--color-dark-green);
     transition: all 1s ease-in-out;
 }
 
@@ -66,7 +66,7 @@
 }
 
 .profile-label, .profile-value {
-    font-family: var(--fonte-principal);
+    font-family: var(--font-primary);
     font-weight: 900;
    
 }

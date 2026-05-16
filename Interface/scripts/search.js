@@ -1,5 +1,5 @@
 'use strict';
-let originalTableData = {};
+let tableDataCache = {};
 
 
 function searchTable(searchTerm, tableData, fieldsToSearch) {
@@ -30,24 +30,24 @@ function renderFilteredTable(tableId, filteredData, tableConfig) {
     tbl.style.borderCollapse = 'collapse';
     tbl.style.margin = ' 20px 60px';
 
-    const style_table = {
+    const tableStyles = {
         header: {
-            backgroundColor: 'var(--verde-escuro)',
-            color: 'var(--marfin)',
+            backgroundColor: 'var(--color-dark-green)',
+            color: 'var(--color-ivory)',
             fontWeight: 'bold',
             textAlign: 'center',
             padding: '10px'
         },
         cell: {
-            border: '1px solid var(--verde-escuro)',
+            border: '1px solid var(--color-dark-green)',
             padding: '10px',
             textAlign: 'center',
-            color: 'var(--verde-escuro)',
+            color: 'var(--color-dark-green)',
             fontWeight: '800'
         },
         row: {
-            backgroundColor: 'var(--marfin)',
-            color: 'var(--verde-escuro)'
+            backgroundColor: 'var(--color-ivory)',
+            color: 'var(--color-dark-green)'
         }
     };
 
@@ -57,7 +57,7 @@ function renderFilteredTable(tableId, filteredData, tableConfig) {
     tableConfig.headers.forEach(headerText => {
         const th = document.createElement('th');
         th.textContent = headerText;
-        Object.assign(th.style, style_table.header);
+        Object.assign(th.style, tableStyles.header);
         headerRow.appendChild(th);
     });
     thead.appendChild(headerRow);
@@ -67,12 +67,12 @@ function renderFilteredTable(tableId, filteredData, tableConfig) {
     const tbody = document.createElement('tbody');
     filteredData.forEach(rowData => {
         const row = document.createElement('tr');
-        Object.assign(row.style, style_table.row);
+        Object.assign(row.style, tableStyles.row);
 
         Object.values(rowData).forEach(value => {
             const cell = document.createElement('td');
             cell.textContent = value;
-            Object.assign(cell.style, style_table.cell);
+            Object.assign(cell.style, tableStyles.cell);
             row.appendChild(cell);
         });
 
@@ -104,7 +104,7 @@ window.setupLoanSearch = function(allLoans) {
         status: r.status
     }));
 
-    originalTableData.loans = loansData;
+    tableDataCache.loans = loansData;
 
     const searchInput = document.querySelector('.search-input-container input');
     if (searchInput && searchInput.id === '') {
@@ -115,7 +115,7 @@ window.setupLoanSearch = function(allLoans) {
     if (searchLoanInput) {
         searchLoanInput.addEventListener('input', (e) => {
             const filtered = searchTable(e.target.value, loansData, ['user', 'book', 'status']);
-            renderFilteredTable('table-emprestimos', filtered, tableConfig);
+            renderFilteredTable('table-loans', filtered, tableConfig);
         });
     }
 };
@@ -141,7 +141,7 @@ window.setupPenaltySearch = function(allPenalties) {
         status: r.statusPenalty
     }));
 
-    originalTableData.penalties = penaltiesData;
+    tableDataCache.penalties = penaltiesData;
 
     const searchInput = document.querySelector('.search-input-container input');
     if (searchInput && searchInput.id === '') {
@@ -152,7 +152,7 @@ window.setupPenaltySearch = function(allPenalties) {
     if (searchPenaltyInput) {
         searchPenaltyInput.addEventListener('input', (e) => {
             const filtered = searchTable(e.target.value, penaltiesData, ['user', 'status', 'amount','id']);
-            renderFilteredTable('table-multas', filtered, tableConfig);
+            renderFilteredTable('table-fines', filtered, tableConfig);
         });
     }
 };
@@ -170,7 +170,7 @@ window.setupStockSearch = function(allStockBook) {
         qtd: r.qtd
     }));
 
-    originalTableData.stock = stockData;
+    tableDataCache.stock = stockData;
 
     const searchContainer = document.querySelector('.search-input-container');
     if (searchContainer && !searchContainer.querySelector('input')) {
@@ -181,7 +181,7 @@ window.setupStockSearch = function(allStockBook) {
         searchContainer.appendChild(searchInput);
 
         const icon = document.createElement('img');
-        icon.src = '/Interface/assets/iconlupa.svg';
+        icon.src = '/Interface/assets/iconSearch.svg';
         icon.alt = 'Buscar';
         searchContainer.appendChild(icon);
     }
@@ -190,7 +190,7 @@ window.setupStockSearch = function(allStockBook) {
     if (searchStockInput) {
         searchStockInput.addEventListener('input', (e) => {
             const filtered = searchTable(e.target.value, stockData, ['title', 'author','id']);
-            const container = document.getElementById('table-estoque');
+            const container = document.getElementById('table-stock');
              if (!container) return;
             container.innerHTML = '';
              container.appendChild(
@@ -199,7 +199,7 @@ window.setupStockSearch = function(allStockBook) {
                     window.openEditBookModal
                 )
             );
-            // renderFilteredTable('table-estoque', filtered, tableConfig);
+            // renderFilteredTable('table-stock', filtered, tableConfig);
         });
     }
 };
@@ -226,7 +226,7 @@ window.setupMovementSearch = function(allMoviments) {
         description: r.description || ''
     }));
 
-    originalTableData.movements = movementsData;
+    tableDataCache.movements = movementsData;
 
     const searchInput = document.querySelector('.search-input-container input');
     if (searchInput && searchInput.id === '') {
@@ -237,7 +237,7 @@ window.setupMovementSearch = function(allMoviments) {
     if (searchMovementInput) {
         searchMovementInput.addEventListener('input', (e) => {
             const filtered = searchTable(e.target.value, movementsData, ['id','createdTime','user','type','book','qtd', 'description']);
-                const container = document.getElementById('table-movimentacoes');
+                const container = document.getElementById('table-movements');
                 if (!container) return;
             container.innerHTML = '';
              container.appendChild(
@@ -264,7 +264,7 @@ window.setupBooksSearch = function(allBooks) {
         genders: r.genders
     }));
 
-    originalTableData.books = booksData;
+    tableDataCache.books = booksData;
 
     const searchInput = document.querySelector('.search-input-container input');
     if (searchInput && searchInput.id === '') {
@@ -275,7 +275,7 @@ window.setupBooksSearch = function(allBooks) {
     if (searchBooksInput) {
         searchBooksInput.addEventListener('input', (e) => {
             const filtered = searchTable(e.target.value, booksData, ['name', 'authors', 'genders','id']);
-              const container = document.getElementById('table-livros');
+              const container = document.getElementById('table-books');
             if (!container) return;
             container.innerHTML = '';
             container.appendChild(

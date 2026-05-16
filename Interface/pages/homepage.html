@@ -7,14 +7,14 @@
    <link rel="stylesheet" href="/Interface/styles/h-navbar.css">
    <link rel="stylesheet" href="/Interface/styles/root.css">
    <link rel="stylesheet" href="/Interface/styles/modal.css">
-   <link rel="stylesheet" href="/Interface/styles/card-livro.css">
+   <link rel="stylesheet" href="/Interface/styles/card-loan.css">
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="stylesheet" href="/Interface/styles/homepage.css">
-    <link rel="stylesheet" href="/Interface/styles/modal-emprestimo.css">
+    <link rel="stylesheet" href="/Interface/styles/modal-loan.css">
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
  
-    <title>Home</title>
+    <title>BookFly - Home</title>
 </head>
 <body>
 
@@ -22,7 +22,7 @@
         <div id="menu-content" class="body-menu">
             <div class="menu-header">
                 <span  id="close-menu">
-                    <img class="icon-close" src="/Interface/assets/iconclose.svg" alt="" srcset="">
+                    <img class="icon-close" src="/Interface/assets/iconClose.svg" alt="" srcset="">
                 </span>
                 <h1>Menu</h1>
             </div>
@@ -52,18 +52,18 @@
 
         <div class="sec-1">
         
-        <div class="s-emprestimo-body">
-            <div class="s-emprestimo-container">
-                <h1 class="s-titulo-emprestimo">Emprestimo(s)</h1>
-                 <div class="s-emprestimo" id="emprestimo">
+        <div class="home-loans-body">
+            <div class="home-loans-section">
+                <h1 class="loan-section-title">Emprestimo(s)</h1>
+                 <div class="home-loans-grid" id="loans-container">
 
                 </div>
                  
             </div>
-         <div  class="s-emprestimo-container">
-                <h1 class="s-titulo-emprestimo">Devolucão</h1>
+         <div  class="home-loans-section">
+                <h1 class="loan-section-title">Devolucão</h1>
                
-                <div class="s-emprestimo" id="devolucao">
+                <div class="home-loans-grid" id="returns-container">
                     
                 </div>
                  
@@ -73,12 +73,9 @@
          
     </div>
     
-   <footer>
-      
-    </footer>
 
 <script src="/Interface/scripts/authGuard.js"></script>
-<script type="module" src="/Interface/scripts/s-emprestimos.js"></script>
+<script type="module" src="/Interface/scripts/home-loans.js"></script>
 <script src="/Interface/scripts/h-navbar.js"></script>
 <script type="module" src="/Interface/scripts/modal.js"></script>
 </body>

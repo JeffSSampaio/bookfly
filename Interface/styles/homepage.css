@@ -2,7 +2,7 @@
 /* Background */
 
 body {
-    background-color: var(--marfin);
+    background-color: var(--color-ivory);
     display: flex;         
     flex-direction: column;  
     min-height: 100vh;      
@@ -19,7 +19,7 @@ body {
  
 
 
-.btn-emprestimo-container{
+.btn-loan-container{
     display: flex;
     align-items: end;
     justify-content: end;
@@ -28,19 +28,19 @@ body {
    
 }
 
-.btn-emprestimo{
+.btn-loan{
     padding: 15px;
     border-radius: 20px;
     border: none;
     margin: 30px 20px;
-    background-color: var(--verde-escuro);
+    background-color: var(--color-dark-green);
      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
-.btn-emprestimo span{
-    font-family: var(--fonte-principal);
+.btn-loan span{
+    font-family: var(--font-primary);
     font-weight: 700;
     font-size: 20px;
-    color: var(--marfin);
+    color: var(--color-ivory);
 }
 
 

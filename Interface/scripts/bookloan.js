@@ -8,7 +8,7 @@ const userMessage = document.getElementById('user-message');
 
 
 
-const loggedUser = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+const loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'));
 const returnDate = new Date();
 returnDate.setDate(returnDate.getDate() + 7);
 const returnDateString = returnDate.toISOString();
@@ -32,7 +32,7 @@ function renderBooks(stockList) {
   emptyMessage.classList.add('hidden');
 
   if (!filtered.length) {
-    emptyMessage.textContent = `Nenhum livro chamado "${textSearched}" encontrado `;
+    emptyMessage.textContent = `No book called "${textSearched}" found `;
     emptyMessage.classList.remove('hidden');
     return;
   }
@@ -48,7 +48,7 @@ function renderBooks(stockList) {
     
     const isAlreadyLoaned = loanedBookIds.has(book.bookId);
     
-    const returnText = isAlreadyLoaned ? 'Você fez o empréstimo desse livro' : 'Disponível para empréstimo';
+    const returnText = isAlreadyLoaned ? 'You have borrowed this book' : 'Available for loan';
    const loanObject = allLoans.find(l => 
         (l.book?.bookId || l.bookId) === book.bookId && l.statusLoan !== 'FINALIZADO'
     );
@@ -94,7 +94,7 @@ function renderBooks(stockList) {
 
 async function loadBooks() {
   if (!loggedUser?.id) {
-    userMessage.textContent = 'Faça login para ver os livros e solicitar empréstimos.';
+    userMessage.textContent = 'log para acessar livros e solicitar empréstimos.';
     loadingMessage.classList.add('hidden');
     return;
   }
@@ -117,7 +117,7 @@ async function loadBooks() {
     renderBooks(allStock);
     loadingMessage.classList.add('hidden');
   } catch (error) {
-    loadingMessage.textContent = 'Erro ao carregar livros. Tente novamente mais tarde.';
+    loadingMessage.textContent = 'falha ao carregar livros. Tente novamente mais tarde.';
     console.error(error);
   }
 }
@@ -140,7 +140,7 @@ bookGrid.addEventListener('click', async event => {
         const loanId = cancelLoan.dataset.loanId;
         
         if (!loanId || loanId === "undefined") {
-            throw new Error("ID do empréstimo inválido.");
+            throw new Error("Invalid loan ID.");
         }
 
         await api.cancelLoan(loanId);
@@ -150,9 +150,9 @@ bookGrid.addEventListener('click', async event => {
         allLoans = allLoans.filter(l => String(l.id || l.loanId) !== String(loanId));
         
         renderBooks(allStock); 
-        alert('Empréstimo cancelado com sucesso.');
+        alert('Emprestimo cancelado com sucesso.');
     } catch (error) {
-        alert('Erro ao Cancelar Emprestimo: ' + (error.message || error));
+        alert('Error cancelling loan: ' + (error.message || error));
         console.error(error);
         cancelLoan.disabled = false;
         cancelLoan.style.opacity = '1';
@@ -166,7 +166,7 @@ bookGrid.addEventListener('click', async event => {
 
     try {
         const loanResponse = await api.createLoan(bookId, loggedUser.id, returnDateString);
-        console.log('loanResponse:', loanResponse);
+
         loanedBookIds.add(bookId);
         allLoans.push({
           ...loanResponse,
@@ -175,9 +175,9 @@ bookGrid.addEventListener('click', async event => {
               });
         
         renderBooks(allStock); 
-        alert('Empréstimo realizado com sucesso.');
+        alert('Emprestimo criado com sucesso.');
     } catch (error) {
-        alert('Erro ao fazer empréstimo: ' + (error.message || error));
+        alert('Error creating loan: ' + (error.message || error));
         console.error(error);
         button.disabled = false;
         button.style.opacity = '1';

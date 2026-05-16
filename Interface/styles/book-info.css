@@ -1,5 +1,5 @@
 
-.c-book-info{
+.book-info-card{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,16 +13,16 @@
 
 
 
-.c-book-info img{
+.book-info-card img{
     margin: 30px;
     width: 250px;
     height: 300px;
-    border: 4px solid var(--ambar-dourado);
+    border: 4px solid var(--color-golden);
     border-radius: 20px;
     box-shadow: var(--box-shadow);
 }
 
-.s-book-status{
+.book-status-row{
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -30,16 +30,16 @@
     padding: 0;
     gap: 1px;
     
-    color: var(--verde-medio);
+    color: var(--color-mid-green);
 }
-.s-book-status p{
+.book-status-row p{
     background-color: white;
 }
-.s-book-status h2{
+.book-status-row h2{
     margin: 0;
 }
 
-.b-book-info{
+.book-info-body{
     margin: 20px;
     padding: 0 50px;
     border-radius: 20px;
@@ -47,56 +47,56 @@
     justify-content: center;
     flex-direction: column;
     box-shadow: var(--box-shadow);
-    background-color: var(--marfin);
+    background-color: var(--color-ivory);
 }
 
 
 
 
-.t-author {
+.book-author-title {
     text-align: center;
     margin: 0;
-    color: var(--verde-medio);
+    color: var(--color-mid-green);
     font-weight: 700;
      margin: 2px;
 }
 
-.t-book{
-    color: var(--verde-escuro);
+.book-main-title{
+    color: var(--color-dark-green);
     text-align: center;
     font-weight: 700;
     margin: 10px;
 }
 
-.s-field-status{
+.book-status-badge{
     padding: 8px 10px;
     margin: 1px 10px;
     text-align: center;
-    font-family: var(--fonte-principal);
+    font-family: var(--font-primary);
     font-weight: 700;
     background-color: white;
     flex-wrap: wrap;
-    color: var(--verde-vivo);
+    color: var(--color-bright-green);
     border-radius: 20px;
 }
 
 
 
-.s-book{
+.book-summary{
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin: 0;
 }
 
-.s-book h2{
+.book-summary h2{
     text-align: left;
-    color: var(--verde-medio);
+    color: var(--color-mid-green);
     margin: 0;
     padding: 0;
 }
 
-.s-book p{
+.book-summary p{
     margin: 10px 10px;
     padding: 5px;
 }
@@ -106,15 +106,15 @@
     margin: 30px 70px;
     border: none;
     padding: 10px;
-    color: var(--marfin);
-    background-color: var(--verde-escuro);
+    color: var(--color-ivory);
+    background-color: var(--color-dark-green);
     font-weight: 700;
     font-size: 30px;
     border-radius: 20px;
     transition: background-color 1s ease-in-out;
 }
 .btn-back:hover{
-    background-color: var(--verde-medio);
-    color: var(--marfin);
+    background-color: var(--color-mid-green);
+    color: var(--color-ivory);
     transition: all 1s ease-in-out;
 }

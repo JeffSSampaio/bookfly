@@ -1,10 +1,10 @@
-.modal-movimentacoes {
+.modal-movements {
     width: 19%;
     height: 55%;
     margin: 8% auto;
 }
 
-.b-modal-movimentacoes {
+.modal-movements-body {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -12,11 +12,11 @@
     padding: 10px;
 }
 
-.b-modal-movimentacoes h1{
+.modal-movements-body h1{
     font-size: 20px;
 }
 
-.f-input-modal-moviment {
+.modal-movements-field {
     width: 100%;
     max-width: 300px;
     display: flex;
@@ -25,40 +25,40 @@
     margin-bottom: 15px;
 }
 
-.f-input-modal-moviment label {
+.modal-movements-field label {
     width: 100%;
     text-align: left;
     margin-bottom: 5px;
 }
 
-.select-moviment-books, 
-.f-input-modal-moviment input {
+.select-movement-books, 
+.modal-movements-field input {
     width: 100%;
     box-sizing: border-box;
     border-radius: 10px;
-    font-family: var(--font-principal);
+    font-family: var(--font-primary);
 }
 
-.select-moviment-books {
+.select-movement-books {
     outline: none;
     padding: 10px 20px;
     font-weight: 800;
-    background-color: var(--verde-vivo);
+    background-color: var(--color-bright-green);
     color: white;
     border: none;
     appearance: none;
 }
 
-.f-input-modal-moviment input {
+.modal-movements-field input {
     padding: 10px 10px;
     border: 1px solid #ccc;
     height: 40px;
     color: white;
-    font-family: var(--font-principal);
+    font-family: var(--font-primary);
     font-weight: 700;
 }
 
-.c-btn-act-moviments{
+.modal-movements-actions{
     display: flex;
     flex-direction: row;
     justify-content: space-between;

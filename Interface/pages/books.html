@@ -5,23 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="/Interface/styles/h-navbar.css">
     <link rel="stylesheet" href="/Interface/styles/root.css">
-   <link rel="stylesheet" href="/Interface/styles/modal-livros.css">
+   <link rel="stylesheet" href="/Interface/styles/modal-books.css">
     <link rel="stylesheet" href="/Interface/styles/modal.css">
     <link rel="stylesheet" href="/Interface/styles/table.css">
-     <link rel="stylesheet" href="/Interface/styles/table-livro.css">
+     <link rel="stylesheet" href="/Interface/styles/table-books.css">
     <link rel="stylesheet" href="/Interface/styles/book-register.css">
  <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
  
-    <title>Livros</title>
+    <title>BookFly - Books</title>
 </head>
 <body>
 
     <div id="h-navbar-right" class="menu-right-container">
         <div id="menu-content" class="body-menu">
             <div class="menu-header">
-               <img  id="close-menu" src="/Interface/assets/iconclose.svg" alt="" srcset="">
+               <img  id="close-menu" src="/Interface/assets/iconClose.svg" alt="" srcset="">
                 <h1>Menu</h1>
             </div>
         </div>
@@ -47,25 +47,23 @@
             <div class="table-title-c">
                 <h1>Livros</h1>
             </div>
-            <div class="c-btn-book">
+            <div class="books-actions">
                   <div class="search-input-container">
                
                 <input type="search" name="" id="" placeholder="Buscar">
-                <img src="/Interface/assets/iconlupa.svg" alt="" srcset="">
+                <img src="/Interface/assets/iconSearch.svg" alt="" srcset="">
             </div>
                 <button onclick="openRegisterBook()">
                 Registrar Livro
                 </button>
             </div>
-            <div id="table-livros"></div>
+            <div id="table-books"></div>
         </div>
             
     </div>
 
     </div>
-         <footer>
 
-        </footer>
         <script src="/Interface/scripts/authGuard.js"></script>
         <script src="/Interface/scripts/search.js"></script>
         <script type="module" src="/Interface/scripts/table.js"></script>

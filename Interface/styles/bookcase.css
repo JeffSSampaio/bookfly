@@ -7,28 +7,28 @@
     margin: 80px 10px 80px;
 }
 
-.c-btn-bookcase {
+.shelf-actions {
     display: flex;
     justify-content: flex-end;
     align-self: flex-end;
     margin: 10px 20px;
 }
 
-.btn-bookcase {
+.btn-create-shelf {
     padding: 15px 25px;
     border: none;
     border-radius: 20px;
-    background-color: var(--verde-escuro);
+    background-color: var(--color-dark-green);
     font-size: 18px;
-    font-family: var(--font-principal);
+    font-family: var(--font-primary);
     font-weight: 800;
-    color: var(--marfin);
+    color: var(--color-ivory);
     box-shadow: var(--box-shadow);
     cursor: pointer;
 }
 
-.btn-bookcase:hover {
-    background-color: var(--verde-medio);
+.btn-create-shelf:hover {
+    background-color: var(--color-mid-green);
     transform: scale(1.05);
     transition: background-color 0.3s ease-in, transform 0.3s ease-in;
 }
@@ -56,7 +56,7 @@
 
 
 
-.title-bookase-container {
+.shelf-header {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -64,28 +64,28 @@
     margin: 5px 10px 10px;
 }
 
-.title-bookase-container h1 {
-    color: var(--verde-escuro);
-    font-family: var(--font-principal);
+.shelf-header h1 {
+    color: var(--color-dark-green);
+    font-family: var(--font-primary);
     font-weight: 800;
     font-size: 22px;
     margin: 0 9px 0 0;
 }
 
-.title-bookase-container span {
+.shelf-header span {
     display: flex;
     align-items: center;
     margin: 0 1px;
 }
 
-.title-bookase-container span img {
+.shelf-header span img {
     width: 22px;
     height: 22px;
     cursor: pointer;
     transition: transform 0.2s ease-in-out;
 }
 
-.title-bookase-container span img:hover {
+.shelf-header span img:hover {
     transform: scale(1.2);
 }
 
@@ -95,15 +95,18 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    background-color: var(--verde-medio);
+    background-color: var(--color-mid-green);
     border-radius: 15px;
     padding: 12px;
 
     min-height: 60px;
 }
+.loan-card{
+    position: relative;
+}
 
 
-.c-card-book {
+.shelf-book-card {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -117,12 +120,12 @@
     position: relative;
 }
 
-.c-card-book:hover {
+.shelf-book-card:hover {
     transform: scale(1.03);
     transition: transform 0.3s ease-in;
 }
 
-.c-card-book img {
+.shelf-book-card img {
     height: 78px;
     width: 56px;
     object-fit: cover;
@@ -131,7 +134,7 @@
    
 }
 
-.card-book-info {
+.shelf-book-info {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -140,8 +143,8 @@
     flex: 1;
 }
 
-.card-book-title {
-    color: var(--verde-escuro);
+.shelf-book-title {
+    color: var(--color-dark-green);
     font-weight: 700;
     font-size: 14px;
 
@@ -150,8 +153,8 @@
     text-overflow: ellipsis;
 }
 
-.card-book-author {
-    color: var(--verde-medio);
+.shelf-book-author {
+    color: var(--color-mid-green);
     font-size: 12px;
     opacity: 80%;
    
@@ -162,7 +165,7 @@
 
 
 
-.btn-card-remover {
+.btn-remove-book {
     position: absolute;
     top: 5px;
     right: 6px;
@@ -174,11 +177,11 @@
     transition: opacity 0.2s ease;
 }
 
-.c-card-book:hover .btn-card-remover {
+.c-card-book:hover .btn-remove-book {
     opacity: 1;
 }
 
-.btn-card-remover img {
+.btn-remove-book img {
     width: 15px;
     height: 15px;
     border-radius: 0;
@@ -187,7 +190,7 @@
 
 
 
-.btn-card-adicionar {
+.btn-add-book {
     position: absolute;
     top: 5px;
     right: 6px;
@@ -198,11 +201,11 @@
     transition: transform 0.2s ease;
 }
 
-.btn-card-adicionar:hover {
+.btn-add-book:hover {
     transform: scale(1.2);
 }
 
-.btn-card-adicionar img {
+.btn-add-book img {
     width: 20px;
     height: 20px;
     border-radius: 0;
@@ -211,13 +214,12 @@
 
 
 
-.c-card-book.selecionado {
-    outline: 2px solid var(--verde-escuro);
+.c-card-book.selected {
+    outline: 2px solid var(--color-dark-green);
     background-color: #edf7ed;
 }
 
-
-.modal-busca-container {
+.modal-search-container {
     display: flex;
     align-items: center;
     background-color: white;
@@ -228,24 +230,24 @@
     box-shadow: var(--box-shadow);
 }
 
-.modal-busca-container input {
+.modal-search-container input {
     border: none;
     outline: none;
     width: 20%;
-    font-family: var(--font-principal);
+    font-family: var(--font-primary);
     font-size: 15px;
     background: transparent;
-    color: var(--verde-escuro);
+    color: var(--color-dark-green);
 }
 
-.modal-busca-container img {
+.modal-search-container img {
     width: 18px;
     height: 18px;
 }
 
 
 
-.modal-grid-livros {
+.modal-books-grid {
     display: grid;
     grid-template-columns: 1fr 1fr ;
     gap: 10px;
@@ -254,14 +256,36 @@
     padding: 8% auto;
 }
 
+.card-book-title{
+    font-size: 14px !important;
+    line-height: 1.1;
 
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 
-.modal-input-nome-estante {
-    background-color: var(--verde-vivo);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+
+    max-width: 100%;
+}
+
+.card-book-author{
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    max-width: 100%;
+}
+
+.modal-shelf-name-input {
+    background-color: var(--color-bright-green);
     padding: 7px 14px;
     border-radius: 15px;
     border: none;
-    font-family: var(--font-principal);
+    font-family: var(--font-primary);
     font-size: 15px;
     color: white;
     width: 30%;
