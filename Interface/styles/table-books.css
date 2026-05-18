@@ -3,6 +3,7 @@
     justify-content: end;
     align-items: center;
     margin-right: 50px;
+    gap:10px;
 }
 
 
@@ -36,4 +37,12 @@
     width: 30%;
     height: 45%;
     background-color: var(--color-ivory);
+}
+
+.search-books{
+    padding: 5px;
+    width: 200px;
+}
+.search-books input{
+    height: 30px;
 }

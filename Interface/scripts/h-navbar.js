@@ -43,10 +43,10 @@ var userMenuLinks = [
 
 var adminMenuLinks =[
     "<a href='../pages/loans.html'>Emprestimo</a>",
-    "<a href='../pages/books.html'>Livros</a>",
-    "<a href='../pages/stock.html'>Estoque</a>",
+    // "<a href='../pages/books.html'>Livros</a>",
+    "<a href='../pages/StockandBooks.html'>Estoque e Livros</a>",
     "<a href='../pages/fines.html'>Multas</a>",
-    "<a href='../pages/movements.html'>Movimentações</a>",
+    "<a href='../pages/movements.html'>Movimentações</a>"
   
 ]
 

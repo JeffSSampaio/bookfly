@@ -2,13 +2,14 @@
 .table-container {
     margin: 5px 0 0px 0;
     text-align: center;
+    
 }
 .table-container h1 {
     font-family: var(--font-primary);
     font-weight: 700;
     font-size: 32px;
     color: var(--color-dark-green);
-
+    margin-left: 4%;
 }
 .table-title-c{
     display: flex;

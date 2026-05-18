@@ -21,15 +21,22 @@
     display: row;
     width: 100%;
     border-collapse: collapse;
-    background-color: #ffffff;
     border-radius: 20px;
-    box-shadow: var(--card-shadow);
+  
 }
 
+.search-loans{
+       display: flex;
+    justify-content: end;
+    align-items: end;
+    flex-direction: row;
+    width: 100%;
+}
 
 .search-loans input {  
-    width: 100%;
-    padding: 12px 40px 12px 15px; 
+
+    padding:5px 20px; 
+    margin: 0 60px;
     border: none;
     border-radius: 10px;
     background: var(--color-mid-green);
@@ -37,4 +44,8 @@
     font-weight: bold;
     color: white;
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+.search-loans input::placeholder {
+    opacity: 0.7;
+    color: var(--color-ivory);
 }

@@ -30,3 +30,11 @@
 .table-header-stock{
     gap: 20px;
 }
+
+.search-stock{
+    padding: 5px;
+    width: 200px;
+}
+.search-stock input{
+    height: 30;
+}
