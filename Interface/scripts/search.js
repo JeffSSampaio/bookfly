@@ -17,11 +17,27 @@ function rerenderTable(containerId, tableConfig, filtered, onEdit) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
+    
+    
     const tableElement = onEdit
-        ? window.table_with_edit({ ...tableConfig, rows: filtered }, onEdit)
-        : window.table({ ...tableConfig, rows: filtered });
-
+    ? window.table_with_edit({ ...tableConfig, rows: filtered }, onEdit)
+    : window.table({ ...tableConfig, rows: filtered });
+    
     container.replaceChildren(tableElement);
+    if(!filtered || filtered.length === 0){
+        const warning = document.createElement('p');
+        warning.style.color = 'var(--color-mid-green)';
+        warning.style.fontWeight = '500';
+        warning.style.display='flex';
+        warning.style.flexDirection='row';
+        warning.style.alignItems='center'
+        warning.style.justifyContent='center'
+        warning.innerHTML = "Nenhuma informação na tabela";
+        container.appendChild(warning);
+        container.appendChild(warning);
+    }
+
+
 }
 
 window.setupLoanSearch = function (allLoans) {
@@ -167,7 +183,12 @@ window.setupMovementSearch = function (allMoviments) {
 
 window.setupBooksSearch = function (allBooks) {
     const tableConfig = {
-        headers: ['Id', 'Livro', 'Autores', 'Genero']
+        headers: ['ID', 'Livro', 'Autores', 'Genero'],
+        columnConfig: {
+              id: {
+                width: '70px'
+            },
+        }
     };
 
     const booksData = allBooks.map(r => ({

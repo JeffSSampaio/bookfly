@@ -491,27 +491,67 @@ window.openEditBookModal = function (BookData, index, rowElement) {
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 };
 
-if (document.getElementById('table-loans')) {
-    document.getElementById('table-loans').appendChild(window.table(loanTableConfig));
-    if (window.setupLoanSearch) window.setupLoanSearch(allLoans);
+
+
+
+function renderTable({idHtmlElement , data, configTable, searchFunction, functionTable}){
+    const container = document.getElementById(idHtmlElement);
+
+    if (!container) return;
+
+    container.appendChild(functionTable(configTable));
+    if(searchFunction) searchFunction(data);
+
+    if(!data || data.length === 0){
+        const warning = document.createElement('p');
+        warning.style.color = 'var(--color-mid-green)';
+        warning.style.fontWeight = '500';
+        warning.style.display='flex';
+        warning.style.flexDirection='row';
+        warning.style.alignItems='center'
+        warning.style.justifyContent='center'
+        warning.innerHTML = "Nenhuma informação na tabela";
+        container.appendChild(warning);
+    }
 }
 
-if (document.getElementById('table-fines')) {
-    document.getElementById('table-fines').appendChild(window.table(finesTableConfig));
-    if (window.setupPenaltySearch) window.setupPenaltySearch(allFines);
-}
 
-if (document.getElementById('table-stock')) {
-    document.getElementById('table-stock').appendChild(window.table_with_edit(stockTableConfig, window.openEditStockModal));
-    if (window.setupStockSearch) window.setupStockSearch(allStock);
-}
+renderTable({
+    idHtmlElement: 'table-loans',
+    data: allLoans,
+    configTable: loanTableConfig,
+    searchFunction: window.setupLoanSearch,
+    functionTable: window.table
+});
 
-if (document.getElementById('table-movements')) {
-    document.getElementById('table-movements').appendChild(window.table_with_edit(movimentTableConfig, window.openEditMoviment));
-    if (window.setupMovementSearch) window.setupMovementSearch(allMovements);
-}
+renderTable({
+    idHtmlElement: 'table-fines',
+    data: allFines,
+    configTable: finesTableConfig,
+    searchFunction: window.setupPenaltySearch,
+    functionTable: window.table
+});
 
-if (document.getElementById('table-books')) {
-    document.getElementById('table-books').appendChild(window.table_with_edit(booksTableConfig, window.openEditBookModal));
-    if (window.setupBooksSearch) window.setupBooksSearch(allBooks);
-}
+renderTable({
+    idHtmlElement: 'table-stock',
+    data: allStock,
+    configTable: stockTableConfig,
+    searchFunction: window.setupStockSearch,
+    functionTable: (config) => window.table_with_edit(config, window.openEditStockModal)
+});
+
+renderTable({
+    idHtmlElement: 'table-movements',
+    data: allMovements,
+    configTable: movimentTableConfig,
+    searchFunction: window.setupMovementSearch,
+    functionTable: (config) => window.table_with_edit(config, window.openEditMoviment)
+});
+
+renderTable({
+    idHtmlElement: 'table-books',
+    data: allBooks,
+    configTable: booksTableConfig,
+    searchFunction: window.setupBooksSearch,
+    functionTable: (config) => window.table_with_edit(config, window.openEditBookModal)
+});
