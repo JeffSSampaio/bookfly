@@ -129,7 +129,7 @@ body{
 }
 
 .body-menu{
-    margin: 20px;
+    margin: 10px;
 }
 
 .btns-menu a{
@@ -199,4 +199,15 @@ body{
 #overlay.active {
   opacity: 1;
   visibility: visible;
+}
+
+.logout-container {
+ position: fixed;
+ left: 1;
+ right: 1;
+ bottom: 2rem;
+}
+
+.logout-container .log{
+    padding: 5px 50px;
 }

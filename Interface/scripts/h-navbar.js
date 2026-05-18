@@ -9,16 +9,22 @@ window.btnMenu = function(){
 const menu = document.getElementById("icon-menu")
 const navbar= document.getElementById("h-navbar-right")
 const closeBtn = document.getElementById("close-menu");
-   menu.addEventListener("click", () => {
-        navbar.classList.toggle("active");
-        overlay.classList.toggle("active");
-});
+const overlay = document.getElementById("overlay");
 
-closeBtn.addEventListener("click", () => {
-  navbar.classList.remove("active");
-  overlay.classList.remove("active");
-});
+  if (menu && navbar) {
+    menu.addEventListener("click", () => {
+      navbar.classList.toggle("active");
+      if (overlay) overlay.classList.toggle("active");
+    });
+  }
 
+ 
+  if (closeBtn && navbar) {
+    closeBtn.addEventListener("click", () => {
+      navbar.classList.remove("active");
+      if (overlay) overlay.classList.remove("active");
+    });
+  }
 }
 
 window.logout = function() {
@@ -31,7 +37,7 @@ var userMenuLinks = [
     "<a href='../pages/homepage.html'>HomePage</a>",
     "<a href='../pages/my-books.html'>Minhas Estantes</a>",
     "<a href='../pages/bookloan.html'>Livros</a>",
-    "<a href='#' onclick='logout()'>Desconectar</a>",
+   
 
 ]
 
@@ -41,7 +47,7 @@ var adminMenuLinks =[
     "<a href='../pages/stock.html'>Estoque</a>",
     "<a href='../pages/fines.html'>Multas</a>",
     "<a href='../pages/movements.html'>Movimentações</a>",
-    "<a href='#' onclick='logout()'>Desconectar</a>",
+  
 ]
 
 
@@ -61,38 +67,35 @@ function shouldShowLink(linkHtml) {
   return !href.endsWith(currentPage);
 }
 
-let content = document.getElementById("menu-content")
+let content = document.getElementById("menu-content");
+
 
 
 if(loggedUser.role == 'USER'){
-
-    
     userMenuLinks.forEach(element => {
         if (!shouldShowLink(element)) return;
-        content.innerHTML+=
-        ` 
+        content.innerHTML += ` 
         <div class='btns-menu'>
-        ${element}
-        </div>
-        `
-        
+          ${element}
+        </div>`;
     });
-    } else if(loggedUser.role == 'ADMIN'){
-        
-        adminMenuLinks.forEach(element=>{
-            if (!shouldShowLink(element)) return;
-            content.innerHTML+=
-             ` 
-            <div class='btns-menu'>
-                ${element}
-                    </div>
-    `
-        }) 
-    }else{
-            alert('Usuário não reconhecido')
-        }
+} else if(loggedUser.role == 'ADMIN'){
+    adminMenuLinks.forEach(element => {
+        if (!shouldShowLink(element)) return;
+        content.innerHTML += ` 
+        <div class='btns-menu'>
+          ${element}
+        </div>`;
+    });
+} else {
+    alert('Usuário não reconhecido');
+}
 
-
+content.innerHTML += `
+  <div class='btns-menu logout-container'>
+    <a class='log' href='#' onclick='logout()'>Desconectar</a>
+  </div>
+`;
 
 
 
