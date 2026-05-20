@@ -70,21 +70,26 @@ public class LoanController {
     @PutMapping("/edit/{loanId}")
     public ResponseEntity<LoanSummary> updateLoan(@PathVariable long loanId, @RequestBody LoanUpdateRequest request) {
         Loan newLoan = new Loan();
+        newLoan.setId(loanId);
 
-        StockBook stockBook = new StockBook();
-        stockBook.setId(request.stockBookId());
+        if (request.stockBookId() != null) {
+            StockBook stockBook = new StockBook();
+            stockBook.setId(request.stockBookId());
+            newLoan.setStockBook(stockBook);
+        }
 
-        User user = new User();
-        user.setId(request.userId());
+        if (request.userId() != null) {
+            User user = new User();
+            user.setId(request.userId());
+            newLoan.setUser(user);
+        }
 
-        newLoan.setStockBook(stockBook);
-        newLoan.setUser(user);
         newLoan.setStatus(request.status());
         newLoan.setReturnDate(request.returnDate());
         newLoan.setLoanDate(request.loanDate());
-        return ResponseEntity.ok().body(LoanSummary.from(loanService.updateLoan(loanId,newLoan)));
-    }
 
+        return ResponseEntity.ok().body(LoanSummary.from(loanService.updateLoan(loanId, newLoan)));
+    }
 
 
     @Operation(summary = "Cancelar Emprestimo")

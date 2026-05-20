@@ -200,22 +200,27 @@ public class LoanService {
     }
     public Loan updateLoan(Long loanId, Loan newLoan){
         Loan existLoan = loanRepository.findById(loanId)
-                .orElseThrow(()-> new RuntimeException("Esse Imprestimo não existe no sistema"));
-        User user = userRepository.findById(newLoan.getUser().getId())
-                .orElseThrow( ()-> new RuntimeException("Esse Usuario não existe"));
-        StockBook stockBook = stockBookRepository.findById(newLoan.getStockBook().getId())
-                .orElseThrow( () -> new RuntimeException("Este Livro não existe dentro do Estoque"));
+                .orElseThrow(() -> new RuntimeException("Esse Empréstimo não existe no sistema"));
 
+        if (newLoan.getUser() != null && newLoan.getUser().getId() != null) {
+            User user = userRepository.findById(newLoan.getUser().getId())
+                    .orElseThrow(() -> new RuntimeException("Esse Usuario não existe"));
+            existLoan.setUser(user);
+        }
 
-        if (existLoan.getUser() != null) existLoan.setUser(user);
-        if (existLoan.getStockBook() != null) existLoan.setStockBook(stockBook);
-        if (existLoan.getMoviments() != null) existLoan.setMoviments(newLoan.getMoviments());
-        if (existLoan.getLoanDate() != null) existLoan.setLoanDate(newLoan.getLoanDate());
-        if (existLoan.getReturnDate() != null) existLoan.setReturnDate(newLoan.getReturnDate());
-        if (existLoan.getPenalty() != null) existLoan.setPenalty(newLoan.getPenalty());
-        if (existLoan.getStatus() != null) existLoan.setStatus(newLoan.getStatus());
+        if (newLoan.getStockBook() != null && newLoan.getStockBook().getId() != null) {
+            StockBook stockBook = stockBookRepository.findById(newLoan.getStockBook().getId())
+                    .orElseThrow(() -> new RuntimeException("Este Livro não existe dentro do Estoque"));
+            existLoan.setStockBook(stockBook);
+        }
 
-        return existLoan;
+        if (newLoan.getMoviments() != null) existLoan.setMoviments(newLoan.getMoviments());
+        if (newLoan.getLoanDate() != null) existLoan.setLoanDate(newLoan.getLoanDate());
+        if (newLoan.getReturnDate() != null) existLoan.setReturnDate(newLoan.getReturnDate());
+        if (newLoan.getPenalty() != null) existLoan.setPenalty(newLoan.getPenalty());
+        if (newLoan.getStatus() != null) existLoan.setStatus(newLoan.getStatus());
+
+        return loanRepository.save(existLoan);
     }
 
 
