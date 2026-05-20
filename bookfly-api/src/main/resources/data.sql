@@ -77,3 +77,15 @@ SELECT * FROM (VALUES
                    (2, 4, 'ENTRADA_ADMIN', 6,  TIMESTAMP '2026-01-10 10:00:00', 'Entrada inicial de estoque do livro Histórias Extraordinárias')
               ) AS v(usuario_id, estoque_livro_id, type_item, qtd_moviment, created_time, description)
 WHERE NOT EXISTS (SELECT 1 FROM movimentacoes LIMIT 1);
+
+INSERT INTO emprestimo (usuario_id, livro_id, loan_date, return_date, status)
+SELECT 1, 1, TIMESTAMP '2026-04-01 09:00:00', TIMESTAMP '2026-04-15 09:00:00', 'ATRASADO'
+    WHERE NOT EXISTS (SELECT 1 FROM emprestimo LIMIT 1);
+
+
+INSERT INTO multa (emprestimo_id, penalty_date, amount, status, paid)
+SELECT e.id, TIMESTAMP '2026-04-16 09:00:00', 22.50, 'PENDENTE', false
+FROM emprestimo e
+WHERE e.status = 'ATRASADO'
+  AND NOT EXISTS (SELECT 1 FROM multa LIMIT 1)
+    LIMIT 1;
