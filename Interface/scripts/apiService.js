@@ -168,6 +168,12 @@ const api = {
       body: JSON.stringify({ status }),
     }).then(handleResponse),
 
+    updateLoan: (loanId, newLoan) => 
+      fetch(`${BASE_URL}/loans/edit/${loanId}`,{
+        method:'PUT',
+        headers: postHeaders(),
+        body: JSON.stringify(newLoan)
+      }).then(handleResponse), 
 
   getAllPenalties: () =>
     fetch(`${BASE_URL}/penalties/list`).then(handleResponse),

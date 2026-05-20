@@ -525,7 +525,7 @@ function renderTable({idHtmlElement , data, configTable, searchFunction, functio
 window.openEditLoanModal = function (loanData, index, rowElement) {
     const uid = `modal-edit-loan-${loanData.id}`;
 
-    const LOAN_STATUSES = ['ACTIVE', 'RETURNED', 'OVERDUE', 'CANCELED'];
+    const LOAN_STATUSES = ['ATIVO', 'ATRASADO', 'FINALIZADO'];
 
     const statusOptions = LOAN_STATUSES.map(s =>
         `<option value="${s}" ${loanData.status === s ? 'selected' : ''}>${s}</option>`
@@ -562,7 +562,8 @@ window.openEditLoanModal = function (loanData, index, rowElement) {
     document.getElementById(`btn-salvar-${uid}`).addEventListener('click', async () => {
         const newStatus = document.getElementById(`status-${uid}`).value;
         try {
-            await api.updateLoanStatus(loanData.id, newStatus);
+            
+            await api.updateLoan(loanData.id, {status:newStatus});
             alert('Empréstimo atualizado com sucesso!');
             modal.remove();
             location.reload();
