@@ -11,8 +11,12 @@ form.addEventListener('submit', async (e) => {
 });
 
 btnEnter.addEventListener('click', async (e) => {
-  e.preventDefault();
-  await doLogin();
+  try{
+    e.preventDefault();
+    await doLogin();
+  }catch(error){
+    alert('Erro ao fazer login: ' + error.message);
+  }
 });
 
 async function doLogin() {
@@ -45,6 +49,6 @@ async function doLogin() {
     window.location.href = '/Interface/pages/homepage.html';
 
   } catch (error) {
-    alert('Erro ao fazer login: ' + erro.message);
+    alert('Erro ao fazer login: ' + error.message);
   }
 }
