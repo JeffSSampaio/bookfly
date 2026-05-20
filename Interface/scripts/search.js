@@ -84,8 +84,8 @@ window.setupPenaltySearch = function (allPenalties) {
         id: r.penaltyId,
         user: r.userName.toUpperCase(),
         amount: r.amount || 'sem valor',
-        penaltyDate: formatador.format(new Date(r.penaltyDate)),
-        returnDateLoan: formatador.format(new Date(r.returnloanDate)),
+        penaltyDate: r.penaltyDate ? formatador.format(new Date(r.penaltyDate)) : 'sem data',
+        returnDateLoan: r.returnloanDate ? formatador.format(new Date(r.returnloanDate)) : 'sem data',
         status: r.statusPenalty
     }));
 

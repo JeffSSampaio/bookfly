@@ -74,8 +74,8 @@ const finesTableConfig = {
         id: r.penaltyId,
         user: r.userName.toUpperCase(),
         amount: r.amount || 'sem valor',
-        penaltyDate: dateFormatter.format(new Date(r.penaltyDate)),
-        returnDateLoan: dateFormatter.format(new Date(r.returnloanDate)),
+        penaltyDate: r.penaltyDate ? dateFormatter.format(new Date(r.penaltyDate)) : 'sem data',
+        returnDateLoan: r.returnloanDate ? dateFormatter.format(new Date(r.returnloanDate)) : 'sem data',
         status: r.statusPenalty
     }))
 };
@@ -572,7 +572,7 @@ window.openEditLoanModal = function (loanData, index, rowElement) {
 window.openEditFineModal = function (fineData, index, rowElement) {
     const uid = `modal-edit-fine-${fineData.id}`;
 
-    const FINE_STATUSES = ['PENDING', 'PAID', 'CANCELED'];
+    const FINE_STATUSES = [ 'PENDENTE', 'PAGO', 'CANCELADA' ];
 
     const statusOptions = FINE_STATUSES.map(s =>
         `<option value="${s}" ${fineData.status === s ? 'selected' : ''}>${s}</option>`
@@ -618,16 +618,22 @@ window.openEditFineModal = function (fineData, index, rowElement) {
             return;
         }
 
-        try {
-            const payload = { statusPenalty: newStatus };
-            if (amount !== null) payload.amount = amount;
+    try {
+         const payload = { status: newStatus };
+
+            if (amount !== null) {
+                payload.amount = amount;
+            }
+
             await api.updatePenalty(fineData.id, payload);
+
             alert('Multa atualizada com sucesso!');
             modal.remove();
             location.reload();
-        } catch (e) {
-            alert('Erro ao atualizar multa: ' + (e.message || e));
-        }
+
+            } catch (e) {
+                alert('Erro ao atualizar multa: ' + (e.message || e));
+            }
     });
 
     document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
