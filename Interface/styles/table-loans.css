@@ -1,25 +1,18 @@
 
-.table-header-loans{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    
-}
+
 
  .table-header-loans {
     display: flex;
     flex-direction: row;
     justify-content: start;
     align-items: center;
-    margin-left: 10px;
+    width: 90%;
  }
 
 
 
 .table-loans {
-    display: row;
-   
+    display: row; 
     border-collapse: collapse;
     border-radius: 20px;
   
@@ -30,14 +23,15 @@
     justify-content: end;
     align-items: end;
     flex-direction: row;
-    width: 100%;
+    /* width: 100%; */
 }
 
 .search-loans input {  
 
-    padding:5px 20px; 
+    padding:5px 10px; 
     margin: 0 60px;
     border: none;
+    width: 200px;
     border-radius: 10px;
     background: var(--color-mid-green);
     font-size: 18px;
@@ -46,6 +40,7 @@
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 .search-loans input::placeholder {
+  
     opacity: 0.7;
     color: var(--color-ivory);
 }

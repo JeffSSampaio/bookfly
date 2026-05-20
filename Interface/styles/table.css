@@ -16,8 +16,9 @@
     flex-direction: row;
     justify-content: start;
     align-items: center;
-    margin-left: 10px;
-
+    margin-left: 5px;
+    margin-bottom: 0;
+    width: 90%;
 }
 
 

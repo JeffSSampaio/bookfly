@@ -1,15 +1,15 @@
 .search-fines{
-       display: flex;
+    display: flex;
     justify-content: end;
     align-items: end;
     flex-direction: row;
-    width: 100%;
 }
 
 .search-fines input {  
 
-    padding:5px 20px; 
+    padding:5px 10px; 
     margin: 0 60px;
+    width: 200px;
     border: none;
     border-radius: 10px;
     background: var(--color-mid-green);

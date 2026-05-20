@@ -65,7 +65,7 @@ window.setupLoanSearch = function (allLoans) {
 
     input.addEventListener('input', e => {
         const filtered = searchTable(e.target.value, loansData, ['id', 'user', 'book', 'status']);
-        rerenderTable('table-loans', tableConfig, filtered, null);
+        rerenderTable('table-loans', tableConfig, filtered, window.openEditLoanModal);
     });
 };
 
@@ -89,12 +89,12 @@ window.setupPenaltySearch = function (allPenalties) {
         status: r.statusPenalty
     }));
 
-    const input = document.getElementById('search-penalties');
+    const input = document.getElementById('search-fine');
     if (!input) return;
 
     input.addEventListener('input', e => {
         const filtered = searchTable(e.target.value, penaltiesData, ['id', 'user', 'amount', 'status']);
-        rerenderTable('table-fines', tableConfig, filtered, null);
+        rerenderTable('table-fines', tableConfig, filtered, window.openEditFineModal);
     });
 };
 

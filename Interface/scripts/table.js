@@ -70,6 +70,12 @@ const loanTableConfig = {
 
 const finesTableConfig = {
     headers: ['ID', 'Usuário', 'Valor da Multa', 'Data de Multa', 'Data de Entrega do Livro', 'Status'],
+    columnConfig:{
+        amount: {render: (cell ,value) =>{
+            cell.innerHTML = 'R$'+ value
+        }
+    }
+    },
     rows: allFines.map(r => ({
         id: r.penaltyId,
         user: r.userName.toUpperCase(),

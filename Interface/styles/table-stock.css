@@ -2,12 +2,14 @@
     display: flex;
     align-items: center;
     justify-content: end;
-    margin: 0 40px;
+    /* margin: 0 40px; */
+    margin-right: 50px;
+    gap: 10px;
 }
 
 .btn-add {
     padding: 10px 20px;
-    margin: 0 20px;
+    margin: 0 10px;
     font-weight: 700;
     border-radius: 20px;
     border: none;
@@ -36,5 +38,5 @@
     width: 200px;
 }
 .search-stock input{
-    height: 30;
+    height: 30px;
 }
