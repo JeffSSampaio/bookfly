@@ -1,12 +1,11 @@
 package com.jefferson.bookfly_api.controllers;
 
-import com.jefferson.bookfly_api.dto.loan.CancelLoanResponse;
-import com.jefferson.bookfly_api.dto.loan.LoanRequest;
-import com.jefferson.bookfly_api.dto.loan.LoanSummary;
-import com.jefferson.bookfly_api.dto.loan.LoanByUserBooksSumary;
+import com.jefferson.bookfly_api.dto.loan.*;
 import com.jefferson.bookfly_api.dto.user.UserOnlyRequest;
 import com.jefferson.bookfly_api.models.Loan;
 import com.jefferson.bookfly_api.models.Moviment;
+import com.jefferson.bookfly_api.models.StockBook;
+import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.service.LoanService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -59,10 +58,33 @@ public class LoanController {
             @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado")
     })
     @PutMapping("/return/{loanId}")
-    public ResponseEntity<LoanSummary> updateLoan(@PathVariable long loanId) {
+    public ResponseEntity<LoanSummary> returnBook(@PathVariable long loanId) {
         Loan loanReturned = loanService.returnBook(loanId);
         return ResponseEntity.ok().body(LoanSummary.from(loanReturned));
     }
+    @Operation(summary = "Editar Emprestimo")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Empréstimo Editado com Sucesso!"),
+            @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado")
+    })
+    @PutMapping("/edit/{loanId}")
+    public ResponseEntity<LoanSummary> updateLoan(@PathVariable long loanId, @RequestBody LoanUpdateRequest request) {
+        Loan newLoan = new Loan();
+
+        StockBook stockBook = new StockBook();
+        stockBook.setId(request.stockBookId());
+
+        User user = new User();
+        user.setId(request.userId());
+
+        newLoan.setStockBook(stockBook);
+        newLoan.setUser(user);
+        newLoan.setStatus(request.status());
+        newLoan.setReturnDate(request.returnDate());
+        newLoan.setLoanDate(request.loanDate());
+        return ResponseEntity.ok().body(LoanSummary.from(loanService.updateLoan(loanId,newLoan)));
+    }
+
 
 
     @Operation(summary = "Cancelar Emprestimo")
