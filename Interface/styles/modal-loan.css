@@ -84,3 +84,13 @@
     padding: 5px 10px;
 
 }
+.select-loan{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-bright-green);
+    padding: 7px;
+    border-radius: 15px;
+    border: none;
+    color: white;
+}

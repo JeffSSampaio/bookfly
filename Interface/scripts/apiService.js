@@ -159,8 +159,14 @@ const api = {
   cancelLoan:(loanId) =>
     fetch(`${BASE_URL}/loans/cancel/${loanId}`, {
       method:'PUT',
-    }).then(handleResponse)
-    ,
+    }).then(handleResponse),
+
+  updateLoanStatus: (loanId, status) =>
+    fetch(`${BASE_URL}/loans/update-status/${loanId}`, {
+      method: 'PATCH',
+      headers: postHeaders(),
+      body: JSON.stringify({ status }),
+    }).then(handleResponse),
 
 
   getAllPenalties: () =>

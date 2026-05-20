@@ -516,12 +516,130 @@ function renderTable({idHtmlElement , data, configTable, searchFunction, functio
 }
 
 
+window.openEditLoanModal = function (loanData, index, rowElement) {
+    const uid = `modal-edit-loan-${loanData.id}`;
+
+    const LOAN_STATUSES = ['ACTIVE', 'RETURNED', 'OVERDUE', 'CANCELED'];
+
+    const statusOptions = LOAN_STATUSES.map(s =>
+        `<option value="${s}" ${loanData.status === s ? 'selected' : ''}>${s}</option>`
+    ).join('');
+
+    const modalHTML = `
+    <div class="modal" id="${uid}">
+        <div class="c-modal modal-movements">
+            <div class="b-modal b-modal-movements">
+                <h1>Editar Empréstimo N°${loanData.id}</h1>
+                <div class="f-input-modal modal-movements-field">
+                    <label>Usuário</label>
+                    <input type="text" value="${loanData.user}" disabled style="opacity:0.6;">
+                </div>
+                <div class="f-input-modal modal-movements-field">
+                    <label>Livro</label>
+                    <input type="text" value="${loanData.book}" disabled style="opacity:0.6;">
+                </div>
+                <div class="f-input-modal modal-movements-field">
+                    <label>Status do Empréstimo</label>
+                    <select id="status-${uid}" class="select-loan">${statusOptions}</select>
+                </div>
+                <div class="c-modal-btn modal-movements-actions">
+                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" id="btn-salvar-${uid}">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    const modal = document.getElementById(uid);
+
+    document.getElementById(`btn-salvar-${uid}`).addEventListener('click', async () => {
+        const newStatus = document.getElementById(`status-${uid}`).value;
+        try {
+            await api.updateLoanStatus(loanData.id, newStatus);
+            alert('Empréstimo atualizado com sucesso!');
+            modal.remove();
+            location.reload();
+        } catch (e) {
+            alert('Erro ao atualizar empréstimo: ' + (e.message || e));
+        }
+    });
+
+    document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+};
+
+window.openEditFineModal = function (fineData, index, rowElement) {
+    const uid = `modal-edit-fine-${fineData.id}`;
+
+    const FINE_STATUSES = ['PENDING', 'PAID', 'CANCELED'];
+
+    const statusOptions = FINE_STATUSES.map(s =>
+        `<option value="${s}" ${fineData.status === s ? 'selected' : ''}>${s}</option>`
+    ).join('');
+
+    const currentAmount = fineData.amount === 'sem valor' ? '' : fineData.amount;
+
+    const modalHTML = `
+    <div class="modal" id="${uid}">
+        <div class="c-modal modal-movements">
+            <div class="b-modal b-modal-movements">
+                <h1>Editar Multa N°${fineData.id}</h1>
+                <div class="f-input-modal modal-movements-field">
+                    <label>Usuário</label>
+                    <input type="text" value="${fineData.user}" disabled style="opacity:0.6;">
+                </div>
+                <div class="f-input-modal modal-movements-field">
+                    <label>Valor da Multa (R$)</label>
+                    <input type="number" id="amount-${uid}" value="${currentAmount}" min="0" step="0.01" placeholder="0.00">
+                </div>
+                <div class="f-input-modal modal-movements-field">
+                    <label>Status da Multa</label>
+                    <select id="status-${uid}" class="select-movement-books">${statusOptions}</select>
+                </div>
+                <div class="c-modal-btn modal-movements-actions">
+                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" id="btn-salvar-${uid}">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    const modal = document.getElementById(uid);
+
+    document.getElementById(`btn-salvar-${uid}`).addEventListener('click', async () => {
+        const amountVal = document.getElementById(`amount-${uid}`).value;
+        const newStatus = document.getElementById(`status-${uid}`).value;
+        const amount = amountVal !== '' ? parseFloat(amountVal) : null;
+
+        if (amountVal !== '' && (isNaN(amount) || amount < 0)) {
+            alert('Informe um valor de multa válido.');
+            return;
+        }
+
+        try {
+            const payload = { statusPenalty: newStatus };
+            if (amount !== null) payload.amount = amount;
+            await api.updatePenalty(fineData.id, payload);
+            alert('Multa atualizada com sucesso!');
+            modal.remove();
+            location.reload();
+        } catch (e) {
+            alert('Erro ao atualizar multa: ' + (e.message || e));
+        }
+    });
+
+    document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+};
+
 renderTable({
     idHtmlElement: 'table-loans',
     data: allLoans,
     configTable: loanTableConfig,
     searchFunction: window.setupLoanSearch,
-    functionTable: window.table
+    functionTable: (config) => window.table_with_edit(config, window.openEditLoanModal)
 });
 
 renderTable({
@@ -529,7 +647,7 @@ renderTable({
     data: allFines,
     configTable: finesTableConfig,
     searchFunction: window.setupPenaltySearch,
-    functionTable: window.table
+    functionTable: (config) => window.table_with_edit(config, window.openEditFineModal)
 });
 
 renderTable({
