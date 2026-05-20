@@ -588,22 +588,22 @@ window.openEditFineModal = function (fineData, index, rowElement) {
 
     const modalHTML = `
     <div class="modal" id="${uid}">
-        <div class="c-modal modal-movements">
-            <div class="b-modal b-modal-movements">
+        <div class="c-modal modal-fines">
+            <div class="b-modal b-modal-fines">
                 <h1>Editar Multa N°${fineData.id}</h1>
-                <div class="f-input-modal modal-movements-field">
+                <div class="f-input-modal modal-fines-field">
                     <label>Usuário</label>
                     <input type="text" value="${fineData.user}" disabled style="opacity:0.6;">
                 </div>
-                <div class="f-input-modal modal-movements-field">
+                <div class="f-input-modal modal-fines-field">
                     <label>Valor da Multa (R$)</label>
                     <input type="number" id="amount-${uid}" value="${currentAmount}" min="0" step="0.01" placeholder="0.00">
                 </div>
-                <div class="f-input-modal modal-movements-field">
+                <div class="f-input-modal modal-fines-field">
                     <label>Status da Multa</label>
-                    <select id="status-${uid}" class="select-movement-books">${statusOptions}</select>
+                    <select id="status-${uid}" class="select-fine-status">${statusOptions}</select>
                 </div>
-                <div class="c-modal-btn modal-movements-actions">
+                <div class="c-modal-btn modal-fines-actions">
                     <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
                     <button type="button" id="btn-salvar-${uid}">Salvar</button>
                 </div>
