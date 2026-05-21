@@ -26,6 +26,7 @@ public class LoanService {
     private final BookRepository bookRepository;
     private final StockBookRepository stockBookRepository;
     private final StockService stockService;
+    private final PenaltyRepository penaltyRepository;
 
     public List<Loan> getAllLoans() {
         return loanRepository.findAll()
@@ -198,6 +199,7 @@ public class LoanService {
 
 
     }
+    @Transactional
     public Loan updateLoan(Long loanId, Loan newLoan){
         Loan existLoan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new RuntimeException("Esse Empréstimo não existe no sistema"));
@@ -217,8 +219,47 @@ public class LoanService {
         if (newLoan.getMoviments() != null) existLoan.setMoviments(newLoan.getMoviments());
         if (newLoan.getLoanDate() != null) existLoan.setLoanDate(newLoan.getLoanDate());
         if (newLoan.getReturnDate() != null) existLoan.setReturnDate(newLoan.getReturnDate());
-        if (newLoan.getPenalty() != null) existLoan.setPenalty(newLoan.getPenalty());
-        if (newLoan.getStatus() != null) existLoan.setStatus(newLoan.getStatus());
+
+        if (newLoan.getStatus() != null) {
+            StatusLoan newLoanStatus= newLoan.getStatus();
+
+
+            if (newLoanStatus == StatusLoan.ATRASADO) {
+                Optional<Penalty> penaltyExistente = penaltyRepository.findByLoan(existLoan);
+                if (penaltyExistente.isEmpty()) {
+                    Penalty penalty = new Penalty();
+                    penalty.setPenaltyDate(LocalDateTime.now());
+                    penalty.setPaid(false);
+                    penalty.setLoan(existLoan);
+                    penalty.setStatus(StatusPenalty.PENDENTE);
+
+                    LocalDateTime dataReferencia = existLoan.getReturnDate().isBefore(LocalDateTime.now())
+                            ? existLoan.getReturnDate()
+                            : LocalDateTime.now();
+                    penalty.setAmount(penalty.getPaymentAmount(dataReferencia, LocalDateTime.now()));
+
+                    penaltyRepository.save(penalty);
+                }
+            }
+
+
+            if (newLoanStatus == StatusLoan.FINALIZADO) {
+                Penalty penalty = existLoan.getPenalty();
+                if (penalty != null && !penalty.getPaid()) {
+                    throw new RuntimeException(
+                            "Não é possível finalizar o empréstimo: existe multa pendente. " +
+                            "Valor: R$ " + penalty.getAmount() + ". Quite a multa antes de finalizar."
+                    );
+                }
+
+                if (penalty != null) {
+                    penalty.setStatus(StatusPenalty.PAGO);
+                    penaltyRepository.save(penalty);
+                }
+            }
+
+            existLoan.setStatus(newLoanStatus);
+        }
 
         return loanRepository.save(existLoan);
     }
