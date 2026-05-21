@@ -80,8 +80,8 @@ const finesTableConfig = {
         id: r.penaltyId,
         user: r.userName.toUpperCase(),
         amount: r.amount || 'sem valor',
-        penaltyDate: r.penaltyDate ? dateFormatter.format(new Date(r.penaltyDate)) : 'sem data',
-        returnDateLoan: r.returnloanDate ? dateFormatter.format(new Date(r.returnloanDate)) : 'sem data',
+        penaltyDate: r.penaltyDate ? dateFormatter.format(new Date(r.penaltyDate)) : 'sem data'.toUpperCase(),
+        returnDateLoan: r.returnloanDate ? dateFormatter.format(new Date(r.returnloanDate)) : 'sem data'.toUpperCase(),
         status: r.statusPenalty
     }))
 };
@@ -92,7 +92,7 @@ const stockTableConfig = {
         id: r.stockId,
         _bookId: r.book.bookId ?? r.book.bookid ?? r.id,
         title: r.book.title.toUpperCase(),
-        author: r.book.authors.map(a => a.name).join(',') || 'Sem author',
+        author: r.book.authors.map(a => a.name.toUpperCase()).join(',') || 'Sem author'.toUpperCase(),
         qtd: r.qtd
     }))
 };
@@ -101,9 +101,9 @@ const booksTableConfig = {
     headers: ['ID', 'Livro', 'Autores', 'Genero'],
     rows: allBooks.map(r => ({
         id: r.bookid,
-        title: r.title,
-        authors: r.authors.map(a => a.name).join(',') || 'autor não identificado',
-        genders: r.genders.map(g => g.name || g).join(', ') || 'Sem Gênero'
+        title: r.title.toUpperCase(),
+        authors: r.authors.map(a => a.name.toUpperCase()).join(',') || 'autor não identificado'.toUpperCase(),
+        genders: r.genders.map(g => g.name || g).join(', ') || 'Sem Gênero'.toUpperCase()
     }))
 };
 
@@ -135,13 +135,13 @@ const movimentTableConfig = {
     },
     rows: allMovements.map(r => ({
         id: r.movimentId,
-        createdTime: dateFormatter.format(new Date(r.createdTime)) || 'sem data de criação',
+        createdTime: dateFormatter.format(new Date(r.createdTime)) || 'sem data de criação'.toUpperCase(),
         user: r.user.name.toUpperCase(),
         userType: r.user.role,
         book: r.book.title.toUpperCase(),
         qtd: (r.type === 'ENTRADA' || r.type === 'ENTRADA_ADMIN') ? '+' + r.qtdMoved : '-' + r.qtdMoved,
         type: r.type.trim(),
-        description: r.description || ''
+        description: r.description.toUpperCase() || ''
     }))
 };
 
