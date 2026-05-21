@@ -225,18 +225,18 @@ public class LoanService {
 
 
             if (newLoanStatus == StatusLoan.ATRASADO) {
-                Optional<Penalty> penaltyExistente = penaltyRepository.findByLoan(existLoan);
-                if (penaltyExistente.isEmpty()) {
+                Optional<Penalty> penaltyExist = penaltyRepository.findByLoan(existLoan);
+                if (penaltyExist.isEmpty()) {
                     Penalty penalty = new Penalty();
                     penalty.setPenaltyDate(LocalDateTime.now());
                     penalty.setPaid(false);
                     penalty.setLoan(existLoan);
                     penalty.setStatus(StatusPenalty.PENDENTE);
 
-                    LocalDateTime dataReferencia = existLoan.getReturnDate().isBefore(LocalDateTime.now())
+                    LocalDateTime dateReference = existLoan.getReturnDate().isBefore(LocalDateTime.now())
                             ? existLoan.getReturnDate()
                             : LocalDateTime.now();
-                    penalty.setAmount(penalty.getPaymentAmount(dataReferencia, LocalDateTime.now()));
+                    penalty.setAmount(penalty.getPaymentAmount(dateReference, LocalDateTime.now()));
 
                     penaltyRepository.save(penalty);
                 }
