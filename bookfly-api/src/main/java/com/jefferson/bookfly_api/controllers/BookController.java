@@ -58,6 +58,20 @@ public class BookController {
 
     @Operation(summary = "Listar todos os livros")
     @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
+    @GetMapping("/list/active")
+    public ResponseEntity<List<BookDetail>> getAllBooksActive(){
+        return ResponseEntity.ok(
+                bookService.findAllBooksActive()
+                        .stream()
+                        .map(book -> BookDetail.from(book))
+                        .toList()
+        );
+
+
+    }
+
+    @Operation(summary = "Listar todos os livros")
+    @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
     @GetMapping("/list")
     public ResponseEntity<List<BookDetail>> getAllBooks(){
         return ResponseEntity.ok(
@@ -69,6 +83,7 @@ public class BookController {
 
 
     }
+
     @Operation(summary = "Buscar livro por ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Livro encontrado"),

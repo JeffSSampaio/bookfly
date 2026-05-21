@@ -76,7 +76,7 @@ const api = {
 
 
   getAllBooks: () =>
-    fetch(`${BASE_URL}/books/list`).then(handleResponse),
+    fetch(`${BASE_URL}/books/list/active`).then(handleResponse),
 
 
   getBookById: (id) =>

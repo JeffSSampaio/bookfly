@@ -101,19 +101,33 @@ public class BookService {
         return bookRepository.save(existBook);
     }
 
-
-
     public List<Book> findAll() {
         return bookRepository.findAll();
+    }
+
+    public List<Book> findAllBooksActive(){
+        return bookRepository.findAll()
+                .stream()
+                .filter( book -> !book.isDeleted())
+                .toList();
     }
 
     public List<Book> findBookByAutor(Long autorId) {
         return bookRepository.findByAuthorsId(autorId);
     }
 
+    public void activeBook(Long id){
+        Book book = bookRepository.findById(id)
+                .filter( b -> b.isDeleted())
+                .orElseThrow(()-> new RuntimeException("Livro nâo Encontrado"));
+        book.setDeleted(false);
+        bookRepository.save(book);
+    }
 
     public void removeBook(Long id){
-        bookRepository.deleteById(id);
+        Book book = bookRepository.findById(id).orElseThrow(()-> new RuntimeException("Livro Não EnContrado"));
+        book.setDeleted(true);
+        bookRepository.save(book);
     }
 
     public List<Book> findByTitle(String title) {

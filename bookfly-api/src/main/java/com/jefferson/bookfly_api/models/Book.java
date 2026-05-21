@@ -2,11 +2,13 @@ package com.jefferson.bookfly_api.models;
 
 import com.jefferson.bookfly_api.enums.Gender;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@SQLDelete(sql = "UPDATE livro SET deleted = true WHERE id= ?")
 @Table(name = "livro")
 public class Book {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,35 +31,29 @@ public class Book {
     )
     private List<Author> authors;
 
+    @Column(nullable = false)
+    private boolean deleted = false;
+
 
     @ElementCollection
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "livro_genero", joinColumns = @JoinColumn(name = "livro_id"))
     private List<Gender> genders = new ArrayList<>();
 
-    public Book(Long id, String title, String cover, String summary, List<Author> authors, List<Gender> genders) {
+
+    public Book() {
+    }
+
+    public Book(Long id, String title, String cover, String summary, List<Author> authors, boolean deleted, List<Gender> genders) {
         this.id = id;
         this.title = title;
         this.cover = cover;
         this.summary = summary;
         this.authors = authors;
+        this.deleted = deleted;
         this.genders = genders;
     }
 
-    public Book() {
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                ", title='" + title + '\'' +
-                ", cover='" + cover + '\'' +
-                ", authors=" + authors +
-                ", genders=" + genders +
-                '}';
-    }
 
     public Long getId() {
         return id;
@@ -97,6 +93,14 @@ public class Book {
 
     public void setAuthors(List<Author> authors) {
         this.authors = authors;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     public List<Gender> getGenders() {
