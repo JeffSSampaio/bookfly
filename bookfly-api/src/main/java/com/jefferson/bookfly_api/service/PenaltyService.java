@@ -6,6 +6,7 @@ import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -59,10 +60,10 @@ public class PenaltyService {
                 .orElseThrow(()-> new RuntimeException("não existe essa multa"));
     }
 
+    @Transactional
     public Penalty updatePenalty(Long penaltyId, Penalty updatedData) {
         Penalty existingPenalty = penaltyRepository.findById(penaltyId)
                 .orElseThrow(() -> new RuntimeException("Multa não encontrada"));
-
 
         if (updatedData.getPenaltyDate() != null) {
             existingPenalty.setPenaltyDate(updatedData.getPenaltyDate());
@@ -78,6 +79,18 @@ public class PenaltyService {
 
         if (updatedData.getStatus() != null) {
             existingPenalty.setStatus(updatedData.getStatus());
+
+
+            if (updatedData.getStatus() == StatusPenalty.PAGO) {
+                existingPenalty.setPaid(true);
+                existingPenalty.setPayedDate(LocalDateTime.now());
+
+                Loan loan = existingPenalty.getLoan();
+                if (loan != null) {
+                    loan.setStatus(StatusLoan.FINALIZADO);
+                    loanRepository.save(loan);
+                }
+            }
         }
 
         if (updatedData.getLoan() != null) {

@@ -56,8 +56,13 @@ public class PenaltyController {
             @PathVariable Long id,
             @RequestBody PenaltyUpdateRequest request
     ) {
-        Penalty penaltyRequested = penaltyService.findById(id);
-        Penalty updatedPenalty = penaltyService.updatePenalty(id, penaltyRequested);
+         Penalty penaltyData = new Penalty();
+         penaltyData.setPenaltyDate(request.penaltyDate());
+         penaltyData.setPaid(request.paid());
+         penaltyData.setAmount(new java.math.BigDecimal(request.amount().toString()));
+         penaltyData.setStatus(request.status());
+
+        Penalty updatedPenalty = penaltyService.updatePenalty(id, penaltyData);
         return ResponseEntity.ok(PenaltyDetail.from(updatedPenalty));
     }
 }
