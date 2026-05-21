@@ -91,6 +91,21 @@ public class PenaltyService {
                     loanRepository.save(loan);
                 }
             }
+
+            if (updatedData.getStatus() == StatusPenalty.PENDENTE) {
+                existingPenalty.setPaid(false);
+                existingPenalty.setPayedDate(null);
+
+                Loan loan = existingPenalty.getLoan();
+                if (loan != null) {
+                    loan.setStatus(StatusLoan.ATRASADO);
+                    loanRepository.save(loan);
+                }
+            }
+
+
+
+
         }
 
         if (updatedData.getLoan() != null) {
