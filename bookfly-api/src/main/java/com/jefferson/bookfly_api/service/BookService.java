@@ -2,10 +2,13 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.dto.book.BookRequest;
 import com.jefferson.bookfly_api.enums.Gender;
+import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
+import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.repository.AuthorRepository;
 import com.jefferson.bookfly_api.repository.BookRepository;
+import com.jefferson.bookfly_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,7 @@ import java.util.Optional;
 public class BookService {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
+    private final UserRepository userRepository;
 
     public Book createBook(Book book){
 
@@ -54,7 +58,7 @@ public class BookService {
         bookToSave.setGenders(genders);
 
         boolean existBook = bookRepository
-                .existsByTitleIgnoreCaseAndAuthorsIn(bookToSave.getTitle(), authors);
+                .existsActiveByTitleAndAuthors(bookToSave.getTitle(), authors);
 
         if (existBook){
             throw new RuntimeException("Livro já cadastrado");
@@ -70,11 +74,15 @@ public class BookService {
                 .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
     }
 
-    public Book updateBook(Long id, Book book){
+    public Book updateBook(Long id,Long userId, Book book){
         Book existBook = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Livro não existe"));
 
-
+            if (existBook.getRecordStatus().getStatus() == RecordStatusValue.DELETED){
+                User currentUser = userRepository.findById(userId)
+                        .orElseThrow(()-> new RuntimeException("Este Usuario não existe para executar essa ação"));
+                existBook.getRecordStatus().active(currentUser);
+            }
         String sumaryExists  = book.getSummary() !=null ? book.getSummary() : "Sem sumario";
 
         if (book.getTitle() != null) existBook.setTitle(book.getTitle());
@@ -108,30 +116,34 @@ public class BookService {
     public List<Book> findAllBooksActive(){
         return bookRepository.findAll()
                 .stream()
-                .filter( book -> !book.isDeleted())
+                .filter( book -> book.getRecordStatus().getStatus() == RecordStatusValue.ACTIVE)
                 .toList();
     }
 
     public List<Book> findBookByAutor(Long autorId) {
-        return bookRepository.findByAuthorsId(autorId);
+        return bookRepository.findActiveByAuthorsId(autorId);
     }
 
-    public void activeBook(Long id){
+    public void activeBook(Long id, User currentUser){
         Book book = bookRepository.findById(id)
-                .filter( b -> b.isDeleted())
+                .filter( b -> b.getRecordStatus().getStatus() == RecordStatusValue.DELETED)
                 .orElseThrow(()-> new RuntimeException("Livro nâo Encontrado"));
-        book.setDeleted(false);
+        userRepository.findById(currentUser.getId())
+                .orElseThrow(()-> new RuntimeException("Este Usuário não existe para realizar a ação de deletar."));
+        book.getRecordStatus().active(currentUser);
         bookRepository.save(book);
     }
 
-    public void removeBook(Long id){
+    public void removeBook(Long id, User currentUser){
         Book book = bookRepository.findById(id).orElseThrow(()-> new RuntimeException("Livro Não EnContrado"));
-        book.setDeleted(true);
+         userRepository.findById(currentUser.getId())
+                 .orElseThrow(()-> new RuntimeException("Este Usuário não existe para realizar a ação de deletar."));
+        book.getRecordStatus().delete(currentUser);
         bookRepository.save(book);
     }
 
     public List<Book> findByTitle(String title) {
-        return bookRepository.findByTitleContainingIgnoreCase(title);
+        return bookRepository.findActiveByTitleContaining(title);
     }
 
 }

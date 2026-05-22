@@ -5,6 +5,7 @@ import com.jefferson.bookfly_api.dto.book.BookRequest;
 import com.jefferson.bookfly_api.dto.book.BookUpdateRequest;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
+import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -103,7 +104,7 @@ public class BookController {
             @ApiResponse(responseCode = "404", description = "Livro não encontrado")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<BookDetail> updateBook(@PathVariable Long id, @RequestBody BookUpdateRequest request) {
+    public ResponseEntity<BookDetail> updateBook(@PathVariable Long id, @RequestBody @Valid BookUpdateRequest request) {
 
        Book bookEdit = new Book();
        bookEdit.setCover(request.cover());
@@ -124,7 +125,8 @@ public class BookController {
        bookEdit.setTitle(request.title());
        bookEdit.setGenders(request.genders());
 
-       Book updatedBook = bookService.updateBook(id, bookEdit);
+
+       Book updatedBook = bookService.updateBook(id, request.userId(), bookEdit);
 
        return ResponseEntity.ok(BookDetail.from(updatedBook));
     }
@@ -135,8 +137,11 @@ public class BookController {
             @ApiResponse(responseCode = "404", description = "Livro não encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletedBook(@PathVariable Long id){
-        bookService.removeBook(id);
+    public ResponseEntity<Void> deletedBook(@PathVariable Long id, Long userId){
+
+        User currentUser = new User();
+        currentUser.setId(userId);
+        bookService.removeBook(id,currentUser);
         return ResponseEntity.noContent().build();
     }
 

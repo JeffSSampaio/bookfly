@@ -44,7 +44,7 @@ public class AuthorService {
 
         Author savedAuthor = authorRepository.save(existAuthor);
 
-        List<Book> booksWithAuthor = bookRepository.findByAuthorsId(id);
+        List<Book> booksWithAuthor = bookRepository.findActiveByAuthorsId(id);
         for (Book book : booksWithAuthor) {
             List<Author> authors = book.getAuthors();
             for (int i = 0; i < authors.size(); i++) {
@@ -86,7 +86,7 @@ public class AuthorService {
         Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Autor não encontrado para deleção"));
 
-        List<Book> booksWithAuthor = bookRepository.findByAuthorsId(id);
+        List<Book> booksWithAuthor = bookRepository.findActiveByAuthorsId(id);
         for (Book book : booksWithAuthor) {
 
             if (book.getAuthors().size() == 1) {

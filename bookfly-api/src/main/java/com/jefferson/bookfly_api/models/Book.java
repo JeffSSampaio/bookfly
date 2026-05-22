@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@SQLDelete(sql = "UPDATE livro SET deleted = true WHERE id= ?")
+@SQLDelete(sql = "UPDATE livro SET record_status = 'DELETED', status_date_time = NOW() WHERE id = ?")
 @Table(name = "livro")
 public class Book {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,29 +31,27 @@ public class Book {
     )
     private List<Author> authors;
 
-    @Column(nullable = false)
-    private boolean deleted = false;
-
-
     @ElementCollection
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "livro_genero", joinColumns = @JoinColumn(name = "livro_id"))
     private List<Gender> genders = new ArrayList<>();
 
+    @Embedded
+    private RecordStatus recordStatus = new RecordStatus();
+
 
     public Book() {
     }
 
-    public Book(Long id, String title, String cover, String summary, List<Author> authors, boolean deleted, List<Gender> genders) {
+    public Book(Long id, String title, String cover, String summary, List<Author> authors, List<Gender> genders, RecordStatus recordStatus) {
         this.id = id;
         this.title = title;
         this.cover = cover;
         this.summary = summary;
         this.authors = authors;
-        this.deleted = deleted;
         this.genders = genders;
+        this.recordStatus = recordStatus;
     }
-
 
     public Long getId() {
         return id;
@@ -95,19 +93,19 @@ public class Book {
         this.authors = authors;
     }
 
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
     public List<Gender> getGenders() {
         return genders;
     }
 
     public void setGenders(List<Gender> genders) {
         this.genders = genders;
+    }
+
+    public RecordStatus getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(RecordStatus recordStatus) {
+        this.recordStatus = recordStatus;
     }
 }
