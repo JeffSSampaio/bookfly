@@ -186,7 +186,9 @@ window.table = function (tableData) {
     return container;
 };
 
-window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeight = '16px') {
+  
+
+window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeight = '16px', extraButtons = []) {
     let container = document.createElement('div');
     Object.assign(container.style, tableStyles.container);
 
@@ -242,24 +244,41 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
 
         let actionsCell = document.createElement('td');
         Object.assign(actionsCell.style, tableStyles.cell);
+        actionsCell.style.whiteSpace = 'nowrap';
 
-        let btn = document.createElement('button');
-        btn.innerHTML = `<img src="/Interface/assets/iconEditWhite.svg" alt="Editar" style="width:${btnWidth};height:${btnHeight};display:block;">`;
-        btn.style.padding = '6px 12px';
-        btn.style.border = 'none';
-        btn.style.backgroundColor = 'var(--color-dark-green)';
-        btn.style.borderRadius = '20px';
-        btn.style.cursor = 'pointer';
-        btn.style.display = 'inline-flex';
-        btn.style.alignItems = 'center';
-        btn.style.justifyContent = 'center';
-        btn.style.margin = '0 auto';
-        btn.style.transition = 'background-color 0.2s ease';
-        btn.onmouseover = () => btn.style.backgroundColor = '#003327';
-        btn.onmouseout  = () => btn.style.backgroundColor = 'var(--color-dark-green)';
-        btn.onclick = () => { if (onEdit) onEdit(rowData, index, row); };
 
-        actionsCell.appendChild(btn);
+     const defaultButtons = [
+            {
+                icon: '/Interface/assets/iconEditWhite.svg',
+                alt: 'Editar',
+                bgColor: 'var(--color-dark-green)',
+                hoverColor: '#003327',
+                onClick: (rowData, index, row) => { if (onEdit) onEdit(rowData, index, row); }
+            }
+        ];
+      
+
+        const allButtons = [...defaultButtons, ...extraButtons];
+
+        allButtons.forEach(btnConfig => {
+            let btn = document.createElement('button');
+            btn.innerHTML = `<img src="${btnConfig.icon}" alt="${btnConfig.alt}" style="width:${btnWidth};height:${btnHeight};display:block;">`;
+            btn.style.padding = '6px 12px';
+            btn.style.border = 'none';
+            btn.style.backgroundColor = btnConfig.bgColor || 'var(--color-dark-green)';
+            btn.style.borderRadius = '20px';
+            btn.style.cursor = 'pointer';
+            btn.style.display = 'inline-flex';
+            btn.style.margin = '0 3px';
+            btn.style.alignItems = 'center';
+            btn.style.justifyContent = 'center';
+            btn.style.transition = 'background-color 0.2s ease';
+            btn.onmouseover = () => btn.style.backgroundColor = btnConfig.hoverColor || '#003327';
+            btn.onmouseout  = () => btn.style.backgroundColor = btnConfig.bgColor || 'var(--color-dark-green)';
+            btn.onclick = () => { if (btnConfig.onClick) btnConfig.onClick(rowData, index, row); };
+            actionsCell.appendChild(btn);
+        });
+
         row.appendChild(actionsCell);
         tbody.appendChild(row);
     });
@@ -500,12 +519,12 @@ window.openEditBookModal = function (BookData, index, rowElement) {
 
 
 
-function renderTable({idHtmlElement , data, configTable, searchFunction, functionTable}){
+function renderTable({idHtmlElement , data, configTable, searchFunction, functionTable,extraButtons = []}){
     const container = document.getElementById(idHtmlElement);
 
     if (!container) return;
 
-    container.appendChild(functionTable(configTable));
+    container.appendChild(functionTable(configTable, extraButtons));
     if(searchFunction) searchFunction(data);
 
     if(!data || data.length === 0){
@@ -684,5 +703,12 @@ renderTable({
     data: allBooks,
     configTable: booksTableConfig,
     searchFunction: window.setupBooksSearch,
-    functionTable: (config) => window.table_with_edit(config, window.openEditBookModal)
+    functionTable: (config, extraButtons) => window.table_with_edit(config, window.openEditBookModal, '16px', '16px', extraButtons),
+    // extraButtons: [{
+    //     icon: '/Interface/assets/iconVerified.svg',
+    //     alt: 'Adicionar',
+    //     bgColor: 'var(--color-dark-green)',
+    //     hoverColor: '#003327',
+    //     onClick: () => { null }
+    // }]
 });
