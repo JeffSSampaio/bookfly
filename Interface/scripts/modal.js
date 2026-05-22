@@ -378,9 +378,9 @@ window.openRegisterBook= async function (){
        fields: [
                 {label:"Nome do Livro", type:"text", name:"bookName"},
                 {label:"Capa do Livro", type:"text", name:"coverBook"},
-                {label:"Book Authors", type:"text", name:"authorName"},
-                {label:"Book Summary", type:"textArea" ,name:"summaryBook"},
-                {label:"Genero", type:"text", name:"genderBook"}
+                {label:"Autores", type:"text", name:"authorName"},
+                {label:"Sumário", type:"textArea" ,name:"summaryBook"},
+                {label:"Gênero", type:"text", name:"genderBook"}
             ],
         onSubmit: async(data)=> {
 
