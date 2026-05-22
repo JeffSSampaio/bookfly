@@ -50,7 +50,7 @@ public class BookController {
 
         book.setGenders(request.genders());
 
-        Book saved = bookService.createBook(book);
+        Book saved = bookService.createBook(request.userId(),book);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(BookDetail.from(saved));

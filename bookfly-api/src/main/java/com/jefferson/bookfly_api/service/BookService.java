@@ -23,9 +23,22 @@ public class BookService {
     private final AuthorRepository authorRepository;
     private final UserRepository userRepository;
 
-    public Book createBook(Book book){
+    public Book createBook(Long userId,Book book){
+        User user= userRepository.findById(userId)
+                .orElseThrow(()-> new RuntimeException("Este Usuario não existe no sistema"));
+        Book existBookDeleted = bookRepository.findById(book.getId())
+                .orElseThrow(() -> new RuntimeException("Esse Livro nâo existe no sistema"));
+        if (existBookDeleted.getRecordStatus().getStatus().equals(RecordStatusValue.DELETED) &&
+            existBookDeleted.getId().equals(book.getId())
+        ){
+            existBookDeleted.getRecordStatus().active(user);
+            return bookRepository.save(existBookDeleted);
+        }
+
 
         List<Author> authors = new ArrayList<>();
+
+
 
         for (Author author : book.getAuthors()) {
 
