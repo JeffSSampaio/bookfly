@@ -70,11 +70,12 @@ const loanTableConfig = {
 
 const finesTableConfig = {
     headers: ['ID', 'Usuário', 'Valor da Multa', 'Data de Multa', 'Data de Entrega do Livro', 'Status'],
-    columnConfig:{
-        amount: {render: (cell ,value) =>{
-            cell.innerHTML = 'R$'+ value
+    columnConfig: {
+        amount: {
+            render: (cell, value) => {
+                cell.innerHTML = 'R$' + value;
+            }
         }
-    }
     },
     rows: allFines.map(r => ({
         id: r.penaltyId,
@@ -186,8 +187,6 @@ window.table = function (tableData) {
     return container;
 };
 
-  
-
 window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeight = '16px', extraButtons = []) {
     let container = document.createElement('div');
     Object.assign(container.style, tableStyles.container);
@@ -246,8 +245,7 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
         Object.assign(actionsCell.style, tableStyles.cell);
         actionsCell.style.whiteSpace = 'nowrap';
 
-
-     const defaultButtons = [
+        const defaultButtons = [
             {
                 icon: '/Interface/assets/iconEditWhite.svg',
                 alt: 'Editar',
@@ -256,7 +254,6 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
                 onClick: (rowData, index, row) => { if (onEdit) onEdit(rowData, index, row); }
             }
         ];
-      
 
         const allButtons = [...defaultButtons, ...extraButtons];
 
@@ -288,6 +285,71 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
     return container;
 };
 
+
+function openConfirmDeleteModal({ uid, title, message, onConfirm }) {
+    const modalHTML = `
+    <div class="modal" id="${uid}">
+        <div class="c-modal modal-movements">
+            <div class="b-modal b-modal-movements" style="text-align:center;">
+                <h1>${title}</h1>
+                <p style="color:var(--color-dark-green);font-family:var(--font-primary);margin:12px 0 24px;font-size:15px;">${message}</p>
+                <div class="c-modal-btn modal-movements-actions">
+                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" id="btn-confirmar-${uid}" style="background-color:#a32d2d;">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    const modal = document.getElementById(uid);
+
+    document.getElementById(`btn-confirmar-${uid}`).addEventListener('click', async () => {
+        try {
+            await onConfirm();
+            modal.remove();
+            location.reload();
+        } catch (e) {
+            alert('Erro ao excluir: ' + (e.message || e));
+        }
+    });
+
+    document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+}
+
+
+window.openDeleteBookModal = function (bookData) {
+    openConfirmDeleteModal({
+        uid: `modal-delete-book-${bookData.id}`,
+        title: `Excluir Livro N°${bookData.id}`,
+        message: `Tem certeza que deseja excluir o livro <strong>${bookData.title}</strong>? Esta ação não pode ser desfeita.`,
+        onConfirm: () => api.deleteBook(bookData.id)
+    });
+};
+
+
+window.openDeleteMovimentModal = function (movimentData) {
+    openConfirmDeleteModal({
+        uid: `modal-delete-moviment-${movimentData.id}`,
+        title: `Excluir Movimentação N°${movimentData.id}`,
+        message: `Tem certeza que deseja excluir esta movimentação do livro <strong>${movimentData.book}</strong>? Esta ação não pode ser desfeita.`,
+        onConfirm: () => api.deleteMoviment(movimentData.id)
+    });
+};
+
+
+window.openDeleteStockModal = function (stockData) {
+    openConfirmDeleteModal({
+        uid: `modal-delete-stock-${stockData.id}`,
+        title: `Remover do Estoque`,
+        message: `Tem certeza que deseja remover <strong>${stockData.title}</strong> do estoque? Esta ação não pode ser desfeita.`,
+        onConfirm: () => api.removeBookFromStock(stockData._bookId)
+    });
+};
+
+
+
 window.openEditMoviment = async function (movimentData, index, rowElement) {
     const uid = `modal-edit-moviment-${movimentData.id}`;
     const currentQtd = parseInt(String(movimentData.qtd).replace('+', '').replace('-', ''));
@@ -313,7 +375,7 @@ window.openEditMoviment = async function (movimentData, index, rowElement) {
                     <input type="text" id="description-${uid}" value="${movimentData.description || ''}">
                 </div>
                 <div class="c-modal-btn modal-movements-actions">
-                    <button type="button" id="btn-cancelar-${uid}">Cancel</button>
+                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
                     <button type="button" id="btn-salvar-${uid}">Salvar</button>
                 </div>
               </div>
@@ -375,7 +437,7 @@ window.openEditStockModal = function (stockData, index, rowElement) {
                     <textarea id="description-${stockData.id}"></textarea>
                 </div>
                 <div class="c-modal-btn">
-                    <button type="button" id="btn-cancelar-${uid}">Cancel</button>
+                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
                     <button type="button" id="btn-salvar-${uid}">Salvar</button>
                 </div>
             </div>
@@ -436,7 +498,7 @@ window.openAddMoviment = async function () {
                     <input type="text" id="desc-${uid}">
                 </div>
                 <div class="c-modal-btn modal-movements-actions">
-                    <button type="button" id="btn-cancelar-${uid}">Cancel</button>
+                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
                     <button type="button" id="btn-salvar-${uid}">Salvar</button>
                 </div>
             </div>
@@ -487,7 +549,7 @@ window.openEditBookModal = function (BookData, index, rowElement) {
                     <input type="text" id="generos-novo-${BookData.id}" value="${gendersText}">
                 </div>
                 <div class="c-modal-btn">
-                    <button type="button" id="btn-cancelar-${uid}">Cancel</button>
+                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
                     <button type="button" id="btn-salvar-${uid}">Salvar</button>
                 </div>
             </div>
@@ -516,30 +578,26 @@ window.openEditBookModal = function (BookData, index, rowElement) {
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 };
 
-
-
-
-function renderTable({idHtmlElement , data, configTable, searchFunction, functionTable,extraButtons = []}){
+function renderTable({ idHtmlElement, data, configTable, searchFunction, functionTable, extraButtons = [] }) {
     const container = document.getElementById(idHtmlElement);
 
     if (!container) return;
 
     container.appendChild(functionTable(configTable, extraButtons));
-    if(searchFunction) searchFunction(data);
+    if (searchFunction) searchFunction(data);
 
-    if(!data || data.length === 0){
+    if (!data || data.length === 0) {
         const warning = document.createElement('p');
         warning.style.color = 'var(--color-mid-green)';
         warning.style.fontWeight = '500';
-        warning.style.display='flex';
-        warning.style.flexDirection='row';
-        warning.style.alignItems='center'
-        warning.style.justifyContent='center'
+        warning.style.display = 'flex';
+        warning.style.flexDirection = 'row';
+        warning.style.alignItems = 'center';
+        warning.style.justifyContent = 'center';
         warning.innerHTML = "Nenhuma informação na tabela";
         container.appendChild(warning);
     }
 }
-
 
 window.openEditLoanModal = function (loanData, index, rowElement) {
     const uid = `modal-edit-loan-${loanData.id}`;
@@ -581,8 +639,7 @@ window.openEditLoanModal = function (loanData, index, rowElement) {
     document.getElementById(`btn-salvar-${uid}`).addEventListener('click', async () => {
         const newStatus = document.getElementById(`status-${uid}`).value;
         try {
-            
-            await api.updateLoan(loanData.id, {status:newStatus});
+            await api.updateLoan(loanData.id, { status: newStatus });
             alert('Empréstimo atualizado com sucesso!');
             modal.remove();
             location.reload();
@@ -598,7 +655,7 @@ window.openEditLoanModal = function (loanData, index, rowElement) {
 window.openEditFineModal = function (fineData, index, rowElement) {
     const uid = `modal-edit-fine-${fineData.id}`;
 
-    const FINE_STATUSES = [ 'PENDENTE', 'PAGO', 'CANCELADA' ];
+    const FINE_STATUSES = ['PENDENTE', 'PAGO', 'CANCELADA'];
 
     const statusOptions = FINE_STATUSES.map(s =>
         `<option value="${s}" ${fineData.status === s ? 'selected' : ''}>${s}</option>`
@@ -644,27 +701,33 @@ window.openEditFineModal = function (fineData, index, rowElement) {
             return;
         }
 
-    try {
-         const payload = { status: newStatus };
-
-            if (amount !== null) {
-                payload.amount = amount;
-            }
+        try {
+            const payload = { status: newStatus };
+            if (amount !== null) payload.amount = amount;
 
             await api.updatePenalty(fineData.id, payload);
-
             alert('Multa atualizada com sucesso!');
             modal.remove();
             location.reload();
-
-            } catch (e) {
-                alert('Erro ao atualizar multa: ' + (e.message || e));
-            }
+        } catch (e) {
+            alert('Erro ao atualizar multa: ' + (e.message || e));
+        }
     });
 
     document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 };
+
+
+const deleteButton = (onDelete) => ({
+    icon: '/Interface/assets/iconDeleteOnly.svg',
+    alt: 'Excluir',
+    bgColor: '#a32d2d',
+    hoverColor: '#7a1f1f',
+    onClick: (rowData) => onDelete(rowData)
+});
+
+
 
 renderTable({
     idHtmlElement: 'table-loans',
@@ -687,7 +750,8 @@ renderTable({
     data: allStock,
     configTable: stockTableConfig,
     searchFunction: window.setupStockSearch,
-    functionTable: (config) => window.table_with_edit(config, window.openEditStockModal)
+    functionTable: (config, extraButtons) => window.table_with_edit(config, window.openEditStockModal, '16px', '16px', extraButtons),
+    extraButtons: [deleteButton(window.openDeleteStockModal)]
 });
 
 renderTable({
@@ -695,7 +759,8 @@ renderTable({
     data: allMovements,
     configTable: movimentTableConfig,
     searchFunction: window.setupMovementSearch,
-    functionTable: (config) => window.table_with_edit(config, window.openEditMoviment)
+    functionTable: (config, extraButtons) => window.table_with_edit(config, window.openEditMoviment, '16px', '16px', extraButtons),
+    extraButtons: [deleteButton(window.openDeleteMovimentModal)]
 });
 
 renderTable({
@@ -704,11 +769,5 @@ renderTable({
     configTable: booksTableConfig,
     searchFunction: window.setupBooksSearch,
     functionTable: (config, extraButtons) => window.table_with_edit(config, window.openEditBookModal, '16px', '16px', extraButtons),
-    // extraButtons: [{
-    //     icon: '/Interface/assets/iconVerified.svg',
-    //     alt: 'Adicionar',
-    //     bgColor: 'var(--color-dark-green)',
-    //     hoverColor: '#003327',
-    //     onClick: () => { null }
-    // }]
+    extraButtons: [deleteButton(window.openDeleteBookModal)]
 });
