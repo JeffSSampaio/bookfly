@@ -99,8 +99,8 @@ const api = {
     }).then(handleResponse),
 
  
-  deleteBook: (id) =>
-    fetch(`${BASE_URL}/books/${id}`, { method: 'DELETE' }).then(handleResponse),
+  deleteBook: (id,userId) =>
+    fetch(`${BASE_URL}/books/${id}?userId=${userId}`, { method: 'DELETE' }).then(handleResponse),
 
 
   

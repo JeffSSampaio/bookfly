@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -130,6 +131,7 @@ public class BookService {
         return bookRepository.findAll()
                 .stream()
                 .filter( book -> book.getRecordStatus().getStatus() == RecordStatusValue.ACTIVE)
+                .sorted(Comparator.comparing(Book::getId))
                 .toList();
     }
 

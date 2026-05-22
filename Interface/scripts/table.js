@@ -324,7 +324,7 @@ window.openDeleteBookModal = function (bookData) {
         uid: `modal-delete-book-${bookData.id}`,
         title: `Excluir Livro N°${bookData.id}`,
         message: `Tem certeza que deseja excluir o livro <strong>${bookData.title}</strong>? Esta ação não pode ser desfeita.`,
-        onConfirm: () => api.deleteBook(bookData.id)
+        onConfirm: () => api.deleteBook(bookData.id,loggedUser.id)
     });
 };
 
