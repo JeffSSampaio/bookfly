@@ -272,5 +272,16 @@ public class LoanService {
         return loanRepository.findByUser(existUser);
     }
 
+    @Transactional
+    public void removeLoan(Long id, Long userId){
+        Loan existLoan = loanRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Não existe esse empréstimo no sistema"));
+       User existUser = userRepository.findById(userId)
+                .orElseThrow(()-> new RuntimeException("Esse Usuário não existe para realizar esa ação"));
+
+        existLoan.getRecordStatus().delete(existUser);
+
+        loanRepository.save(existLoan);
+    }
 
 }

@@ -9,6 +9,7 @@ import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.repository.AuthorRepository;
 import com.jefferson.bookfly_api.repository.BookRepository;
 import com.jefferson.bookfly_api.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -149,11 +150,12 @@ public class BookService {
         bookRepository.save(book);
     }
 
-    public void removeBook(Long id, User currentUser){
+    @Transactional
+    public void removeBook(Long id, Long userId){
         Book book = bookRepository.findById(id).orElseThrow(()-> new RuntimeException("Livro Não EnContrado"));
-         userRepository.findById(currentUser.getId())
+        User existUser = userRepository.findById(userId)
                  .orElseThrow(()-> new RuntimeException("Este Usuário não existe para realizar a ação de deletar."));
-        book.getRecordStatus().delete(currentUser);
+        book.getRecordStatus().delete(existUser);
         bookRepository.save(book);
     }
 

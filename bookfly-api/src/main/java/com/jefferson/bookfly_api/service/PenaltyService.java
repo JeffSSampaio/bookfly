@@ -114,4 +114,17 @@ public class PenaltyService {
 
         return penaltyRepository.save(existingPenalty);
     }
+
+    public void removePenalty(Long id,Long userId){
+            Penalty penaltyExist = penaltyRepository.findById(id)
+                    .orElseThrow(()-> new RuntimeException("Essa multa não existe no sistema"));
+            User userExist = userRepository.findById(userId)
+                    .orElseThrow(()-> new RuntimeException("Esse Usuário não existe no sistema"));
+
+            penaltyExist.getRecordStatus().delete(userExist);
+
+            penaltyRepository.save(penaltyExist);
+    }
+
+
 }

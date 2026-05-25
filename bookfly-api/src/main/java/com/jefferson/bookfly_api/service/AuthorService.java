@@ -3,9 +3,11 @@ package com.jefferson.bookfly_api.service;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
 import com.jefferson.bookfly_api.models.StockBook;
+import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.repository.AuthorRepository;
 import com.jefferson.bookfly_api.repository.BookRepository;
 import com.jefferson.bookfly_api.repository.StockBookRepository;
+import com.jefferson.bookfly_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ public class AuthorService {
     private final AuthorRepository authorRepository;
     private final StockBookRepository stockBookRepository;
     private final BookRepository bookRepository;
+    private final UserRepository userRepository;
 
 
     public List<Author> getAllAuthors() {
@@ -82,10 +85,11 @@ public class AuthorService {
     }
 
     @Transactional
-    public void deleteAuthor(Long id) {
+    public void deleteAuthor(Long id, Long userId) {
         Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Autor não encontrado para deleção"));
-
+        User existUser = userRepository.findById(userId)
+                .orElseThrow( () -> new RuntimeException("Este Usuário não existe para executar essa ação"));
         List<Book> booksWithAuthor = bookRepository.findActiveByAuthorsId(id);
         for (Book book : booksWithAuthor) {
 
@@ -97,6 +101,8 @@ public class AuthorService {
             bookRepository.save(book);
         }
 
-        authorRepository.delete(author);
+        author.getRecordStatus().delete(existUser);
+
+        authorRepository.save(author);
     }
 }

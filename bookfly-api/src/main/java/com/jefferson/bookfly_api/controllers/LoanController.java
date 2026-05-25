@@ -119,6 +119,15 @@ public class LoanController {
                 );
     }
 
-
+    @Operation(summary = "Deletar Emprestimo")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Emrpestimo deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Emprestimo não encontrado")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteLoan(@PathVariable Long id, Long userId){
+        loanService.removeLoan(id,userId);
+        return ResponseEntity.noContent().build();
+    }
 
 }

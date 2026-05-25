@@ -4,6 +4,7 @@ import com.jefferson.bookfly_api.dto.penalty.PenaltyDetail;
 import com.jefferson.bookfly_api.dto.penalty.PenaltyRequest;
 import com.jefferson.bookfly_api.dto.penalty.PenaltyUpdateRequest;
 import com.jefferson.bookfly_api.models.Penalty;
+import com.jefferson.bookfly_api.service.LoanService;
 import com.jefferson.bookfly_api.service.PenaltyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -65,4 +66,16 @@ public class PenaltyController {
         Penalty updatedPenalty = penaltyService.updatePenalty(id, penaltyData);
         return ResponseEntity.ok(PenaltyDetail.from(updatedPenalty));
     }
+
+    @Operation(summary = "Deletar penalidade")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Penalidade atualizada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Penalidade não encontrada")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePenalty(@PathVariable Long id , Long userId ){
+        penaltyService.removePenalty(id,userId);
+        return ResponseEntity.noContent().build();
+    }
+
 }

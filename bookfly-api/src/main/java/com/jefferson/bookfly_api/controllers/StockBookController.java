@@ -100,4 +100,11 @@ public class StockBookController {
                 )
         );
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBookFromStock(@PathVariable Long id,Long userId){
+        stockBookService.removeBookOnStock(id,userId);
+        return ResponseEntity.noContent().build();
+    }
+
 }

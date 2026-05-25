@@ -138,10 +138,7 @@ public class BookController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletedBook(@PathVariable Long id, Long userId){
-
-        User currentUser = new User();
-        currentUser.setId(userId);
-        bookService.removeBook(id,currentUser);
+        bookService.removeBook(id,userId);
         return ResponseEntity.noContent().build();
     }
 

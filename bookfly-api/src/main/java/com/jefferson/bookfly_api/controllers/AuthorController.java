@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.controllers;
 
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
+import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.service.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -67,8 +68,8 @@ public class AuthorController {
             @ApiResponse(responseCode = "404", description = "Autor não encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
-        authorService.deleteAuthor(id);
+    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id, Long userId) {
+        authorService.deleteAuthor(id,userId);
         return ResponseEntity.noContent().build();
     }
 }

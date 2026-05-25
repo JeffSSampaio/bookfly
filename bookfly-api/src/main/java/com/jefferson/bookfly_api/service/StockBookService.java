@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.service;
 
+import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
 import com.jefferson.bookfly_api.models.*;
@@ -25,6 +26,9 @@ public class StockBookService {
     public StockBook addBookOnStock(Long bookId, Long userId, int qtd) {
         if (qtd < 0) throw new RuntimeException("Quantidade inválida");
 
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario não existe"));
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
 
@@ -34,7 +38,13 @@ public class StockBookService {
                 .findByStockAndBook(stock, book)
                 .orElse(null);
 
+
         if (stockBook != null) {
+
+            if (stockBook.getRecordStatus().equals(RecordStatusValue.DELETED)){
+                stockBook.getRecordStatus().active(user);
+            }
+
             stockBook.setQtd(stockBook.getQtd() + qtd);
         } else {
             stockBook = new StockBook();
@@ -43,8 +53,6 @@ public class StockBookService {
             stockBook.setQtd(qtd);
         }
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario não existe"));
 
         boolean isAdmin = user.getRole().equals(Role.ADMIN);
         TypeMoviment typeMoviment = TypeMoviment.ENTRADA_ADMIN;
@@ -69,20 +77,20 @@ public class StockBookService {
         return saved;
     }
 
-    public StockBook removeBookFromStock(Long bookId) {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
-
-        Stock stock = stockService.getStock();
-
-        StockBook stockBook = stockBookRepository
-                .findByStockAndBook(stock, book)
-                .orElseThrow(() -> new RuntimeException("Livro não existe no estoque"));
-
-        stockBook.setQtd(0);
-
-        return stockBookRepository.save(stockBook);
-    }
+//    public StockBook removeBookFromStock(Long bookId) {
+//        Book book = bookRepository.findById(bookId)
+//                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+//
+//        Stock stock = stockService.getStock();
+//
+//        StockBook stockBook = stockBookRepository
+//                .findByStockAndBook(stock, book)
+//                .orElseThrow(() -> new RuntimeException("Livro não existe no estoque"));
+//
+//        stockBook.setQtd(0);
+//
+//        return stockBookRepository.save(stockBook);
+//    }
 
     public StockBook findByBook(Long bookId) {
         Book book = bookRepository.findById(bookId)
@@ -132,4 +140,19 @@ public class StockBookService {
         Stock stock = stockService.getStock();
         return stockBookRepository.findByStock(stock);
     }
+
+    public void removeBookOnStock(Long id,Long userId){
+
+        StockBook stockBook = stockBookRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Esse Livro não existe no estoque"));
+
+        User userExist = userRepository.findById(userId)
+                .orElseThrow(()-> new RuntimeException("Este Usuário não foi encontrado para realizar essa ação"));
+
+        stockBook.getRecordStatus().delete(userExist);
+        stockBook.setQtd(0);
+
+        stockBookRepository.save(stockBook);
+    }
+
 }

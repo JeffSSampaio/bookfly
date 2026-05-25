@@ -99,7 +99,9 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        userRepository.delete(user);
+        user.getRecordStatus().delete(user);
+
+        userRepository.save(user);
     }
 
     public boolean userExistsById(Long id){
