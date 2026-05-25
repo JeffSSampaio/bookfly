@@ -73,9 +73,9 @@ public class StockBookController {
             @ApiResponse(responseCode = "404", description = "Livro não encontrado")
     })
     @DeleteMapping("/remove/{bookId}")
-    public ResponseEntity<Void> removeBookFromStock(@PathVariable Long bookId) {
+    public ResponseEntity<Void> removeBookFromStock(@PathVariable Long bookId, Long userId) {
 
-        stockBookService.removeBookFromStock(bookId);
+        stockBookService.removeBookOnStock(bookId,userId);
 
         return ResponseEntity.noContent().build();
     }
