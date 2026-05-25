@@ -70,8 +70,8 @@ const api = {
       method: 'POST',
     }).then(handleResponse),
 
-  deleteAuthor: (id) =>
-    fetch(`${BASE_URL}/authors/${id}`, { method: 'DELETE' }).then(handleResponse),
+  deleteAuthor: (id,userId) =>
+    fetch(`${BASE_URL}/authors/${id}userId=${userId}`, { method: 'DELETE' }).then(handleResponse),
 
 
 
@@ -129,8 +129,8 @@ const api = {
     }).then(handleResponse),
 
 
-  removeBookFromStock: (bookId) =>
-    fetch(`${BASE_URL}/stock/remove/${bookId}`, { method: 'DELETE' }).then(handleResponse),
+  removeBookFromStock: (bookId,userId) =>
+    fetch(`${BASE_URL}/stock/remove/${bookId}userId=${userId}`, { method: 'DELETE' }).then(handleResponse),
 
 
 
@@ -193,6 +193,10 @@ const api = {
       body: JSON.stringify(penaltyData),
     }).then(handleResponse),
 
+  deletePenalty: (id , userId) =>
+      fetch(`${BASE_URL}/penalties/${id}?userId=${userId}`,{
+          method:'DELETE',
+        }).then(handleResponse),
 
 
   getAllMoviments: () =>

@@ -329,14 +329,14 @@ window.openDeleteBookModal = function (bookData) {
 };
 
 
-window.openDeleteMovimentModal = function (movimentData) {
-    openConfirmDeleteModal({
-        uid: `modal-delete-moviment-${movimentData.id}`,
-        title: `Excluir Movimentação N°${movimentData.id}`,
-        message: `Tem certeza que deseja excluir esta movimentação do livro <strong>${movimentData.book}</strong>? Esta ação não pode ser desfeita.`,
-        onConfirm: () => api.deleteMoviment(movimentData.id)
-    });
-};
+// window.openDeleteMovimentModal = function (movimentData) {
+//     openConfirmDeleteModal({
+//         uid: `modal-delete-moviment-${movimentData.id}`,
+//         title: `Excluir Movimentação N°${movimentData.id}`,
+//         message: `Tem certeza que deseja excluir esta movimentação do livro <strong>${movimentData.book}</strong>? Esta ação não pode ser desfeita.`,
+//         onConfirm: () => api.deleteMoviment(movimentData.id)
+//     });
+// };
 
 
 window.openDeleteStockModal = function (stockData) {
@@ -344,7 +344,7 @@ window.openDeleteStockModal = function (stockData) {
         uid: `modal-delete-stock-${stockData.id}`,
         title: `Remover do Estoque`,
         message: `Tem certeza que deseja remover <strong>${stockData.title}</strong> do estoque? Esta ação não pode ser desfeita.`,
-        onConfirm: () => api.removeBookFromStock(stockData._bookId)
+        onConfirm: () => api.removeBookFromStock(stockData._bookId,loggedUser.id)
     });
 };
 
@@ -760,7 +760,7 @@ renderTable({
     configTable: movimentTableConfig,
     searchFunction: window.setupMovementSearch,
     functionTable: (config, extraButtons) => window.table_with_edit(config, window.openEditMoviment, '16px', '16px', extraButtons),
-    extraButtons: [deleteButton(window.openDeleteMovimentModal)]
+    // extraButtons: [deleteButton(window.openDeleteMovimentModal)]
 });
 
 renderTable({
