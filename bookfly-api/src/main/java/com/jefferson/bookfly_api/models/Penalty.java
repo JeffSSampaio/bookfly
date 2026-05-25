@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.models;
 
 import com.jefferson.bookfly_api.enums.StatusPenalty;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Entity
+@SQLDelete(sql = "UPDATE multa SET record_status = 'DELETED', status_date_time = NOW() WHERE id = ?")
 @Table(name = "multa")
 public class Penalty {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,19 +34,8 @@ public class Penalty {
     @JoinColumn(name = "emprestimo_id")
     private Loan loan;
 
-
-    public Penalty() {
-    }
-
-    public Penalty(Long id, Boolean paid, LocalDateTime payedDate, LocalDateTime penaltyDate, BigDecimal amount, StatusPenalty status, Loan loan) {
-        this.id = id;
-        this.paid = paid;
-        this.payedDate = payedDate;
-        this.penaltyDate = penaltyDate;
-        this.amount = amount;
-        this.status = status;
-        this.loan = loan;
-    }
+    @Embedded
+    private RecordStatus recordStatus = new RecordStatus();
 
     public BigDecimal getPaymentAmount(LocalDateTime dateReturnDateLoan, LocalDateTime dateCurrent) {
         long daysPassed = ChronoUnit.DAYS.between(dateReturnDateLoan, dateCurrent);
@@ -53,6 +44,20 @@ public class Penalty {
         return new BigDecimal(value)
                 .multiply(new BigDecimal("1.50"))
                 .setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public Penalty() {
+    }
+
+    public Penalty(Long id, Boolean paid, LocalDateTime payedDate, LocalDateTime penaltyDate, BigDecimal amount, StatusPenalty status, Loan loan, RecordStatus recordStatus) {
+        this.id = id;
+        this.paid = paid;
+        this.payedDate = payedDate;
+        this.penaltyDate = penaltyDate;
+        this.amount = amount;
+        this.status = status;
+        this.loan = loan;
+        this.recordStatus = recordStatus;
     }
 
     public Long getId() {
@@ -110,4 +115,14 @@ public class Penalty {
     public void setLoan(Loan loan) {
         this.loan = loan;
     }
+
+    public RecordStatus getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(RecordStatus recordStatus) {
+        this.recordStatus = recordStatus;
+    }
+
+
 }

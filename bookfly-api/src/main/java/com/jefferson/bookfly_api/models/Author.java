@@ -1,12 +1,14 @@
 package com.jefferson.bookfly_api.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
+@SQLDelete(sql = "UPDATE autor SET record_status = 'DELETED', status_date_time = NOW() WHERE id = ?")
 @Table(name="autor")
 public class Author {
 
@@ -24,16 +26,19 @@ public class Author {
     @ManyToMany(mappedBy = "authors")
     private List<Book> books;
 
+    @Embedded
+    private RecordStatus recordStatus = new RecordStatus();
+
     public Author() {
     }
 
-    public Author(Long id, String name, Bookcase bookcase, List<Book> books) {
+    public Author(Long id, String name, Bookcase bookcase, List<Book> books, RecordStatus recordStatus) {
         this.id = id;
         this.name = name;
         this.bookcase = bookcase;
         this.books = books;
+        this.recordStatus = recordStatus;
     }
-
 
     public Long getId() {
         return id;
@@ -65,5 +70,13 @@ public class Author {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    public RecordStatus getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(RecordStatus recordStatus) {
+        this.recordStatus = recordStatus;
     }
 }

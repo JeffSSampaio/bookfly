@@ -36,8 +36,6 @@ public class Moviment {
     private int qtdMoviment;
 
 
-
-
     public Moviment() {
     }
 
