@@ -29,7 +29,7 @@ public class StockBookController {
     public ResponseEntity<List<StockBookSummary>> getAllBooksOnStock() {
 
         return ResponseEntity.ok(
-                stockBookService.findAll()
+                stockBookService.findAllActive()
                         .stream()
                         .map(StockBookSummary::from)
                         .toList()

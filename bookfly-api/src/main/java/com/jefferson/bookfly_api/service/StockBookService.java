@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -24,11 +25,18 @@ public class StockBookService {
     private final StockService stockService;
 
     public StockBook addBookOnStock(Long bookId, Long userId, int qtd) {
-        if (qtd < 0) throw new RuntimeException("Quantidade inválida");
-
+        if (qtd <= 0) {
+            throw new RuntimeException("Quantidade deve ser maior que zero");
+        }
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario não existe"));
+                .orElseThrow(() -> new RuntimeException("Usuário não existe"));
+
+        boolean isAdmin = user.getRole().equals(Role.ADMIN);
+        if (!isAdmin) {
+            throw new RuntimeException("Usuário não autorizado");
+        }
+
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
 
@@ -38,30 +46,23 @@ public class StockBookService {
                 .findByStockAndBook(stock, book)
                 .orElse(null);
 
-
         if (stockBook != null) {
-
-            if (stockBook.getRecordStatus().equals(RecordStatusValue.DELETED)){
+            if (RecordStatusValue.DELETED.equals(stockBook.getRecordStatus().getStatus())) {
                 stockBook.getRecordStatus().active(user);
             }
-
             stockBook.setQtd(stockBook.getQtd() + qtd);
         } else {
             stockBook = new StockBook();
             stockBook.setStock(stock);
             stockBook.setBook(book);
             stockBook.setQtd(qtd);
+            if (stockBook.getRecordStatus() != null) {
+                stockBook.getRecordStatus().active(user);
+            }
         }
 
-
-        boolean isAdmin = user.getRole().equals(Role.ADMIN);
         TypeMoviment typeMoviment = TypeMoviment.ENTRADA_ADMIN;
-        String description = "";
-        if(isAdmin){
-            description = "Admin realizou " + typeMoviment + " em " + book.getTitle() + " com " + qtd + " unidade(s)";
-        } else{
-            throw new RuntimeException("Usuario não autorizado");
-        }
+        String description = "ADMIN REALIZOU " + typeMoviment + " EM " + book.getTitle() + " COM " + qtd + " UNIDADE(S)";
 
         Moviment moviment = new Moviment();
         moviment.setStockBook(stockBook);
@@ -136,9 +137,19 @@ public class StockBookService {
         return stockBookRepository.save(stockBook);
     }
 
+    public List<StockBook> findAllActive(){
+        return stockBookRepository.findAllActive()
+                .stream()
+                .sorted(Comparator.comparing(stockBook -> stockBook.getBook().getId()))
+                .toList();
+    }
+
     public List<StockBook> findAll() {
-        Stock stock = stockService.getStock();
-        return stockBookRepository.findByStock(stock);
+
+       List<StockBook> booksOnStock = stockBookRepository.findAll().stream()
+                .sorted(Comparator.comparing(stockBook -> stockBook.getBook().getId()))
+               .toList();
+        return booksOnStock;
     }
 
     public void removeBookOnStock(Long id,Long userId){
