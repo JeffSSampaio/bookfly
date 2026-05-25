@@ -1,95 +1,356 @@
-INSERT INTO usuario (name, email, password, role)
-SELECT * FROM (VALUES
-                   ('user', 'user@gmail.com', 'us', 'USER'),
-                   ('admin', 'admin@gmail.com', 'ad', 'ADMIN')
-              ) AS v(name, email, password, role)
-WHERE NOT EXISTS (SELECT 1 FROM usuario LIMIT 1);
+-- =========================================================
+-- USUÁRIOS
+-- =========================================================
+
+INSERT INTO usuario (
+    name,
+    email,
+    password,
+    role,
+    status,
+    status_date_time
+)
+SELECT *
+FROM (
+         VALUES
+             (
+                 'user',
+                 'user@gmail.com',
+                 'us',
+                 'USER',
+                 'ACTIVE',
+                 NOW()
+             ),
+             (
+                 'admin',
+                 'admin@gmail.com',
+                 'ad',
+                 'ADMIN',
+                 'ACTIVE',
+                 NOW()
+             )
+     ) AS v(
+            name,
+            email,
+            password,
+            role,
+            status,
+            status_date_time
+    )
+WHERE NOT EXISTS (
+    SELECT 1 FROM usuario
+);
 
 
-INSERT INTO autor (name)
-SELECT * FROM (VALUES
-                   ('J. R. R. Tolkien'),
-                   ('Stephen King'),
-                   ('Edgar Allan Poe')
-              ) AS v(name)
-WHERE NOT EXISTS (SELECT 1 FROM autor LIMIT 1);
+
+-- =========================================================
+-- ESTOQUE
+-- =========================================================
+
+INSERT INTO estoque (
+    id
+)
+SELECT *
+FROM (
+         VALUES
+             (1)
+     ) AS v(id)
+WHERE NOT EXISTS (
+    SELECT 1 FROM estoque
+);
 
 
-INSERT INTO estoque (id)
-SELECT 1
-    WHERE NOT EXISTS (SELECT 1 FROM estoque LIMIT 1);
+
+-- =========================================================
+-- AUTORES
+-- =========================================================
+
+INSERT INTO autor (
+    name,
+    status,
+    status_date_time
+)
+SELECT *
+FROM (
+         VALUES
+             (
+                 'J. R. R. Tolkien',
+                 'ACTIVE',
+                 NOW()
+             ),
+             (
+                 'Stephen King',
+                 'ACTIVE',
+                 NOW()
+             ),
+             (
+                 'Edgar Allan Poe',
+                 'ACTIVE',
+                 NOW()
+             )
+     ) AS v(
+            name,
+            status,
+            status_date_time
+    )
+WHERE NOT EXISTS (
+    SELECT 1 FROM autor
+);
 
 
-INSERT INTO livro (title, cover, summary, status, status_date_time, status_user_id)
-SELECT * FROM (VALUES
-                   ('O Hobbit',
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHmkcR1BUTUEMz3gtzlkRM2Lb73oWVcU7S0A&s',
-                    'O livro narra a jornada de Bilbo Bolseiro, um hobbit pacato que é arrastado para uma aventura pelo mago Gandalf e treze anões. O objetivo é retomar o Reino de Erebor e seu tesouro das garras do dragão Smaug. É nesta história que Bilbo encontra o ''um anel'' e enfrenta criaturas como trolls, lobos e o icônico Gollum.',
-                    'ACTIVE', NOW(), 2),
-                   ('O Senhor dos Anéis: A Sociedade do Anel',
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHB8qZ_YJcBCgxXcnR6GhGMoA4IxKtlZnAoQ&s',
-                    'Anos após os eventos de O Hobbit, o Um Anel passa para as mãos de Frodo Bolseiro. Ao descobrir que o artefato pertence ao Lorde das Trevas, Sauron, Frodo precisa deixar o Condado para destruí-lo na Montanha da Perdição. Ele é acompanhado pela Sociedade do Anel, formada por representantes das diferentes raças da Terra Média.',
-                    'ACTIVE', NOW(), 2),
-                   ('It: A Coisa',
-                    'https://m.media-amazon.com/images/I/91g9Dvtf+jL._UF1000,1000_QL80_.jpg',
-                    'Ambientado na cidade de Derry, o livro acompanha um grupo de sete amigos conhecidos como ''O Clube dos Otários''. Eles enfrentam uma entidade milenar e metamórfica que assume a forma dos medos mais profundos das crianças — frequentemente personificada como o palhaço Pennywise.',
-                    'ACTIVE', NOW(), 2),
-                   ('Histórias Extraordinárias',
-                    'https://m.media-amazon.com/images/I/91J4ze7NJlL._AC_UF1000,1000_QL80_.jpg',
-                    'Esta é uma coletânea que reúne os contos mais famosos de Poe, o mestre do mistério e do macabro. Inclui clássicos como O Gato Preto, O Coração Delator, A Queda da Casa de Usher e Os Assassinatos na Rua Morgue.',
-                    'ACTIVE', NOW(), 2)
-              ) AS v(title, cover, summary, status, status_date_time, status_user_id)
-WHERE NOT EXISTS (SELECT 1 FROM livro LIMIT 1);
+
+-- =========================================================
+-- LIVROS
+-- =========================================================
+
+INSERT INTO livro (
+    title,
+    cover,
+    summary,
+    status,
+    status_date_time,
+    status_user_id
+)
+SELECT *
+FROM (
+         VALUES
+
+             (
+                 'O Hobbit',
+                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHmkcR1BUTUEMz3gtzlkRM2Lb73oWVcU7S0A&s',
+                 'O livro narra a jornada de Bilbo Bolseiro, um hobbit pacato que é arrastado para uma aventura pelo mago Gandalf e treze anões.',
+                 'ACTIVE',
+                 NOW(),
+                 2
+             ),
+
+             (
+                 'O Senhor dos Anéis: A Sociedade do Anel',
+                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHB8qZ_YJcBCgxXcnR6GhGMoA4IxKtlZnAoQ&s',
+                 'O Um Anel passa para as mãos de Frodo Bolseiro.',
+                 'ACTIVE',
+                 NOW(),
+                 2
+             ),
+
+             (
+                 'It: A Coisa',
+                 'https://m.media-amazon.com/images/I/91g9Dvtf+jL._UF1000,1000_QL80_.jpg',
+                 'Grupo de amigos enfrenta Pennywise na cidade de Derry.',
+                 'ACTIVE',
+                 NOW(),
+                 2
+             ),
+
+             (
+                 'Histórias Extraordinárias',
+                 'https://m.media-amazon.com/images/I/91J4ze7NJlL._AC_UF1000,1000_QL80_.jpg',
+                 'Coletânea com os contos mais famosos de Edgar Allan Poe.',
+                 'ACTIVE',
+                 NOW(),
+                 2
+             )
+
+     ) AS v(
+            title,
+            cover,
+            summary,
+            status,
+            status_date_time,
+            status_user_id
+    )
+WHERE NOT EXISTS (
+    SELECT 1 FROM livro
+);
 
 
-INSERT INTO livro_author (livro_id, autor_id)
-SELECT * FROM (VALUES
-                   (1, 1),
-                   (2, 1),
-                   (3, 2),
-                   (4, 3)
-              ) AS v(livro_id, autor_id)
-WHERE NOT EXISTS (SELECT 1 FROM livro_author LIMIT 1);
+
+-- =========================================================
+-- ESTOQUE_LIVRO
+-- =========================================================
+
+INSERT INTO estoque_livro (
+    qtd,
+    estoque_id,
+    livro_id,
+    status,
+    status_date_time,
+    status_user_id
+)
+SELECT *
+FROM (
+         VALUES
+             (
+                 10,
+                 1,
+                 1,
+                 'ACTIVE',
+                 NOW(),
+                 2
+             ),
+             (
+                 5,
+                 1,
+                 2,
+                 'ACTIVE',
+                 NOW(),
+                 2
+             ),
+             (
+                 7,
+                 1,
+                 3,
+                 'ACTIVE',
+                 NOW(),
+                 2
+             ),
+             (
+                 3,
+                 1,
+                 4,
+                 'ACTIVE',
+                 NOW(),
+                 2
+             )
+     ) AS v(
+            qtd,
+            estoque_id,
+            livro_id,
+            status,
+            status_date_time,
+            status_user_id
+    )
+WHERE NOT EXISTS (
+    SELECT 1 FROM estoque_livro
+);
 
 
-INSERT INTO livro_genero (livro_id, genders)
-SELECT * FROM (VALUES
-                   (1, 'FANTASIA'),
-                   (2, 'FANTASIA'),
-                   (2, 'ACAO'),
-                   (3, 'TERROR'),
-                   (4, 'TERROR')
-              ) AS v(livro_id, genders)
-WHERE NOT EXISTS (SELECT 1 FROM livro_genero LIMIT 1);
+
+-- =========================================================
+-- LIVRO_AUTOR
+-- =========================================================
+
+INSERT INTO livro_author (
+    livro_id,
+    autor_id
+)
+SELECT *
+FROM (
+         VALUES
+             (1, 1),
+             (2, 1),
+             (3, 2),
+             (4, 3)
+     ) AS v(
+            livro_id,
+            autor_id
+    )
+WHERE NOT EXISTS (
+    SELECT 1 FROM livro_author
+);
 
 
-INSERT INTO estoque_livro (estoque_id, livro_id, qtd)
-SELECT * FROM (VALUES
-                   (1, 1, 10),
-                   (1, 2, 8),
-                   (1, 3, 5),
-                   (1, 4, 6)
-              ) AS v(estoque_id, livro_id, qtd)
-WHERE NOT EXISTS (SELECT 1 FROM estoque_livro LIMIT 1);
+
+-- =========================================================
+-- LIVRO_GENERO
+-- =========================================================
+
+INSERT INTO livro_genero (
+    livro_id,
+    genders
+)
+SELECT *
+FROM (
+         VALUES
+             (1, 'FANTASIA'),
+             (2, 'FANTASIA'),
+             (2, 'ACAO'),
+             (3, 'TERROR'),
+             (4, 'TERROR')
+     ) AS v(
+            livro_id,
+            genders
+    )
+WHERE NOT EXISTS (
+    SELECT 1 FROM livro_genero
+);
 
 
-INSERT INTO movimentacoes (usuario_id, estoque_livro_id, type_item, qtd_moviment, created_time, description)
-SELECT * FROM (VALUES
-                   (2, 1, 'ENTRADA_ADMIN', 10, TIMESTAMP '2026-01-10 10:00:00', 'Entrada inicial de estoque do livro O Hobbit'),
-                   (2, 2, 'ENTRADA_ADMIN', 8,  TIMESTAMP '2026-01-10 10:00:00', 'Entrada inicial de estoque do livro O Senhor dos Anéis'),
-                   (2, 3, 'ENTRADA_ADMIN', 5,  TIMESTAMP '2026-01-10 10:00:00', 'Entrada inicial de estoque do livro It: A Coisa'),
-                   (2, 4, 'ENTRADA_ADMIN', 6,  TIMESTAMP '2026-01-10 10:00:00', 'Entrada inicial de estoque do livro Histórias Extraordinárias')
-              ) AS v(usuario_id, estoque_livro_id, type_item, qtd_moviment, created_time, description)
-WHERE NOT EXISTS (SELECT 1 FROM movimentacoes LIMIT 1);
 
-INSERT INTO emprestimo (usuario_id, livro_id, loan_date, return_date, status)
-SELECT 1, 1, TIMESTAMP '2026-04-01 09:00:00', TIMESTAMP '2026-04-15 09:00:00', 'ATRASADO'
-    WHERE NOT EXISTS (SELECT 1 FROM emprestimo LIMIT 1);
+-- =========================================================
+-- EMPRÉSTIMOS
+-- =========================================================
+
+INSERT INTO emprestimo (
+    usuario_id,
+    livro_id,
+    loan_date,
+    return_date,
+    loan_status,
+    status,
+    status_date_time
+)
+SELECT *
+FROM (
+         VALUES
+             (
+                 1,
+                 1,
+                 TIMESTAMP '2026-04-01 09:00:00',
+                 TIMESTAMP '2026-04-15 09:00:00',
+                 'ATRASADO',
+                 'ACTIVE',
+                 NOW()
+             )
+     ) AS v(
+            usuario_id,
+            livro_id,
+            loan_date,
+            return_date,
+            loan_status,
+            status,
+            status_date_time
+    )
+WHERE NOT EXISTS (
+    SELECT 1 FROM emprestimo
+);
 
 
-INSERT INTO multa (emprestimo_id, penalty_date, amount, status, paid)
-SELECT e.id, TIMESTAMP '2026-04-16 09:00:00', 22.50, 'PENDENTE', false
-FROM emprestimo e
-WHERE e.status = 'ATRASADO'
-  AND NOT EXISTS (SELECT 1 FROM multa LIMIT 1)
-    LIMIT 1;
+
+-- =========================================================
+-- MULTAS
+-- =========================================================
+
+INSERT INTO multa (
+    emprestimo_id,
+    penalty_date,
+    amount,
+    penalty_status,
+    paid,
+    status,
+    status_date_time
+)
+SELECT *
+FROM (
+         VALUES
+             (
+                 1,
+                 TIMESTAMP '2026-04-16 09:00:00',
+                 22.50,
+                 'PENDENTE',
+                 false,
+                 'ACTIVE',
+                 NOW()
+             )
+     ) AS v(
+            emprestimo_id,
+            penalty_date,
+            amount,
+            penalty_status,
+            paid,
+            status,
+            status_date_time
+    )
+WHERE NOT EXISTS (
+    SELECT 1 FROM multa
+);
