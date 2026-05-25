@@ -29,6 +29,7 @@ public class Loan {
     private LocalDateTime returnDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "loan_status")
     private StatusLoan status;
 
     @OneToMany(fetch = FetchType.LAZY)

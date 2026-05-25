@@ -28,6 +28,7 @@ public class Penalty {
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "penalty_status")
     private StatusPenalty status;
 
     @OneToOne(fetch = FetchType.LAZY)
