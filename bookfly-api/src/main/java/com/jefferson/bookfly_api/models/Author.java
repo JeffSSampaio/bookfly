@@ -19,9 +19,9 @@ public class Author {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "bookcase_id")
-    private Bookcase bookcase;
+//    @ManyToOne
+//    @JoinColumn(name = "bookcase_id")
+//    private Bookcase bookcase;
 
     @ManyToMany(mappedBy = "authors")
     private List<Book> books;
@@ -32,10 +32,9 @@ public class Author {
     public Author() {
     }
 
-    public Author(Long id, String name, Bookcase bookcase, List<Book> books, RecordStatus recordStatus) {
+    public Author(Long id, String name, List<Book> books, RecordStatus recordStatus) {
         this.id = id;
         this.name = name;
-        this.bookcase = bookcase;
         this.books = books;
         this.recordStatus = recordStatus;
     }
@@ -54,14 +53,6 @@ public class Author {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Bookcase getBookcase() {
-        return bookcase;
-    }
-
-    public void setBookcase(Bookcase bookcase) {
-        this.bookcase = bookcase;
     }
 
     public List<Book> getBooks() {
