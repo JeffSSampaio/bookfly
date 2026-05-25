@@ -130,7 +130,7 @@ const api = {
 
 
   removeBookFromStock: (bookId,userId) =>
-    fetch(`${BASE_URL}/stock/remove/${bookId}userId=${userId}`, { method: 'DELETE' }).then(handleResponse),
+    fetch(`${BASE_URL}/stock/remove/${bookId}?userId=${userId}`, { method: 'DELETE' }).then(handleResponse),
 
 
 
