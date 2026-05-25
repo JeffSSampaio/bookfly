@@ -1,13 +1,26 @@
 import api from './apiService.js';
 
+const tableStyleValues= {
+    color:{
+         headerColor:'var( --color-dark-green)',
+         containerColor:'var(--color-ivory)'
+    },
+    border: {
+    borderContainer: '1px solid var(--color-dark-green)',
+    borderHeaderBottom: '2px solid var(--color-dark-green)',
+    borderCellBottom:'1px solid rgba(0, 74, 57, 0.15)'
+    }
+
+}
+
 const tableStyles = {
     container: {
         borderRadius: '12px',
         overflow: 'hidden',
-        border: '1px solid var(--color-dark-green)',
+        border:tableStyleValues.border.borderContainer ,
         boxShadow: 'var(--box-shadow)',
         margin: '10px 60px 30px 60px',
-        backgroundColor: 'var(--color-ivory)'
+        backgroundColor: tableStyleValues.color.containerColor
     },
     table: {
         width: '100%',
@@ -16,16 +29,16 @@ const tableStyles = {
         tableLayout: 'fixed'
     },
     header: {
-        backgroundColor: 'var(--color-dark-green)',
+        backgroundColor: tableStyleValues.color.headerColor,
         color: 'var(--color-ivory)',
         fontWeight: 'bold',
         padding: '12px 10px',
         textAlign: 'center',
         fontFamily: 'var(--font-primary)',
-        borderBottom: '2px solid var(--color-dark-green)'
+        borderBottom: tableStyleValues.border.borderHeaderBottom
     },
     cell: {
-        borderBottom: '1px solid rgba(0, 74, 57, 0.15)',
+        borderBottom: tableStyleValues.border.borderCellBottom,
         padding: '10px 8px',
         textAlign: 'center',
         color: 'var(--color-dark-green)',
@@ -249,8 +262,8 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
             {
                 icon: '/Interface/assets/iconEditWhite.svg',
                 alt: 'Editar',
-                bgColor: 'var(--color-dark-green)',
-                hoverColor: '#003327',
+                bgColor: 'var(--color-blue-dark)',
+                hoverColor: 'var(--color-blue-naive',
                 onClick: (rowData, index, row) => { if (onEdit) onEdit(rowData, index, row); }
             }
         ];
