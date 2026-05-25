@@ -565,7 +565,9 @@ window.openEditBookModal = function (BookData, index, rowElement) {
         const genders = document.getElementById(`generos-novo-${BookData.id}`).value.split(',').map(g => g.trim().toUpperCase()).filter(Boolean);
 
         try {
-            await api.updateBook(BookData.id, { title, authors, genders });
+
+
+            await api.updateBook(BookData.id,{ userId: loggedUser.id ,title: title, authors: authors,genders: genders });
             alert('Livro atualizado com sucesso!');
             modal.remove();
             location.reload();

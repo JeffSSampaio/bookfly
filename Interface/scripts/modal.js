@@ -537,8 +537,8 @@ window.openAddItemOnStock = async function() {
                     </div>
                 </div>
                 <div class="c-modal-btn">
-                    <button type="button" class="closeBtn">Cancel</button>
-                    <button type="button" class="confirmBtn">Confirm</button>
+                    <button type="button" class="closeBtn">Cancelar</button>
+                    <button type="button" class="confirmBtn">Confirmar</button>
                 </div>
             </div>
         </div>
@@ -585,7 +585,7 @@ window.openAddItemOnStock = async function() {
 
     confirmBtn.addEventListener('click', async () => {
         if (!selectedBooks.size) {
-            alert('Select at least one book.');
+            alert('Selecione um Livro');
             return;
         }
 
@@ -600,11 +600,12 @@ window.openAddItemOnStock = async function() {
                 const qtyInput = modal.querySelector(`.card-book-qtd[data-book-id="${bookId}"]`);
                 const quantidade = Number(qtyInput?.value) || 1;
                 await api.addBookToStock(bookId, userId, quantidade);
+                location.reload()
             }
-            alert('Books successfully added to stock.');
+            alert('Livro adicionado com sucesso');
             modal.remove();
         } catch (e) {
-            alert('Error adding books to stock: ' + e.message);
+            alert('Erro em adiiconar Livro: ' + e.message);
         }
     });
 
