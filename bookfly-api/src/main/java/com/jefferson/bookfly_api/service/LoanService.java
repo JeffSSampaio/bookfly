@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class LoanService {
     public List<Loan> getAllLoans() {
         return loanRepository.findAll()
                 .stream()
-                .filter(loan -> loan != null)
+                .sorted(Comparator.comparing(Loan::getId))
                 .toList();
     }
 
@@ -48,7 +49,7 @@ public class LoanService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuário não existe"));
 
-        Optional<Loan> existLoan = loanRepository.findByUserAndStockBook(user, bookOnStock);
+        Optional<Loan> existLoan = loanRepository.findActiveByUserAndStockBook(user, bookOnStock);
 
         if (existLoan.isPresent()) {
             Loan activeLoan = existLoan.get();
@@ -180,7 +181,9 @@ public class LoanService {
         moviment.setTypeItem(type);
         moviment.setDescription(description.toUpperCase());
 
-
+        if (existLoan.getStatus() == StatusLoan.FINALIZADO) {
+            throw new RuntimeException("Não é possível cancelar um empréstimo já finalizado");
+        }
 
         movimentRepository.save(moviment);
         stockBookRepository.save(bookOnStock);
@@ -227,16 +230,23 @@ public class LoanService {
             if (newLoanStatus == StatusLoan.ATRASADO) {
                 Optional<Penalty> penaltyExist = penaltyRepository.findByLoan(existLoan);
                 if (penaltyExist.isEmpty()) {
+
+
+                    boolean isOverdue = existLoan.getReturnDate().isBefore(LocalDateTime.now());
+                    if (!isOverdue) {
+                        throw new RuntimeException(
+                                "Não é possível marcar como atrasado: o prazo de devolução ainda não venceu."
+                        );
+                    }
+
                     Penalty penalty = new Penalty();
                     penalty.setPenaltyDate(LocalDateTime.now());
                     penalty.setPaid(false);
                     penalty.setLoan(existLoan);
                     penalty.setStatus(StatusPenalty.PENDENTE);
 
-                    LocalDateTime dateReference = existLoan.getReturnDate().isBefore(LocalDateTime.now())
-                            ? existLoan.getReturnDate()
-                            : LocalDateTime.now();
-                    penalty.setAmount(penalty.getPaymentAmount(dateReference, LocalDateTime.now()));
+
+                    penalty.setAmount(penalty.getPaymentAmount(existLoan.getReturnDate(), LocalDateTime.now()));
 
                     penaltyRepository.save(penalty);
                 }

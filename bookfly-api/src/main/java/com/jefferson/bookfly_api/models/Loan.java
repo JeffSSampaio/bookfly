@@ -44,7 +44,6 @@ public class Loan {
                     @JoinColumn(name = "movimentacao_status", referencedColumnName = "typeitem")
             }
     )
-    @JoinColumn(name = "moviment_id")
     private List<Moviment> moviments;
 
     @OneToOne(mappedBy = "loan", cascade = CascadeType.ALL)
