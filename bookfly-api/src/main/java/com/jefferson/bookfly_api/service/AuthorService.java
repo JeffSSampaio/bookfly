@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.service;
 
+import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
 import com.jefferson.bookfly_api.models.StockBook;
@@ -31,7 +32,7 @@ public class AuthorService {
 
     public Author createAuthor(Author author) {
         if (author.getId() != null && authorRepository.existsById(author.getId())) {
-            throw new RuntimeException("Esse Author já existe no sistema com o ID: " + author.getId());
+            throw new NotFoundException("Esse Author já existe no sistema com o ID: " + author.getId());
         }
         return authorRepository.save(author);
     }
@@ -39,7 +40,7 @@ public class AuthorService {
     @Transactional
     public Author editAuthor(Long id, Author newAuthor) {
         Author existAuthor = authorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Esse Author não existe no sistema"));
+                .orElseThrow(() -> new NotFoundException("Esse Author não existe no sistema"));
 
         if (newAuthor.getName() != null) {
             existAuthor.setName(newAuthor.getName());
@@ -65,10 +66,10 @@ public class AuthorService {
     @Transactional
     public Book addAuthorToBook(Long authorId, Long bookId) {
         Author author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new RuntimeException("Autor não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Autor não encontrado"));
 
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
 
         if (!book.getAuthors().contains(author)) {
             book.getAuthors().add(author);
@@ -87,14 +88,14 @@ public class AuthorService {
     @Transactional
     public void deleteAuthor(Long id, Long userId) {
         Author author = authorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Autor não encontrado para deleção"));
+                .orElseThrow(() -> new NotFoundException("Autor não encontrado para deleção"));
         User existUser = userRepository.findById(userId)
-                .orElseThrow( () -> new RuntimeException("Este Usuário não existe para executar essa ação"));
+                .orElseThrow( () -> new NotFoundException("Este Usuário não existe para executar essa ação"));
         List<Book> booksWithAuthor = bookRepository.findActiveByAuthorsId(id);
         for (Book book : booksWithAuthor) {
 
             if (book.getAuthors().size() == 1) {
-                throw new RuntimeException("Não é possível remover o único autor do livro: " + book.getTitle());
+                throw new NotFoundException("Não é possível remover o único autor do livro: " + book.getTitle());
             }
             
             book.getAuthors().removeIf(a -> a.getId().equals(id));

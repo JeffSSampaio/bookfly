@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
+import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
 import jakarta.transaction.Transactional;
@@ -27,18 +28,18 @@ public class MovimentService {
         Stock stock = stockService.getStock();
 
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Livro não esta registrado"));
+                .orElseThrow(() -> new NotFoundException("Livro não esta registrado"));
 
         StockBook bookOnStock = stockBookRepository.findByStockAndBook(stock, book)
-                .orElseThrow(() -> new RuntimeException("Livro não existe no estoque"));
+                .orElseThrow(() -> new NotFoundException("Livro não existe no estoque"));
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuário não existe"));
+                .orElseThrow(() -> new NotFoundException("Usuário não existe"));
 
-        if (qtd == 0) throw new RuntimeException("Quantidade não pode ser zero");
+        if (qtd == 0) throw new NotFoundException("Quantidade não pode ser zero");
 
         int newQtd = bookOnStock.getQtd() + qtd;
-        if (newQtd < 0) throw new RuntimeException("Quantidade insuficiente no Estoque");
+        if (newQtd < 0) throw new NotFoundException("Quantidade insuficiente no Estoque");
 
         bookOnStock.setQtd(newQtd);
         stockBookRepository.save(bookOnStock);
@@ -78,20 +79,20 @@ public class MovimentService {
 
     public Moviment getMoviment(Long id) {
         return movimentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Movimentação inexistente no estoque"));
+                .orElseThrow(() -> new NotFoundException("Movimentação inexistente no estoque"));
     }
 
     @Transactional
     public Moviment editMoviment(Long id, Moviment newMoviment) {
         Moviment oldMoviment = movimentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Movimentação inexistente no estoque"));
+                .orElseThrow(() -> new NotFoundException("Movimentação inexistente no estoque"));
 
         if (newMoviment.getQtdMoviment() <= 0) {
-            throw new RuntimeException("Quantidade inválida");
+            throw new NotFoundException("Quantidade inválida");
         }
 
         User user = userRepository.findById(newMoviment.getUser().getId())
-                .orElseThrow(() -> new RuntimeException("Usuario não existe"));
+                .orElseThrow(() -> new NotFoundException("Usuario não existe"));
 
         StockBook stockBook = oldMoviment.getStockBook();
 
@@ -100,7 +101,7 @@ public class MovimentService {
             stockBook.setQtd(stockBook.getQtd() + oldMoviment.getQtdMoviment());
         } else {
             if (stockBook.getQtd() < oldMoviment.getQtdMoviment()) {
-                throw new RuntimeException("Erro ao reverter movimentação antiga");
+                throw new NotFoundException("Erro ao reverter movimentação antiga");
             }
             stockBook.setQtd(stockBook.getQtd() - oldMoviment.getQtdMoviment());
         }
@@ -108,7 +109,7 @@ public class MovimentService {
         boolean isNewOutput = newMoviment.getTypeItem() == TypeMoviment.SAIDA;
         if (isNewOutput) {
             if (stockBook.getQtd() < newMoviment.getQtdMoviment()) {
-                throw new RuntimeException("Estoque insuficiente");
+                throw new NotFoundException("Estoque insuficiente");
             }
             stockBook.setQtd(stockBook.getQtd() - newMoviment.getQtdMoviment());
         } else {
@@ -127,7 +128,7 @@ public class MovimentService {
     @Transactional
     public void deleteMoviment(Long id) {
         Moviment moviment = movimentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Movimentação não encontrada"));
+                .orElseThrow(() -> new NotFoundException("Movimentação não encontrada"));
 
         StockBook stockBook = moviment.getStockBook();
         boolean isOutput = moviment.getTypeItem() == TypeMoviment.SAIDA;
@@ -136,7 +137,7 @@ public class MovimentService {
             stockBook.setQtd(stockBook.getQtd() + moviment.getQtdMoviment());
         } else {
             if (stockBook.getQtd() < moviment.getQtdMoviment()) {
-                throw new RuntimeException("Erro ao reverter movimentação");
+                throw new NotFoundException("Erro ao reverter movimentação");
             }
             stockBook.setQtd(stockBook.getQtd() - moviment.getQtdMoviment());
         }

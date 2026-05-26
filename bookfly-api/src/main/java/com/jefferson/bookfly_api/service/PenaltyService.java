@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
+import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +27,14 @@ public class PenaltyService {
 
     public Penalty createPenalty(Long userId, Long loanId) {
         userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuário não existe"));
+                .orElseThrow(() -> new NotFoundException("Usuário não existe"));
 
         Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new RuntimeException("Empréstimo inexistente"));
+                .orElseThrow(() -> new NotFoundException("Empréstimo inexistente"));
 
         Optional<Penalty> existPenalty = penaltyRepository.findByLoan(loan);
         if (existPenalty.isPresent()) {
-            throw new RuntimeException("Essa multa já existe");
+            throw new NotFoundException("Essa multa já existe");
         }
 
         boolean isOverdue = loan.getReturnDate().isBefore(LocalDateTime.now());
@@ -51,19 +52,19 @@ public class PenaltyService {
 
             return penaltyRepository.save(penalty);
         } else {
-            throw new RuntimeException("Não foi possível criar multa: o prazo de devolução ainda não venceu");
+            throw new NotFoundException("Não foi possível criar multa: o prazo de devolução ainda não venceu");
         }
     }
 
     public Penalty findById(Long id){
         return penaltyRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("não existe essa multa"));
+                .orElseThrow(()-> new NotFoundException("não existe essa multa"));
     }
 
     @Transactional
     public Penalty updatePenalty(Long penaltyId, Penalty updatedData) {
         Penalty existingPenalty = penaltyRepository.findById(penaltyId)
-                .orElseThrow(() -> new RuntimeException("Multa não encontrada"));
+                .orElseThrow(() -> new NotFoundException("Multa não encontrada"));
 
         if (updatedData.getPenaltyDate() != null) {
             existingPenalty.setPenaltyDate(updatedData.getPenaltyDate());
@@ -117,9 +118,9 @@ public class PenaltyService {
 
     public void removePenalty(Long id,Long userId){
             Penalty penaltyExist = penaltyRepository.findById(id)
-                    .orElseThrow(()-> new RuntimeException("Essa multa não existe no sistema"));
+                    .orElseThrow(()-> new NotFoundException("Essa multa não existe no sistema"));
             User userExist = userRepository.findById(userId)
-                    .orElseThrow(()-> new RuntimeException("Esse Usuário não existe no sistema"));
+                    .orElseThrow(()-> new NotFoundException("Esse Usuário não existe no sistema"));
 
             penaltyExist.getRecordStatus().delete(userExist);
 

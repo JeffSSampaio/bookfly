@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.dto.user.UserRequest;
 import com.jefferson.bookfly_api.enums.Role;
+import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -21,7 +22,7 @@ public class UserService {
         if (userRepository.findByEmail(user.getEmail())
                 .filter(u -> !u.getId().equals(user.getId()))
                 .isPresent()) {
-            throw new RuntimeException("Email já está em uso");
+            throw new NotFoundException("Email já está em uso");
         }
 
         User userToSave = new User();
@@ -39,19 +40,19 @@ public class UserService {
 
     public User getUserById(Long id){
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
     }
 
     @Transactional
     public User updateUser(User newUser){
 
         User userExist = userRepository.findById(newUser.getId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         if (userRepository.findByEmail(newUser.getEmail())
                 .filter(u -> !u.getId().equals(newUser.getId()))
                 .isPresent()) {
-            throw new RuntimeException("Email já está em uso");
+            throw new NotFoundException("Email já está em uso");
         }
 
 
@@ -73,10 +74,10 @@ public class UserService {
 //    public User updateUser(User user){
 //
 //        User existUser = userRepository.findById(user.getId())
-//                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+//                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 //
 //        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-//            throw new RuntimeException("Email já está em uso");
+//            throw new NotFoundException("Email já está em uso");
 //        }
 //
 //
@@ -97,7 +98,7 @@ public class UserService {
     @Transactional
     public void deleteUser(Long id){
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         user.getRecordStatus().delete(user);
 

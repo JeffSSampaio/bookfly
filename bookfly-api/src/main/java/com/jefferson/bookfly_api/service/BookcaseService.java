@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.service;
 
+import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.Bookcase;
 import com.jefferson.bookfly_api.models.StockBook;
 import com.jefferson.bookfly_api.models.User;
@@ -25,7 +26,7 @@ public class BookcaseService {
     public Bookcase createBookcase(String name, Long userId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         Bookcase bookcase = new Bookcase();
         bookcase.setName(name);
@@ -38,7 +39,7 @@ public class BookcaseService {
 
     public Bookcase findById(Long id) {
         return bookcaseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Estante não encontrada"));
+                .orElseThrow(() -> new NotFoundException("Estante não encontrada"));
     }
 
     public List<Bookcase> findAll() {
@@ -48,7 +49,7 @@ public class BookcaseService {
     public List<Bookcase> findByUser(Long userId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         return bookcaseRepository.findByUser(user);
     }
@@ -60,16 +61,16 @@ public class BookcaseService {
     @Transactional
     public Bookcase addBookToBookcase(Long bookcaseId, Long stockBookId) {
         Bookcase bookcase = bookcaseRepository.findById(bookcaseId)
-                .orElseThrow(() -> new RuntimeException("Estante não encontrada"));
+                .orElseThrow(() -> new NotFoundException("Estante não encontrada"));
 
         StockBook stockBook = stockBookRepository.findById(stockBookId)
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado no estoque"));
+                .orElseThrow(() -> new NotFoundException("Livro não encontrado no estoque"));
 
         boolean alreadyExists = bookcase.getStockBooks().stream()
                 .anyMatch(sb -> sb.getId().equals(stockBookId));
 
         if (alreadyExists) {
-            throw new RuntimeException("Livro já está na estante");
+            throw new NotFoundException("Livro já está na estante");
         }
 
 
@@ -82,7 +83,7 @@ public class BookcaseService {
     public Bookcase updateBookcase(Long id, String name, Long stockBookId) {
 
         Bookcase bookcase = bookcaseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Estante não encontrada"));
+                .orElseThrow(() -> new NotFoundException("Estante não encontrada"));
 
         if (name != null && !name.isBlank()) {
             bookcase.setName(name);
@@ -91,13 +92,13 @@ public class BookcaseService {
         if (stockBookId != null) {
 
             StockBook stockBook = stockBookRepository.findById(stockBookId)
-                    .orElseThrow(() -> new RuntimeException("Livro não encontrado no estoque"));
+                    .orElseThrow(() -> new NotFoundException("Livro não encontrado no estoque"));
 
             boolean alreadyExists = bookcase.getStockBooks().stream()
                     .anyMatch(sb -> sb.getId().equals(stockBookId));
 
             if (alreadyExists) {
-                throw new RuntimeException("Livro já está na estante");
+                throw new NotFoundException("Livro já está na estante");
             }
 
             bookcase.getStockBooks().add(stockBook);
@@ -110,13 +111,13 @@ public class BookcaseService {
     public Bookcase removeBookFromBookcase(Long bookcaseId, Long stockBookId) {
 
         Bookcase bookcase = bookcaseRepository.findById(bookcaseId)
-                .orElseThrow(() -> new RuntimeException("Estante não encontrada"));
+                .orElseThrow(() -> new NotFoundException("Estante não encontrada"));
 
         boolean removed = bookcase.getStockBooks()
                 .removeIf(sb -> sb.getId().equals(stockBookId));
 
         if (!removed) {
-            throw new RuntimeException("Livro não estava na estante");
+            throw new NotFoundException("Livro não estava na estante");
         }
 
         return bookcaseRepository.save(bookcase);
@@ -128,7 +129,7 @@ public class BookcaseService {
     public void deleteBookcase(Long id) {
 
         if (!bookcaseRepository.existsById(id)) {
-            throw new RuntimeException("Estante não encontrada");
+            throw new NotFoundException("Estante não encontrada");
         }
 
         bookcaseRepository.deleteById(id);

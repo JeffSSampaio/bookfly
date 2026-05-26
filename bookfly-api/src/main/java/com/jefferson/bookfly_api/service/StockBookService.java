@@ -3,6 +3,7 @@ package com.jefferson.bookfly_api.service;
 import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
+import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
 import jakarta.transaction.Transactional;
@@ -26,19 +27,19 @@ public class StockBookService {
 
     public StockBook addBookOnStock(Long bookId, Long userId, int qtd) {
         if (qtd <= 0) {
-            throw new RuntimeException("Quantidade deve ser maior que zero");
+            throw new NotFoundException("Quantidade deve ser maior que zero");
         }
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuário não existe"));
+                .orElseThrow(() -> new NotFoundException("Usuário não existe"));
 
         boolean isAdmin = user.getRole().equals(Role.ADMIN);
         if (!isAdmin) {
-            throw new RuntimeException("Usuário não autorizado");
+            throw new NotFoundException("Usuário não autorizado");
         }
 
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
 
         Stock stock = stockService.getStock();
 
@@ -80,13 +81,13 @@ public class StockBookService {
 
 //    public StockBook removeBookFromStock(Long bookId) {
 //        Book book = bookRepository.findById(bookId)
-//                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+//                .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
 //
 //        Stock stock = stockService.getStock();
 //
 //        StockBook stockBook = stockBookRepository
 //                .findByStockAndBook(stock, book)
-//                .orElseThrow(() -> new RuntimeException("Livro não existe no estoque"));
+//                .orElseThrow(() -> new NotFoundException("Livro não existe no estoque"));
 //
 //        stockBook.setQtd(0);
 //
@@ -95,31 +96,31 @@ public class StockBookService {
 
     public StockBook findByBook(Long bookId) {
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
 
         Stock stock = stockService.getStock();
 
         return stockBookRepository.findByStockAndBook(stock, book)
-                .orElseThrow(() -> new RuntimeException("Livro não está no estoque"));
+                .orElseThrow(() -> new NotFoundException("Livro não está no estoque"));
     }
 
     @Transactional
     public StockBook updateQtd(Long bookId, int delta, Long adminId , String description) {
 
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
 
         Stock stock = stockService.getStock();
 
         StockBook stockBook = stockBookRepository
                 .findByStockAndBook(stock, book)
-                .orElseThrow(() -> new RuntimeException("Livro não está no estoque"));
+                .orElseThrow(() -> new NotFoundException("Livro não está no estoque"));
 
         int newQtd = stockBook.getQtd() + delta;
-        if (newQtd < 0) throw new RuntimeException("Quantidade insuficiente no estoque");
+        if (newQtd < 0) throw new NotFoundException("Quantidade insuficiente no estoque");
 
         User admin = userRepository.findById(adminId)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         TypeMoviment type = delta > 0 ? TypeMoviment.ENTRADA_ADMIN : TypeMoviment.SAIDA_ADMIN;
         if (description == null || description.equals("")) description = "ALTERAÇÃO: Admin " + admin.getName() + " realizou " + type + " de " + Math.abs(delta) + " unidade(s)";
@@ -155,10 +156,10 @@ public class StockBookService {
     public void removeBookOnStock(Long id,Long userId){
 
         StockBook stockBook = stockBookRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Esse Livro não existe no estoque"));
+                .orElseThrow(()-> new NotFoundException("Esse Livro não existe no estoque"));
 
         User userExist = userRepository.findById(userId)
-                .orElseThrow(()-> new RuntimeException("Este Usuário não foi encontrado para realizar essa ação"));
+                .orElseThrow(()-> new NotFoundException("Este Usuário não foi encontrado para realizar essa ação"));
 
         stockBook.getRecordStatus().delete(userExist);
         stockBook.setQtd(0);

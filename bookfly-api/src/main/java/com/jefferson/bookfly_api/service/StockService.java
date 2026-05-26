@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.service;
 
+import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.Stock;
 import com.jefferson.bookfly_api.repository.StockRepository;
 import jakarta.annotation.PostConstruct;
@@ -15,7 +16,7 @@ public class StockService {
         return stockRepository.findAll()
                 .stream()
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Stock não existe"));
+                .orElseThrow(() -> new NotFoundException("Stock não existe"));
     }
 
 

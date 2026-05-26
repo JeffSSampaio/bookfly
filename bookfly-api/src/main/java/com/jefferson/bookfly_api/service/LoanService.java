@@ -4,6 +4,7 @@ import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
+import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
 import jakarta.transaction.Transactional;
@@ -41,13 +42,13 @@ public class LoanService {
         Stock stock = stockService.getStock();
 
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Esse livro não existe"));
+                .orElseThrow(() -> new NotFoundException("Esse livro não existe"));
 
         StockBook bookOnStock = stockBookRepository.findByStockAndBook(stock, book)
-                .orElseThrow(() -> new RuntimeException("Esse livro não existe dentro do estoque"));
+                .orElseThrow(() -> new NotFoundException("Esse livro não existe dentro do estoque"));
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuário não existe"));
+                .orElseThrow(() -> new NotFoundException("Usuário não existe"));
 
         Optional<Loan> existLoan = loanRepository.findActiveByUserAndStockBook(user, bookOnStock);
 
@@ -56,17 +57,17 @@ public class LoanService {
 
             Penalty penalty = activeLoan.getPenalty();
             if (penalty != null && !penalty.getPaid()) {
-                throw new RuntimeException(
+                throw new NotFoundException(
                         "Usuário possui multa pendente para este livro. " +
                                 "Valor: R$ " + penalty.getAmount() + ". Quite a multa antes de fazer novo empréstimo."
                 );
             }
 
-            throw new RuntimeException("Usuário já possui um empréstimo ativo para este livro");
+            throw new NotFoundException("Usuário já possui um empréstimo ativo para este livro");
         }
 
         if (!bookOnStock.isBookAvailable()) {
-            throw new RuntimeException("Não foi possível fazer empréstimo: livro indisponível no estoque");
+            throw new NotFoundException("Não foi possível fazer empréstimo: livro indisponível no estoque");
         }
 
         bookOnStock.setQtd(bookOnStock.getQtd() - 1);
@@ -102,15 +103,15 @@ public class LoanService {
     public Loan returnBook(Long loanId) {
 
         Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Empréstimo não encontrado"));
 
         if (loan.getStatus() == StatusLoan.FINALIZADO) {
-            throw new RuntimeException("Este empréstimo já foi finalizado");
+            throw new NotFoundException("Este empréstimo já foi finalizado");
         }
 
         Penalty penalty = loan.getPenalty();
         if (penalty != null && !penalty.getPaid()) {
-            throw new RuntimeException(
+            throw new NotFoundException(
                     "Não é possível devolver o livro: existe multa pendente. " +
                             "Valor: R$ " + penalty.getAmount()
             );
@@ -147,9 +148,9 @@ public class LoanService {
     @Transactional
     public Moviment cancelLoan(Long loanId){
         Loan existLoan = loanRepository.findById(loanId)
-            .orElseThrow(()-> new RuntimeException("Este Emprestimo Não Existe"));
+            .orElseThrow(()-> new NotFoundException("Este Emprestimo Não Existe"));
         StockBook bookOnStock = stockBookRepository.findById(existLoan.getStockBook().getId())
-                .orElseThrow(() -> new RuntimeException("Esse Livro não existe no stock"));
+                .orElseThrow(() -> new NotFoundException("Esse Livro não existe no stock"));
 
 //        List<Moviment> movimentsFromExistLoan =  existLoan.getMoviments()
 //                .stream()
@@ -182,7 +183,7 @@ public class LoanService {
         moviment.setDescription(description.toUpperCase());
 
         if (existLoan.getStatus() == StatusLoan.FINALIZADO) {
-            throw new RuntimeException("Não é possível cancelar um empréstimo já finalizado");
+            throw new NotFoundException("Não é possível cancelar um empréstimo já finalizado");
         }
 
         movimentRepository.save(moviment);
@@ -205,17 +206,17 @@ public class LoanService {
     @Transactional
     public Loan updateLoan(Long loanId, Loan newLoan){
         Loan existLoan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new RuntimeException("Esse Empréstimo não existe no sistema"));
+                .orElseThrow(() -> new NotFoundException("Esse Empréstimo não existe no sistema"));
 
         if (newLoan.getUser() != null && newLoan.getUser().getId() != null) {
             User user = userRepository.findById(newLoan.getUser().getId())
-                    .orElseThrow(() -> new RuntimeException("Esse Usuario não existe"));
+                    .orElseThrow(() -> new NotFoundException("Esse Usuario não existe"));
             existLoan.setUser(user);
         }
 
         if (newLoan.getStockBook() != null && newLoan.getStockBook().getId() != null) {
             StockBook stockBook = stockBookRepository.findById(newLoan.getStockBook().getId())
-                    .orElseThrow(() -> new RuntimeException("Este Livro não existe dentro do Estoque"));
+                    .orElseThrow(() -> new NotFoundException("Este Livro não existe dentro do Estoque"));
             existLoan.setStockBook(stockBook);
         }
 
@@ -234,7 +235,7 @@ public class LoanService {
 
                     boolean isOverdue = existLoan.getReturnDate().isBefore(LocalDateTime.now());
                     if (!isOverdue) {
-                        throw new RuntimeException(
+                        throw new NotFoundException(
                                 "Não é possível marcar como atrasado: o prazo de devolução ainda não venceu."
                         );
                     }
@@ -256,7 +257,7 @@ public class LoanService {
             if (newLoanStatus == StatusLoan.FINALIZADO) {
                 Penalty penalty = existLoan.getPenalty();
                 if (penalty != null && !penalty.getPaid()) {
-                    throw new RuntimeException(
+                    throw new NotFoundException(
                             "Não é possível finalizar o empréstimo: existe multa pendente. " +
                             "Valor: R$ " + penalty.getAmount() + ". Quite a multa antes de finalizar."
                     );
@@ -278,16 +279,16 @@ public class LoanService {
 
     public List<Loan> findAllLoansByUser(long userId) {
         User existUser = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Este usuário não existe"));
+                .orElseThrow(() -> new NotFoundException("Este usuário não existe"));
         return loanRepository.findByUser(existUser);
     }
 
     @Transactional
     public void removeLoan(Long id, Long userId){
         Loan existLoan = loanRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Não existe esse empréstimo no sistema"));
+                .orElseThrow(()-> new NotFoundException("Não existe esse empréstimo no sistema"));
        User existUser = userRepository.findById(userId)
-                .orElseThrow(()-> new RuntimeException("Esse Usuário não existe para realizar esa ação"));
+                .orElseThrow(()-> new NotFoundException("Esse Usuário não existe para realizar esa ação"));
 
         existLoan.getRecordStatus().delete(existUser);
 

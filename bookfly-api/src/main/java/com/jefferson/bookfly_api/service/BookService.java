@@ -3,6 +3,7 @@ package com.jefferson.bookfly_api.service;
 import com.jefferson.bookfly_api.dto.book.BookRequest;
 import com.jefferson.bookfly_api.enums.Gender;
 import com.jefferson.bookfly_api.enums.RecordStatusValue;
+import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
 import com.jefferson.bookfly_api.models.User;
@@ -27,9 +28,9 @@ public class BookService {
 
     public Book createBook(Long userId,Book book){
         User user= userRepository.findById(userId)
-                .orElseThrow(()-> new RuntimeException("Este Usuario não existe no sistema"));
+                .orElseThrow(()-> new NotFoundException("Este Usuario não existe no sistema"));
         Book existBookDeleted = bookRepository.findById(book.getId())
-                .orElseThrow(() -> new RuntimeException("Esse Livro nâo existe no sistema"));
+                .orElseThrow(() -> new NotFoundException("Esse Livro nâo existe no sistema"));
         if (existBookDeleted.getRecordStatus().getStatus().equals(RecordStatusValue.DELETED) &&
             existBookDeleted.getId().equals(book.getId())
         ){
@@ -76,7 +77,7 @@ public class BookService {
                 .existsActiveByTitleAndAuthors(bookToSave.getTitle(), authors);
 
         if (existBook){
-            throw new RuntimeException("Livro já cadastrado");
+            throw new NotFoundException("Livro já cadastrado");
         }
 
         System.out.println("\nLivro cadastrado " + book);
@@ -86,16 +87,16 @@ public class BookService {
 
     public Book findById(Long id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
     }
 
     public Book updateBook(Long id,Long userId, Book book){
         Book existBook = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Livro não existe"));
+                .orElseThrow(() -> new NotFoundException("Livro não existe"));
 
             if (existBook.getRecordStatus().getStatus() == RecordStatusValue.DELETED){
                 User currentUser = userRepository.findById(userId)
-                        .orElseThrow(()-> new RuntimeException("Este Usuario não existe para executar essa ação"));
+                        .orElseThrow(()-> new NotFoundException("Este Usuario não existe para executar essa ação"));
                 existBook.getRecordStatus().active(currentUser);
             }
         String sumaryExists  = book.getSummary() !=null ? book.getSummary() : "Sem sumario";
@@ -143,18 +144,18 @@ public class BookService {
     public void activeBook(Long id, User currentUser){
         Book book = bookRepository.findById(id)
                 .filter( b -> b.getRecordStatus().getStatus() == RecordStatusValue.DELETED)
-                .orElseThrow(()-> new RuntimeException("Livro nâo Encontrado"));
+                .orElseThrow(()-> new NotFoundException("Livro nâo Encontrado"));
         userRepository.findById(currentUser.getId())
-                .orElseThrow(()-> new RuntimeException("Este Usuário não existe para realizar a ação de deletar."));
+                .orElseThrow(()-> new NotFoundException("Este Usuário não existe para realizar a ação de deletar."));
         book.getRecordStatus().active(currentUser);
         bookRepository.save(book);
     }
 
     @Transactional
     public void removeBook(Long id, Long userId){
-        Book book = bookRepository.findById(id).orElseThrow(()-> new RuntimeException("Livro Não EnContrado"));
+        Book book = bookRepository.findById(id).orElseThrow(()-> new NotFoundException("Livro Não EnContrado"));
         User existUser = userRepository.findById(userId)
-                 .orElseThrow(()-> new RuntimeException("Este Usuário não existe para realizar a ação de deletar."));
+                 .orElseThrow(()-> new NotFoundException("Este Usuário não existe para realizar a ação de deletar."));
         book.getRecordStatus().delete(existUser);
         bookRepository.save(book);
     }
