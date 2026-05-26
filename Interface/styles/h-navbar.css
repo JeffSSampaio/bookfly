@@ -28,7 +28,7 @@ body{
 }
 
 .title-logo h1{
-    color: var(--color-ivory);
+    color: white;
     font-weight: bolder;
     margin: 5px;
 }
