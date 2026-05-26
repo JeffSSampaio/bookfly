@@ -1,15 +1,16 @@
 .stock-actions{
-    display: flex;
+     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: end;
-    /* margin: 0 40px; */
-    margin-right: 50px;
-    gap: 10px;
+    flex-direction: row;
+    margin-right: 55px;
+   
+  
 }
 
 .btn-add {
-    padding: 10px 20px;
-    margin: 0 10px;
+    margin: 0 5px;
+    padding: 10px 10px;
     font-weight: 700;
     border-radius: 20px;
     border: none;
@@ -29,12 +30,9 @@
 
 }
 
-.table-header-stock{
-    gap: 20px;
-}
 
 .search-stock{
-    padding: 5px;
+
     width: 200px;
 }
 .search-stock input{

@@ -7,18 +7,17 @@
 .table-container h1 {
     font-family: var(--font-primary);
     font-weight: 700;
-    font-size: 32px;
+    font-size: 30px;
     color: var(--color-dark-green);
     margin-left: 4%;
 }
 .table-title-c{
     display: flex;
     flex-direction: row;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
-    margin-left: 5px;
-    margin-bottom: 0;
     width: 90%;
+    
 }
 
 

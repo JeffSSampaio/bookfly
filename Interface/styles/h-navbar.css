@@ -152,8 +152,8 @@ body{
 
 .btns-menu a:hover{
     background-color: var(--color-dark-green);
-    transform: scale(0.8);
-    transition: all 1s ease-in;
+    transform: scale(0.98);
+    transition: transform 0.5s ease-in;
 }
 
 

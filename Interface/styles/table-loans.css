@@ -1,5 +1,12 @@
 
 
+.loans-actions{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+
 
  .table-header-loans {
     display: flex;
@@ -8,6 +15,8 @@
     align-items: center;
     width: 90%;
  }
+
+
 
 
 

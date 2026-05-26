@@ -1,17 +1,20 @@
 .books-actions{
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     align-items: center;
-    margin-right: 60px;
-    gap:10px;
+    flex-direction: row;
+    margin-right: 55px;
+   
 }
 
 
-/* .books-actions button{
+
+
+ .books-actions button{
     background-color: var(--color-mid-green);
     color: white;
-    margin: 0 10px;
-    padding: 10px 20px;
+    margin: 0 5px;
+    padding: 10px 10px;
     border: none;
     border-radius: 20px;
     font-weight: 600;
@@ -26,7 +29,7 @@
     transform: scale(1.1);
     transition: all 1s ease-in;
 
-} */
+} 
 .modal-books-table{
     display: flex;
     flex-direction: column;
@@ -40,7 +43,7 @@
 }
 
 .search-books{
-    padding: 5px;
+  
     width: 200px;
 }
 .search-books input{

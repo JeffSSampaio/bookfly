@@ -42,9 +42,9 @@ var userMenuLinks = [
 ]
 
 var adminMenuLinks =[
-    "<a href='../pages/LoansAndFines.html'>Emprestimos e Multas</a>",
+    "<a href='../pages/LoansAndFines.html'>Emprestimos</a>",
     // "<a href='../pages/books.html'>Livros</a>",
-    "<a href='../pages/StockandBooks.html'>Estoque e Livros</a>",
+    "<a href='../pages/StockandBooks.html'>Estoque</a>",
     // "<a href='../pages/fines.html'>Multas</a>",
     "<a href='../pages/movements.html'>Movimentações</a>"
   
