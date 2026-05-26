@@ -277,13 +277,13 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
         allButtons.forEach(btnConfig => {
             let btn = document.createElement('button');
             btn.innerHTML = `<img src="${btnConfig.icon}" alt="${btnConfig.alt}" style="width:${btnWidth};height:${btnHeight};display:block;">`;
-            btn.style.padding = '6px 12px';
+            btn.style.padding = '6px 10px';
             btn.style.border = 'none';
             btn.style.backgroundColor = btnConfig.bgColor || 'var(--color-dark-green)';
-            btn.style.borderRadius = '20px';
+            btn.style.borderRadius = '10px';
             btn.style.cursor = 'pointer';
             btn.style.display = 'inline-flex';
-            btn.style.margin = '0 3px';
+            btn.style.margin = '0 2px';
             btn.style.alignItems = 'center';
             btn.style.justifyContent = 'center';
             btn.style.transition = 'background-color 0.2s ease';
