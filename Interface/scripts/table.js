@@ -1,26 +1,30 @@
 import api from './apiService.js';
 
+
 const tableStyleValues= {
     color:{
-         headerColor:'var( --color-dark-green)',
-         containerColor:'var(--color-ivory)'
+         headerBackgroundColor:'var( --color-ivory)',
+         containerBackgroundColor:'white',
+         rowBackgroundColor: 'white',
+         textColor: 'var(--color-wine-2)',
     },
     border: {
-    borderContainer: '1px solid var(--color-dark-green)',
-    borderHeaderBottom: '2px solid var(--color-dark-green)',
-    borderCellBottom:'1px solid rgba(0, 74, 57, 0.15)'
+    // borderContainer: '1px solid var( --color-wine)',
+     borderContainer: 'none',
+    // borderHeaderBottom: '2px solid var(--color-wine)',
+    // borderCellBottom:'1px solid rgba(0, 74, 57, 0.15)'
     }
 
 }
 
 const tableStyles = {
     container: {
-        borderRadius: '12px',
+        borderRadius: '0px',
         overflow: 'hidden',
         border:tableStyleValues.border.borderContainer ,
-        boxShadow: 'var(--box-shadow)',
-        margin: '10px 60px 30px 60px',
-        backgroundColor: tableStyleValues.color.containerColor
+        // boxShadow: 'var(--box-shadow)',
+        margin: '10px 0.9px',
+        backgroundColor: tableStyleValues.color.containerBackgroundColor
     },
     table: {
         width: '100%',
@@ -29,10 +33,10 @@ const tableStyles = {
         tableLayout: 'fixed'
     },
     header: {
-        backgroundColor: tableStyleValues.color.headerColor,
-        color: 'var(--color-ivory)',
+        backgroundColor: tableStyleValues.color.headerBackgroundColor,
+        color: 'var(--color-wine)',
         fontWeight: 'bold',
-        padding: '12px 10px',
+        padding: '12px 1px',
         textAlign: 'center',
         fontFamily: 'var(--font-primary)',
         borderBottom: tableStyleValues.border.borderHeaderBottom
@@ -41,7 +45,7 @@ const tableStyles = {
         borderBottom: tableStyleValues.border.borderCellBottom,
         padding: '10px 8px',
         textAlign: 'center',
-        color: 'var(--color-dark-green)',
+        color: tableStyleValues.color.textColor,
         fontWeight: '700',
         fontFamily: 'var(--font-primary)',
         fontSize: '15px',
@@ -50,7 +54,7 @@ const tableStyles = {
         whiteSpace: 'nowrap'
     },
     row: {
-        backgroundColor: 'var(--color-ivory)',
+        backgroundColor: tableStyleValues.color.rowBackgroundColor,
         color: 'var(--color-dark-green)'
     }
 };
@@ -214,7 +218,7 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
 
     tableData.headers.forEach(headerText => {
         let th = document.createElement('th');
-        if (headerText === 'ID') th.style.width = '10px';
+        if (headerText === 'ID') th.style.width = '40px';
         th.textContent = headerText;
         Object.assign(th.style, tableStyles.header);
         headerRow.appendChild(th);
@@ -260,10 +264,10 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
 
         const defaultButtons = [
             {
-                icon: '/Interface/assets/iconEditWhite.svg',
+                icon: '/Interface/assets/iconEditBlue.svg',
                 alt: 'Editar',
-                bgColor: 'var(--color-blue-dark)',
-                hoverColor: 'var(--color-blue-naive',
+                bgColor: 'var(--color-blue-smooth)',
+                hoverColor: 'var(--color-blue-smooth-bk)',
                 onClick: (rowData, index, row) => { if (onEdit) onEdit(rowData, index, row); }
             }
         ];
@@ -603,7 +607,7 @@ function renderTable({ idHtmlElement, data, configTable, searchFunction, functio
 
     if (!data || data.length === 0) {
         const warning = document.createElement('p');
-        warning.style.color = 'var(--color-mid-green)';
+        warning.style.color = 'var(--color-wine)';
         warning.style.fontWeight = '500';
         warning.style.display = 'flex';
         warning.style.flexDirection = 'row';
@@ -735,10 +739,10 @@ window.openEditFineModal = function (fineData, index, rowElement) {
 
 
 const deleteButton = (onDelete) => ({
-    icon: '/Interface/assets/iconDeleteOnly.svg',
+    icon: '/Interface/assets/iconDeleteRed.svg',
     alt: 'Excluir',
-    bgColor: '#a32d2d',
-    hoverColor: '#7a1f1f',
+    bgColor: 'var(--color-red-smooth)',
+    hoverColor: 'var(--color-red-smooth-bk)',
     onClick: (rowData) => onDelete(rowData)
 });
 

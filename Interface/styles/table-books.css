@@ -11,7 +11,7 @@
 
 
  .books-actions button{
-    background-color: var(--color-mid-green);
+    background-color: var(--color-wine);
     color: white;
     margin: 0 5px;
     padding: 10px 10px;
@@ -25,9 +25,9 @@
 }
 .books-actions button:hover{
     cursor: pointer;
-    background-color: var(--color-dark-green);
-    transform: scale(1.1);
-    transition: all 1s ease-in;
+    background-color: var(--color-wine-2);
+    transform: scale(0.98);
+    transition: all 0.5s ease-in;
 
 } 
 .modal-books-table{
@@ -48,5 +48,5 @@
 }
 .search-books input{
     height: 30px;
-    background-color: var(--color-mid-green);
+    background-color: var(--color-wine);
 }

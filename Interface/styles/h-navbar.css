@@ -13,22 +13,24 @@ body{
       box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
-.title-logo {
+.title-logo, h1 ,img{
    display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin: 5px 5px;
 }
 
 .title-logo img{
-    height: 50px;
-    margin: 5px 15px;
+    height:30px;
+    width: 30px;
+     margin: 5px;
 }
 
 .title-logo h1{
     color: var(--color-ivory);
     font-weight: bolder;
-   
+    margin: 5px;
 }
 
 .icon-menu{
@@ -211,3 +213,4 @@ body{
 .logout-container .log{
     padding: 5px 50px;
 }
+

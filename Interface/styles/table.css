@@ -1,15 +1,19 @@
 
 .table-container {
-    margin: 5px 0 0px 0;
+  
     text-align: center;
-    
+    background-color: white;
+    margin: 1% 60px;
+    padding: 10px 1px;
+    border-radius: 15px;
+    box-shadow: var(--box-shadow);
 }
 .table-container h1 {
     font-family: var(--font-primary);
     font-weight: 700;
-    font-size: 30px;
-    color: var(--color-dark-green);
-    margin-left: 4%;
+    font-size: 25px;
+    color: var( --color-wine);
+    margin-left: 1%;
 }
 .table-title-c{
     display: flex;
@@ -20,4 +24,7 @@
     
 }
 
+tbody tr:nth-child(even) {
+    background-color: var(--color-cream) !important; 
+}
 
