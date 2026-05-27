@@ -32,7 +32,7 @@ function renderBooks(stockList) {
   emptyMessage.classList.add('hidden');
 
   if (!filtered.length) {
-    emptyMessage.textContent = `No book called "${textSearched}" found `;
+    emptyMessage.textContent = `Livro "${textSearched}" Não Encontrado `;
     emptyMessage.classList.remove('hidden');
     return;
   }

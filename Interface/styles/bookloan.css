@@ -43,6 +43,11 @@ body {
 }
 
 
+.search-book-loan input{
+    background: var(--color-mid-green) !important;
+}
+
+
 .bookloan-hero {
     display: flex;
     justify-content: space-between;
