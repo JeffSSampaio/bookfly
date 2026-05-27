@@ -23,12 +23,12 @@ public interface StockBookRepository extends JpaRepository<StockBook, Long> {
 
     List<StockBook> findByBook(Book book);
 
-    @Query("SELECT sb FROM StockBook sb WHERE sb.recordStatus.status = 'ACTIVE'")
+    @Query("SELECT sb FROM StockBook sb WHERE sb.recordStatus.recordStatusValue = 'ACTIVE'")
     List<StockBook> findAllActive();
 
-    @Query("SELECT sb FROM StockBook sb WHERE sb.stock = :stock AND sb.recordStatus.status = 'ACTIVE'")
+    @Query("SELECT sb FROM StockBook sb WHERE sb.stock = :stock AND sb.recordStatus.recordStatusValue = 'ACTIVE'")
     List<StockBook> findActiveByStock(Stock stock);
 
-    @Query("SELECT sb FROM StockBook sb WHERE sb.stock = :stock AND sb.book = :book AND sb.recordStatus.status = 'ACTIVE'")
+    @Query("SELECT sb FROM StockBook sb WHERE sb.stock = :stock AND sb.book = :book AND sb.recordStatus.recordStatusValue = 'ACTIVE'")
     Optional<StockBook> findActiveByStockAndBook(Stock stock, Book book);
 }

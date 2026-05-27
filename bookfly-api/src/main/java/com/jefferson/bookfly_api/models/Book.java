@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@SQLDelete(sql = "UPDATE livro SET record_status = 'DELETED', status_date_time = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE livro SET record_status_value = 'DELETED', status_date_time = NOW() WHERE id = ?")
 @Table(name = "livro")
 public class Book {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

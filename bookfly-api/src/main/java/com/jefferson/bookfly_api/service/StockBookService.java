@@ -48,7 +48,7 @@ public class StockBookService {
                 .orElse(null);
 
         if (stockBook != null) {
-            if (RecordStatusValue.DELETED.equals(stockBook.getRecordStatus().getStatus())) {
+            if (RecordStatusValue.DELETED.equals(stockBook.getRecordStatus().getRecordStatusValue())) {
                 stockBook.getRecordStatus().active(user);
             }
             stockBook.setQtd(stockBook.getQtd() + qtd);

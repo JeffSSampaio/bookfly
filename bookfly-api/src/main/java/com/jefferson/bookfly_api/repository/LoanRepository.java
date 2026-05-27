@@ -23,12 +23,12 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     Optional<Loan> findByUserAndStockBook(User user, StockBook book);
 
-    @Query("SELECT l FROM Loan l WHERE l.recordStatus.status = 'ACTIVE'")
+    @Query("SELECT l FROM Loan l WHERE l.recordStatus.recordStatusValue = 'ACTIVE'")
     List<Loan> findAllActive();
 
-    @Query("SELECT l FROM Loan l WHERE l.user = :user AND l.recordStatus.status = 'ACTIVE'")
+    @Query("SELECT l FROM Loan l WHERE l.user = :user AND l.recordStatus.recordStatusValue = 'ACTIVE'")
     List<Loan> findActiveByUser(User user);
 
-    @Query("SELECT l FROM Loan l WHERE l.user = :user AND l.stockBook = :stockBook AND l.recordStatus.status = 'ACTIVE'")
+    @Query("SELECT l FROM Loan l WHERE l.user = :user AND l.stockBook = :stockBook AND l.recordStatus.recordStatusValue = 'ACTIVE'")
     Optional<Loan> findActiveByUserAndStockBook(User user, StockBook stockBook);
 }

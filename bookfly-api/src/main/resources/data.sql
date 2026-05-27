@@ -7,7 +7,7 @@ INSERT INTO usuario (
     email,
     password,
     role,
-    status,
+    record_status_value,
     status_date_time
 )
 SELECT *
@@ -34,7 +34,7 @@ FROM (
             email,
             password,
             role,
-            status,
+            record_status_value,
             status_date_time
     )
 WHERE NOT EXISTS (
@@ -67,8 +67,9 @@ WHERE NOT EXISTS (
 
 INSERT INTO autor (
     name,
-    status,
-    status_date_time
+    record_status_value,
+    status_date_time,
+    status_user_id
 )
 SELECT *
 FROM (
@@ -76,22 +77,27 @@ FROM (
              (
                  'J. R. R. Tolkien',
                  'ACTIVE',
-                 NOW()
+                 NOW(),
+                 2
+
              ),
              (
                  'Stephen King',
                  'ACTIVE',
-                 NOW()
+                 NOW(),
+                 2
              ),
              (
                  'Edgar Allan Poe',
                  'ACTIVE',
-                 NOW()
+                 NOW(),
+                 2
              )
      ) AS v(
             name,
-            status,
-            status_date_time
+            record_status_value,
+            status_date_time,
+            status_user_id
     )
 WHERE NOT EXISTS (
     SELECT 1 FROM autor
@@ -107,7 +113,7 @@ INSERT INTO livro (
     title,
     cover,
     summary,
-    status,
+    record_status_value,
     status_date_time,
     status_user_id
 )
@@ -155,7 +161,7 @@ FROM (
             title,
             cover,
             summary,
-            status,
+            record_status_value,
             status_date_time,
             status_user_id
     )
@@ -173,7 +179,7 @@ INSERT INTO estoque_livro (
     qtd,
     estoque_id,
     livro_id,
-    status,
+    record_status_value,
     status_date_time,
     status_user_id
 )
@@ -216,7 +222,7 @@ FROM (
             qtd,
             estoque_id,
             livro_id,
-            status,
+            record_status_value,
             status_date_time,
             status_user_id
     )
@@ -287,7 +293,7 @@ INSERT INTO emprestimo (
     loan_date,
     return_date,
     loan_status,
-    status,
+    record_status_value,
     status_date_time
 )
 SELECT *
@@ -308,7 +314,7 @@ FROM (
             loan_date,
             return_date,
             loan_status,
-            status,
+            record_status_value,
             status_date_time
     )
 WHERE NOT EXISTS (
@@ -327,7 +333,7 @@ INSERT INTO multa (
     amount,
     penalty_status,
     paid,
-    status,
+    record_status_value,
     status_date_time
 )
 SELECT *
@@ -348,7 +354,7 @@ FROM (
             amount,
             penalty_status,
             paid,
-            status,
+            record_status_value,
             status_date_time
     )
 WHERE NOT EXISTS (

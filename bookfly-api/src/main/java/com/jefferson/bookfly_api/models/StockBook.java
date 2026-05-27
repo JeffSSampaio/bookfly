@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.SQLDelete;
 
 @Entity
-@SQLDelete(sql = "UPDATE estoque_livro SET record_status = 'DELETED', status_date_time = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE estoque_livro SET record_status_value = 'DELETED', status_date_time = NOW() WHERE id = ?")
 @Table(name = "estoque_livro")
 public class StockBook {
     @Id

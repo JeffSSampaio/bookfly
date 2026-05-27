@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Entity
-@SQLDelete(sql = "UPDATE multa SET status = 'DELETED', status_date_time = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE multa SET record_status_value  = 'DELETED', status_date_time = NOW() WHERE id = ?")
 @Table(name = "multa")
 public class Penalty {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

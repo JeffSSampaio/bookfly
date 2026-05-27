@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 @Embeddable
 public class RecordStatus implements IRecordStatus {
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private RecordStatusValue status = RecordStatusValue.ACTIVE;
+    @Column(name = "record_status_value",nullable = false)
+    private RecordStatusValue recordStatusValue = RecordStatusValue.ACTIVE;
 
     @Column(name = "status_date_time",nullable = false)
     private LocalDateTime dateTime = LocalDateTime.now();
@@ -22,33 +22,33 @@ public class RecordStatus implements IRecordStatus {
     public RecordStatus() {
     }
 
-    public RecordStatus(RecordStatusValue status, LocalDateTime dateTime, User byUser) {
-        this.status = status;
+    public RecordStatus(RecordStatusValue recordStatusValue, LocalDateTime dateTime, User byUser) {
+        this.recordStatusValue = recordStatusValue;
         this.dateTime = dateTime;
         this.byUser = byUser;
     }
 
     @Override
     public void delete(User user) {
-        this.status = RecordStatusValue.DELETED;
+        this.recordStatusValue = RecordStatusValue.DELETED;
         this.dateTime = LocalDateTime.now();
         this.byUser = user;
     }
 
     @Override
     public void active(User user) {
-        this.status= RecordStatusValue.ACTIVE;
+        this.recordStatusValue= RecordStatusValue.ACTIVE;
         this.dateTime = LocalDateTime.now();
         this.byUser = user;
     }
 
 
-    public RecordStatusValue getStatus() {
-        return status;
+    public RecordStatusValue getRecordStatusValue() {
+        return recordStatusValue;
     }
 
-    public void setStatus(RecordStatusValue status) {
-        this.status = status;
+    public void setRecordStatusValue(RecordStatusValue recordStatusValue) {
+        this.recordStatusValue = recordStatusValue;
     }
 
     public LocalDateTime getDateTime() {

@@ -31,7 +31,7 @@ public class BookService {
                 .orElseThrow(()-> new NotFoundException("Este Usuario não existe no sistema"));
         Book existBookDeleted = bookRepository.findById(book.getId())
                 .orElseThrow(() -> new NotFoundException("Esse Livro nâo existe no sistema"));
-        if (existBookDeleted.getRecordStatus().getStatus().equals(RecordStatusValue.DELETED) &&
+        if (existBookDeleted.getRecordStatus().getRecordStatusValue().equals(RecordStatusValue.DELETED) &&
             existBookDeleted.getId().equals(book.getId())
         ){
             existBookDeleted.getRecordStatus().active(user);
@@ -94,7 +94,7 @@ public class BookService {
         Book existBook = bookRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Livro não existe"));
 
-            if (existBook.getRecordStatus().getStatus() == RecordStatusValue.DELETED){
+            if (existBook.getRecordStatus().getRecordStatusValue() == RecordStatusValue.DELETED){
                 User currentUser = userRepository.findById(userId)
                         .orElseThrow(()-> new NotFoundException("Este Usuario não existe para executar essa ação"));
                 existBook.getRecordStatus().active(currentUser);
@@ -132,7 +132,7 @@ public class BookService {
     public List<Book> findAllBooksActive(){
         return bookRepository.findAll()
                 .stream()
-                .filter( book -> book.getRecordStatus().getStatus() == RecordStatusValue.ACTIVE)
+                .filter( book -> book.getRecordStatus().getRecordStatusValue() == RecordStatusValue.ACTIVE)
                 .sorted(Comparator.comparing(Book::getId))
                 .toList();
     }
@@ -143,7 +143,7 @@ public class BookService {
 
     public void activeBook(Long id, User currentUser){
         Book book = bookRepository.findById(id)
-                .filter( b -> b.getRecordStatus().getStatus() == RecordStatusValue.DELETED)
+                .filter( b -> b.getRecordStatus().getRecordStatusValue() == RecordStatusValue.DELETED)
                 .orElseThrow(()-> new NotFoundException("Livro nâo Encontrado"));
         userRepository.findById(currentUser.getId())
                 .orElseThrow(()-> new NotFoundException("Este Usuário não existe para realizar a ação de deletar."));

@@ -13,9 +13,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
-    @Query("SELECT u FROM User u WHERE u.recordStatus.status = 'ACTIVE'")
+    @Query("SELECT u FROM User u WHERE u.recordStatus.recordStatusValue = 'ACTIVE'")
     List<User> findAllActive();
 
-    @Query("SELECT u FROM User u WHERE u.email = :email AND u.recordStatus.status = 'ACTIVE'")
+    @Query("SELECT u FROM User u WHERE u.email = :email AND u.recordStatus.recordStatusValue = 'ACTIVE'")
     Optional<User> findActiveByEmail(String email);
 }

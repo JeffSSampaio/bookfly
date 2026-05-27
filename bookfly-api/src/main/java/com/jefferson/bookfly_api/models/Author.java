@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Entity
-@SQLDelete(sql = "UPDATE autor SET record_status = 'DELETED', status_date_time = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE autor SET record_status_value = 'DELETED', status_date_time = NOW() WHERE id = ?")
 @Table(name="autor")
 public class Author {
 

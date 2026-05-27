@@ -11,19 +11,19 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book,Long> {
 
-    @Query("SELECT b FROM Book b JOIN b.authors a WHERE a.id = :autorId AND b.recordStatus.status = 'ACTIVE'")
+    @Query("SELECT b FROM Book b JOIN b.authors a WHERE a.id = :autorId AND b.recordStatus.recordStatusValue = 'ACTIVE'")
     List<Book> findActiveByAuthorsId(Long autorId);
 
 
-    @Query("SELECT b FROM Book b WHERE LOWER(b.title) LIKE LOWER(CONCAT('%', :title, '%')) AND b.recordStatus.status = 'ACTIVE'")
+    @Query("SELECT b FROM Book b WHERE LOWER(b.title) LIKE LOWER(CONCAT('%', :title, '%')) AND b.recordStatus.recordStatusValue = 'ACTIVE'")
     List<Book> findActiveByTitleContaining(String title);
 
 
-    @Query("SELECT COUNT(b) > 0 FROM Book b JOIN b.authors a WHERE LOWER(b.title) = LOWER(:title) AND a IN :authors AND b.recordStatus.status = 'ACTIVE'")
+    @Query("SELECT COUNT(b) > 0 FROM Book b JOIN b.authors a WHERE LOWER(b.title) = LOWER(:title) AND a IN :authors AND b.recordStatus.recordStatusValue = 'ACTIVE'")
     boolean existsActiveByTitleAndAuthors(String title, List<Author> authors);
 
 
-    @Query("SELECT b FROM Book b WHERE b.recordStatus.status = 'ACTIVE'")
+    @Query("SELECT b FROM Book b WHERE b.recordStatus.recordStatusValue = 'ACTIVE'")
     List<Book> findAllActive();
 
 
