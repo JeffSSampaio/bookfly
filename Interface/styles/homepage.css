@@ -5,7 +5,7 @@ body {
     background-color: var(--color-ivory);
     display: flex;         
     flex-direction: column;  
-    min-height: 100vh;      
+    min-height: 10vh;      
 }
 
 .body-page {
@@ -16,7 +16,12 @@ body {
     flex-direction: column;
 }
 
- 
+.loan-section-title{
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+}
 
 
 .btn-loan-container{

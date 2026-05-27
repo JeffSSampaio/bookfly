@@ -83,7 +83,7 @@ var returnContainer = document.getElementById('returns-container');
             hasActiveLoans = true;
             const overdue = element.statusLoan == "ATRASADO" || (element.returnDate && new Date(element.returnDate) < new Date());
             const statusLabel = overdue ? "ATRASADO" : element.statusLoan;
-            const statusClass = overdue ? "badge-status-late" : "badge-status-active";
+            const statusClass ="badge-status-active";
             let returnText = "";
 
             if (element.returnDate) {
