@@ -26,7 +26,7 @@ function rerenderTable(containerId, tableConfig, filtered, onEdit) {
     container.replaceChildren(tableElement);
     if(!filtered || filtered.length === 0){
         const warning = document.createElement('p');
-        warning.style.color = 'var(--color-wine)';
+        warning.style.color = 'var(--color-wine) !important';
         warning.style.fontWeight = '500';
         warning.style.display='flex';
         warning.style.flexDirection='row';

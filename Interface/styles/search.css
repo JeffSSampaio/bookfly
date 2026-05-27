@@ -1,0 +1,121 @@
+
+.search-input-container{
+    position: relative;
+  
+}
+.search-input-container input {
+  width: 100%;
+  padding: 12px 10px 12px 15px; 
+  border: none;
+  border-radius: 10px;
+  background: var(--color-ivory) !important;
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--color-wine) !important;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+.search-input-container input::placeholder {
+  color: var(--color-wine) !important;
+  font-family: var(--font-primary);
+  font-weight: bold;
+  font-size: 15px;
+  opacity: 80%;
+}
+
+.search-input-container img {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  pointer-events: none; 
+}
+
+
+/* .search-book-loan input{
+    background: var(--color-mid-green) 
+} */
+
+
+.search-fines{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    flex-direction: row;
+}
+
+.search-fines input {  
+
+    padding:5px 10px; 
+    margin: 0 60px;
+    width: 200px;
+    border: none;
+    border-radius: 10px;
+    background: var(--color-wine);
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+.search-fines input::placeholder {
+    opacity: 0.7;
+    color: var(--color-ivory);
+}
+
+
+.search-movements{
+    padding: 5px;
+    width: 200px;
+}
+.search-movements input{
+    height: 30px;
+
+}
+
+.search-stock{
+
+    width: 200px;
+}
+.search-stock input{
+    height: 30px;
+
+}
+
+
+.search-loans{
+       display: flex;
+    justify-content: end;
+    align-items: end;
+    flex-direction: row;
+    /* width: 100%; */
+}
+
+.search-loans input {  
+
+    padding:5px 10px; 
+    margin: 0 60px;
+    border: none;
+    width: 200px;
+    border-radius: 10px;
+    
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+.search-loans input::placeholder {
+  
+    opacity: 0.7;
+    color: var(--color-ivory);
+}
+
+
+
+.search-books{
+  
+    width: 200px;
+}
+.search-books input{
+    height: 30px;
+    background-color: var(--color-wine);
+}

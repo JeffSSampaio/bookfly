@@ -31,16 +31,8 @@
 }
 
 
-.search-movements{
-    padding: 5px;
-    width: 200px;
-}
-.search-movements input{
-    height: 30px;
-    background-color: var(--color-wine);
-}
 .btn-add-movement{
-    background-color: var(--color-wine);
+    background-color: var(--color-ivory);
     border: none;
     padding: 9px;
     font-size: 15px;

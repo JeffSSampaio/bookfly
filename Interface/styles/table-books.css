@@ -11,13 +11,13 @@
 
 
  .books-actions button{
-    background-color: var(--color-wine);
-    color: white;
+    background-color: var(--color-ivory);
+    color: var(--color-wine);
     margin: 0 5px;
     padding: 10px 10px;
     border: none;
     border-radius: 20px;
-    font-weight: 600;
+    font-weight: 700;
     font-family: var(--font-primary);
     transform: scale(1);
     transition:   background-color 1s ease-out,
@@ -25,7 +25,7 @@
 }
 .books-actions button:hover{
     cursor: pointer;
-    background-color: var(--color-wine-2);
+    background-color: var(--color-cream);
     transform: scale(0.98);
     transition: all 0.5s ease-in;
 
@@ -42,11 +42,3 @@
     background-color: var(--color-ivory);
 }
 
-.search-books{
-  
-    width: 200px;
-}
-.search-books input{
-    height: 30px;
-    background-color: var(--color-wine);
-}

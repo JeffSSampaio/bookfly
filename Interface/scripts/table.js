@@ -108,6 +108,7 @@ if (!data || data.length === 0) {
 
     const warning = document.createElement('p');
     warning.innerHTML = "Nenhuma informação na tabela";
+    warning.style.color=`var(--color-wine)`
 
     container.appendChild(warning);
 }

@@ -21,7 +21,7 @@
     border-radius: 20px;
     width: 20%;
     height: 45%;
-    background-color: var(--color-ivory);
+    background-color: white;
 }
 
 .book-detail-modal {

@@ -9,43 +9,9 @@ body {
     padding: 0 20px;
 }
 
-.search-input-container{
-    position: relative;
-  
-}
-
-.search-input-container input {
-  width: 100%;
-  padding: 12px 10px 12px 15px; 
-  border: none;
-  border-radius: 10px;
-  background: var(--color-wine);
-  font-size: 18px;
-  font-weight: bold;
-  color: white;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-}
-.search-input-container input::placeholder {
-  color: var(--color-ivory);
-  font-family: var(--font-primary);
-  font-weight: bold;
-  font-size: 20px;
-  opacity: 80%;
-}
-
-.search-input-container img {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 30px;
-  pointer-events: none; 
-}
 
 
-.search-book-loan input{
-    background: var(--color-mid-green) !important;
-}
+
 
 
 .bookloan-hero {

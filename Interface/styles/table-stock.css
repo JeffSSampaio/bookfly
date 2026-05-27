@@ -14,8 +14,8 @@
     font-weight: 700;
     border-radius: 20px;
     border: none;
-    color: white;
-    background-color: var(--color-wine);
+    color: var(--color-wine);
+    background-color: var(--color-ivory);
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     transform: scale(1);
     transition: background-color 1s ease-out,
@@ -24,18 +24,10 @@
 
 .btn-add:hover{
     cursor: pointer;
-    background-color:  var(--color-wine-2);
+    background-color:  var(--color-cream);
     transform: scale(0.98);
     transition: all 0.5s ease-in;
 
 }
 
 
-.search-stock{
-
-    width: 200px;
-}
-.search-stock input{
-    height: 30px;
-    background-color: var(--color-wine);
-}
