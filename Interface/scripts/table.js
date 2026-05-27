@@ -327,6 +327,9 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
 
     function render(page) {
         wrapper.innerHTML = '';
+        const sortedRows = [...tableData.rows].sort((a, b) => {
+            return Number(a.id) - Number(b.id);
+        });
 
         let container = document.createElement('div');
         Object.assign(container.style, tableStyles.container);
@@ -358,7 +361,7 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
         let tbody = document.createElement('tbody');
 
         const start = (page - 1) * PAGE_SIZE;
-        const pageRows = tableData.rows.slice(start, start + PAGE_SIZE);
+        const pageRows = sortedRows.slice(start, start + PAGE_SIZE);
 
         pageRows.forEach((rowData, index) => {
             let row = document.createElement('tr');
