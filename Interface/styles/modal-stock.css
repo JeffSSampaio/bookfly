@@ -2,14 +2,17 @@
 .card-select-book {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px;
+    gap: 10px;
+    padding: 10px;
     border: 1px solid #dce2e7;
     border-radius: 12px;
     cursor: pointer;
-    margin-bottom: 10px;
+    margin: 5px;
     background-color: #fff;
     transition: background 0.2s, border-color 0.2s;
+    width: 70%;
+    height: 70%;
+
 }
 
 .card-select-book:hover {
@@ -39,8 +42,8 @@
 }
 
 .card-select-book > img {
-    width: 40px;
-    height: 56px;
+    width: 46px;
+    height: 46px;
     object-fit: cover;
     border-radius: 8px;
 }
@@ -52,7 +55,7 @@
 
 .card-select-book-title {
     font-weight: 700;
-    color: #1a1a1a;
+    color: var(--color-dark-green);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -61,7 +64,7 @@
 
 .card-select-book-author {
     font-size: 0.85rem;
-    color: #666666;
+    color: var(--color-mid-green);
     margin-top: 4px;
     white-space: nowrap;
     overflow: hidden;
@@ -70,8 +73,8 @@
 
 .card-select-qty-container {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    flex-direction: row;
+    align-items: center;
     gap: 4px;
 }
 
@@ -81,8 +84,8 @@
 }
 
 .card-book-qtd {
-    width: 62px;
-    padding: 6px 8px;
+    width:50px;
+    padding: 6px 6px;
     border-radius: 8px;
     border: 1px solid #dce2e7;
     text-align: center;
@@ -90,7 +93,9 @@
 }
 
 .modal-add-stock-grid {
-    max-height: 45vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr ;
+    max-height: 450vh;
     overflow-y: auto;
     width: 100%;
     padding-right: 8px;
@@ -160,10 +165,10 @@
     padding: 20px;
     border-radius: 20px;
     margin: 15% auto;
-    width: 70%;
+    width: 75%;
     max-width: 750px;
     height: 75%;
-    background-color: var(--color-ivory);
+    background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;

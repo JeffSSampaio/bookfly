@@ -529,7 +529,7 @@ window.openAddItemOnStock = async function() {
                 <h1 class="t-modal">Adicionar Estoque</h1>
                 <div class="modal-content-wrapper">
                     <div class="modal-add-stock-search">
-                        <input type="text" id="search-stock" placeholder="Search book..." />
+                        <input type="text" id="search-stock" placeholder="Pesquisar Livro.." />
                         <img src="/Interface/assets/iconSearch.svg" alt="Buscar" />
                     </div>
                     <div class="modal-add-stock-grid" id="grid-add-stock">
