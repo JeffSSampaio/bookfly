@@ -9,6 +9,7 @@ import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -146,18 +147,20 @@ public class LoanService {
     }
 
     @Transactional
-    public Moviment cancelLoan(Long loanId){
+    public Moviment cancelLoan(Long loanId) {
         Loan existLoan = loanRepository.findById(loanId)
-            .orElseThrow(()-> new NotFoundException("Este Emprestimo Não Existe"));
+                .orElseThrow(() -> new NotFoundException("Este Emprestimo Não Existe"));
+
+        if (existLoan.getStatus() == StatusLoan.FINALIZADO) {
+            throw new NotFoundException("Não é possível cancelar um empréstimo já finalizado");
+        }
+
+        if (existLoan.getStatus() == StatusLoan.CANCELADO) {
+            throw new NotFoundException("Este empréstimo já foi cancelado anteriormente");
+        }
+
         StockBook bookOnStock = stockBookRepository.findById(existLoan.getStockBook().getId())
                 .orElseThrow(() -> new NotFoundException("Esse Livro não existe no stock"));
-
-//        List<Moviment> movimentsFromExistLoan =  existLoan.getMoviments()
-//                .stream()
-//                .filter((moviment -> moviment != null))
-//                .toList();
-
-
 
         Moviment moviment = new Moviment();
         moviment.setUser(existLoan.getUser());
@@ -168,40 +171,28 @@ public class LoanService {
         moviment.setStockBook(bookOnStock);
 
         Boolean isUserAdmin = existLoan.getUser().getRole().equals(Role.ADMIN);
-        String description ="";
-        TypeMoviment type ;
-        if (isUserAdmin){
+        String description = "";
+        TypeMoviment type;
 
-            description ="Admin Cancelou Emprestimo de Livro " + existLoan.getStockBook().getBook().getTitle();
+        if (isUserAdmin) {
+            description = "Admin Cancelou Emprestimo de Livro " + existLoan.getStockBook().getBook().getTitle();
             type = TypeMoviment.ENTRADA_ADMIN;
-        }else {
-            description="Usuario Cancelou Emprestimo de Livro " + existLoan.getStockBook().getBook().getTitle();
+        } else {
+            description = "Usuario Cancelou Emprestimo de Livro " + existLoan.getStockBook().getBook().getTitle();
             type = TypeMoviment.ENTRADA;
         }
 
         moviment.setTypeItem(type);
         moviment.setDescription(description.toUpperCase());
 
-        if (existLoan.getStatus() == StatusLoan.FINALIZADO) {
-            throw new NotFoundException("Não é possível cancelar um empréstimo já finalizado");
-        }
+
+        existLoan.setStatus(StatusLoan.CANCELADO);
 
         movimentRepository.save(moviment);
         stockBookRepository.save(bookOnStock);
-        loanRepository.delete(existLoan);
+        loanRepository.save(existLoan);
+
         return moviment;
-
-
-//        movimentsFromExistLoan.forEach(moviment -> {
-//
-//            moviment.setStockBook(existLoan.getStockBook());
-//            moviment.setQtdMoviment(moviment.getQtdMoviment() + 1);
-//            moviment.setDescription("Emprestimo Cancelado por Usuario:" + moviment.getUser());
-//            moviment.setTypeItem(TypeMoviment.ENTRADA);
-//
-//        });
-
-
     }
     @Transactional
     public Loan updateLoan(Long loanId, Loan newLoan){
