@@ -1,6 +1,11 @@
 import api from './apiService.js';
 
 
+
+const PAGE_SIZE = 4; 
+
+
+
 const tableStyleValues= {
     color:{
          headerBackgroundColor:'var( --color-ivory)',
@@ -19,13 +24,14 @@ const tableStyleValues= {
 
 const tableStyles = {
     container: {
-        borderRadius: '0px',
-        overflow: 'hidden',
-        border:tableStyleValues.border.borderContainer ,
-        // boxShadow: 'var(--box-shadow)',
-        margin: '10px 0.9px',
-        backgroundColor: tableStyleValues.color.containerBackgroundColor
-    },
+borderRadius: '0px',
+overflowX: 'auto',
+overflowY: 'visible',
+border: tableStyleValues.border.borderContainer,
+margin: '10px 0.9px',
+backgroundColor: tableStyleValues.color.containerBackgroundColor
+},
+
     table: {
         width: '100%',
         borderCollapse: 'collapse',
@@ -66,6 +72,118 @@ var allFines = await api.getAllPenalties();
 var allBooks = await api.getAllBooks();
 
 const loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'));
+
+
+
+function renderTable({
+idHtmlElement,
+data,
+configTable,
+searchFunction,
+functionTable,
+extraButtons = [],
+onEdit
+}) {
+
+
+const container = document.getElementById(idHtmlElement);
+
+if (!container) return;
+
+container.innerHTML = '';
+
+container.appendChild(
+    functionTable(
+        configTable,
+        onEdit,
+        extraButtons
+    )
+);
+
+if (searchFunction) {
+    searchFunction(data);
+}
+
+if (!data || data.length === 0) {
+
+    const warning = document.createElement('p');
+    warning.innerHTML = "Nenhuma informação na tabela";
+
+    container.appendChild(warning);
+}
+
+
+}
+
+function buildPagination(totalRows, currentPage, onPageChange) {
+    const totalPages = Math.ceil(totalRows / PAGE_SIZE);
+    if (totalPages <= 1) return null;
+
+    const nav = document.createElement('div');
+    nav.style.cssText = `
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 12px 6px;
+        font-family: var(--font-primary);
+    `;
+
+    const btnStyle = (active) => `
+        min-width: 28px;
+        height: 28px;
+        border: 1px solid ${active ? 'var(--color-wine)' : '#ddd'};
+        border-radius: 6px;
+        background: ${active ? 'var(--color-wine)' : 'white'};
+        color: ${active ? 'white' : 'var(--color-wine)'};
+        font-weight: ${active ? '700' : '500'};
+        font-size: 13px;
+        cursor: pointer;
+        padding: 0 6px;
+        font-family: var(--font-primary);
+        transition: all 0.15s ease;
+    `;
+
+    const makeBtn = (label, targetPage, disabled = false) => {
+        const btn = document.createElement('button');
+        btn.innerHTML = label;
+        btn.style.cssText = btnStyle(targetPage === currentPage);
+        btn.disabled = disabled;
+        
+        if (disabled) { 
+            btn.style.opacity = '0.35'; 
+            btn.style.cursor = 'default'; 
+        }
+        
+        btn.onmouseover = () => { if (!disabled && targetPage !== currentPage) btn.style.background = 'var(--color-ivory)'; };
+        btn.onmouseout  = () => { if (!disabled && targetPage !== currentPage) btn.style.background = 'white'; };
+        btn.onclick = () => { if (!disabled) onPageChange(targetPage); };
+        return btn;
+    };
+
+  
+    nav.appendChild(makeBtn('|&lt;', 1, currentPage === 1));
+    nav.appendChild(makeBtn('&lt;', currentPage - 1, currentPage === 1));
+
+  
+    let start = Math.max(1, currentPage - 2);
+    let end = Math.min(totalPages, start + 4);
+    if (end - start < 4) {
+        start = Math.max(1, end - 4);
+    }
+
+    for (let p = start; p <= end; p++) {
+
+        nav.appendChild(makeBtn(p, p, false));
+    }
+
+    nav.appendChild(makeBtn('&gt;', currentPage + 1, currentPage === totalPages));
+    nav.appendChild(makeBtn('&gt;|', totalPages, currentPage === totalPages));
+
+    return nav;
+}
+
+
 
 const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
     dateStyle: 'short',
@@ -205,101 +323,116 @@ window.table = function (tableData) {
 };
 
 window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeight = '16px', extraButtons = []) {
-    let container = document.createElement('div');
-    Object.assign(container.style, tableStyles.container);
+    const wrapper = document.createElement('div');
 
-    let tbl = document.createElement('table');
-    Object.assign(tbl.style, tableStyles.table);
+    function render(page) {
+        wrapper.innerHTML = '';
 
-    let config = tableData.columnConfig || {};
+        let container = document.createElement('div');
+        Object.assign(container.style, tableStyles.container);
 
-    let thead = document.createElement('thead');
-    let headerRow = document.createElement('tr');
+        let tbl = document.createElement('table');
+        Object.assign(tbl.style, tableStyles.table);
 
-    tableData.headers.forEach(headerText => {
-        let th = document.createElement('th');
-        if (headerText === 'ID') th.style.width = '40px';
-        th.textContent = headerText;
-        Object.assign(th.style, tableStyles.header);
-        headerRow.appendChild(th);
-    });
+        let config = tableData.columnConfig || {};
 
-    let thActions = document.createElement('th');
-    thActions.textContent = 'Ações';
-    Object.assign(thActions.style, tableStyles.header);
-    headerRow.appendChild(thActions);
+        let thead = document.createElement('thead');
+        let headerRow = document.createElement('tr');
 
-    thead.appendChild(headerRow);
-    tbl.appendChild(thead);
-
-    let tbody = document.createElement('tbody');
-
-    tableData.rows.forEach((rowData, index) => {
-        let row = document.createElement('tr');
-        Object.assign(row.style, tableStyles.row);
-
-        Object.keys(rowData).forEach(key => {
-            if (key.startsWith('_')) return;
-
-            let cell = document.createElement('td');
-            Object.assign(cell.style, tableStyles.cell);
-
-            if (config[key]?.render) {
-                config[key].render(cell, rowData[key], rowData);
-            } else {
-                cell.textContent = rowData[key];
-            }
-
-            if (config[key]) {
-                const { render, ...styleOnly } = config[key];
-                Object.assign(cell.style, styleOnly);
-            }
-
-            row.appendChild(cell);
+        tableData.headers.forEach(headerText => {
+            let th = document.createElement('th');
+            if (headerText === 'ID') th.style.width = '40px';
+            th.textContent = headerText;
+            Object.assign(th.style, tableStyles.header);
+            headerRow.appendChild(th);
         });
 
-        let actionsCell = document.createElement('td');
-        Object.assign(actionsCell.style, tableStyles.cell);
-        actionsCell.style.whiteSpace = 'nowrap';
+        let thActions = document.createElement('th');
+        thActions.textContent = 'Ações';
+        Object.assign(thActions.style, tableStyles.header);
+        headerRow.appendChild(thActions);
 
-        const defaultButtons = [
-            {
-                icon: '/Interface/assets/iconEditBlue.svg',
-                alt: 'Editar',
-                bgColor: 'var(--color-blue-smooth)',
-                hoverColor: 'var(--color-blue-smooth-bk)',
-                onClick: (rowData, index, row) => { if (onEdit) onEdit(rowData, index, row); }
-            }
-        ];
+        thead.appendChild(headerRow);
+        tbl.appendChild(thead);
 
-        const allButtons = [...defaultButtons, ...extraButtons];
+        let tbody = document.createElement('tbody');
 
-        allButtons.forEach(btnConfig => {
-            let btn = document.createElement('button');
-            btn.innerHTML = `<img src="${btnConfig.icon}" alt="${btnConfig.alt}" style="width:${btnWidth};height:${btnHeight};display:block;">`;
-            btn.style.padding = '6px 10px';
-            btn.style.border = 'none';
-            btn.style.backgroundColor = btnConfig.bgColor || 'var(--color-dark-green)';
-            btn.style.borderRadius = '10px';
-            btn.style.cursor = 'pointer';
-            btn.style.display = 'inline-flex';
-            btn.style.margin = '0 2px';
-            btn.style.alignItems = 'center';
-            btn.style.justifyContent = 'center';
-            btn.style.transition = 'background-color 0.2s ease';
-            btn.onmouseover = () => btn.style.backgroundColor = btnConfig.hoverColor || '#003327';
-            btn.onmouseout  = () => btn.style.backgroundColor = btnConfig.bgColor || 'var(--color-dark-green)';
-            btn.onclick = () => { if (btnConfig.onClick) btnConfig.onClick(rowData, index, row); };
-            actionsCell.appendChild(btn);
+        const start = (page - 1) * PAGE_SIZE;
+        const pageRows = tableData.rows.slice(start, start + PAGE_SIZE);
+
+        pageRows.forEach((rowData, index) => {
+            let row = document.createElement('tr');
+            Object.assign(row.style, tableStyles.row);
+
+            Object.keys(rowData).forEach(key => {
+                if (key.startsWith('_')) return;
+
+                let cell = document.createElement('td');
+                Object.assign(cell.style, tableStyles.cell);
+
+                if (config[key]?.render) {
+                    config[key].render(cell, rowData[key], rowData);
+                } else {
+                    cell.textContent = rowData[key];
+                }
+
+                if (config[key]) {
+                    const { render, ...styleOnly } = config[key];
+                    Object.assign(cell.style, styleOnly);
+                }
+
+                row.appendChild(cell);
+            });
+
+            let actionsCell = document.createElement('td');
+            Object.assign(actionsCell.style, tableStyles.cell);
+            actionsCell.style.whiteSpace = 'nowrap';
+
+            const defaultButtons = [
+                {
+                    icon: '/Interface/assets/iconEditBlue.svg',
+                    alt: 'Editar',
+                    bgColor: 'var(--color-blue-smooth)',
+                    hoverColor: 'var(--color-blue-smooth-bk)',
+                    onClick: (rowData, index, row) => { if (onEdit) onEdit(rowData, index, row); }
+                }
+            ];
+
+            const allButtons = [...defaultButtons, ...extraButtons];
+
+            allButtons.forEach(btnConfig => {
+                let btn = document.createElement('button');
+                btn.innerHTML = `<img src="${btnConfig.icon}" alt="${btnConfig.alt}" style="width:${btnWidth};height:${btnHeight};display:block;">`;
+                btn.style.padding = '6px 10px';
+                btn.style.border = 'none';
+                btn.style.backgroundColor = btnConfig.bgColor || 'var(--color-dark-green)';
+                btn.style.borderRadius = '10px';
+                btn.style.cursor = 'pointer';
+                btn.style.display = 'inline-flex';
+                btn.style.margin = '0 2px';
+                btn.style.alignItems = 'center';
+                btn.style.justifyContent = 'center';
+                btn.style.transition = 'background-color 0.2s ease';
+                btn.onmouseover = () => btn.style.backgroundColor = btnConfig.hoverColor || '#003327';
+                btn.onmouseout  = () => btn.style.backgroundColor = btnConfig.bgColor || 'var(--color-dark-green)';
+                btn.onclick = () => { if (btnConfig.onClick) btnConfig.onClick(rowData, start + index, row); };
+                actionsCell.appendChild(btn);
+            });
+
+            row.appendChild(actionsCell);
+            tbody.appendChild(row);
         });
 
-        row.appendChild(actionsCell);
-        tbody.appendChild(row);
-    });
+        tbl.appendChild(tbody);
+        container.appendChild(tbl);
+        wrapper.appendChild(container);
 
-    tbl.appendChild(tbody);
-    container.appendChild(tbl);
-    return container;
+        const pagination = buildPagination(tableData.rows.length, page, render);
+        if (pagination) wrapper.appendChild(pagination);
+    }
+
+    render(1);
+    return wrapper;
 };
 
 
@@ -597,26 +730,7 @@ window.openEditBookModal = function (BookData, index, rowElement) {
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 };
 
-function renderTable({ idHtmlElement, data, configTable, searchFunction, functionTable, extraButtons = [] }) {
-    const container = document.getElementById(idHtmlElement);
 
-    if (!container) return;
-
-    container.appendChild(functionTable(configTable, extraButtons));
-    if (searchFunction) searchFunction(data);
-
-    if (!data || data.length === 0) {
-        const warning = document.createElement('p');
-        warning.style.color = 'var(--color-wine)';
-        warning.style.fontWeight = '500';
-        warning.style.display = 'flex';
-        warning.style.flexDirection = 'row';
-        warning.style.alignItems = 'center';
-        warning.style.justifyContent = 'center';
-        warning.innerHTML = "Nenhuma informação na tabela";
-        container.appendChild(warning);
-    }
-}
 
 window.openEditLoanModal = function (loanData, index, rowElement) {
     const uid = `modal-edit-loan-${loanData.id}`;
@@ -749,44 +863,88 @@ const deleteButton = (onDelete) => ({
 
 
 renderTable({
-    idHtmlElement: 'table-loans',
-    data: allLoans,
-    configTable: loanTableConfig,
-    searchFunction: window.setupLoanSearch,
-    functionTable: (config) => window.table_with_edit(config, window.openEditLoanModal)
+idHtmlElement: 'table-loans',
+data: allLoans,
+configTable: loanTableConfig,
+searchFunction: window.setupLoanSearch,
+onEdit: window.openEditLoanModal,
+functionTable: (config, onEdit, extraButtons) =>
+window.table_with_edit(
+config,
+onEdit,
+'16px',
+'16px',
+extraButtons
+)
 });
 
 renderTable({
-    idHtmlElement: 'table-fines',
-    data: allFines,
-    configTable: finesTableConfig,
-    searchFunction: window.setupPenaltySearch,
-    functionTable: (config) => window.table_with_edit(config, window.openEditFineModal)
+idHtmlElement: 'table-fines',
+data: allFines,
+configTable: finesTableConfig,
+searchFunction: window.setupPenaltySearch,
+onEdit: window.openEditFineModal,
+functionTable: (config, onEdit, extraButtons) =>
+window.table_with_edit(
+config,
+onEdit,
+'16px',
+'16px',
+extraButtons
+)
 });
 
 renderTable({
-    idHtmlElement: 'table-stock',
-    data: allStock,
-    configTable: stockTableConfig,
-    searchFunction: window.setupStockSearch,
-    functionTable: (config, extraButtons) => window.table_with_edit(config, window.openEditStockModal, '16px', '16px', extraButtons),
-    extraButtons: [deleteButton(window.openDeleteStockModal)]
+idHtmlElement: 'table-stock',
+data: allStock,
+configTable: stockTableConfig,
+searchFunction: window.setupStockSearch,
+onEdit: window.openEditStockModal,
+functionTable: (config, onEdit, extraButtons) =>
+window.table_with_edit(
+config,
+onEdit,
+'16px',
+'16px',
+extraButtons
+),
+extraButtons: [
+deleteButton(window.openDeleteStockModal)
+]
 });
 
 renderTable({
-    idHtmlElement: 'table-movements',
-    data: allMovements,
-    configTable: movimentTableConfig,
-    searchFunction: window.setupMovementSearch,
-    functionTable: (config, extraButtons) => window.table_with_edit(config, window.openEditMoviment, '16px', '16px', extraButtons),
-    // extraButtons: [deleteButton(window.openDeleteMovimentModal)]
+idHtmlElement: 'table-movements',
+data: allMovements,
+configTable: movimentTableConfig,
+searchFunction: window.setupMovementSearch,
+onEdit: window.openEditMoviment,
+functionTable: (config, onEdit, extraButtons) =>
+window.table_with_edit(
+config,
+onEdit,
+'16px',
+'16px',
+extraButtons
+),
+// extraButtons: [deleteButton(window.openDeleteMovimentModal)]
 });
 
 renderTable({
-    idHtmlElement: 'table-books',
-    data: allBooks,
-    configTable: booksTableConfig,
-    searchFunction: window.setupBooksSearch,
-    functionTable: (config, extraButtons) => window.table_with_edit(config, window.openEditBookModal, '16px', '16px', extraButtons),
-    extraButtons: [deleteButton(window.openDeleteBookModal)]
+idHtmlElement: 'table-books',
+data: allBooks,
+configTable: booksTableConfig,
+searchFunction: window.setupBooksSearch,
+onEdit: window.openEditBookModal,
+functionTable: (config, onEdit, extraButtons) =>
+window.table_with_edit(
+config,
+onEdit,
+'16px',
+'16px',
+extraButtons
+),
+extraButtons: [
+deleteButton(window.openDeleteBookModal)
+]
 });
