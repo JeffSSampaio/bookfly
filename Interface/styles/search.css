@@ -11,15 +11,15 @@
   background: var(--color-ivory) ;
   font-size: 15px;
   font-weight: bold;
-  color: var(--color-wine) ;
+  color: var(--color-mid-green) ;
   box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 .search-input-container input::placeholder {
-  color: var(--color-wine) ;
+  color: var(--color-mid-green) ;
   font-family: var(--font-primary);
   font-weight: bold;
   font-size: 15px;
-  opacity: 80%;
+  opacity: 90%;
 }
 
 .search-input-container img {
@@ -51,7 +51,6 @@
     width: 200px;
     border: none;
     border-radius: 10px;
-    font-size: 18px;
     font-weight: bold;
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
@@ -94,8 +93,6 @@
     border: none;
     width: 200px;
     border-radius: 10px;
-    
-    font-size: 18px;
     font-weight: bold;
 
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);

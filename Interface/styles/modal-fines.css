@@ -3,7 +3,11 @@
 .b-modal-fines{}
 
 .select-fine-status{
-
+    background-color: var(--color-bright-green);
+    padding: 5px 12px;
+    width: 180px;
+    border-radius: 20px;
+    color: white;
 }
 .modal-fines-field{
 

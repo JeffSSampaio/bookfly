@@ -196,17 +196,19 @@
 .f-input-modal {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     gap: 5px;
    
 }
 
 .f-input-modal label {
+    justify-content: end;
     font-family: var(--font-primary);
     color: var(--color-dark-green);
     font-weight: bolder;
-    margin: 5px 20px;
-    text-align: left;
+    margin: 10px 20px;
+ 
     
    
 }
