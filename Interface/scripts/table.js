@@ -11,8 +11,8 @@ const tableStyleValues= {
          headerBackgroundColor:'var( --color-ivory)',
          containerBackgroundColor:'white',
          rowBackgroundColor: 'white',
-         cellTextColor: 'var(--color-wine)',
-         headerTextColor: 'var(--color-wine-2)'
+         cellTextColor: 'var(--color-mid-green)',
+         headerTextColor: 'var(--color-dark-green)'
     },
     border: {
     // borderContainer: '1px solid var( --color-wine)',
@@ -41,7 +41,7 @@ backgroundColor: tableStyleValues.color.containerBackgroundColor
     },
     header: {
         backgroundColor: tableStyleValues.color.headerBackgroundColor,
-        color: 'var(--color-wine)',
+        color: tableStyleValues.color.headerTextColor,
         fontWeight: 'bold',
         padding: '12px 1px',
         textAlign: 'center',
@@ -109,7 +109,7 @@ if (!data || data.length === 0) {
 
     const warning = document.createElement('p');
     warning.innerHTML = "Nenhuma informação na tabela";
-    warning.style.color=`var(--color-wine)`
+    warning.style.color=`var(--color-dark-green)`
 
     container.appendChild(warning);
 }
@@ -136,8 +136,8 @@ function buildPagination(totalRows, currentPage, onPageChange) {
         height: 28px;
         border: 1px solid ${active ? 'var(--color-wine)' : '#ddd'};
         border-radius: 6px;
-        background: ${active ? 'var(--color-wine)' : 'white'};
-        color: ${active ? 'white' : 'var(--color-wine)'};
+        background: ${active ? 'var(--color-mid-green)' : 'white'};
+        color: ${active ? 'white' : 'var(--color-mid-green)'};
         font-weight: ${active ? '700' : '500'};
         font-size: 13px;
         cursor: pointer;
@@ -157,7 +157,7 @@ function buildPagination(totalRows, currentPage, onPageChange) {
             btn.style.cursor = 'default'; 
         }
         
-        btn.onmouseover = () => { if (!disabled && targetPage !== currentPage) btn.style.background = 'var(--color-ivory)'; };
+        btn.onmouseover = () => { if (!disabled && targetPage !== currentPage) btn.style.background = 'var(--color-dark-green)'; };
         btn.onmouseout  = () => { if (!disabled && targetPage !== currentPage) btn.style.background = 'white'; };
         btn.onclick = () => { if (!disabled) onPageChange(targetPage); };
         return btn;
@@ -219,7 +219,9 @@ const finesTableConfig = {
         user: r.userName.toUpperCase(),
         amount: r.amount || 'sem valor',
         penaltyDate: r.penaltyDate ? dateFormatter.format(new Date(r.penaltyDate)) : 'sem data'.toUpperCase(),
-        returnDateLoan: r.returnloanDate ? dateFormatter.format(new Date(r.returnloanDate)) : 'sem data'.toUpperCase(),
+        returnDateLoan: r.returnLoanDate && r.statusPenalty == "PAGO" 
+        ? dateFormatter.format(new Date(r.returnLoanDate)) 
+        : 'Livro não devolvido'.toUpperCase(),
         status: r.statusPenalty
     }))
 };
@@ -368,7 +370,6 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
         pageRows.forEach((rowData, index) => {
             let row = document.createElement('tr');
             Object.assign(row.style, tableStyles.row);
-
             Object.keys(rowData).forEach(key => {
                 if (key.startsWith('_')) return;
 
@@ -385,7 +386,7 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
                     const { render, ...styleOnly } = config[key];
                     Object.assign(cell.style, styleOnly);
                 }
-
+            
                 row.appendChild(cell);
             });
 
@@ -793,7 +794,7 @@ window.openEditLoanModal = function (loanData, index, rowElement) {
 window.openEditFineModal = function (fineData, index, rowElement) {
     const uid = `modal-edit-fine-${fineData.id}`;
 
-    const FINE_STATUSES = ['PENDENTE', 'PAGO', 'CANCELADA'];
+    const FINE_STATUSES = ['PENDENTE', 'PAGO'];
 
     const statusOptions = FINE_STATUSES.map(s =>
         `<option value="${s}" ${fineData.status === s ? 'selected' : ''}>${s}</option>`

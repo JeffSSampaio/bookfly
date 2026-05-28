@@ -26,7 +26,7 @@ function rerenderTable(containerId, tableConfig, filtered, onEdit) {
     container.replaceChildren(tableElement);
     if(!filtered || filtered.length === 0){
         const warning = document.createElement('p');
-        warning.style.color = 'var(--color-wine) !important';
+        warning.style.color = 'var(--color-dark-green) !important';
         warning.style.fontWeight = '500';
         warning.style.display='flex';
         warning.style.flexDirection='row';
@@ -83,9 +83,9 @@ window.setupPenaltySearch = function (allPenalties) {
     const penaltiesData = allPenalties.map(r => ({
         id: r.penaltyId,
         user: r.userName.toUpperCase(),
-        amount: r.amount || 'sem valor',
-        penaltyDate: r.penaltyDate ? formatador.format(new Date(r.penaltyDate)) : 'sem data',
-        returnDateLoan: r.returnloanDate ? formatador.format(new Date(r.returnloanDate)) : 'sem data',
+        amount: r.amount || 'sem valor'.toUpperCase(),
+        penaltyDate: r.penaltyDate ? formatador.format(new Date(r.penaltyDate)) : 'sem data'.toUpperCase(),
+        returnDateLoan: r.returnloanDate ? formatador.format(new Date(r.returnloanDate)) :  'sem data'.toUpperCase(),
         status: r.statusPenalty
     }));
 
@@ -106,7 +106,7 @@ window.setupStockSearch = function (allStockBook) {
     const stockData = allStockBook.map(r => ({
         id: r.stockId,
         title: r.book.title.toUpperCase(),
-        author: r.book.authors.map(a => a.name).join(', ') || 'Sem author',
+        author: r.book.authors.map(a => a.name).join(', ') || 'Sem autor'.toUpperCase(),
         qtd: r.qtd,
         _bookId: r.book.bookId ?? r.book.bookid ?? r.id
     }));
@@ -194,7 +194,7 @@ window.setupBooksSearch = function (allBooks) {
     const booksData = allBooks.map(r => ({
         id: r.bookid,
         name: r.title,
-        authors: r.authors.map(a => a.name).join(', ') || 'autor não identificado',
+        authors: r.authors.map(a => a.name).join(', ') || 'autor não identificado'.toUpperCase(),
         genders: Array.isArray(r.genders)
             ? r.genders.map(g => g.name || g).join(', ')
             : r.genders || ''

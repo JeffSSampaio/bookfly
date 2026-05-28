@@ -22,15 +22,16 @@ public record PenaltyDetail(
 
 ) {
     public static PenaltyDetail from(Penalty penalty){
+        var loan = penalty.getLoan();
         return new PenaltyDetail(
                 penalty.getId(),
                 penalty.getStatus(),
                 penalty.getLoan().getUser().getId(),
                 penalty.getLoan().getUser().getName(),
                 penalty.getAmount(),
-                penalty.getLoan().getLoanDate(),
-                penalty.getLoan().getReturnDate(),
-                penalty.getLoan().getStatus()
+                penalty.getPenaltyDate(),
+                penalty.getPayedDate(),
+                loan != null ? loan.getStatus() : null
         );
     }
 }

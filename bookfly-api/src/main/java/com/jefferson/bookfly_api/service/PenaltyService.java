@@ -80,13 +80,14 @@ public class PenaltyService {
 
         if (updatedData.getStatus() != null) {
             existingPenalty.setStatus(updatedData.getStatus());
-
-
+            Loan loan = existingPenalty.getLoan();
+            existingPenalty.setAmount(existingPenalty.getPaymentAmount(loan.getReturnDate(), LocalDateTime.now()));
             if (updatedData.getStatus() == StatusPenalty.PAGO) {
                 existingPenalty.setPaid(true);
                 existingPenalty.setPayedDate(LocalDateTime.now());
 
-                Loan loan = existingPenalty.getLoan();
+
+
                 if (loan != null) {
                     loan.setStatus(StatusLoan.FINALIZADO);
                     loanRepository.save(loan);
@@ -97,7 +98,7 @@ public class PenaltyService {
                 existingPenalty.setPaid(false);
                 existingPenalty.setPayedDate(null);
 
-                Loan loan = existingPenalty.getLoan();
+
                 if (loan != null) {
                     loan.setStatus(StatusLoan.ATRASADO);
                     loanRepository.save(loan);

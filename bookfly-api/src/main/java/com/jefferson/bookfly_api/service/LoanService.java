@@ -226,7 +226,7 @@ public class LoanService {
                                 "Não é possível marcar como atrasado: o prazo de devolução ainda não venceu."
                         );
                     }
-
+                    existLoan.setReturnDate(null);
                     Penalty penalty = new Penalty();
                     penalty.setPenaltyDate(LocalDateTime.now());
                     penalty.setPaid(false);
@@ -251,7 +251,9 @@ public class LoanService {
                 }
 
                 if (penalty != null) {
+                    existLoan.setReturnDate(LocalDateTime.now());
                     penalty.setStatus(StatusPenalty.PAGO);
+                    penalty.setPayedDate(LocalDateTime.now());
                     penaltyRepository.save(penalty);
                 }
             }
