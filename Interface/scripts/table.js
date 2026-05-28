@@ -206,7 +206,7 @@ const loanTableConfig = {
 };
 
 const finesTableConfig = {
-    headers: ['ID', 'Usuário', 'Valor da Multa', 'Data de Multa', 'Data de Entrega do Livro', 'Status'],
+    headers: ['ID', 'Usuário','Livro' ,'Valor da Multa', 'Data de Multa', 'Data de Entrega do Livro', 'Status'],
     columnConfig: {
         amount: {
             render: (cell, value) => {
@@ -217,6 +217,7 @@ const finesTableConfig = {
     rows: allFines.map(r => ({
         id: r.penaltyId,
         user: r.userName.toUpperCase(),
+        book: r.bookName.toUpperCase(),
         amount: r.amount || 'sem valor',
         penaltyDate: r.penaltyDate ? dateFormatter.format(new Date(r.penaltyDate)) : 'sem data'.toUpperCase(),
         returnDateLoan: r.returnLoanDate && r.statusPenalty == "PAGO" 

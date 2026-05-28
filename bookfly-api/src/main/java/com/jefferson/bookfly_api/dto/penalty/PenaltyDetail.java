@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public record PenaltyDetail(
         Long penaltyId,
         StatusPenalty statusPenalty,
+        String bookName,
         Long userId,
         String userName,
         BigDecimal amount,
@@ -26,6 +27,7 @@ public record PenaltyDetail(
         return new PenaltyDetail(
                 penalty.getId(),
                 penalty.getStatus(),
+                penalty.getLoan().getStockBook().getBook().getTitle(),
                 penalty.getLoan().getUser().getId(),
                 penalty.getLoan().getUser().getName(),
                 penalty.getAmount(),
