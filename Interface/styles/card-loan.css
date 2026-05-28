@@ -4,15 +4,15 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    justify-content: flex-start;
     background-color: white;
+   
     margin: 10px ;
-   padding: 10px;
-   width: 200px;
-   height: 120px;
+    padding: 10px;
+    width: 200px;
+    height: 120px;
   
     border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
 .home-loans-body{
@@ -54,8 +54,7 @@
     border-radius: 5px;
 }
 .loan-card-info{
-    padding: 0px;
-    text-align: left;
+    padding: 1px;
     font-family: var(--font-primary);
     font-weight: 700;
 }
@@ -66,10 +65,20 @@
     opacity: 80%;
 }
 .loan-card-info .loan-card-title{
+    display: block;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 99px;
     color:var(--color-dark-green);
     font-weight: 700;
     font-size: 12px;
 }
+
 
 .loan-card h1, .loan-card span, .loan-card p{
     margin: 4px ;
@@ -81,7 +90,7 @@
     font-weight: 700;
     background-color: var(--badge-yellow);
     font-family: var(--font-primary);
-    font-size: 13px;
+    font-size: 11px;
 }
 
 
@@ -90,7 +99,7 @@
     font-weight: 700;
     background-color: var(--badge-red);
     font-family: var(--font-primary);
-    font-size: 15px;
+    font-size: 11px;
 }
 
 .loan-card-info .badge-status-returned{
@@ -98,11 +107,11 @@
     font-weight: 700;
     background-color: var(--badge-green);
     font-family: var(--font-primary);
-    font-size: 15px;
+    font-size: 11px;
 }
 
 .date{
-   font-size: 13px;
+   font-size: 11px;
     color: var(--color-dark-green);
 }
 .empty-loans, .empty-returns{

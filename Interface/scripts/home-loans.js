@@ -61,7 +61,7 @@ userLoans.forEach(element => {
               <img src="${element.book.cover}">
 
               <div class="loan-card-info">
-                <h1 class="loan-card-title">
+                <h1 class="loan-card-title" title="${element.book.title}">
                     ${element.book.title}
                 </h1>
 
