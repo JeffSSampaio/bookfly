@@ -108,10 +108,10 @@ async function loadBooks() {
       allLoans = loans || [];
 
    loanedBookIds = new Set(
-      allLoans
-        .filter(loan => loan.statusLoan !== 'FINALIZADO')
-        .map(loan => loan.book?.bookId || loan.bookId)
-    );
+  allLoans
+    .filter(loan => loan.statusLoan !== 'FINALIZADO' && loan.statusLoan !== 'CANCELADO')
+    .map(loan => loan.book?.bookId || loan.bookId)
+);
 
     allStock = stock || [];
     renderBooks(allStock);
