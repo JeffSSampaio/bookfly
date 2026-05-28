@@ -6,14 +6,11 @@ const emptyMessage = document.getElementById('empty-message');
 const loadingMessage = document.getElementById('loading-message');
 const userMessage = document.getElementById('user-message');
 
-
-
 const loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'));
 const returnDate = new Date();
 returnDate.setDate(returnDate.getDate() + 7);
 const returnDateString = returnDate.toISOString();
 
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 let allStock = [];
 let allLoans = [];
 let loanedBookIds = new Set();
@@ -26,7 +23,7 @@ function renderBooks(stockList) {
     return title.includes(search) || authors.includes(search);
   });
 
-  let textSearched = searchInput.value 
+  const textSearched = searchInput.value;
 
   bookGrid.innerHTML = '';
   emptyMessage.classList.add('hidden');
@@ -43,30 +40,29 @@ function renderBooks(stockList) {
     const title = book.title || 'Título indisponível';
     const authors = (book.authors || []).map(a => a.name).join(', ') || 'Autor desconhecido';
     const quantity = stock.qtd ?? 0;
-    
-    
-    
-    const isAlreadyLoaned = loanedBookIds.has(book.bookId);
-    
-    const returnText = isAlreadyLoaned ? 'Você ja tem este livro emprestado' : 'Disponível para empréstimo';
-   const loanObject = allLoans.find(l => 
-        (l.book?.bookId || l.bookId) === book.bookId && l.statusLoan !== 'FINALIZADO'
-    );
-    const loanId = loanObject ? (loanObject.id || loanObject.loanId): null;
 
-    const btnCancelLoan = isAlreadyLoaned && quantity> 0 ?
-     `<button class="loan-cancel-button" type='button' data-loan-id="${loanId}">
-        <span>x</span>
-     </button>`:
-     
-     '';
-    
+    const isAlreadyLoaned = loanedBookIds.has(book.bookId);
+
+    const returnText = isAlreadyLoaned ? 'Você ja tem este livro emprestado' : 'Disponível para empréstimo';
+
+
+    const loanObject = allLoans.find(l =>
+      Number(l.book?.bookId) === Number(book.bookId) &&
+      l.status !== 'FINALIZADO' &&
+      l.status !== 'CANCELADO'
+    );
+    const loanId = loanObject ? (loanObject.loanId || loanObject.id) : null;
+
+    const btnCancelLoan = isAlreadyLoaned && quantity > 0
+      ? `<button class="loan-cancel-button" type="button" data-loan-id="${loanId}">
+           <span>x</span>
+         </button>`
+      : '';
+
     const buttonMarkup = !isAlreadyLoaned && quantity > 0
-      ? `
-      <button class="loan-button" type="button" data-book-id="${book.bookId}" data-stock-id="${stock.stockId}">
-        <img src="/Interface/assets/iconAdd.svg" alt="Empréstimo">
-      </button>
-    `
+      ? `<button class="loan-button" type="button" data-book-id="${book.bookId}" data-stock-id="${stock.stockId}">
+           <img src="/Interface/assets/iconAdd.svg" alt="Empréstimo">
+         </button>`
       : '';
 
     const card = document.createElement('article');
@@ -74,19 +70,15 @@ function renderBooks(stockList) {
     card.dataset.bookId = book.bookId;
     card.dataset.stockId = stock.stockId;
 
-    const btnSwitch = isAlreadyLoaned ? btnCancelLoan : buttonMarkup;
-    
     card.innerHTML = `
       <img class="book-card-cover" src="${cover}" alt="${title}">
       <div class="book-card-info">
         <h3 class="book-card-title">${title}</h3>
         <p class="book-card-author">${authors}</p>
-        <p class="book-card-return ${'book-card-rented'} ">${returnText}</p>
+        <p class="book-card-return book-card-rented">${returnText}</p>
       </div>
-      ${btnSwitch}
+      ${isAlreadyLoaned ? btnCancelLoan : buttonMarkup}
     `;
-
-    
 
     bookGrid.appendChild(card);
   });
@@ -105,13 +97,14 @@ async function loadBooks() {
       api.getLoansByUser(loggedUser.id),
     ]);
 
-      allLoans = loans || [];
+    allLoans = loans || [];
 
-   loanedBookIds = new Set(
-  allLoans
-    .filter(loan => loan.statusLoan !== 'FINALIZADO' && loan.statusLoan !== 'CANCELADO')
-    .map(loan => loan.book?.bookId || loan.bookId)
-);
+  
+    loanedBookIds = new Set(
+      allLoans
+        .filter(loan => loan.status !== 'FINALIZADO' && loan.status !== 'CANCELADO')
+        .map(loan => loan.book?.bookId)
+    );
 
     allStock = stock || [];
     renderBooks(allStock);
@@ -124,7 +117,7 @@ async function loadBooks() {
 
 bookGrid.addEventListener('click', async event => {
   const button = event.target.closest('.loan-button');
-  const cancelLoan = event.target.closest('.loan-cancel-button')
+  const cancelLoan = event.target.closest('.loan-cancel-button');
   const card = event.target.closest('.book-card');
   if (!card) return;
 
@@ -137,52 +130,54 @@ bookGrid.addEventListener('click', async event => {
     cancelLoan.style.opacity = '0.5';
 
     try {
-        const loanId = cancelLoan.dataset.loanId;
-        
-        if (!loanId || loanId === "undefined") {
-            throw new Error("Invalid loan ID.");
-        }
+      const loanId = cancelLoan.dataset.loanId;
 
-        await api.cancelLoan(loanId);
-        
-  
-        loanedBookIds.delete(bookId);
-        allLoans = allLoans.filter(l => String(l.id || l.loanId) !== String(loanId));
-        
-        renderBooks(allStock); 
-        alert('Emprestimo cancelado com sucesso.');
+      if (!loanId || loanId === 'undefined' || loanId === 'null') {
+        throw new Error('ID do empréstimo inválido.');
+      }
+
+      await api.cancelLoan(loanId);
+
+      loanedBookIds.delete(bookId);
+
+      allLoans = allLoans.filter(l => String(l.loanId ?? l.id) !== String(loanId));
+
+      renderBooks(allStock);
+      alert('Empréstimo cancelado com sucesso.');
     } catch (error) {
-        alert('Error cancelling loan: ' + (error.message || error));
-        console.error(error);
-        cancelLoan.disabled = false;
-        cancelLoan.style.opacity = '1';
+      alert('Erro ao cancelar empréstimo: ' + (error.message || error));
+      console.error(error);
+      cancelLoan.disabled = false;
+      cancelLoan.style.opacity = '1';
     }
     return;
-}
+  }
 
- if (button) {
+  if (button) {
     button.disabled = true;
     button.style.opacity = '0.65';
 
     try {
-        const loanResponse = await api.createLoan(bookId, loggedUser.id, returnDateString);
+      const loanResponse = await api.createLoan(bookId, loggedUser.id, returnDateString);
 
-        loanedBookIds.add(bookId);
-        allLoans.push({
-          ...loanResponse,
-          book: { bookId: bookId },   
-          statusLoan: loanResponse.status  
-              });
-        
-        renderBooks(allStock); 
-        alert('Emprestimo criado com sucesso.');
+      loanedBookIds.add(bookId);
+    
+      allLoans.push({
+        loanId: loanResponse.id,
+        id: loanResponse.id,
+        status: loanResponse.status,
+        book: { bookId: bookId },
+      });
+
+      renderBooks(allStock);
+      alert('Empréstimo criado com sucesso.');
     } catch (error) {
-        alert('Error creating loan: ' + (error.message || error));
-        console.error(error);
-        button.disabled = false;
-        button.style.opacity = '1';
+      alert('Erro ao criar empréstimo: ' + (error.message || error));
+      console.error(error);
+      button.disabled = false;
+      button.style.opacity = '1';
     }
-} else {
+  } else {
     if (typeof window.openBookModal === 'function') {
       window.openBookModal(bookId);
     }

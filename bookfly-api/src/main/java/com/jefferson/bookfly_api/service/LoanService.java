@@ -155,9 +155,7 @@ public class LoanService {
             throw new NotFoundException("Não é possível cancelar um empréstimo já finalizado");
         }
 
-        if (existLoan.getStatus() == StatusLoan.CANCELADO) {
-            throw new NotFoundException("Este empréstimo já foi cancelado anteriormente");
-        }
+
 
         StockBook bookOnStock = stockBookRepository.findById(existLoan.getStockBook().getId())
                 .orElseThrow(() -> new NotFoundException("Esse Livro não existe no stock"));
@@ -186,11 +184,9 @@ public class LoanService {
         moviment.setDescription(description.toUpperCase());
 
 
-        existLoan.setStatus(StatusLoan.CANCELADO);
-
         movimentRepository.save(moviment);
         stockBookRepository.save(bookOnStock);
-        loanRepository.save(existLoan);
+        loanRepository.delete(existLoan);
 
         return moviment;
     }
@@ -271,7 +267,7 @@ public class LoanService {
     public List<Loan> findAllLoansByUser(long userId) {
         User existUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Este usuário não existe"));
-        return loanRepository.findByUser(existUser);
+        return loanRepository.findActiveByUser(existUser);
     }
 
     @Transactional

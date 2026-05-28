@@ -12,7 +12,7 @@ public record LoanByUserBooksSumary(
         Long loanId,
         LocalDateTime loanDate,
         LocalDateTime returnDate,
-        StatusLoan statusLoan,
+        StatusLoan status,
         BookSummary book
 
 ) {
