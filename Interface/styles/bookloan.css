@@ -9,7 +9,14 @@ body {
     padding: 0 20px;
 }
 
-
+.search-book-loan input{
+    background: var(--color-mid-green) !important;
+    color: white !important;
+}
+.search-book-loan input::placeholder{
+    color: white !important;
+    opacity: 0.7 !important;
+}
 
 
 
