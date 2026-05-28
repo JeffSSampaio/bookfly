@@ -11,7 +11,8 @@ const tableStyleValues= {
          headerBackgroundColor:'var( --color-ivory)',
          containerBackgroundColor:'white',
          rowBackgroundColor: 'white',
-         textColor: 'var(--color-wine-2)',
+         cellTextColor: 'var(--color-wine)',
+         headerTextColor: 'var(--color-wine-2)'
     },
     border: {
     // borderContainer: '1px solid var( --color-wine)',
@@ -51,7 +52,7 @@ backgroundColor: tableStyleValues.color.containerBackgroundColor
         borderBottom: tableStyleValues.border.borderCellBottom,
         padding: '10px 8px',
         textAlign: 'center',
-        color: tableStyleValues.color.textColor,
+        color: tableStyleValues.color.cellTextColor,
         fontWeight: '700',
         fontFamily: 'var(--font-primary)',
         fontSize: '15px',
