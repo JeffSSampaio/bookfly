@@ -385,6 +385,51 @@ window.openBookModal = function (bookId) {
 }
 
 
+window.openBookModalLoaned = function (userId,bookId) {
+
+    const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
+    dateStyle: 'short',
+    timeStyle: 'short',
+    timeZone: 'America/Sao_Paulo'
+});
+
+    api.getBookByLoanForUser(userId,bookId).then(loan => {
+        const book = loan.bookTitle || "Sem Livro";
+        const statusText = loan.status;
+        const loanDate = dateFormatter.format(new Date(loan.loanDate));
+        const returnDate = dateFormatter.format(new Date(loan.returnDate));
+
+
+        const modalHTML = `
+        <div class="modal">
+            <div class="book-detail-modal">
+                <button class="book-detail-close" type="button">×</button>
+                <div class="book-detail-card">
+                  
+                    <div class="book-detail-info">
+                        <h1 class="book-detail-title">${book || 'Título desconhecido'}</h1>
+                        <div class="book-detail-status-row">
+                            <span class="book-detail-label">Status</span>
+                            <span class="book-detail-status status-available">${statusText}</span>
+                        </div>
+                        <p class="book-detail-label">Dia do Empréstimo: ${loanDate} </p>
+                         <p class="book-detail-label">Dia da Entrega do Livro: ${returnDate}</p>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>`;
+
+        document.body.insertAdjacentHTML("beforeend", modalHTML);
+        const modal = document.querySelector(".modal:last-child");
+        const closeBtn = modal.querySelector('.book-detail-close');
+        closeBtn.addEventListener('click', () => modal.remove());
+        modal.addEventListener("click", e => { if (e.target === modal) modal.remove(); });
+    }).catch((e) => {
+        alert('Error performing carregar detalhes do livro.'+ e);
+    });
+}
+
 
 window.openRegisterBook= async function (){
 

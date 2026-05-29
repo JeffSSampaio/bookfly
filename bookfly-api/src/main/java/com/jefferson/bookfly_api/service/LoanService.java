@@ -264,7 +264,15 @@ public class LoanService {
         return loanRepository.save(existLoan);
     }
 
-
+    public Loan findByBookOnLoanForUser(Long userId,Long book){
+        User userExist = userRepository.findById(userId)
+                .orElseThrow(()-> new NotFoundException("Usuario nâo encontrado"));
+        StockBook bookOnStock = stockBookRepository.findById(book)
+                .orElseThrow(()-> new NotFoundException("Livro não Encontrado no estoque"));
+        Loan loanExist = loanRepository.findActiveByUserAndStockBook(userExist,bookOnStock)
+                .orElseThrow(()-> new NotFoundException("Não foi encotrado Nenhum Emprestimo com esse Livro por este Usuario"));
+        return loanExist;
+    }
 
     public List<Loan> findAllLoansByUser(long userId) {
         User existUser = userRepository.findById(userId)

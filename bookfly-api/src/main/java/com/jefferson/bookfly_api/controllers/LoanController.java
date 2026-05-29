@@ -38,6 +38,18 @@ public class LoanController {
                 );
     }
 
+    @Operation(summary = "Listar um Livro emprestado a um usuário")
+    @ApiResponse(responseCode = "200", description = "Livro retornada com sucesso")
+    @GetMapping("/list/user/{userId}/book/{bookId}")
+    public ResponseEntity<LoanSummary> getBookByLoanForUser(@PathVariable Long userId, @PathVariable Long bookId) {
+        Loan loanExist = loanService.findByBookOnLoanForUser(userId,bookId);
+        return ResponseEntity.ok()
+                .body(
+                       LoanSummary.from(loanExist)
+                );
+    }
+
+
     @Operation(summary = "Criar empréstimo")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Empréstimo criado com sucesso"),

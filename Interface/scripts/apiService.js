@@ -142,6 +142,12 @@ const api = {
       method: 'GET'
     }).then(handleResponse),
 
+  getBookByLoanForUser:(userId,bookId) =>
+    fetch(`${BASE_URL}/loans/list/user/${userId}/book/${bookId}`,{
+       method:'GET' 
+    }).then(handleResponse),
+  
+
 
   createLoan: (bookId, userId, returnDateBook) =>
     fetch(`${BASE_URL}/loans/create`, {
