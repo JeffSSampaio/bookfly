@@ -385,7 +385,7 @@ window.openBookModal = function (bookId) {
 window.openRegisterBook= async function (){
 
    modalForm({
-       title: "Registrar",
+       title: "Registrar Livro",
        fields: [
                 {label:"Nome do Livro", type:"text", name:"bookName"},
                 {label:"Capa do Livro", type:"text", name:"coverBook"},
@@ -401,9 +401,15 @@ window.openRegisterBook= async function (){
             const gendersBook = data.genderBook ? data.genderBook.split(',').map(g => g.trim()) : [];
             let summaryBook = data.summaryBook || 'Sem sumario'
             let book =  {title: nameBook, cover: coverBook,summary:summaryBook,authors: authorsName,genders: gendersBook }
-
+            try {
             await api.createBook(book)
 
+            alert('Livro registrado com sucesso!');
+            location.reload();
+            }
+            catch(e){
+                alert('Erro ao Registrar: ' + e.message);
+            }
         }   
 
        
