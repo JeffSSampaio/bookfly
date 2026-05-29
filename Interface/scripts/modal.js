@@ -14,19 +14,30 @@ function modalForm({ title, fields = [], onSubmit }) {
         `;
     });
 
-    const modalHTML = `
-    <div class="modal">
-        <div class="c-modal">
-            <div class="b-modal">
-                <h1>${title}</h1>
-                <form class="c-modal-form">${htmlContent}</form>
-                <div class="c-modal-btn">
-                    <button type="button" class="closeBtn">Cancelar</button>
-                    <button type="button" class="confirmBtn">Confirmar</button>
-                </div>
-            </div>
+
+const modalHTML = `
+<div class="modal">
+    <div class="c-modal">
+
+        <div class="modal-header">
+            <h1 class="t-modal">${title}</h1>
         </div>
-    </div>`;
+
+        <div class="modal-body">
+            <form class="c-modal-form">
+                ${htmlContent}
+            </form>
+        </div>
+
+        <div class="c-modal-btn modal-footer">
+            <button type="button" class="closeBtn">Cancelar</button>
+            <button type="button" class="confirmBtn">Confirmar</button>
+        </div>
+
+    </div>
+</div>`;
+
+
 
     document.body.insertAdjacentHTML("beforeend", modalHTML);
     const modals = document.querySelectorAll(".modal");
@@ -491,6 +502,7 @@ window.openAddItemOnStock = async function() {
     const books = await api.getAllBooks();
     const uid = 'modal-add-stock';
     const selectedBooks = new Set();
+
     let allCards = books.map(book => {
         const bookId = book.bookid ?? book.id;
         const cover = book.cover || '/Interface/assets/book.png';
@@ -506,17 +518,23 @@ window.openAddItemOnStock = async function() {
             author,
             html: `
             <div class="card-select-book" data-book-id="${bookId}">
-                <div class="card-select-indicator">
-                    <img src="/Interface/assets/iconAddRounded.svg" alt="Selecionar" />
-                </div>
-                <img src="${cover}" alt="${title}" />
-                <div class="card-select-book-info">
-                    <div class="card-select-book-title">${title}</div>
-                    <div class="card-select-book-author">${author}</div>
-                </div>
-                <div class="card-select-qty-container">
-                    <label for="qty-${bookId}">Qtd</label>
-                    <input id="qty-${bookId}" class="card-book-qtd" type="number" min="1" value="1" data-book-id="${bookId}" />
+                <div class="card-select-book-inner">
+                    <div class="card-select-indicator">
+                        <img src="/Interface/assets/iconAddRounded.svg" alt="Selecionar" />
+                    </div>
+                    <img class="card-select-cover" src="${cover}" alt="${title}" />
+                    <div class="card-select-book-info">
+                        <div class="card-select-book-title">${title}</div>
+                        <div class="card-select-book-author">${author}</div>
+                    </div>
+                    <div class="card-select-qty-container">
+                        <label>Qtd</label>
+                        <div class="qty-control">
+                            <button type="button" class="qty-btn qty-minus" data-book-id="${bookId}">−</button>
+                            <input class="card-book-qtd" type="number" min="1" value="1" data-book-id="${bookId}" />
+                            <button type="button" class="qty-btn qty-plus" data-book-id="${bookId}">+</button>
+                        </div>
+                    </div>
                 </div>
             </div>`
         };
@@ -526,16 +544,21 @@ window.openAddItemOnStock = async function() {
     <div class="modal" id="${uid}">
         <div class="c-modal modal-stock-table">
             <div class="b-modal modal-stock-body">
-                <h1 class="t-modal">Adicionar Estoque</h1>
+
+                <div class="modal-stock-header">
+                    <h1 class="t-modal">Adicionar Estoque</h1>
+                </div>
+
                 <div class="modal-content-wrapper">
                     <div class="modal-add-stock-search">
                         <input type="text" id="search-stock" placeholder="Pesquisar Livro.." />
                         <img src="/Interface/assets/iconSearch.svg" alt="Buscar" />
                     </div>
                     <div class="modal-add-stock-grid" id="grid-add-stock">
-                        ${allCards.map(c => c.html).join('') || '<p style="color:var(--color-mid-green); text-align:center;">Nenhum livro encontrado.</p>'}
+                        ${allCards.map(c => c.html).join('') || '<p>Nenhum livro encontrado.</p>'}
                     </div>
                 </div>
+
                 <div class="c-modal-btn">
                     <button type="button" class="closeBtn">Cancelar</button>
                     <button type="button" class="confirmBtn">Confirmar</button>
@@ -545,27 +568,30 @@ window.openAddItemOnStock = async function() {
     </div>`;
 
     document.body.insertAdjacentHTML('beforeend', modalHTML);
-    const modal = document.getElementById(uid);
-    const grid = modal.querySelector('#grid-add-stock');
+
+    const modal      = document.getElementById(uid);
+    const grid       = modal.querySelector('#grid-add-stock');
     const searchInput = modal.querySelector('#search-stock');
     const confirmBtn = modal.querySelector('.confirmBtn');
-    const closeBtn = modal.querySelector('.closeBtn');
+    const closeBtn   = modal.querySelector('.closeBtn');
 
-   
+
     searchInput.addEventListener('input', () => {
-        const searchTerm = searchInput.value.toLowerCase();
-        const filtered = allCards.filter(card => 
-            card.title.toLowerCase().includes(searchTerm) ||
-            card.author.toLowerCase().includes(searchTerm)
+        const term = searchInput.value.toLowerCase();
+        const filtered = allCards.filter(c =>
+            c.title.toLowerCase().includes(term) ||
+            c.author.toLowerCase().includes(term)
         );
-        grid.innerHTML = filtered.length > 0 
+        grid.innerHTML = filtered.length > 0
             ? filtered.map(c => c.html).join('')
-            : '<p style="color:var(--color-mid-green); text-align:center; padding:20px;">Nenhum livro encontrado.</p>';
+            : '<p>Nenhum livro encontrado.</p>';
     });
 
-  
+    
     grid.addEventListener('click', e => {
-        if (e.target.closest('.card-book-qtd')) return;
+       
+        if (e.target.closest('.qty-control')) return;
+
         const card = e.target.closest('.card-select-book');
         if (!card) return;
 
@@ -583,9 +609,35 @@ window.openAddItemOnStock = async function() {
         }
     });
 
+
+    grid.addEventListener('click', e => {
+        const btn = e.target.closest('.qty-btn');
+        if (!btn) return;
+
+        e.stopPropagation();
+
+        const bookId = btn.dataset.bookId;
+        const input  = grid.querySelector(`.card-book-qtd[data-book-id="${bookId}"]`);
+        if (!input) return;
+
+        let val = parseInt(input.value, 10) || 1;
+
+        if (btn.classList.contains('qty-plus')) {
+            input.value = val + 1;
+        } else if (btn.classList.contains('qty-minus')) {
+            input.value = Math.max(1, val - 1);
+        }
+    });
+
+   
+    grid.addEventListener('mousedown', e => {
+        if (e.target.closest('.qty-control')) e.stopPropagation();
+    });
+
+
     confirmBtn.addEventListener('click', async () => {
         if (!selectedBooks.size) {
-            alert('Selecione um Livro');
+            alert('Selecione pelo menos um livro.');
             return;
         }
 
@@ -598,17 +650,18 @@ window.openAddItemOnStock = async function() {
         try {
             for (const bookId of selectedBooks) {
                 const qtyInput = modal.querySelector(`.card-book-qtd[data-book-id="${bookId}"]`);
-                const quantidade = Number(qtyInput?.value) || 1;
+                const quantidade = Math.max(1, Number(qtyInput?.value) || 1);
                 await api.addBookToStock(bookId, userId, quantidade);
-                location.reload()
             }
-            alert('Livro adicionado com sucesso');
+            alert('Estoque atualizado com sucesso!');
             modal.remove();
-        } catch (e) {
-            alert('Erro em adiiconar Livro: ' + e.message);
+            location.reload();
+        } catch (err) {
+            alert('Erro ao adicionar livro: ' + err.message);
         }
     });
 
+
     closeBtn.addEventListener('click', () => modal.remove());
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
-}
+};
