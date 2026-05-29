@@ -17,23 +17,27 @@ function modalForm({ title, fields = [], onSubmit }) {
 
 const modalHTML = `
 <div class="modal">
-    <div class="c-modal">
+    <div class="c-modal ">
 
+        <div class= "content-modal">
+
+        
         <div class="modal-header">
-            <h1 class="t-modal">${title}</h1>
+        <h1 class="t-modal">${title}</h1>
         </div>
-
+        
         <div class="modal-body">
-            <form class="c-modal-form">
-                ${htmlContent}
-            </form>
+        <form class="c-modal-form">
+        ${htmlContent}
+        </form>
         </div>
-
+        
         <div class="c-modal-btn modal-footer">
-            <button type="button" class="closeBtn">Cancelar</button>
-            <button type="button" class="confirmBtn">Confirmar</button>
+        <button type="button" class="closeBtn">Cancelar</button>
+        <button type="button" class="confirmBtn">Confirmar</button>
         </div>
-
+        
+        </div>
     </div>
 </div>`;
 
@@ -96,8 +100,8 @@ window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
 
     const modalHTML = `
     <div class="modal" id="${uid}">
-        <div class="c-modal modal-bookcase-edit">
-            <div class="b-modal">
+        <div class="c-modal">
+            <div class="c-modal">
                 <h1>Editar Estante</h1>
 
                 <div class="f-input-modal modal-input-container">

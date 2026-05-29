@@ -8,7 +8,8 @@
     align-items: center;
     justify-content: center;
 
-    padding: 24px;
+    padding: 0px;
+    border-radius: 28px;
 
     background: rgba(0, 0, 0, 0.45);
     backdrop-filter: blur(5px);
@@ -56,15 +57,20 @@
     }
 }
 
+.modal-book-edit{
+    padding: 0px;
+}
 
 
 .c-modal {
-    width: min(480px, 94vw);
-    padding: 28px;
+    width: min(580px, 94vw);
+    
+   
 }
 
+
 .modal-bookcase-edit {
-    width: min(760px, 94vw);
+    width: min(160px, 94vw);
 }
 
 .modal-bookcase-add {
@@ -169,9 +175,17 @@
     font-weight: 600;
 }
 
+.modal-header {
+        background: var(--color-dark-green);
+    padding: 20px 28px 18px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+}
 
 
-/* STATUS */
 .book-detail-status-row {
     display: flex;
     align-items: center;
@@ -219,7 +233,7 @@
 
 
 
-/* DESCRIÇÃO */
+
 .book-detail-description {
     margin: 0;
 
@@ -240,13 +254,22 @@
     text-align: justify;
 }
 
+.t-modal {
+    margin: 0;
+    font-family: var(--font-primary) !important;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: white !important;
+    flex: 1;
+}
 
-
-/* FORMULÁRIOS */
 .f-input-modal {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 14px;
+    margin: 10px 70px;
 }
 
 
@@ -359,7 +382,7 @@
 
 
 .c-modal-btn .closeBtn:hover {
-    background: var(--color-pastel-dark);
+    background: var(--color-ivory);
 }
 
 

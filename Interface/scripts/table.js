@@ -257,6 +257,9 @@ const movimentTableConfig = {
             maxWidth: '300px',
             textAlign: 'justify'
         },
+        book:{
+
+        },
         id: {
             width: '70px'
         },
@@ -371,6 +374,7 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
         pageRows.forEach((rowData, index) => {
             let row = document.createElement('tr');
             Object.assign(row.style, tableStyles.row);
+                
             Object.keys(rowData).forEach(key => {
                 if (key.startsWith('_')) return;
 
@@ -382,12 +386,13 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
                 } else {
                     cell.textContent = rowData[key];
                 }
-
+               
                 if (config[key]) {
                     const { render, ...styleOnly } = config[key];
                     Object.assign(cell.style, styleOnly);
                 }
-            
+
+               
                 row.appendChild(cell);
             });
 
@@ -433,7 +438,7 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
         tbl.appendChild(tbody);
         container.appendChild(tbl);
         wrapper.appendChild(container);
-
+      
         const pagination = buildPagination(tableData.rows.length, page, render);
         if (pagination) wrapper.appendChild(pagination);
     }
@@ -446,13 +451,15 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
 function openConfirmDeleteModal({ uid, title, message, onConfirm }) {
     const modalHTML = `
     <div class="modal" id="${uid}">
-        <div class="c-modal modal-movements">
+        <div class="c-modal ">
             <div class="b-modal b-modal-movements" style="text-align:center;">
-                <h1>${title}</h1>
-                <p style="color:var(--color-dark-green);font-family:var(--font-primary);margin:12px 0 24px;font-size:15px;">${message}</p>
+            <div class="modal-header">
+            <h1 class="t-modal">${title}</h1>
+            </div>
+                <p style="color:var(--color-dark-green);font-family:var(--font-primary);margin:12px 0 24px; padding:10px; font-size:15px;">${message}</p>
                 <div class="c-modal-btn modal-movements-actions">
-                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
-                    <button type="button" id="btn-confirmar-${uid}" style="background-color:#a32d2d;">Excluir</button>
+                    <button type="button" class="closeBtn" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" class="confirmBtn" id="btn-confirmar-${uid}" style="background-color:#a32d2d;">Excluir</button>
                 </div>
             </div>
         </div>
@@ -514,8 +521,11 @@ window.openEditMoviment = async function (movimentData, index, rowElement) {
     const modalHTML = `
         <div class="modal" id="${uid}">
             <div class="c-modal modal-movements">
-              <div class="b-modal b-modal-movements">
-                <h1>Editar Movimentação N°${movimentData.id}</h1>
+           
+              <div class="modal-header">
+                <h1 class="t-modal">Editar Movimentação N°${movimentData.id}</h1>
+              </div>
+
                 <div class="f-input-modal modal-movements-field">
                     <label>Quantidade</label>
                     <input type="number" id="qtd-${uid}" value="${currentQtd}" min="1">
@@ -532,10 +542,10 @@ window.openEditMoviment = async function (movimentData, index, rowElement) {
                     <input type="text" id="description-${uid}" value="${movimentData.description || ''}">
                 </div>
                 <div class="c-modal-btn modal-movements-actions">
-                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
-                    <button type="button" id="btn-salvar-${uid}">Salvar</button>
+                    <button type="button" class="closeBtn" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" class="confirmBtn" id="btn-salvar-${uid}">Salvar</button>
                 </div>
-              </div>
+    
             </div>
         </div>`;
 
@@ -574,15 +584,16 @@ window.openEditStockModal = function (stockData, index, rowElement) {
 
     const modalHTML = `
     <div class="modal" id="${uid}">
-        <div class="c-modal modal-movements">
-            <div class="b-modal b-modal-movements">
-                <h1>Editar Estoque</h1>
+        <div class="c-modal ">
+                <div class="modal-header">
+                <h1 class="t-modal">Editar Estoque</h1>
+                </div>
                 <div class="f-input-modal">
-                    <label>Livro</label>
+                    <label style="opacity: 0.6;">Livro</label>
                     <input type="text" value="${stockData.title}" disabled style="opacity: 0.6;">
                 </div>
                 <div class="f-input-modal">
-                    <label>Quantidade Atual</label>
+                    <label style="opacity: 0.6;">Quantidade Atual</label>
                     <input type="number" id="qtd-atual-${stockData.id}" value="${stockData.qtd}" disabled style="opacity: 0.6;">
                 </div>
                 <div class="f-input-modal">
@@ -594,10 +605,10 @@ window.openEditStockModal = function (stockData, index, rowElement) {
                     <textarea id="description-${stockData.id}"></textarea>
                 </div>
                 <div class="c-modal-btn">
-                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
-                    <button type="button" id="btn-salvar-${uid}">Salvar</button>
+                    <button type="button" class="closeBtn" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" class="confirmBtn" id="btn-salvar-${uid}">Salvar</button>
                 </div>
-            </div>
+         
         </div>
     </div>`;
 
@@ -687,10 +698,12 @@ window.openEditBookModal = function (BookData, index, rowElement) {
     const modalHTML = `
     <div class="modal" id="${uid}">
         <div class="c-modal modal-book-edit">
-            <div class="b-modal">
-                <h1>Editar Livro N°${BookData.id}</h1>
+           
+            <div class="modal-header">
+            <h1 class="t-modal">Editar Livro N°${BookData.id}</h1>
+            </div>
                 <div class="f-input-modal">
-                    <label>Livro Atual</label>
+                    <label style="opacity: 0.6;">Livro Atual</label>
                     <input type="text" value="${titleText}" disabled style="opacity: 0.6;">
                 </div>
                 <div class="f-input-modal">
@@ -706,10 +719,10 @@ window.openEditBookModal = function (BookData, index, rowElement) {
                     <input type="text" id="generos-novo-${BookData.id}" value="${gendersText}">
                 </div>
                 <div class="c-modal-btn">
-                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
-                    <button type="button" id="btn-salvar-${uid}">Salvar</button>
+                    <button type="button" class="closeBtn" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" class="confirmBtn" id="btn-salvar-${uid}">Salvar</button>
                 </div>
-            </div>
+
         </div>
     </div>`;
 
