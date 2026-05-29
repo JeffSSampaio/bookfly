@@ -763,26 +763,29 @@ window.openEditLoanModal = function (loanData, index, rowElement) {
 
     const modalHTML = `
     <div class="modal" id="${uid}">
-        <div class="c-modal modal-movements">
-            <div class="b-modal b-modal-movements">
-                <h1>Editar Empréstimo N°${loanData.id}</h1>
+        <div class="c-modal modal-book-edit">
+            
+                <div class="modal-header">
+                <h1 class="t-modal">Editar Empréstimo N°${loanData.id}</h1>
+                </div>
                 <div class="f-input-modal modal-movements-field">
-                    <label>Usuário</label>
-                    <input type="text" value="${loanData.user}" disabled style="opacity:0.6;">
+                <label>Usuário</label>
+                <input type="text" value="${loanData.user}" disabled style="opacity:0.6;">
                 </div>
                 <div class="f-input-modal modal-movements-field">
                     <label>Livro</label>
                     <input type="text" value="${loanData.book}" disabled style="opacity:0.6;">
                 </div>
                 <div class="f-input-modal modal-movements-field">
-                    <label>Status do Empréstimo</label>
-                    <select id="status-${uid}" class="select-loan">${statusOptions}</select>
+                <label>Status do Empréstimo</label>
+                <select id="status-${uid}" class="select-loan">${statusOptions}</select>
                 </div>
-                <div class="c-modal-btn modal-movements-actions">
-                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
-                    <button type="button" id="btn-salvar-${uid}">Salvar</button>
+                <div class="c-modal-btn">
+                <button type="button" class="closeBtn" id="btn-cancelar-${uid}">Cancelar</button>
+                <button type="button" class="confirmBtn" id="btn-salvar-${uid}">Salvar</button>
                 </div>
-            </div>
+                
+              
         </div>
     </div>`;
 
@@ -818,9 +821,10 @@ window.openEditFineModal = function (fineData, index, rowElement) {
 
     const modalHTML = `
     <div class="modal" id="${uid}">
-        <div class="c-modal modal-fines">
-            <div class="b-modal b-modal-fines">
-                <h1>Editar Multa N°${fineData.id}</h1>
+        <div class="c-modal modal-book-edit">
+                <div class="modal-header">
+                <h1 class="t-modal">Editar Multa N°${fineData.id}</h1>
+                </div>
                 <div class="f-input-modal modal-fines-field">
                     <label>Usuário</label>
                     <input type="text" value="${fineData.user}" disabled style="opacity:0.6;">
@@ -834,10 +838,10 @@ window.openEditFineModal = function (fineData, index, rowElement) {
                     <select id="status-${uid}" class="select-fine-status">${statusOptions}</select>
                 </div>
                 <div class="c-modal-btn modal-fines-actions">
-                    <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
-                    <button type="button" id="btn-salvar-${uid}">Salvar</button>
+                    <button type="button" class="closeBtn" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" class="confirmBtn" id="btn-salvar-${uid}">Salvar</button>
                 </div>
-            </div>
+      
         </div>
     </div>`;
 
