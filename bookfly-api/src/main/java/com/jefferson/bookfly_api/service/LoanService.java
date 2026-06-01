@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.service;
 
+import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
@@ -37,6 +38,7 @@ public class LoanService {
     }
 
     @Transactional
+    @Auditable(action = "SOLICITAR_EMPRESTIMO",details = "Usuario FEZ EMPRESTIMO DESSE LIVRO")
     public Loan doLoanBook(Long bookId, Long userId) {
         Stock stock = stockService.getStock();
 
