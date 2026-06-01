@@ -31,7 +31,7 @@ userLoans.forEach(element => {
     const formattedDate = dateFormatter.format(loanDate);
 
   
-    if (element.status === "ATIVO" || element.status === "ATRASADO") {
+    if (element.status === "ATIVO" || element.status === "ATRASADO" || element.status=="EM_ESPERA") {
 
         hasActiveLoans = true;
 

@@ -15,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/loans")
@@ -130,6 +132,21 @@ public class LoanController {
                                 .toList()
                 );
     }
+
+    @Operation(summary = "Ativar Emprestimo")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200",description = "Empréstimo Ativado!"),
+            @ApiResponse(responseCode = "404",description = "Não Encontrado")
+    })
+    @PutMapping("/activate/loan/{loanId}/user/{userId}")
+    public ResponseEntity<Map<String, String>>activateLoan(@PathVariable Long loanId,@PathVariable Long userId){
+        loanService.activateLoanBook(loanId,userId);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Empréstimo ativado com sucesso!");
+
+        return ResponseEntity.ok(response);
+    }
+
 
     @Operation(summary = "Deletar Emprestimo")
     @ApiResponses({

@@ -413,6 +413,9 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
             const allButtons = [...defaultButtons, ...extraButtons];
 
             allButtons.forEach(btnConfig => {
+                if (btnConfig.show && !btnConfig.show(rowData)) {
+                        return; 
+                      }
                 let btn = document.createElement('button');
                 btn.innerHTML = `<img src="${btnConfig.icon}" alt="${btnConfig.alt}" style="width:${btnWidth};height:${btnHeight};display:block;">`;
                 btn.style.padding = '6px 10px';
@@ -460,6 +463,43 @@ function openConfirmDeleteModal({ uid, title, message, onConfirm }) {
                 <div class="c-modal-btn modal-movements-actions">
                     <button type="button" class="closeBtn" id="btn-cancelar-${uid}">Cancelar</button>
                     <button type="button" class="confirmBtn" id="btn-confirmar-${uid}" style="background-color:#a32d2d;">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    const modal = document.getElementById(uid);
+
+    document.getElementById(`btn-confirmar-${uid}`).addEventListener('click', async () => {
+        try {
+            await onConfirm();
+            modal.remove();
+            location.reload();
+        } catch (e) {
+            alert('Erro ao excluir: ' + (e.message || e));
+        }
+    });
+
+    document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+}
+
+
+
+
+function openConfirmModal({ uid, title, message, onConfirm }) {
+    const modalHTML = `
+    <div class="modal" id="${uid}">
+        <div class="c-modal ">
+            <div class="b-modal b-modal-movements" style="text-align:center;">
+            <div class="modal-header">
+            <h1 class="t-modal">${title}</h1>
+            </div>
+                <p style="color:var(--color-dark-green);font-family:var(--font-primary);margin:12px 0 24px; padding:10px; font-size:15px;">${message}</p>
+                <div class="c-modal-btn modal-movements-actions">
+                    <button type="button" class="closeBtn" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" class="confirmBtn" id="btn-confirmar-${uid}" style="background-color:#a32d2d;">Confirmar</button>
                 </div>
             </div>
         </div>
@@ -755,9 +795,12 @@ window.openEditBookModal = function (BookData, index, rowElement) {
 window.openEditLoanModal = function (loanData, index, rowElement) {
     const uid = `modal-edit-loan-${loanData.id}`;
 
-    const LOAN_STATUSES = ['ATIVO', 'ATRASADO', 'FINALIZADO'];
+    const LOAN_STATUS = ['ATIVO', 'ATRASADO', 'FINALIZADO', 'ANALISE'];
 
-    const statusOptions = LOAN_STATUSES.map(s =>
+    const isWaiting = loanData.status === "EM_ESPERA";
+
+
+    const statusOptions = LOAN_STATUS.map(s =>
         `<option value="${s}" ${loanData.status === s ? 'selected' : ''}>${s}</option>`
     ).join('');
 
@@ -778,7 +821,7 @@ window.openEditLoanModal = function (loanData, index, rowElement) {
                 </div>
                 <div class="f-input-modal modal-movements-field">
                 <label>Status do Empréstimo</label>
-                <select id="status-${uid}" class="select-loan">${statusOptions}</select>
+                <select id="status-${uid}" class="select-loan" ${isWaiting ? 'disabled' : ''}> >${statusOptions}</select>
                 </div>
                 <div class="c-modal-btn">
                 <button type="button" class="closeBtn" id="btn-cancelar-${uid}">Cancelar</button>
@@ -875,6 +918,15 @@ window.openEditFineModal = function (fineData, index, rowElement) {
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 };
 
+ window.activateLoan = function(loanData){
+    openConfirmModal({
+        uid: `modal-activate-${loanData.id}`,
+        message: "Você deseja ativar esse Emprestimo",
+        title:`Ativar Empréstimo ID°${loanData.id} `,
+        onConfirm: () => api.activateLoan(loanData.id,loggedUser.id)
+
+    })
+ }
 
 const deleteButton = (onDelete) => ({
     icon: '/Interface/assets/iconDeleteRed.svg',
@@ -883,6 +935,15 @@ const deleteButton = (onDelete) => ({
     hoverColor: 'var(--color-red-smooth-bk)',
     onClick: (rowData) => onDelete(rowData)
 });
+
+const activateLoanBtn = (onActivate) => ({
+    icon:'/Interface/assets/iconAddRounded.svg',
+    alt: 'Ativar',
+    bgColor:'var(color-mid-green)',
+    show: (rowData) => rowData.status === 'EM_ESPERA',
+    hoverColor:'var(--color-dark-green)',
+    onClick: (rowData) => onActivate(rowData) 
+})
 
 
 
@@ -899,7 +960,8 @@ onEdit,
 '16px',
 '16px',
 extraButtons
-)
+),
+extraButtons: [activateLoanBtn(window.activateLoan)]
 });
 
 renderTable({
@@ -932,9 +994,6 @@ onEdit,
 '16px',
 extraButtons
 ),
-extraButtons: [
-deleteButton(window.openDeleteStockModal)
-]
 });
 
 renderTable({

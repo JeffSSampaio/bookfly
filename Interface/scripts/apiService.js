@@ -156,6 +156,9 @@ const api = {
       body: JSON.stringify({ bookId, userId, returnDateBook }),
     }).then(handleResponse),
 
+  activateLoan: (loanId,userId) => fetch(`${BASE_URL}/loans/activate/loan/${loanId}/user/${userId}`,{
+      method: 'PUT'
+    }).then(handleResponse),
 
   returnBook: (loanId) =>
     fetch(`${BASE_URL}/loans/return/${loanId}`, {
