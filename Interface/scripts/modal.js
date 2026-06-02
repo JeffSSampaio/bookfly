@@ -101,9 +101,9 @@ window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
     const modalHTML = `
     <div class="modal" id="${uid}">
         <div class="c-modal">
-            <div class="c-modal">
-                <h1>Editar Estante</h1>
-
+              <div class="modal-header">
+              <h1 class="t-modal">Editar Estante</h1>
+             </div>
                 <div class="f-input-modal modal-input-container">
                     <label>Nome da Estante</label>
                     <input class="modal-shelf-name-input" type="text"
@@ -120,11 +120,11 @@ window.openBookcaseEditModal = function (bookcaseId, nomeAtual, imgEl) {
                 </div>
 
                 <div class="c-modal-btn modal-btn-container">
-                <button type="button" id="btn-cancelar-${uid}">Cancelar</button>
-                <button type="button" id="btn-delete-${uid}" class="btn-delete-bookcase">Excluir estante</button>
-                    <button type="button" id="btn-salvar-${uid}">Salvar</button>
+                <button type="button" class="confirmBtn" id="btn-cancelar-${uid}">Cancelar</button>
+                <button type="button" class="confirmBtn" id="btn-delete-${uid}" class="btn-delete-bookcase">Excluir estante</button>
+                <button type="button"class="confirmBtn"  id="btn-salvar-${uid}">Salvar</button>
                 </div>
-            </div>
+          
         </div>
     </div>`;
 
@@ -217,8 +217,10 @@ window.openAddBookModal = function (bookcaseId, nomeShelf, imgEl) {
     <div class="modal" id="${uid}">
         <div class="c-modal modal-bookcase-add">
             <div class="b-modal">
-                <h1>Adicionar a ${nomeShelf}</h1>
-
+              <div class="modal-header">
+              <h1 class="t-modal">Adicionar a ${nomeShelf}</h1>
+             </div>
+            
                 <div class="modal-search-container">
                     <input type="search" id="search-shelf-add-${bookcaseId}" placeholder="Procurar livro" />
                     <img src="/Interface/assets/iconSearch.svg" alt="">
@@ -229,8 +231,8 @@ window.openAddBookModal = function (bookcaseId, nomeShelf, imgEl) {
                 </div>
 
                 <div class="c-modal-btn modal-btn-container">
-                    <button type="button" id="btn-cancelar-${uid}">Cancel</button>
-                    <button type="button" id="btn-adicionar-${uid}">Adicionar</button>
+                    <button type="button" class="closeBtn"  id="btn-cancelar-${uid}">Cancel</button>
+                    <button type="button" class="confirmBtn" id="btn-adicionar-${uid}">Adicionar</button>
                 </div>
             </div>
         </div>
@@ -356,7 +358,7 @@ window.openBookModal = function (bookId) {
 
         const modalHTML = `
         <div class="modal">
-            <div class="book-detail-modal">
+            <div class="book-detail-modal modal-book-loaned">
                 <button class="book-detail-close" type="button">×</button>
                 <div class="book-detail-card">
                     <img class="book-detail-cover" src="${book.cover || '/Interface/assets/book.png'}" alt="${book.title || 'Book cover'}">
@@ -401,8 +403,8 @@ window.openBookModalLoaned = function (userId,bookId) {
 
 
         const modalHTML = `
-        <div class="modal">
-            <div class="book-detail-modal">
+        <div class="modal ">
+            <div class="book-detail-modal modal-book-loaned">
                 <button class="book-detail-close" type="button">×</button>
                 <div class="book-detail-card">
                   

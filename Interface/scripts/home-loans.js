@@ -88,7 +88,7 @@ userLoans.forEach(element => {
 
         if (returnContainer) {
             returnContainer.innerHTML += `
-            <div class="loan-card" onclick="openBookModal(${element.book.bookId})">
+            <div class="loan-card" onclick="openBookModalLoaned(${loggedUser.id}, ${element.book.bookId})">
               <img src="${element.book.cover}">
 
               <div class="loan-card-info">

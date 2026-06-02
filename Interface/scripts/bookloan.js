@@ -78,7 +78,7 @@ const btnCancelLoan = isAlreadyLoaned && quantity > 0 && canCancel
 
     card.innerHTML = `
       <img class="book-card-cover" src="${cover}" alt="${title}">
-      <div class="book-card-info">
+      <div class="book-card-info" onClick="openBookModal(${book.bookId}) ">
         <h3 class="book-card-title">${title}</h3>
         <p class="book-card-author">${authors}</p>
         <p class="book-card-return book-card-rented">${returnText}</p>
