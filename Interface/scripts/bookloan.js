@@ -43,22 +43,28 @@ function renderBooks(stockList) {
 
     const isAlreadyLoaned = loanedBookIds.has(book.bookId);
 
-    const returnText = isAlreadyLoaned ? 'Você ja tem este livro emprestado' : 'Disponível para empréstimo';
+   const loanObject = allLoans.find(l =>
+  Number(l.book?.bookId) === Number(book.bookId) &&
+  l.status !== 'FINALIZADO' &&
+  l.status !== 'CANCELADO'
+);
 
+const loanId = loanObject ? (loanObject.loanId || loanObject.id) : null;
 
-    const loanObject = allLoans.find(l =>
-      Number(l.book?.bookId) === Number(book.bookId) &&
-      l.status !== 'FINALIZADO' &&
-      l.status !== 'CANCELADO'
-    );
-    const loanId = loanObject ? (loanObject.loanId || loanObject.id) : null;
+const canCancel = loanObject?.status === 'EM_ESPERA';
 
-    const btnCancelLoan = isAlreadyLoaned && quantity > 0
-      ? `<button class="loan-cancel-button" type="button" data-loan-id="${loanId}">
-           <span>x</span>
-         </button>`
-      : '';
+const returnText = isAlreadyLoaned
+  ? loanObject?.status === 'EM_ESPERA'
+    ? 'Empréstimo aguardando aprovação'
+    : 'Livro emprestado'
+  : 'Disponível para empréstimo';
 
+const btnCancelLoan = isAlreadyLoaned && quantity > 0 && canCancel
+  ? `<button class="loan-cancel-button" type="button" data-loan-id="${loanId}">
+       <span>x</span>
+     </button>`
+  : '';
+  
     const buttonMarkup = !isAlreadyLoaned && quantity > 0
       ? `<button class="loan-button" type="button" data-book-id="${book.bookId}" data-stock-id="${stock.stockId}">
            <img src="/Interface/assets/iconAdd.svg" alt="Empréstimo">
@@ -124,64 +130,75 @@ bookGrid.addEventListener('click', async event => {
   const bookId = Number(card.dataset.bookId);
   if (!bookId) return;
 
-  if (cancelLoan) {
-    if (cancelLoan.disabled) return;
-    cancelLoan.disabled = true;
-    cancelLoan.style.opacity = '0.5';
+ if (cancelLoan) {
+  const loan = allLoans.find(
+    l => String(l.loanId ?? l.id) === String(cancelLoan.dataset.loanId)
+  );
 
-    try {
-      const loanId = cancelLoan.dataset.loanId;
-
-      if (!loanId || loanId === 'undefined' || loanId === 'null') {
-        throw new Error('ID do empréstimo inválido.');
-      }
-
-      await api.cancelLoan(loanId);
-
-      loanedBookIds.delete(bookId);
-
-      allLoans = allLoans.filter(l => String(l.loanId ?? l.id) !== String(loanId));
-
-      renderBooks(allStock);
-      alert('Empréstimo cancelado com sucesso.');
-    } catch (error) {
-      alert('Erro ao cancelar empréstimo: ' + (error.message || error));
-      console.error(error);
-      cancelLoan.disabled = false;
-      cancelLoan.style.opacity = '1';
-    }
+  if (!loan || loan.status !== 'EM_ESPERA') {
+    alert('Este empréstimo já foi aprovado e não pode mais ser cancelado.');
     return;
   }
 
-  if (button) {
-    button.disabled = true;
-    button.style.opacity = '0.65';
+  if (cancelLoan.disabled) return;
 
-    try {
-      const loanResponse = await api.createLoan(bookId, loggedUser.id, returnDateString);
+  cancelLoan.disabled = true;
+  cancelLoan.style.opacity = '0.5';
 
-      loanedBookIds.add(bookId);
-    
-      allLoans.push({
-        loanId: loanResponse.id,
-        id: loanResponse.id,
-        status: loanResponse.status,
-        book: { bookId: bookId },
-      });
+  try {
+    const loanId = cancelLoan.dataset.loanId;
 
-      renderBooks(allStock);
-      alert('Empréstimo criado com sucesso.');
-    } catch (error) {
-      alert('Erro ao criar empréstimo: ' + (error.message || error));
-      console.error(error);
-      button.disabled = false;
-      button.style.opacity = '1';
-    }
-  } else {
-    if (typeof window.openBookModal === 'function') {
-      window.openBookModal(bookId);
-    }
+    await api.cancelLoan(loanId);
+
+    loanedBookIds.delete(bookId);
+
+    allLoans = allLoans.filter(
+      l => String(l.loanId ?? l.id) !== String(loanId)
+    );
+
+    renderBooks(allStock);
+    alert('Empréstimo cancelado com sucesso.');
+  } catch (error) {
+    alert('Erro ao cancelar empréstimo: ' + (error.message || error));
+    cancelLoan.disabled = false;
+    cancelLoan.style.opacity = '1';
   }
+
+  return;
+}
+
+
+if (button) {
+  button.disabled = true;
+  button.style.opacity = '0.65';
+
+  try {
+    const loanResponse = await api.createLoan(
+      bookId,
+      loggedUser.id,
+      returnDateString
+    );
+
+    loanedBookIds.add(bookId);
+
+    allLoans.push({
+      loanId: loanResponse.id,
+      id: loanResponse.id,
+      status: loanResponse.status,
+      book: { bookId }
+    });
+
+    renderBooks(allStock);
+    alert('Empréstimo criado com sucesso.');
+  } catch (error) {
+    alert('Erro ao criar empréstimo: ' + (error.message || error));
+    button.disabled = false;
+    button.style.opacity = '1';
+  }
+
+  return;
+}
+
 });
 
 searchInput.addEventListener('input', () => renderBooks(allStock));

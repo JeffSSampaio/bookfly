@@ -330,7 +330,7 @@ window.table = function (tableData) {
     return container;
 };
 
-window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeight = '16px', extraButtons = []) {
+window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeight = '16px', extraButtons = [], showEditButton = () => true) {
     const wrapper = document.createElement('div');
 
     function render(page) {
@@ -405,6 +405,7 @@ window.table_with_edit = function (tableData, onEdit, btnWidth = '16px', btnHeig
                     icon: '/Interface/assets/iconEditBlue.svg',
                     alt: 'Editar',
                     bgColor: 'var(--color-blue-smooth)',
+                    show: showEditButton,
                     hoverColor: 'var(--color-blue-smooth-bk)',
                     onClick: (rowData, index, row) => { if (onEdit) onEdit(rowData, index, row); }
                 }
@@ -959,7 +960,8 @@ config,
 onEdit,
 '16px',
 '16px',
-extraButtons
+extraButtons,
+(rowData) => rowData.status !== 'EM_ESPERA'
 ),
 extraButtons: [activateLoanBtn(window.activateLoan)]
 });
