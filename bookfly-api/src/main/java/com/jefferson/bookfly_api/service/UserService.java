@@ -1,5 +1,7 @@
 package com.jefferson.bookfly_api.service;
 
+import com.jefferson.bookfly_api.annotation.Auditable;
+import com.jefferson.bookfly_api.config.AuditContext;
 import com.jefferson.bookfly_api.dto.user.UserRequest;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
@@ -17,6 +19,10 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    @Auditable(
+            action = "CRIADO_USUARIO",
+            details = "Criado Usuario {userNome}"
+    )
     public User createUser(User user){
 
         if (userRepository.findByEmail(user.getEmail())
@@ -27,6 +33,7 @@ public class UserService {
 
         User userToSave = new User();
         userToSave.setName(user.getName());
+        AuditContext.capture("userName", user.getName());
         userToSave.setEmail(user.getEmail());
         userToSave.setPassword(user.getPassword());
         userToSave.setRole(user.getRole());

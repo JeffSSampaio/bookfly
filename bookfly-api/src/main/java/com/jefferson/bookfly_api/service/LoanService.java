@@ -1,6 +1,7 @@
 package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
+import com.jefferson.bookfly_api.config.AuditContext;
 import com.jefferson.bookfly_api.enums.*;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
@@ -10,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +37,7 @@ public class LoanService {
     }
 
     @Transactional
-    @Auditable(action = "SOLICITAR_EMPRESTIMO",details = "Usuario FEZ EMPRESTIMO DESSE LIVRO")
+    @Auditable(action = "SOLICITAR_EMPRESTIMO",details = "USUARIO {userId} FEZ EMPRESTIMO DE LIVRO ID ({bookId}) ")
     public Loan doLoanBook(Long bookId, Long userId) {
         Stock stock = stockService.getStock();
 
@@ -114,6 +112,7 @@ public class LoanService {
     }
 
     @Transactional
+    @Auditable(action = "ATIVAR_EMPRESTIMO",details = "USUARIO {userId} ATIVOU EMPRESTIMO {loanId}")
     public Loan activateLoanBook(Long loanId, Long userId) {
         Loan loanExists = loanRepository.findById(loanId)
                 .orElseThrow(() -> new NotFoundException("Emprestimo Não Encontrado no Sistema"));
@@ -144,6 +143,7 @@ public class LoanService {
     }
 
     @Transactional
+    @Auditable(action = "RETORNAR_EMPRESTIMO_LIVRO",details = "FEITO RETORNO DO LIVRO NO EMPRESTIMO {loanId}")
     public Loan returnBook(Long loanId) {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new NotFoundException("Empréstimo não encontrado"));
@@ -189,6 +189,7 @@ public class LoanService {
     }
 
     @Transactional
+    @Auditable(action = "CANCELAR_EMPRESTIMO_LIVRO",details = "FEITO CANCELAMENTO DO LIVRO NO EMPRESTIMO {loanId} do USUARIO {userId}")
     public Moviment cancelLoan(Long loanId) {
         Loan existLoan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new NotFoundException("Este Emprestimo Não Existe"));
@@ -208,7 +209,6 @@ public class LoanService {
         moviment.setUser(existLoan.getUser());
         moviment.setQtdMoviment(1);
         moviment.setCreatedTime(LocalDateTime.now());
-
         bookOnStock.setQtd(bookOnStock.getQtd() + moviment.getQtdMoviment());
         moviment.setStockBook(bookOnStock);
 
@@ -227,6 +227,8 @@ public class LoanService {
         moviment.setTypeItem(type);
         moviment.setDescription(description.toUpperCase());
 
+        AuditContext.capture("userId",existLoan.getUser().getId());
+
         movimentRepository.save(moviment);
         stockBookRepository.save(bookOnStock);
         loanRepository.delete(existLoan);
@@ -235,6 +237,10 @@ public class LoanService {
     }
 
     @Transactional
+    @Auditable(
+            action = "ATUALIZAR_EMPRESTIMO_LIVRO",
+            details = " FEITO ATUALIZAÇÃO DO EMPRÉSTIMO {loanId}"
+    )
     public Loan updateLoan(Long loanId, Loan newLoan) {
         Loan existLoan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new NotFoundException("Esse Empréstimo não existe no sistema"));
@@ -305,7 +311,10 @@ public class LoanService {
 
         return loanRepository.save(existLoan);
     }
-
+    @Auditable(
+            action = "ENCONTRAR_EMPRESTIMO_POR_USUARIO",
+            details = "USUÁRIO {userId} FEITO RETORNO DO LIVRO ID({bookId})"
+    )
     public Loan findByBookOnLoanForUser(Long userId, Long bookId) {
         User userExist = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Usuario nâo encontrado"));
@@ -328,6 +337,10 @@ public class LoanService {
     }
 
     @Transactional
+    @Auditable(
+            action = "REMOVER_EMPRESTIMO_POR_USUARIO",
+            details = "USUÁRIO {userId} REMOVENDO EMPRESTIMO ID({id})"
+    )
     public void removeLoan(Long id, Long userId) {
         Loan existLoan = loanRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Não existe esse empréstimo no sistema"));
