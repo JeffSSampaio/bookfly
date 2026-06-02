@@ -29,7 +29,7 @@ public class LoanController {
 
     @Operation(summary = "Listar todos os empréstimos")
     @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
-    @GetMapping("/list")
+    @GetMapping("/list/all")
     public ResponseEntity<List<LoanSummary>> getAllLoans() {
         List<Loan> allLoans = loanService.getAllLoans();
         return ResponseEntity.ok()
@@ -39,6 +39,22 @@ public class LoanController {
                                 .toList()
                 );
     }
+
+
+
+    @Operation(summary = "Listar todos os empréstimos ativos")
+    @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
+    @GetMapping("/list")
+    public ResponseEntity<List<LoanSummary>> getAllActive() {
+        List<Loan> allLoans = loanService.getAllLoansActive();
+        return ResponseEntity.ok()
+                .body(
+                        allLoans.stream()
+                                .map(LoanSummary::from)
+                                .toList()
+                );
+    }
+
 
     @Operation(summary = "Listar um Livro emprestado a um usuário")
     @ApiResponse(responseCode = "200", description = "Livro retornada com sucesso")

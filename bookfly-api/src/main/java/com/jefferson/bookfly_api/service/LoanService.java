@@ -1,10 +1,7 @@
 package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
-import com.jefferson.bookfly_api.enums.Role;
-import com.jefferson.bookfly_api.enums.StatusLoan;
-import com.jefferson.bookfly_api.enums.StatusPenalty;
-import com.jefferson.bookfly_api.enums.TypeMoviment;
+import com.jefferson.bookfly_api.enums.*;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
@@ -37,6 +34,10 @@ public class LoanService {
                 .toList();
     }
 
+    public List<Loan> getAllLoansActive(){
+        return loanRepository.findAllActive();
+    }
+
     @Transactional
     @Auditable(action = "SOLICITAR_EMPRESTIMO",details = "Usuario FEZ EMPRESTIMO DESSE LIVRO")
     public Loan doLoanBook(Long bookId, Long userId) {
@@ -51,12 +52,24 @@ public class LoanService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Usuário não existe"));
 
-        Optional<Loan> existLoan = loanRepository.findActiveByUserAndStockBook(user, bookOnStock);
+        Optional<Loan> existLoan = loanRepository.findByUserAndStockBook(user, bookOnStock);
 
         if (existLoan.isPresent()) {
-            Loan activeLoan = existLoan.get();
+            Loan loan = existLoan.get();
+            if (loan.getRecordStatus().getRecordStatusValue() == RecordStatusValue.DELETED ){
+                loan.getRecordStatus().active(user);
+                loan.setLoanDate(LocalDateTime.now());
+                loan.setReturnDate(LocalDateTime.now().plusDays(7));
+                loan.setStatus(StatusLoan.EM_ESPERA);
 
-            Penalty penalty = activeLoan.getPenalty();
+                bookOnStock.setQtd(bookOnStock.getQtd() - 1);
+
+                stockBookRepository.save(bookOnStock);
+
+                return loanRepository.save(loan);
+            }
+
+            Penalty penalty = loan.getPenalty();
             if (penalty != null && !penalty.getPaid()) {
                 throw new NotFoundException(
                         "Usuário possui multa pendente para este livro. " +
