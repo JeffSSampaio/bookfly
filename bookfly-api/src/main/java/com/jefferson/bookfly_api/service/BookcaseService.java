@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.service;
 
+import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.Bookcase;
 import com.jefferson.bookfly_api.models.StockBook;
@@ -23,6 +24,10 @@ public class BookcaseService {
     private final StockBookRepository stockBookRepository;
 
     @Transactional
+    @Auditable(
+            action = "CRIADO_ESTANTE",
+            details = "USUARIO {userId} CRIOU A ESTANTE - {name}"
+    )
     public Bookcase createBookcase(String name, Long userId) {
 
         User user = userRepository.findById(userId)

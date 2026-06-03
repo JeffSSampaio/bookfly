@@ -25,6 +25,10 @@ public class LoanService {
     private final StockService stockService;
     private final PenaltyRepository penaltyRepository;
 
+    @Auditable(
+            action = "LISTAR_TODAS_MOVIMENTAÇÕES",
+            details = "LISTAR TODAS AS MOVIMENTAÇÕES"
+    )
     public List<Loan> getAllLoans() {
         return loanRepository.findAll()
                 .stream()
@@ -112,7 +116,7 @@ public class LoanService {
     }
 
     @Transactional
-    @Auditable(action = "ATIVAR_EMPRESTIMO",details = "USUARIO {userId} ATIVOU EMPRESTIMO {loanId}")
+    @Auditable(action = "ATIVAR_EMPRESTIMO",details = "USUARIO {userId} ATIVOU EMPRESTIMO ID°{loanId}")
     public Loan activateLoanBook(Long loanId, Long userId) {
         Loan loanExists = loanRepository.findById(loanId)
                 .orElseThrow(() -> new NotFoundException("Emprestimo Não Encontrado no Sistema"));
@@ -143,7 +147,7 @@ public class LoanService {
     }
 
     @Transactional
-    @Auditable(action = "RETORNAR_EMPRESTIMO_LIVRO",details = "FEITO RETORNO DO LIVRO NO EMPRESTIMO {loanId}")
+    @Auditable(action = "RETORNAR_EMPRESTIMO_LIVRO", details = " RETORNO DO LIVRO NO EMPRESTIMO {loanId}")
     public Loan returnBook(Long loanId) {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new NotFoundException("Empréstimo não encontrado"));
@@ -189,7 +193,7 @@ public class LoanService {
     }
 
     @Transactional
-    @Auditable(action = "CANCELAR_EMPRESTIMO_LIVRO",details = "FEITO CANCELAMENTO DO LIVRO NO EMPRESTIMO {loanId} do USUARIO {userId}")
+    @Auditable(action = "CANCELAR_EMPRESTIMO_LIVRO",details = "CANCELAMENTO DO LIVRO NO EMPRESTIMO {loanId} do USUARIO {userId}")
     public Moviment cancelLoan(Long loanId) {
         Loan existLoan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new NotFoundException("Este Emprestimo Não Existe"));

@@ -1,5 +1,7 @@
 package com.jefferson.bookfly_api.service;
 
+import com.jefferson.bookfly_api.annotation.Auditable;
+import com.jefferson.bookfly_api.config.AuditContext;
 import com.jefferson.bookfly_api.dto.book.BookRequest;
 import com.jefferson.bookfly_api.enums.Gender;
 import com.jefferson.bookfly_api.enums.RecordStatusValue;
@@ -26,6 +28,10 @@ public class BookService {
     private final AuthorRepository authorRepository;
     private final UserRepository userRepository;
 
+    @Auditable(
+            action = "REGISTRAR_LIVRO",
+            details = "REGISTROU LIVRO POR ID°{bookId} E POR USUÁRIO ID°{userId} "
+    )
     public Book createBook(Long userId,Book book){
         User user= userRepository.findById(userId)
                 .orElseThrow(()-> new NotFoundException("Este Usuario não existe no sistema"));
@@ -37,7 +43,7 @@ public class BookService {
             existBookDeleted.getRecordStatus().active(user);
             return bookRepository.save(existBookDeleted);
         }
-
+        AuditContext.capture("bookId",book.getId());
 
         List<Author> authors = new ArrayList<>();
 
@@ -89,7 +95,11 @@ public class BookService {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
     }
-
+    @Transactional
+    @Auditable(
+            action = "ATUALIZAR_LIVRO",
+            details = "USUÁRIO {userId} ATUALIZOU LIVRO ID°{bookId}"
+    )
     public Book updateBook(Long id,Long userId, Book book){
         Book existBook = bookRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Livro não existe"));
@@ -100,7 +110,7 @@ public class BookService {
                 existBook.getRecordStatus().active(currentUser);
             }
         String sumaryExists  = book.getSummary() !=null ? book.getSummary() : "Sem sumario";
-
+        AuditContext.capture("bookId",existBook.getId());
         if (book.getTitle() != null) existBook.setTitle(book.getTitle());
         if (book.getCover() != null) existBook.setCover(book.getCover());
         if (book.getGenders() != null) existBook.setGenders(book.getGenders());
@@ -124,11 +134,18 @@ public class BookService {
 
         return bookRepository.save(existBook);
     }
-
+    @Auditable(
+            action = "LISTAR_LIVROS",
+            details = "LISTAR TODOS OS LIVROS"
+    )
     public List<Book> findAll() {
         return bookRepository.findAll();
     }
 
+    @Auditable(
+            action = "lISTAR_lIVROS_ATIVOS",
+            details = "LISTAR TODOS OS LIVROS ATIVOS"
+    )
     public List<Book> findAllBooksActive(){
         return bookRepository.findAll()
                 .stream()
@@ -152,6 +169,10 @@ public class BookService {
     }
 
     @Transactional
+    @Auditable(
+            action = "REMOVER_LIVRO",
+            details = "USUARIO ID°{userId} REMOVEU LIVRO ID°{bookId}"
+    )
     public void removeBook(Long id, Long userId){
         Book book = bookRepository.findById(id).orElseThrow(()-> new NotFoundException("Livro Não EnContrado"));
         User existUser = userRepository.findById(userId)

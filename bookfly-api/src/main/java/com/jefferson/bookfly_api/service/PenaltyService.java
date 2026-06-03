@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.service;
 
+import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
@@ -25,6 +26,10 @@ public class PenaltyService {
         return penaltyRepository.findAll();
     }
 
+    @Auditable(
+            action = "CRIACAO_MULTA",
+            details = "USUARIO {userId} FOi MULTADO"
+    )
     public Penalty createPenalty(Long userId, Long loanId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Usuário não existe"));
@@ -62,6 +67,10 @@ public class PenaltyService {
     }
 
     @Transactional
+    @Auditable(
+            action = "EDICAO_MULTA",
+            details = "MULTA ID°{penaltyId} FOI ATUALIZADA"
+    )
     public Penalty updatePenalty(Long penaltyId, Penalty updatedData) {
         Penalty existingPenalty = penaltyRepository.findById(penaltyId)
                 .orElseThrow(() -> new NotFoundException("Multa não encontrada"));
@@ -116,7 +125,11 @@ public class PenaltyService {
 
         return penaltyRepository.save(existingPenalty);
     }
+    @Auditable(
+            action = "REMOCAO_MULTA",
+            details = "MULTA ID°{id} DE USUÁRIO {userId} FOI DELETADO "
 
+    )
     public void removePenalty(Long id,Long userId){
             Penalty penaltyExist = penaltyRepository.findById(id)
                     .orElseThrow(()-> new NotFoundException("Essa multa não existe no sistema"));

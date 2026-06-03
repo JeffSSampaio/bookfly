@@ -1,5 +1,7 @@
 package com.jefferson.bookfly_api.service;
 
+import com.jefferson.bookfly_api.annotation.Auditable;
+import com.jefferson.bookfly_api.config.AuditContext;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
@@ -30,14 +32,23 @@ public class AuthorService {
         return authorRepository.findAll();
     }
 
+    @Auditable(
+            action = "CRIAR_AUTOR",
+            details = "REGISTRADO NOVO AUTOR:{authorName}"
+    )
     public Author createAuthor(Author author) {
         if (author.getId() != null && authorRepository.existsById(author.getId())) {
             throw new NotFoundException("Esse Author já existe no sistema com o ID: " + author.getId());
         }
+        AuditContext.capture("authorName",author.getName());
         return authorRepository.save(author);
     }
 
     @Transactional
+    @Auditable(
+            action = "EDITAR_AUTOR",
+            details = "EDITADO USUARIO {id}"
+    )
     public Author editAuthor(Long id, Author newAuthor) {
         Author existAuthor = authorRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Esse Author não existe no sistema"));
@@ -86,6 +97,10 @@ public class AuthorService {
     }
 
     @Transactional
+    @Auditable(
+            action = "DELETAR_AUTOR",
+            details = "DELETADO AUTOR ID°{id} POR USUÁRIO {userId}"
+    )
     public void deleteAuthor(Long id, Long userId) {
         Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Autor não encontrado para deleção"));

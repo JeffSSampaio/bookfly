@@ -1,5 +1,7 @@
 package com.jefferson.bookfly_api.service;
 
+import com.jefferson.bookfly_api.annotation.Auditable;
+import com.jefferson.bookfly_api.config.AuditContext;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
@@ -24,6 +26,10 @@ public class MovimentService {
     private final StockService stockService;
 
     @Transactional
+    @Auditable(
+            action = "FAZER_MOVIMENTACAO_ITENS",
+            details = "USUARIO ID°{userId} FEZ UMA MOVIMENTAÇÃO {type} DE {qtd}"
+    )
     public Moviment doMoviment(Long bookId, Long userId, int qtd, String description) {
         Stock stock = stockService.getStock();
 
@@ -56,7 +62,9 @@ public class MovimentService {
         String finalDescription = "";
         if (isAdmin) {
             finalDescription = (description == null || description.isBlank()) ? "Admin fez " + type + " de " + qtd + "em Livro " + bookOnStock.getBook().getTitle() : description;
-        } 
+        }
+
+        AuditContext.capture("type",type);
         
         Moviment moviment = new Moviment();
         moviment.setStockBook(bookOnStock);
@@ -72,17 +80,28 @@ public class MovimentService {
 
 
 
-
+    @Auditable(
+            action = "LISTAR_TODAS_MOVIMENTACAO",
+            details = "LISTADO TODAS AS MOVIMENTAÇÕES"
+    )
     public List<Moviment> getAllMoviments() {
         return movimentRepository.findAll();
     }
 
+    @Auditable(
+            action = "LISTAR_MOVIMENTAÇÃO",
+            details = "LISTADA MOVIMENTAÇÃO ID°{id}"
+    )
     public Moviment getMoviment(Long id) {
         return movimentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Movimentação inexistente no estoque"));
     }
 
     @Transactional
+    @Auditable(
+            action = "EDITAR_MOVIMENTACAO",
+            details= "EDITAR MOVIMENTAÇÃO ID°{id} "
+    )
     public Moviment editMoviment(Long id, Moviment newMoviment) {
         Moviment oldMoviment = movimentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Movimentação inexistente no estoque"));
@@ -126,6 +145,10 @@ public class MovimentService {
     }
 
     @Transactional
+    @Auditable(
+            action = "DELETAR_MOVIMENTACAO",
+            details = "DELETADA MOVIMENTACAO ID°{id}"
+    )
     public void deleteMoviment(Long id) {
         Moviment moviment = movimentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Movimentação não encontrada"));

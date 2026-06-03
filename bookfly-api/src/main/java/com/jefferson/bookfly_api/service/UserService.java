@@ -51,6 +51,10 @@ public class UserService {
     }
 
     @Transactional
+    @Auditable(
+            action = "USUARIO_ATUALIZADO",
+             details = "USUÁRIO FOI ATUALIZADO"
+    )
     public User updateUser(User newUser){
 
         User userExist = userRepository.findById(newUser.getId())
@@ -103,6 +107,10 @@ public class UserService {
 //    }
 
     @Transactional
+    @Auditable(
+            action = "USUARIO_DELETADO",
+            details = "USUÁRIO ID°{id} FOI DELETADO"
+    )
     public void deleteUser(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));

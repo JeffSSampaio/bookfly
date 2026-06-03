@@ -125,8 +125,8 @@ public class AuditAspect {
         }
 
         log.setAction(action.toUpperCase());
-        log.setOperator(operador);
-        log.setDetails(details);
+        log.setOperator(operador.toUpperCase());
+        log.setDetails(details.toUpperCase());
         log.setTimestamp(LocalDateTime.now());
 
         try {

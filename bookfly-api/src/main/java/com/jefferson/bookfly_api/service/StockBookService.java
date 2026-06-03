@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.service;
 
+import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
@@ -25,6 +26,11 @@ public class StockBookService {
     private final MovimentRepository movimentRepository;
     private final StockService stockService;
 
+
+    @Auditable(
+            action = "ADICIONADO_LIVRO_ESTOQUE",
+            details = "ADICIONADO LIVRO ID°{bookId} POR USUÁRIO {userId} EM UMA QUANTIDADE DE {qtd}"
+    )
     public StockBook addBookOnStock(Long bookId, Long userId, int qtd) {
         if (qtd <= 0) {
             throw new NotFoundException("Quantidade deve ser maior que zero");
@@ -105,6 +111,10 @@ public class StockBookService {
     }
 
     @Transactional
+    @Auditable(
+            action = "ATUALIZACAO_LIVRO_QUANTIDADE",
+            details = "QUANTIDADE DE LIVRO ID°{bookId} FOI ALTERADA POR USUARIO {adminId}  "
+    )
     public StockBook updateQtd(Long bookId, int delta, Long adminId , String description) {
 
         Book book = bookRepository.findById(bookId)
@@ -152,7 +162,10 @@ public class StockBookService {
                .toList();
         return booksOnStock;
     }
-
+    @Auditable(
+            action = "REMOCAO_LIVRO_ESTOQUE",
+            details = "REMOÇÃO DO LIVRO DO ESTOQUE"
+    )
     public void removeBookOnStock(Long id,Long userId){
 
         StockBook stockBook = stockBookRepository.findById(id)
