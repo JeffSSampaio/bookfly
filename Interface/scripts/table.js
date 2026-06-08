@@ -65,6 +65,7 @@ backgroundColor: tableStyleValues.color.containerBackgroundColor
         color: 'var(--color-dark-green)'
     }
 };
+const loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'));
 
 var allLoansByUser = await api.getLoansByUser(loggedUser.id)
 var allStock = await api.getAllStock();
@@ -73,7 +74,6 @@ var allMovements = await api.getAllMoviments();
 var allFines = await api.getAllPenalties();
 var allBooks = await api.getAllBooks();
 
-const loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'));
 
 
 
@@ -194,6 +194,18 @@ const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
     timeZone: 'America/Sao_Paulo'
 });
 
+const loanByUserConfig = {
+    headers:['ID','Livro','Status','Data de Empréstimo','Data de Retorno'],
+    rows: allLoansByUser.map(r=>({
+        id: r.loanId,
+        status: r.status,
+        book: r.book.title,
+        loanDate: dateFormatter.format(new Date(r.loanDate)),
+        returnDate: dateFormatter.format(new Date(r.returnDate)),
+        _penalty: r.penalty.penaltyId
+    }))
+}
+
 const loanTableConfig = {
     headers: ['ID', 'Usuário', 'Livro', 'Data de Empréstimo', 'Data de Devolução', 'Status'],
     rows: allLoans.map(r => ({
@@ -211,7 +223,7 @@ const finesTableConfig = {
     columnConfig: {
         amount: {
             render: (cell, value) => {
-                cell.innerHTML = 'R$' + value;
+                cell.innerHTML = 'R$ ' + value;
             }
         }
     },
@@ -228,9 +240,6 @@ const finesTableConfig = {
     }))
 };
 
-const loansByUser = {
-    headers:[]
-}
 
 const stockTableConfig = {
     headers: ['ID', 'Livro', 'Autor', 'Quantidade'],
@@ -945,9 +954,9 @@ const deleteButton = (onDelete) => ({
 const activateLoanBtn = (onActivate) => ({
     icon:'/Interface/assets/iconAddRounded.svg',
     alt: 'Ativar',
-    bgColor:'var(color-mid-green)',
+    bgColor:'var(--color-dark-green)',
     show: (rowData) => rowData.status === 'EM_ESPERA',
-    hoverColor:'var(--color-dark-green)',
+    hoverColor:'var(--color-mid-green)',
     onClick: (rowData) => onActivate(rowData) 
 })
 
@@ -1039,3 +1048,19 @@ deleteButton(window.openDeleteBookModal)
 ]
 });
 
+renderTable({
+idHtmlElement:'table-user-loans',
+data: allLoansByUser,
+configTable: loanByUserConfig,
+searchFunction: null,
+onEdit: null,
+functionTable: (config, onEdit, extraButtons) =>
+window.table_with_edit(
+config,
+onEdit,
+'16px',
+'16px',
+extraButtons
+),
+extraButtons:[]
+});
