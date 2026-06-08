@@ -226,6 +226,11 @@
     color: #1f4b34;
 }
 
+.status-available-y {
+    background: var(--badge-yellow);
+    color: rgb(153, 153, 7);
+}
+
 .status-unavailable {
     background: #f4d2cf;
     color: #a32c24;

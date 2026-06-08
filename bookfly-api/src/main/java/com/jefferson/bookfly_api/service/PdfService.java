@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.service;
 
 
 import com.jefferson.bookfly_api.models.Book;
+import com.jefferson.bookfly_api.models.StockBook;
 import com.lowagie.text.Document;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class PdfService {
 
-    public void exportar(HttpServletResponse response, List<Book> books) throws IOException {
+    public void export(HttpServletResponse response, List<Book> books) throws IOException {
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document,response.getOutputStream());
         document.open();
@@ -44,5 +45,10 @@ public class PdfService {
         document.close();
 
     }
+
+//    public void export(HttpServletResponse response, List<StockBook> stockBooks) throws IOException{
+//
+//
+//    }
 
 }

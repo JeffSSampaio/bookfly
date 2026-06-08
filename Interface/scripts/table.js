@@ -66,6 +66,7 @@ backgroundColor: tableStyleValues.color.containerBackgroundColor
     }
 };
 
+var allLoansByUser = await api.getLoansByUser(loggedUser.id)
 var allStock = await api.getAllStock();
 var allLoans = await api.getAllLoans();
 var allMovements = await api.getAllMoviments();
@@ -226,6 +227,10 @@ const finesTableConfig = {
         status: r.statusPenalty
     }))
 };
+
+const loansByUser = {
+    headers:[]
+}
 
 const stockTableConfig = {
     headers: ['ID', 'Livro', 'Autor', 'Quantidade'],
@@ -1033,3 +1038,4 @@ extraButtons: [
 deleteButton(window.openDeleteBookModal)
 ]
 });
+

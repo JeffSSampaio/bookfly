@@ -367,7 +367,7 @@ window.openBookModal = function (bookId) {
                         <p class="book-detail-authors">${autor}</p>
                         <div class="book-detail-status-row">
                             <span class="book-detail-label">Status</span>
-                            <span class="book-detail-status ${statusClass}">${statusText}</span>
+                            <span class="book-detail-status badge-status-active{ ${statusClass}">${statusText}</span>
                         </div>
                         <p class="book-detail-label">Sumário</p>
                         <p class="book-detail-description">${summary}</p>
@@ -412,7 +412,7 @@ window.openBookModalLoaned = function (userId,bookId) {
                         <h1 class="book-detail-title">${book || 'Título desconhecido'}</h1>
                         <div class="book-detail-status-row">
                             <span class="book-detail-label">Status</span>
-                            <span class="book-detail-status status-available">${statusText}</span>
+                            <span class="book-detail-status status-available-y">${statusText}</span>
                         </div>
                         <p class="book-detail-label">Dia do Empréstimo: ${loanDate} </p>
                          <p class="book-detail-label">Dia da Entrega do Livro: ${returnDate}</p>
