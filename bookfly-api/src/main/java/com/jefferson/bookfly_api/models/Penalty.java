@@ -1,6 +1,7 @@
 package com.jefferson.bookfly_api.models;
 
 import com.jefferson.bookfly_api.enums.StatusPenalty;
+import com.jefferson.bookfly_api.interfaces.IPenalty;
 import jakarta.persistence.*;
 import org.hibernate.annotations.SQLDelete;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,7 +15,7 @@ import java.time.temporal.ChronoUnit;
 @Entity
 @SQLDelete(sql = "UPDATE multa SET record_status_value  = 'DELETED', status_date_time = NOW() WHERE id = ?")
 @Table(name = "multa")
-public class Penalty {
+public class Penalty implements IPenalty {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -43,7 +44,7 @@ public class Penalty {
         long value = Math.max(0, daysPassed);
 
         return new BigDecimal(value)
-                .multiply(new BigDecimal("1.50"))
+                .multiply(valuePenalty)
                 .setScale(2, RoundingMode.HALF_UP);
     }
 
