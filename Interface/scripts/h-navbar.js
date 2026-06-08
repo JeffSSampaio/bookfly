@@ -35,7 +35,7 @@ window.logout = function() {
 var userMenuLinks = [ 
     "<a href='../pages/profile.html'>Perfil</a>",
     "<a href='../pages/homepage.html'>HomePage</a>",
-    "<a href='../pages/my-books.html'>Minhas Estantes</a>",
+    // "<a href='../pages/my-books.html'>Minhas Estantes</a>",
     "<a href='../pages/bookloan.html'>Livros</a>",
    
 
