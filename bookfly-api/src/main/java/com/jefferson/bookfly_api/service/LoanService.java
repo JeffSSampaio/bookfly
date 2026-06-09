@@ -337,7 +337,10 @@ public class LoanService {
     public List<Loan> findAllLoansByUser(long userId) {
         User existUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Este usuário não existe"));
-        return loanRepository.findActiveByUser(existUser);
+        return loanRepository.findActiveByUser(existUser)
+                .stream()
+                .sorted(Comparator.comparing(Loan::getId))
+                .toList();
     }
 
     @Transactional
