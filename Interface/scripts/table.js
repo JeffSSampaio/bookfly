@@ -1007,7 +1007,7 @@ const deleteButton = (onDelete) => ({
 });
 
 const activateLoanBtn = (onActivate) => ({
-    icon:'/Interface/assets/iconAddRounded.svg',
+    icon:'/Interface/assets/iconPlus.svg',
     alt: 'Ativar',
     bgColor:'var(--color-dark-green)',
     show: (rowData) => rowData.status === 'EM_ESPERA',
