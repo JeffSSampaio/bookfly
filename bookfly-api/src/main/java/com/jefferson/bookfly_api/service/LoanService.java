@@ -268,6 +268,20 @@ public class LoanService {
         if (newLoan.getStatus() != null) {
             StatusLoan newLoanStatus = newLoan.getStatus();
 
+            if (newLoanStatus == StatusLoan.ATIVO){
+                Optional<Penalty> penaltyExist = penaltyRepository.findByLoan(existLoan);
+                Penalty penalty = penaltyExist.get();
+                penalty.setStatus(StatusPenalty.PENDENTE);
+                penaltyRepository.save(penalty);
+            }
+
+            if (newLoanStatus == StatusLoan.ANALISE) {
+                Optional<Penalty> penaltyExist = penaltyRepository.findByLoan(existLoan);
+                Penalty penalty = penaltyExist.get();
+                penalty.setStatus(StatusPenalty.ANALISE);
+                penaltyRepository.save(penalty);
+            }
+
             if (newLoanStatus == StatusLoan.ATRASADO) {
                 Optional<Penalty> penaltyExist = penaltyRepository.findByLoan(existLoan);
                 if (penaltyExist.isEmpty()) {

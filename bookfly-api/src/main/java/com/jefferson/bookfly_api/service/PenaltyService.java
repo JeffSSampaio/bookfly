@@ -108,7 +108,7 @@ public class PenaltyService {
 
 
 
-            if (updatedData.getStatus() == StatusPenalty.PENDENTE || updatedData.getStatus() == StatusPenalty.ANALISE) {
+            if (updatedData.getStatus() == StatusPenalty.PENDENTE ) {
                 existingPenalty.setPaid(false);
                 existingPenalty.setPayedDate(null);
                 existingPenalty.setAmount(BigDecimal.valueOf(0.0));
@@ -116,6 +116,18 @@ public class PenaltyService {
 
                 if (loan != null) {
                     loan.setStatus(StatusLoan.ATRASADO);
+                    loanRepository.save(loan);
+                }
+            }
+
+            if (updatedData.getStatus() == StatusPenalty.ANALISE){
+                existingPenalty.setPaid(false);
+                existingPenalty.setPayedDate(null);
+                existingPenalty.setAmount(BigDecimal.valueOf(0.0));
+
+
+                if (loan != null) {
+                    loan.setStatus(StatusLoan.ANALISE);
                     loanRepository.save(loan);
                 }
             }
