@@ -110,7 +110,7 @@ public class BookService {
                 existBook.getRecordStatus().active(currentUser);
             }
         String sumaryExists  = book.getSummary() !=null ? book.getSummary() : "Sem sumario";
-        AuditContext.capture("bookId",existBook.getId());
+
         if (book.getTitle() != null) existBook.setTitle(book.getTitle());
         if (book.getCover() != null) existBook.setCover(book.getCover());
         if (book.getGenders() != null) existBook.setGenders(book.getGenders());
@@ -131,6 +131,7 @@ public class BookService {
             }
             existBook.setAuthors(updatedAuthors);
         }
+        AuditContext.capture("bookId",existBook.getId());
 
         return bookRepository.save(existBook);
     }
@@ -171,13 +172,14 @@ public class BookService {
     @Transactional
     @Auditable(
             action = "REMOVER_LIVRO",
-            details = "USUARIO ID°{userId} REMOVEU LIVRO ID°{bookId}"
+            details = "USUARIO {userId} REMOVEU LIVRO ID°{bookId}"
     )
     public void removeBook(Long id, Long userId){
         Book book = bookRepository.findById(id).orElseThrow(()-> new NotFoundException("Livro Não EnContrado"));
         User existUser = userRepository.findById(userId)
                  .orElseThrow(()-> new NotFoundException("Este Usuário não existe para realizar a ação de deletar."));
         book.getRecordStatus().delete(existUser);
+        AuditContext.capture("bookId",book.getId());
         bookRepository.save(book);
     }
 
