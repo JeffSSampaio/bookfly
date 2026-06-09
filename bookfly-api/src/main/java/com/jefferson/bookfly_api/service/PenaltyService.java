@@ -3,6 +3,7 @@ package com.jefferson.bookfly_api.service;
 import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
+import com.jefferson.bookfly_api.exceptions.DependencyViolationException;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +59,7 @@ public class PenaltyService {
 
             return penaltyRepository.save(penalty);
         } else {
-            throw new NotFoundException("Não foi possível criar multa: o prazo de devolução ainda não venceu");
+            throw new DependencyViolationException("Não foi possível criar multa: o prazo de devolução ainda não venceu");
         }
     }
 
@@ -91,6 +93,7 @@ public class PenaltyService {
             existingPenalty.setStatus(updatedData.getStatus());
             Loan loan = existingPenalty.getLoan();
             existingPenalty.setAmount(existingPenalty.getPaymentAmount(loan.getReturnDate(), LocalDateTime.now()));
+
             if (updatedData.getStatus() == StatusPenalty.PAGO) {
                 existingPenalty.setPaid(true);
                 existingPenalty.setPayedDate(LocalDateTime.now());
@@ -103,9 +106,12 @@ public class PenaltyService {
                 }
             }
 
-            if (updatedData.getStatus() == StatusPenalty.PENDENTE) {
+
+
+            if (updatedData.getStatus() == StatusPenalty.PENDENTE || updatedData.getStatus() == StatusPenalty.ANALISE) {
                 existingPenalty.setPaid(false);
                 existingPenalty.setPayedDate(null);
+                existingPenalty.setAmount(BigDecimal.valueOf(0.0));
 
 
                 if (loan != null) {
@@ -135,6 +141,10 @@ public class PenaltyService {
                     .orElseThrow(()-> new NotFoundException("Essa multa não existe no sistema"));
             User userExist = userRepository.findById(userId)
                     .orElseThrow(()-> new NotFoundException("Esse Usuário não existe no sistema"));
+
+            if (penaltyExist.getStatus() == StatusPenalty.ANALISE){
+                throw new DependencyViolationException("Não é Possível Remover uma Multa em Análise");
+            }
 
             penaltyExist.getRecordStatus().delete(userExist);
 

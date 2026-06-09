@@ -3,6 +3,7 @@ package com.jefferson.bookfly_api.config;
 
 import ch.qos.logback.core.model.ComponentModel;
 import com.jefferson.bookfly_api.dto.global.ErrorResponse;
+import com.jefferson.bookfly_api.exceptions.DependencyViolationException;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -43,4 +44,26 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(error);
     }
+
+    @ExceptionHandler(DependencyViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDependencyViolation(DependencyViolationException ex, HttpServletRequest request){
+        StackTraceElement origin = ex.getStackTrace()[0];
+        String originMessage = origin.getClassName() + "."
+                + origin.getMethodName()
+                + "() line: " +
+                origin.getLineNumber();
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.NOT_ACCEPTABLE.value(),
+                "NOT_ACCEPTABLE",
+                ex.getMessage(),
+                request.getMethod(),
+                request.getRequestURI(),
+                originMessage
+        );
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                .body(errorResponse);
+    }
+
+
 }
