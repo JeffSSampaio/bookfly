@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.config;
 
 
 import ch.qos.logback.core.model.ComponentModel;
+import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.dto.global.ErrorResponse;
 import com.jefferson.bookfly_api.exceptions.DependencyViolationException;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
@@ -17,11 +18,12 @@ import java.util.UUID;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
+    @Auditable(action = "ERRO_ITEM_NAO_ENCONTRADO" , details = "REGISTRADO ERRO EM ENCONTRAR ITEM: {messageError}")
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound( NotFoundException ex, HttpServletRequest request) {
 
         StackTraceElement origin = ex.getStackTrace()[0];
+        AuditContext.capture("messageError",ex.getMessage());
 
         String originMessage = origin.getClassName()
                 + "." + origin.getMethodName()
@@ -44,10 +46,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(error);
     }
-
+    @Auditable(action = "ERRO_VIOLAÇÃO_DEPENDECIA" , details = "REGISTRADO ERRO DE DEPENDENCIA: {messageError}")
     @ExceptionHandler(DependencyViolationException.class)
     public ResponseEntity<ErrorResponse> handleDependencyViolation(DependencyViolationException ex, HttpServletRequest request){
         StackTraceElement origin = ex.getStackTrace()[0];
+        AuditContext.capture("messageError",ex.getMessage());
         String originMessage = origin.getClassName() + "."
                 + origin.getMethodName()
                 + "() line: " +
