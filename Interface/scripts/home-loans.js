@@ -1,6 +1,7 @@
 'use strict'
 
 import api from './apiService.js'
+import './table.js'
 
 var loggedUser = JSON.parse(sessionStorage.getItem('loggedUser'));
 

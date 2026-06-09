@@ -1,0 +1,307 @@
+
+.dashboard-toggle-bar {
+    display: flex;
+    gap: 8px;
+    width: 58%;
+    padding: 28px 0 12px;
+    align-items: right;
+    justify-content: right;
+}
+
+.dashboard-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 20px;
+    border-radius: 24px;
+    border: 2px solid var(--color-dark-green);
+    background: transparent;
+    color: var(--color-dark-green);
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.dashboard-toggle-btn img {
+    width: 15px;
+    height: 15px;
+    filter: none;
+    transition: filter 0.2s ease;
+}
+
+.dashboard-toggle-btn:hover,
+.dashboard-toggle-btn.active {
+    background: var(--color-dark-green);
+    color: var(--color-ivory);
+}
+
+.dashboard-toggle-btn:hover img,
+.dashboard-toggle-btn.active img {
+    filter: brightness(0) invert(1);
+}
+
+
+.db-view {
+    width: 100%;
+    animation: dbFadeIn 0.18s ease;
+}
+
+@keyframes dbFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0);   }
+}
+
+
+.db-cards-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 40px;
+    padding: 20px 40px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.db-cards-section {
+    margin-top: 20px;
+}
+
+.db-section-title {
+    font-family: var(--font-primary);
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--color-dark-green);
+    margin: 0 0 16px 4px;
+}
+
+.db-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background-color: var(--color-mid-green);
+    padding: 8px;
+    border-radius: 12px;
+    box-shadow: var(--box-shadow);
+    min-height: 80px;
+}
+
+
+.db-loan-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    min-height: 110px;
+    box-sizing: border-box;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.db-loan-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.13);
+}
+
+.db-loan-card img {
+    height: 90px;
+    width: 62px;
+    object-fit: cover;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.db-loan-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    overflow: hidden;
+}
+
+.db-loan-card-title {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--color-dark-green);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 110px;
+    margin: 0;
+}
+
+.db-loan-card-author {
+    font-family: var(--font-primary);
+    font-size: 10px;
+    color: var(--color-mid-green);
+    opacity: 0.8;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.db-loan-card-date {
+    font-family: var(--font-primary);
+    font-size: 10px;
+    color: var(--color-dark-green);
+    margin: 0;
+}
+
+
+.db-badge {
+    display: inline-block;
+    align-self: flex-start;
+    font-family: var(--font-primary);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin: 0;
+    white-space: nowrap;
+    width: fit-content;
+}
+
+.db-badge--ativo     { background: #fff8e1; color: #b8860b; }
+.db-badge--atrasado  { background: #fcebeb; color: #a32d2d; }
+.db-badge--finalizado{ background: #e8f0fb; color: #1a56a0; }
+.db-badge--espera    { background: #fff3e0; color: #e65100; }
+.db-badge--analise   { background: #f3e5f5; color: #6a1b9a; }
+.db-badge--default   { background: #eee;    color: #555;    }
+
+
+.db-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    width: 100%;
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: 15px;
+    color: white;
+    text-align: center;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+
+.db-table-view {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 1100px;
+    margin: 16px auto 48px;
+}
+
+.db-table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+   
+}
+
+.db-table-title {
+    font-family: var(--font-primary);
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--color-dark-green);
+    margin-left: 10px;
+}
+
+
+.db-table-wrap {
+    background: white;
+    border-radius: 0 0 20px 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.db-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-family: var(--font-primary);
+}
+
+.db-table thead th {
+    background: var(--color-ivory);
+    color: var(--color-dark-green);
+    font-weight: 700;
+    font-size: 13px;
+    padding: 13px 8px;
+    text-align: center;
+    letter-spacing: 0.3px;
+}
+
+.db-table tbody tr {
+  
+    transition: background 0.12s;
+}
+
+.db-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+
+
+.db-table tbody td {
+    padding: 10px 8px;
+    text-align: center;
+    color: var(--color-mid-green);
+    font-weight: 700;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.db-pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 4px 4px;
+    font-family: var(--font-primary);
+}
+
+.db-page-btn {
+    min-width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: white;
+    color: var(--color-mid-green);
+    font-weight: 500;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0 6px;
+    font-family: var(--font-primary);
+    transition: all 0.15s ease;
+}
+
+.db-page-btn:hover:not(:disabled) {
+    background: var(--color-dark-green);
+    color: white;
+    border-color: var(--color-dark-green);
+}
+
+.db-page-btn.active {
+    background: var(--color-mid-green);
+    color: white;
+    border-color: var(--color-wine);
+    font-weight: 700;
+}
+
+.db-page-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}

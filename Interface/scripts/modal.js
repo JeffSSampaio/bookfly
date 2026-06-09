@@ -409,11 +409,7 @@ window.openBookModalLoaned = function (userId,bookId) {
                 <div class="book-detail-card">
                   
                     <div class="book-detail-info">
-                        <h1 class="book-detail-title">${book || 'Título desconhecido'}</h1>
-                        <div class="book-detail-status-row">
-                            <span class="book-detail-label">Status</span>
-                            <span class="book-detail-status status-available-y">${statusText}</span>
-                        </div>
+                      <p class="book-detail-label">Livro: ${book} </p>
                         <p class="book-detail-label">Dia do Empréstimo: ${loanDate} </p>
                          <p class="book-detail-label">Dia da Entrega do Livro: ${returnDate}</p>
                        
