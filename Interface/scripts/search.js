@@ -1,3 +1,4 @@
+
 'use strict';
 
 function searchTable(searchTerm, tableData, fieldsToSearch) {
@@ -17,8 +18,6 @@ function rerenderTable(containerId, tableConfig, filtered, onEdit) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    
-    
     const tableElement = onEdit
     ? window.table_with_edit({ ...tableConfig, rows: filtered }, onEdit)
     : window.table({ ...tableConfig, rows: filtered });
@@ -30,14 +29,11 @@ function rerenderTable(containerId, tableConfig, filtered, onEdit) {
         warning.style.fontWeight = '500';
         warning.style.display='flex';
         warning.style.flexDirection='row';
-        warning.style.alignItems='center'
-        warning.style.justifyContent='center'
+        warning.style.alignItems='center';
+        warning.style.justifyContent='center';
         warning.innerHTML = "Nenhuma informação na tabela";
         container.appendChild(warning);
-        container.appendChild(warning);
     }
-
-
 }
 
 window.setupLoanSearch = function (allLoans) {
@@ -70,22 +66,25 @@ window.setupLoanSearch = function (allLoans) {
 };
 
 window.setupPenaltySearch = function (allPenalties) {
-    const formatador = new Intl.DateTimeFormat('pt-BR', {
+    const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
         dateStyle: 'short',
         timeStyle: 'short',
         timeZone: 'America/Sao_Paulo'
     });
 
     const tableConfig = {
-        headers: ['ID', 'Usuário', 'Valor da Multa', 'Data de Multa', 'Data de Entrega do Livro', 'Status']
+        headers: ['ID', 'Usuário', 'Livro','Valor da Multa', 'Data de Multa', 'Data de Entrega do Livro', 'Status']
     };
 
     const penaltiesData = allPenalties.map(r => ({
         id: r.penaltyId,
         user: r.userName.toUpperCase(),
-        amount: r.amount || 'sem valor'.toUpperCase(),
-        penaltyDate: r.penaltyDate ? formatador.format(new Date(r.penaltyDate)) : 'sem data'.toUpperCase(),
-        returnDateLoan: r.returnloanDate ? formatador.format(new Date(r.returnloanDate)) :  'sem data'.toUpperCase(),
+        book: r.bookName.toUpperCase(),
+        amount: r.amount || 0.0,
+        penaltyDate: r.penaltyDate ? dateFormatter.format(new Date(r.penaltyDate)) : 'sem data'.toUpperCase(),
+        returnDateLoan: r.returnLoanDate && r.statusPenalty == "PAGO" 
+        ? dateFormatter.format(new Date(r.returnLoanDate)) 
+        : 'Livro não devolvido'.toUpperCase(),
         status: r.statusPenalty
     }));
 
@@ -93,7 +92,7 @@ window.setupPenaltySearch = function (allPenalties) {
     if (!input) return;
 
     input.addEventListener('input', e => {
-        const filtered = searchTable(e.target.value, penaltiesData, ['id', 'user', 'amount', 'status']);
+        const filtered = searchTable(e.target.value, penaltiesData, ['id', 'user', 'book','amount', 'status']);
         rerenderTable('table-fines', tableConfig, filtered, window.openEditFineModal);
     });
 };
@@ -183,28 +182,57 @@ window.setupMovementSearch = function (allMoviments) {
 
 window.setupBooksSearch = function (allBooks) {
     const tableConfig = {
-        headers: ['ID', 'Livro', 'Autores', 'Genero'],
+        headers: ['ID', 'Livro', 'Autores', 'Gênero'],
         columnConfig: {
-              id: {
+            id: {
                 width: '70px'
             },
+            authors: {
+                render: (cell, valuesArray) => {
+                    cell.innerHTML = valuesArray.map(author => 
+                        `<span class="db-badge db-badge--espera">${author}</span>`
+                    ).join(' ');
+                }
+            },
+            genders: {
+                render: (cell, valuesArray) => {
+                    cell.innerHTML = valuesArray.map(gender => 
+                        `<span class="db-badge db-badge--analise">${gender}</span>`
+                    ).join(' ');
+                }
+            }
         }
     };
 
-    const booksData = allBooks.map(r => ({
-        id: r.bookid,
-        name: r.title,
-        authors: r.authors.map(a => a.name).join(', ') || 'autor não identificado'.toUpperCase(),
-        genders: Array.isArray(r.genders)
-            ? r.genders.map(g => g.name || g).join(', ')
-            : r.genders || ''
-    }));
+    const booksData = allBooks.map(r => {
+        const authorsList = r.authors && r.authors.length > 0 
+            ? r.authors.map(a => a.name.toUpperCase()) 
+            : ['AUTOR NÃO IDENTIFICADO'];
+
+        const rawGenders = Array.isArray(r.genders)
+            ? r.genders.map(g => g.name || g)
+            : (r.genders ? r.genders.split(',') : []);
+
+        const gendersList = rawGenders.length > 0
+            ? rawGenders.map(g => String(g).trim().toUpperCase())
+            : ['SEM GÊNERO'];
+
+        return {
+            id: r.bookid,
+            name: r.title.toUpperCase(),
+            authors: authorsList,
+            genders: gendersList,
+            _search_authors: authorsList.join(' '),
+            _search_genders: gendersList.join(' ')
+        };
+    });
 
     const input = document.getElementById('search-books');
     if (!input) return;
 
     input.addEventListener('input', e => {
-        const filtered = searchTable(e.target.value, booksData, ['id', 'name', 'authors', 'genders']);
+        const filtered = searchTable(e.target.value, booksData, ['id', 'name', '_search_authors', '_search_genders']);
         rerenderTable('table-books', tableConfig, filtered, window.openEditBookModal);
     });
 };
+

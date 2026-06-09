@@ -75,7 +75,16 @@ var allFines = await api.getAllPenalties();
 var allBooks = await api.getAllBooks();
 
 
-
+function badgeClass(status) {
+    const map = {
+        ATIVO:      'db-badge--ativo',
+        ATRASADO:   'db-badge--atrasado',
+        FINALIZADO: 'db-badge--finalizado',
+        EM_ESPERA:  'db-badge--espera',
+        ANALISE:    'db-badge--analise',
+    };
+    return map[status] || 'db-badge--default';
+}
 
 function renderTable({
 idHtmlElement,
@@ -208,6 +217,13 @@ const loanByUserConfig = {
 
 const loanTableConfig = {
     headers: ['ID', 'Usuário', 'Livro', 'Data de Empréstimo', 'Data de Devolução', 'Status'],
+    columnConfig:{
+        status:{
+            render:(cell,value) =>{
+              cell.innerHTML = `<span class="db-badge ${badgeClass(value)}">${value}</span>`
+            }
+        }
+    },
     rows: allLoans.map(r => ({
         id: r.id,
         user: r.user.name.toUpperCase(),
@@ -223,15 +239,21 @@ const finesTableConfig = {
     columnConfig: {
         amount: {
             render: (cell, value) => {
-                cell.innerHTML = 'R$ ' + value;
+               (value == 0.0) ? cell.innerHTML= '||' : cell.innerHTML = `<span class="db-badge ${badgeClass(value)}">R$${value}</span>` ;
+            }
+        },
+        status:{
+            render:(cell,value) =>{
+              cell.innerHTML = `<span class="db-badge ${badgeClass(value)}">${value}</span>`
             }
         }
+
     },
     rows: allFines.map(r => ({
         id: r.penaltyId,
         user: r.userName.toUpperCase(),
         book: r.bookName.toUpperCase(),
-        amount: r.amount || 'sem valor',
+        amount: r.amount || 0.0,
         penaltyDate: r.penaltyDate ? dateFormatter.format(new Date(r.penaltyDate)) : 'sem data'.toUpperCase(),
         returnDateLoan: r.returnLoanDate && r.statusPenalty == "PAGO" 
         ? dateFormatter.format(new Date(r.returnLoanDate)) 
@@ -243,6 +265,13 @@ const finesTableConfig = {
 
 const stockTableConfig = {
     headers: ['ID', 'Livro', 'Autor', 'Quantidade'],
+    columnConfig:{
+        author:{
+            render:(cell,value) => {
+                 cell.innerHTML = `<span class="db-badge db-badge--espera ">${value}</span>`
+            }
+        }
+    },
     rows: allStock.map(r => ({
         id: r.stockId,
         _bookId: r.book.bookId ?? r.book.bookid ?? r.id,
@@ -253,13 +282,39 @@ const stockTableConfig = {
 };
 
 const booksTableConfig = {
-    headers: ['ID', 'Livro', 'Autores', 'Genero'],
-    rows: allBooks.map(r => ({
-        id: r.bookid,
-        title: r.title.toUpperCase(),
-        authors: r.authors.map(a => a.name.toUpperCase()).join(',') || 'autor não identificado'.toUpperCase(),
-        genders: r.genders.map(g => g.name || g).join(', ') || 'Sem Gênero'.toUpperCase()
-    }))
+    headers: ['ID', 'Livro', 'Autores', 'Gênero'],
+    columnConfig: {
+        authors: {
+            render: (cell, valuesArray) => {
+                cell.innerHTML = valuesArray.map(author => 
+                    `<span class="db-badge db-badge--espera">${author}</span>`
+                ).join(' ');
+            }
+        },
+        genders: {
+            render: (cell, valuesArray) => {
+                cell.innerHTML = valuesArray.map(gender => 
+                    `<span class="db-badge db-badge--analise">${gender}</span>`
+                ).join(' ');
+            }
+        }
+    },
+    rows: allBooks.map(r => {
+        const authorsList = r.authors.length > 0 
+            ? r.authors.map(a => a.name.toUpperCase()) 
+            : ['AUTOR NÃO IDENTIFICADO'];
+
+        const gendersList = r.genders.length > 0 
+            ? r.genders.map(g => (g.name || g).toUpperCase()) 
+            : ['SEM GÊNERO'];
+
+        return {
+            id: r.bookid,
+            title: r.title.toUpperCase(),
+            authors: authorsList,
+            genders: gendersList
+        };
+    })
 };
 
 const movimentTableConfig = {
@@ -869,7 +924,7 @@ window.openEditLoanModal = function (loanData, index, rowElement) {
 window.openEditFineModal = function (fineData, index, rowElement) {
     const uid = `modal-edit-fine-${fineData.id}`;
 
-    const FINE_STATUSES = ['PENDENTE', 'PAGO'];
+    const FINE_STATUSES = ['PENDENTE','ANALISE' ,'PAGO'];
 
     const statusOptions = FINE_STATUSES.map(s =>
         `<option value="${s}" ${fineData.status === s ? 'selected' : ''}>${s}</option>`
