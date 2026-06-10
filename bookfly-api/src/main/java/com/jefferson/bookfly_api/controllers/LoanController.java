@@ -7,14 +7,20 @@ import com.jefferson.bookfly_api.models.Moviment;
 import com.jefferson.bookfly_api.models.StockBook;
 import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.service.LoanService;
+import com.jefferson.bookfly_api.service.PdfService;
+import com.jefferson.bookfly_api.strategy.pdf.LoanPdfStrategy;
+import com.jefferson.bookfly_api.strategy.pdf.MovimentPdfStrategy;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +32,7 @@ import java.util.Map;
 public class LoanController {
 
     private final LoanService loanService;
+    private final PdfService pdfService;
 
     @Operation(summary = "Listar todos os empréstimos")
     @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
@@ -175,4 +182,34 @@ public class LoanController {
         return ResponseEntity.noContent().build();
     }
 
+
+
+    @Operation(summary = "Exportar PDF")
+    @ApiResponse(
+            responseCode = "200",
+            description = "PDF gerado com sucesso"
+    )
+    @GetMapping(
+            value = "/pdf",
+            produces = MediaType.APPLICATION_PDF_VALUE
+    )
+    public void exportPDF(HttpServletResponse response)
+            throws IOException {
+        response.setContentType("application/pdf");
+        response.setHeader(
+                "Content-Disposition",
+                "attachment; filename=relatorioEmprestimos.pdf"
+        );
+        List<Loan> loans = loanService.getAllLoans();
+
+        LoanPdfStrategy strategy = new LoanPdfStrategy();
+
+        pdfService.export(
+                response,
+                loans,
+                strategy
+        );
+
+
+    }
 }

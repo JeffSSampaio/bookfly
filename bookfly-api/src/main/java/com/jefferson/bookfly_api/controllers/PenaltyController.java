@@ -4,16 +4,20 @@ import com.jefferson.bookfly_api.dto.penalty.PenaltyDetail;
 import com.jefferson.bookfly_api.dto.penalty.PenaltyRequest;
 import com.jefferson.bookfly_api.dto.penalty.PenaltyUpdateRequest;
 import com.jefferson.bookfly_api.models.Penalty;
-import com.jefferson.bookfly_api.service.LoanService;
+import com.jefferson.bookfly_api.service.PdfService;
 import com.jefferson.bookfly_api.service.PenaltyService;
+import com.jefferson.bookfly_api.strategy.pdf.PenaltyPdfStrategy;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -23,6 +27,7 @@ import java.util.List;
 public class PenaltyController {
 
     private final PenaltyService penaltyService;
+    private final PdfService pdfService;
 
     @Operation(summary = "Criar penalidade")
     @ApiResponses({
@@ -76,6 +81,36 @@ public class PenaltyController {
     public ResponseEntity<Void> deletePenalty(@PathVariable Long id , Long userId ){
         penaltyService.removePenalty(id,userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Exportar PDF")
+    @ApiResponse(
+            responseCode = "200",
+            description = "PDF gerado com sucesso"
+    )
+    @GetMapping(
+            value = "/pdf",
+            produces = MediaType.APPLICATION_PDF_VALUE
+    )
+    public void exportPDF(HttpServletResponse response)
+            throws IOException {
+
+        response.setContentType("application/pdf");
+        response.setHeader(
+                "Content-Disposition",
+                "attachment; filename=relatorioMultas.pdf"
+        );
+
+        List<Penalty> penalties = penaltyService.getAllPenaltys();
+
+        PenaltyPdfStrategy strategy = new PenaltyPdfStrategy();
+
+        pdfService.export(
+                response,
+                penalties,
+                strategy
+        );
+
     }
 
 }

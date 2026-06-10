@@ -5,26 +5,31 @@ import com.jefferson.bookfly_api.dto.book.BookRequest;
 import com.jefferson.bookfly_api.dto.book.BookUpdateRequest;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
-import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.service.BookService;
+import com.jefferson.bookfly_api.service.PdfService;
+import com.jefferson.bookfly_api.strategy.pdf.BookPdfStrategy;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
-@Tag(name = "Books", description = "API para gerenciamento de livros")
+@Tag(name = "Livros", description = "API para gerenciamento de livros")
 public class BookController {
     private final BookService bookService;
+    private final PdfService pdfService;
 
     @Operation(summary = "Criar um novo livro")
     @ApiResponses(value = {
@@ -140,6 +145,31 @@ public class BookController {
     public ResponseEntity<Void> deletedBook(@PathVariable Long id, Long userId){
         bookService.removeBook(id,userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Exportar PDF")
+    @ApiResponse(
+            responseCode = "200",
+            description = "PDF gerado com sucesso"
+    )
+    @GetMapping(
+            value = "/pdf",
+            produces = MediaType.APPLICATION_PDF_VALUE
+    )
+    public void exportPDF(HttpServletResponse response)
+            throws IOException {
+        response.setContentType("application/pdf");
+        response.setHeader(
+                "Content-Disposition",
+                "attachment; filename=relatorioLivros.pdf"
+        );
+        List<Book> books = bookService.findAll();
+
+        pdfService.export(
+                response,
+                books,
+                new BookPdfStrategy()
+        );
     }
 
 }

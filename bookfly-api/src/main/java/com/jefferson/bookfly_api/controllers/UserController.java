@@ -4,17 +4,22 @@ import com.jefferson.bookfly_api.dto.user.UserRequest;
 import com.jefferson.bookfly_api.dto.user.UserRequestUpdate;
 import com.jefferson.bookfly_api.dto.user.UserSummary;
 import com.jefferson.bookfly_api.models.User;
+import com.jefferson.bookfly_api.service.PdfService;
 import com.jefferson.bookfly_api.service.UserService;
+import com.jefferson.bookfly_api.strategy.pdf.UserPdfStrategy;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -24,6 +29,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final PdfService pdfService;
 
     @Operation(summary = "Listar todos os usuários")
     @ApiResponses(value = {
@@ -100,5 +106,30 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Exportar PDF")
+    @ApiResponse(
+            responseCode = "200",
+            description = "PDF gerado com sucesso"
+    )
+    @GetMapping(
+            value = "/pdf",
+            produces = MediaType.APPLICATION_PDF_VALUE
+    )
+    public void exportPDF(HttpServletResponse response)
+            throws IOException {
+        List<User> users = userService.getAllUsers();
+        response.setContentType("application/pdf");
+        response.setHeader(
+                "Content-Disposition",
+                "attachment; filename=relatorioUsuarios.pdf"
+        );
+        UserPdfStrategy strategy = new UserPdfStrategy();
+        pdfService.export(
+                response,
+                users,
+                strategy
+        );
     }
 }

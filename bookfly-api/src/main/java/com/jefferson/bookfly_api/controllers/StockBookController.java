@@ -2,26 +2,31 @@ package com.jefferson.bookfly_api.controllers;
 
 import com.jefferson.bookfly_api.dto.stockbook.*;
 import com.jefferson.bookfly_api.models.StockBook;
-import com.jefferson.bookfly_api.models.User;
+import com.jefferson.bookfly_api.service.PdfService;
 import com.jefferson.bookfly_api.service.StockBookService;
+import com.jefferson.bookfly_api.strategy.pdf.StockBookPdfStrategy;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/stock")
 @RequiredArgsConstructor
-@Tag(name = "Stock", description = "Gerenciamento do estoque de livros")
+@Tag(name = "Estoque", description = "Gerenciamento do estoque de livros")
 public class StockBookController {
 
     private final StockBookService stockBookService;
+    private final PdfService pdfService;
 
     @Operation(summary = "Listar todos os livros no estoque")
     @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
@@ -105,6 +110,34 @@ public class StockBookController {
     public ResponseEntity<Void> deleteBookFromStock(@PathVariable Long id,Long userId){
         stockBookService.removeBookOnStock(id,userId);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @Operation(summary = "Exportar PDF")
+    @ApiResponse(
+            responseCode = "200",
+            description = "PDF gerado com sucesso"
+    )
+    @GetMapping(
+            value = "/pdf",
+            produces = MediaType.APPLICATION_PDF_VALUE
+    )
+    public void exportPDF(HttpServletResponse response)
+            throws IOException {
+
+        response.setContentType("application/pdf");
+        response.setHeader(
+                "Content-Disposition",
+                "attachment; filename=relatorioEstoque.pdf"
+        );
+        List<StockBook> stockBooks = stockBookService.findAll();
+        StockBookPdfStrategy strategy = new StockBookPdfStrategy();
+        pdfService.export(
+                response,
+                stockBooks,
+                strategy
+        );
+
     }
 
 }

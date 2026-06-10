@@ -7,10 +7,15 @@ import com.jefferson.bookfly_api.dto.moviment.MovimentUpdateRequest;
 import com.jefferson.bookfly_api.models.Moviment;
 import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.service.MovimentService;
+import com.jefferson.bookfly_api.service.PdfService;
+import com.jefferson.bookfly_api.strategy.pdf.MovimentPdfStrategy;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +29,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 public class MovimentController {
 
     private final MovimentService movimentService;
+    private final PdfService pdfService;
 
     @Operation(summary = "Listar todas as movimentações")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Movimentações retornadas com sucesso")})
@@ -91,4 +97,34 @@ public class MovimentController {
         movimentService.deleteMoviment(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Exportar PDF")
+    @ApiResponse(
+            responseCode = "200",
+            description = "PDF gerado com sucesso"
+    )
+    @GetMapping(
+            value = "/pdf",
+            produces = MediaType.APPLICATION_PDF_VALUE
+    )
+    public void exportPDF(HttpServletResponse response)
+            throws IOException {
+        response.setContentType("application/pdf");
+        response.setHeader(
+                "Content-Disposition",
+                "attachment; filename=relatorioMovimentacoes.pdf"
+        );
+        List<Moviment> moviments = movimentService.getAllMoviments();
+
+        MovimentPdfStrategy strategy = new MovimentPdfStrategy();
+
+        pdfService.export(
+                response,
+                moviments,
+                strategy
+        );
+
+
+    }
+
 }

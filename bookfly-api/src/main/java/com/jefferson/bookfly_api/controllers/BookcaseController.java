@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/bookcases")
 @RequiredArgsConstructor
-@Tag(name = "Bookcases", description = "Gerenciamento de estantes de livros")
+@Tag(name = "Estantes", description = "Gerenciamento de estantes de livros")
 public class BookcaseController {
 
     private final BookcaseService bookcaseService;
