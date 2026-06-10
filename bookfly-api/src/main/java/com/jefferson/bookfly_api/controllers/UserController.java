@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.controllers;
 
+import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.dto.user.UserRequest;
 import com.jefferson.bookfly_api.dto.user.UserRequestUpdate;
 import com.jefferson.bookfly_api.dto.user.UserSummary;
@@ -117,6 +118,7 @@ public class UserController {
             value = "/pdf",
             produces = MediaType.APPLICATION_PDF_VALUE
     )
+    @Auditable(action = "EXPORTAR_RELATÓRIO_SISTEMA", details = "EXPORTAR RELATORIO EM PDF")
     public void exportPDF(HttpServletResponse response)
             throws IOException {
         List<User> users = userService.getAllUsers();

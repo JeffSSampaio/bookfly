@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.controllers;
 
+import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.dto.stockbook.*;
 import com.jefferson.bookfly_api.models.StockBook;
 import com.jefferson.bookfly_api.service.PdfService;
@@ -122,6 +123,7 @@ public class StockBookController {
             value = "/pdf",
             produces = MediaType.APPLICATION_PDF_VALUE
     )
+    @Auditable(action = "EXPORTAR_RELATÓRIO_SISTEMA", details = "EXPORTAR RELATORIO EM PDF")
     public void exportPDF(HttpServletResponse response)
             throws IOException {
 

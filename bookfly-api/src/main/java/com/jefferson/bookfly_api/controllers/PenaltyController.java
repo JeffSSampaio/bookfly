@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.controllers;
 
+import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.dto.penalty.PenaltyDetail;
 import com.jefferson.bookfly_api.dto.penalty.PenaltyRequest;
 import com.jefferson.bookfly_api.dto.penalty.PenaltyUpdateRequest;
@@ -92,6 +93,7 @@ public class PenaltyController {
             value = "/pdf",
             produces = MediaType.APPLICATION_PDF_VALUE
     )
+    @Auditable(action = "EXPORTAR_RELATÓRIO_SISTEMA", details = "EXPORTAR RELATORIO EM PDF")
     public void exportPDF(HttpServletResponse response)
             throws IOException {
 
