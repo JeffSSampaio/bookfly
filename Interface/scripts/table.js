@@ -1119,3 +1119,36 @@ extraButtons
 ),
 extraButtons:[]
 });
+
+
+
+function executeBtn(btn, content, action = 'click') {
+
+    if (!btn) {
+        return;
+    }
+
+    btn.addEventListener(action, async () => {
+        try {
+            await content();
+        } catch (e) {
+            alert("Não foi Possível Executar Ação: " + e);
+        }
+    });
+}
+
+
+const btnRelStock = document.getElementById('btnRelStock');
+const btnRelBook = document.getElementById('btnRelBook');
+const btnRelMoviment = document.getElementById('btnRelMoviment');
+const btnRelPenalty = document.getElementById('btnRelPenalty');
+const btnRelLoan = document.getElementById('btnRelLoan');
+
+[
+    [btnRelBook, api.exportPdfBooks],
+    [btnRelLoan, api.exportPdfLoans],
+    [btnRelMoviment, api.exportPdfMoviment],
+    [btnRelPenalty, api.exportPdfPenalties],
+    [btnRelStock, api.exportPdfBooksStock]
+].forEach(([btn, action]) => executeBtn(btn, action));
+

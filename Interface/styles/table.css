@@ -43,3 +43,14 @@
 .db-badge--espera    { background: #fff3e0; color: #e65100; }
 .db-badge--analise   { background: #f3e5f5; color: #6a1b9a; }
 .db-badge--default   { background: #eee;    color: #555;    }
+
+.btn-icon{
+    background-color: var(--color-dark-green) !important ; 
+    padding: 2px !important ;
+    border: none !important ;
+    border-radius: 12px !important ; 
+}
+.btn-icon > img {
+    width: 20px !important ;
+    height: 20px !important ;
+}

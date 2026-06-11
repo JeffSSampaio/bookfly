@@ -43,7 +43,22 @@ const api = {
   deleteUser: (id) =>
     fetch(`${BASE_URL}/users/${id}`, { method: 'DELETE' }).then(handleResponse),
 
+  exportPdfUsers: async () => {
 
+    const response = await fetch(
+        `${BASE_URL}/users/pdf`
+    );
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'usuarios.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  },
 
   getAllAuthors: () =>
     fetch(`${BASE_URL}/authors/list`).then(handleResponse),
@@ -102,6 +117,22 @@ const api = {
   deleteBook: (id,userId) =>
     fetch(`${BASE_URL}/books/${id}?userId=${userId}`, { method: 'DELETE' }).then(handleResponse),
 
+  exportPdfBooks: async () => {
+
+    const response = await fetch(
+        `${BASE_URL}/books/pdf`
+    );
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Livros.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  },
 
   
   getAllStock: () =>
@@ -131,7 +162,23 @@ const api = {
 
   removeBookFromStock: (bookId,userId) =>
     fetch(`${BASE_URL}/stock/remove/${bookId}?userId=${userId}`, { method: 'DELETE' }).then(handleResponse),
+ 
+  exportPdfBooksStock: async () => {
 
+    const response = await fetch(
+        `${BASE_URL}/stock/pdf`
+    );
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'LivrosEstoque.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  },
 
 
   getAllLoans: () =>
@@ -184,6 +231,23 @@ const api = {
         body: JSON.stringify(newLoan)
       }).then(handleResponse), 
 
+    exportPdfLoans: async () => {
+
+    const response = await fetch(
+        `${BASE_URL}/loans/pdf`
+    );
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Emprestimos.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  },  
+
   getAllPenalties: () =>
     fetch(`${BASE_URL}/penalties/list`).then(handleResponse),
 
@@ -207,6 +271,22 @@ const api = {
           method:'DELETE',
         }).then(handleResponse),
 
+     exportPdfPenalties: async () => {
+
+    const response = await fetch(
+        `${BASE_URL}/penalties/pdf`
+    );
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Multas.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  },
 
   getAllMoviments: () =>
     fetch(`${BASE_URL}/moviments`).then(handleResponse),
@@ -232,6 +312,23 @@ updateMoviment: (id, moviment) =>
 
   deleteMoviment: (id) =>
     fetch(`${BASE_URL}/moviments/${id}`, { method: 'DELETE' }).then(handleResponse),
+
+  exportPdfMoviment: async () => {
+
+    const response = await fetch(
+        `${BASE_URL}/moviments/pdf`
+    );
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'movimentacoes.pdf';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  },
 
 
   getAllBookcases: () =>

@@ -2,7 +2,7 @@
 
 .loans-actions{
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
     align-items: center;
     flex-direction: row;
 }
@@ -24,6 +24,7 @@
     display: row; 
     border-collapse: collapse;
     border-radius: 20px;
-  
 }
+
+
 
