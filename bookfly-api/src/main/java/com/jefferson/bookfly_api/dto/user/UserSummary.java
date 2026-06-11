@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.dto.user;
 
+import com.jefferson.bookfly_api.dto.recordStatus.RecordStatusDetail;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.models.User;
 
@@ -8,7 +9,8 @@ public record UserSummary(
         String name,
         String email,
         String password,
-        Role role
+        Role role,
+        RecordStatusDetail recordStatus
 ) {
 
     public static UserSummary from(User user){
@@ -17,7 +19,8 @@ public record UserSummary(
                 user.getName(),
                 user.getEmail(),
                 user.getPassword(),
-                user.getRole()
+                user.getRole(),
+                RecordStatusDetail.from(user.getRecordStatus())
         );
     }
 }
