@@ -16,7 +16,7 @@ public record RecordStatusDetail(
         return new RecordStatusDetail(
                 recordStatus.getRecordStatusValue(),
                  recordStatus.getDateTime(),
-                UserSummary.from(recordStatus.getByUser())
+               recordStatus.getByUser() == null ? null :  UserSummary.from(recordStatus.getByUser())
         );
     }
 

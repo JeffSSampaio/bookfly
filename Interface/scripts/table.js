@@ -73,6 +73,7 @@ var allLoans = await api.getAllLoans();
 var allMovements = await api.getAllMoviments();
 var allFines = await api.getAllPenalties();
 var allBooks = await api.getAllBooks();
+var allUsers = await api.getAllUsers();
 
 
 function badgeClass(status) {
@@ -212,6 +213,19 @@ const loanByUserConfig = {
         loanDate: dateFormatter.format(new Date(r.loanDate)),
         returnDate: dateFormatter.format(new Date(r.returnDate)),
         _penalty: r.penalty.penaltyId
+    }))
+}
+console.log(allUsers)
+
+const usersTableConfig ={
+    headers:['ID','Nome', 'Email','Tipo de Usuario','Estado'],
+    rows: allUsers.map(r =>({
+        id: r.id,
+        name:r.name.toUpperCase(),
+        email: r.email,
+        role:r.role,
+        state: r.recordStatus.state,
+        _byUser: r.recordStatus.byUser
     }))
 }
 
@@ -1103,11 +1117,13 @@ deleteButton(window.openDeleteBookModal)
 ]
 });
 
+
+
 renderTable({
-idHtmlElement:'table-user-loans',
+idHtmlElement:'table-users',
 data: allLoansByUser,
-configTable: loanByUserConfig,
-searchFunction: null,
+configTable: usersTableConfig,
+searchFunction: window.setupUsersSearch ,
 onEdit: null,
 functionTable: (config, onEdit, extraButtons) =>
 window.table_with_edit(
@@ -1119,7 +1135,6 @@ extraButtons
 ),
 extraButtons:[]
 });
-
 
 
 function executeBtn(btn, content, action = 'click') {
@@ -1143,12 +1158,14 @@ const btnRelBook = document.getElementById('btnRelBook');
 const btnRelMoviment = document.getElementById('btnRelMoviment');
 const btnRelPenalty = document.getElementById('btnRelPenalty');
 const btnRelLoan = document.getElementById('btnRelLoan');
+const btnRelUser = document.getElementById('btnRelUser');
 
 [
     [btnRelBook, api.exportPdfBooks],
     [btnRelLoan, api.exportPdfLoans],
     [btnRelMoviment, api.exportPdfMoviment],
     [btnRelPenalty, api.exportPdfPenalties],
-    [btnRelStock, api.exportPdfBooksStock]
+    [btnRelStock, api.exportPdfBooksStock],
+     [btnRelUser, api.exportPdfUsers],
 ].forEach(([btn, action]) => executeBtn(btn, action));
 

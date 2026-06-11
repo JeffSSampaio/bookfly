@@ -46,6 +46,7 @@ var adminMenuLinks =[
     // "<a href='../pages/books.html'>Livros</a>",
     "<a href='../pages/StockandBooks.html'>Estoque</a>",
     // "<a href='../pages/fines.html'>Multas</a>",
+     "<a href='../pages/users.html'>Usuários</a>",
     "<a href='../pages/movements.html'>Movimentações</a>"
   
 ]

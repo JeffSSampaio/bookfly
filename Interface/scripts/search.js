@@ -180,6 +180,41 @@ window.setupMovementSearch = function (allMoviments) {
     });
 };
 
+window.setupUsersSearch = function (allUsers) {
+
+    const tableConfig = {
+        headers: ['ID', 'Nome', 'Email', 'Tipo de Usuario', 'Estado']
+    };
+
+    const usersData = allUsers.map(r => ({
+        id: r.id,
+        name: r.name.toUpperCase(),
+        email: r.email,
+        role: r.role,
+        state: r.recordStatus.state
+    }));
+
+    const input = document.getElementById('search-users');
+
+    if (!input) return;
+
+    input.addEventListener('input', e => {
+
+        const filtered = searchTable(
+            e.target.value,
+            usersData,
+            ['id', 'name', 'email', 'role', 'state']
+        );
+
+        rerenderTable(
+            'table-users',
+            tableConfig,
+            filtered,
+            null
+        );
+    });
+};
+
 window.setupBooksSearch = function (allBooks) {
     const tableConfig = {
         headers: ['ID', 'Livro', 'Autores', 'Gênero'],
