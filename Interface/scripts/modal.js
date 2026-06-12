@@ -428,6 +428,42 @@ window.openBookModalLoaned = function (userId,bookId) {
     });
 }
 
+window.openRegisterUser = async function () {
+    
+    modalForm({
+        title: "Registrar Novo Usuário",
+        fields:[
+            {label:"Nome",type:"text",name:"name"},
+            {label:"Email",type:"text",name:"email"},
+            {label:"Senha",type:"text",name:"password"},
+             {label:"Confirmar Senha",type:"text",name:"confirmPassword"},
+        ],
+        onSubmit: async (data) =>{
+                let name = data.name;
+                let email = data.email;
+                let isPasswordEquals = data.password == data.confirmPassword;
+                
+                let user = {
+                    name: name,
+                    email: email,
+                    role: 'USER',
+                    password: data.password
+                }
+                    if(!isPasswordEquals){
+                       alert('Senha diferente em um dos campos')
+                    } 
+                try{
+                     api.createUser(user);
+                     
+                }catch(e){
+                    // console.error("erro:"+e)
+                    alert("erro:"+e)
+                }
+
+        }
+    })
+}
+
 
 window.openRegisterBook= async function (){
 

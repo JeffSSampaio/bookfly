@@ -45,6 +45,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public List<User> getAllUsersActive(){
+        return userRepository.findAllActive();
+    }
+
     public User getUserById(Long id){
         return userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));

@@ -3,6 +3,8 @@ package com.jefferson.bookfly_api.strategy.pdf;
 import com.jefferson.bookfly_api.interfaces.IPdfReportStrategy;
 import com.jefferson.bookfly_api.models.User;
 
+import java.time.format.DateTimeFormatter;
+
 public class UserPdfStrategy implements IPdfReportStrategy<User> {
     @Override
     public String getTitle() {
@@ -23,12 +25,15 @@ public class UserPdfStrategy implements IPdfReportStrategy<User> {
 
     @Override
     public String[] getRow(User user) {
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         return new String[]{
                 String.valueOf(user.getId()),
                 user.getName(),
                 user.getEmail(),
+                String.valueOf(user.getRole()) ,
                 String.valueOf(user.getRecordStatus().getRecordStatusValue()),
-                String.valueOf(user.getRecordStatus().getDateTime())
+                String.valueOf(user.getRecordStatus().getDateTime().format(formatter))
         };
     }
 }

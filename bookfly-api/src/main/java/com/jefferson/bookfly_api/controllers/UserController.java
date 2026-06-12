@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -37,14 +38,16 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso")
     })
     @GetMapping("/list")
-    public ResponseEntity<List<UserSummary>> getALlUsers(){
+    public ResponseEntity<List<UserSummary>> getAllUsers(){
         return ResponseEntity.ok(
-                userService.getAllUsers()
+                userService.getAllUsersActive()
                         .stream()
                         .map(UserSummary::from)
                         .toList()
         );
     }
+
+
 
     @Operation(summary = "Buscar usuário por ID")
     @ApiResponses(value = {

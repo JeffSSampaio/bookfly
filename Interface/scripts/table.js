@@ -218,14 +218,16 @@ const loanByUserConfig = {
 console.log(allUsers)
 
 const usersTableConfig ={
-    headers:['ID','Nome', 'Email','Tipo de Usuario','Estado'],
+    headers:['ID','Nome', 'Email','Tipo de Usuario','Estado','H/T'],
     rows: allUsers.map(r =>({
         id: r.id,
         name:r.name.toUpperCase(),
         email: r.email,
         role:r.role,
-        state: r.recordStatus.state,
-        _byUser: r.recordStatus.byUser
+        recordStatus: r.recordStatus,
+        recordDateTime: r.recordDateTime
+    ? dateFormatter.format(new Date(r.recordDateTime))
+    : "-"  ,
     }))
 }
 
@@ -636,6 +638,15 @@ window.openDeleteStockModal = function (stockData) {
     });
 };
 
+window.openDeleteUser = function (userData) {
+    openConfirmDeleteModal({
+        uid: `modal-delete-stock-${userData.id}`,
+        title: `Remover Usuário ID°${userData.id}`,
+        message: `Tem certeza que deseja remover <strong>${userData.name}</strong> do estoque? Esta ação não pode ser desfeita.`,
+        onConfirm: () => api.deleteUser(userData.id)
+    });
+};
+
 
 
 window.openEditMoviment = async function (movimentData, index, rowElement) {
@@ -752,6 +763,72 @@ window.openEditStockModal = function (stockData, index, rowElement) {
                 await api.updateStockQtd(stockData._bookId, loggedUser.id, diference, description);
             }
             alert('Estoque atualizado com sucesso!');
+            modal.remove();
+            location.reload();
+        } catch (e) {
+            alert('Erro ao atualizar: ' + (e.message || e));
+        }
+    });
+
+    document.getElementById(`btn-cancelar-${uid}`).addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+};
+
+
+
+window.openEditUser = function (userData, index, rowElement) {
+    const uid = `modal-edit-stock-${userData.id}`;
+
+     const USER_ROLE = ['USER','ADMIN'];
+
+    const statusOptions = USER_ROLE.map(s =>
+        `<option value="${s}" >${s}</option>`
+    ).join('');
+
+    const modalHTML = `
+    <div class="modal" id="${uid}">
+        <div class="c-modal ">
+                <div class="modal-header">
+                <h1 class="t-modal">Editar Usuario N°${userData.id}</h1>
+                </div>
+                <div class="f-input-modal">
+                    <label>Nome do Usuario</label>
+                    <input type="text" value="${userData.name}" id="nome-nova-${userData.id}" ">
+                </div>
+
+                 <div class="f-input-modal">
+                    <label>Email do Usuario</label>
+                    <input type="text" value="${userData.email}" id="email-nova-${userData.id}">
+                </div>
+                <div class="f-input-modal ">
+                <label>Papel do Usuário</label>
+                <select id="status-${uid}" class="select-user"> >${statusOptions}</select>
+                </div>
+               
+                <div class="c-modal-btn">
+                    <button type="button" class="closeBtn" id="btn-cancelar-${uid}">Cancelar</button>
+                    <button type="button" class="confirmBtn" id="btn-salvar-${uid}">Salvar</button>
+                </div>
+         
+        </div>
+    </div>`;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    const modal = document.getElementById(uid);
+
+    document.getElementById(`btn-salvar-${uid}`).addEventListener('click', async () => {
+        const newName = document.getElementById(`nome-nova-${userData.id}`).value;
+        const newEmail = document.getElementById(`email-nova-${userData.id}`).value;
+        const newRole = document.getElementById(`status-${uid}`).value;
+
+        try {
+            const user = {
+                name: newName,
+                email: newEmail,
+                role: newRole
+            };
+            api.updateUser(userData.id,user)
+            alert('Usuário atualizado com sucesso!');
             modal.remove();
             location.reload();
         } catch (e) {
@@ -1012,6 +1089,8 @@ window.openEditFineModal = function (fineData, index, rowElement) {
     })
  }
 
+
+
 const deleteButton = (onDelete) => ({
     icon: '/Interface/assets/iconDeleteRed.svg',
     alt: 'Excluir',
@@ -1121,19 +1200,20 @@ deleteButton(window.openDeleteBookModal)
 
 renderTable({
 idHtmlElement:'table-users',
-data: allLoansByUser,
+data: allUsers,
 configTable: usersTableConfig,
 searchFunction: window.setupUsersSearch ,
-onEdit: null,
+onEdit: window.openEditUser ,
 functionTable: (config, onEdit, extraButtons) =>
 window.table_with_edit(
 config,
 onEdit,
 '16px',
 '16px',
-extraButtons
+extraButtons,
+(rowData) => rowData.recordStatus !== 'DELETED'
 ),
-extraButtons:[]
+extraButtons:[deleteButton(window.openDeleteUser)]
 });
 
 

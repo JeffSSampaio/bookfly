@@ -1,4 +1,3 @@
-
 'use strict';
 
 function searchTable(searchTerm, tableData, fieldsToSearch) {
@@ -13,13 +12,45 @@ function searchTable(searchTerm, tableData, fieldsToSearch) {
         })
     );
 }
+const deleteButton = (onDelete) => ({
+    icon: '/Interface/assets/iconDeleteRed.svg',
+    alt: 'Excluir',
+    bgColor: 'var(--color-red-smooth)',
+    hoverColor: 'var(--color-red-smooth-bk)',
+    onClick: (rowData) => onDelete(rowData)
+});
 
-function rerenderTable(containerId, tableConfig, filtered, onEdit) {
+const activateLoanBtn = (onActivate) => ({
+    icon:'/Interface/assets/iconPlus.svg',
+    alt: 'Ativar',
+    bgColor:'var(--color-dark-green)',
+    show: (rowData) => rowData.status === 'EM_ESPERA',
+    hoverColor:'var(--color-mid-green)',
+    onClick: (rowData) => onActivate(rowData) 
+})
+
+window.openDeleteUser = function (userData) {
+    openConfirmDeleteModal({
+        uid: `modal-delete-stock-${userData.id}`,
+        title: `Remover Usuário ID°${userData.id}`,
+        message: `Tem certeza que deseja remover <strong>${userData.name}</strong> do estoque? Esta ação não pode ser desfeita.`,
+        onConfirm: () => api.deleteUser(userData.id)
+    });
+};
+
+
+function rerenderTable(containerId, tableConfig, filtered, onEdit, extraButtons=[]) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
     const tableElement = onEdit
-    ? window.table_with_edit({ ...tableConfig, rows: filtered }, onEdit)
+    ? window.table_with_edit(
+        { ...tableConfig, rows: filtered },
+        onEdit,
+        '16px',
+        '16px',
+        extraButtons
+      )
     : window.table({ ...tableConfig, rows: filtered });
     
     container.replaceChildren(tableElement);
@@ -181,17 +212,24 @@ window.setupMovementSearch = function (allMoviments) {
 };
 
 window.setupUsersSearch = function (allUsers) {
-
+  const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
+        dateStyle: 'short',
+        timeStyle: 'short',
+        timeZone: 'America/Sao_Paulo'
+    });
     const tableConfig = {
-        headers: ['ID', 'Nome', 'Email', 'Tipo de Usuario', 'Estado']
+        headers: ['ID', 'Nome', 'Email', 'Tipo de Usuario', 'Estado','H/T']
     };
 
-    const usersData = allUsers.map(r => ({
+    const usersData = allUsers.map(r =>({
         id: r.id,
-        name: r.name.toUpperCase(),
+        name:r.name.toUpperCase(),
         email: r.email,
-        role: r.role,
-        state: r.recordStatus.state
+        role:r.role,
+        recordStatus: r.recordStatus,
+        recordDateTime: r.recordDateTime
+    ? dateFormatter.format(new Date(r.recordDateTime))
+    : "-"  ,
     }));
 
     const input = document.getElementById('search-users');
@@ -210,7 +248,8 @@ window.setupUsersSearch = function (allUsers) {
             'table-users',
             tableConfig,
             filtered,
-            null
+            window.openEditUser,
+            [deleteButton(window.openDeleteUser)]
         );
     });
 };

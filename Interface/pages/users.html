@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/Interface/styles/modal.css">
     <link rel="stylesheet" href="/Interface/styles/modal-movements.css">
     <link rel="stylesheet" href="/Interface/styles/table.css">
+    <link rel="stylesheet" href="/Interface/styles/modal-user.css">
     <link rel="stylesheet" href="/Interface/styles/modal-stock.css">
     <link rel="stylesheet" href="/Interface/styles/table-movements.css">
     <link rel="stylesheet" href="/Interface/styles/book-register.css">
@@ -56,6 +57,9 @@
                   <div class="search-input-container search-movements">
                         <input type="search" name="" id="search-users" placeholder="Buscar">
                     </div>
+                <button class="btn-add" onclick="openRegisterUser()">
+                Registrar
+                </button>
                 </div>
            
             <div id="table-users"></div>
@@ -66,7 +70,7 @@
     </div>
 
         <script src="/Interface/scripts/authGuard.js"></script>
-        <script src="/Interface/scripts/search.js"></script>
+        <script type="module" src="/Interface/scripts/search.js"></script>
         <script type="module" src="/Interface/scripts/table.js"></script>
 <script src="/Interface/scripts/h-navbar.js"></script>
 <script type="module" src="/Interface/scripts/modal.js"></script>

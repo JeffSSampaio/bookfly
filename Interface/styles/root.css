@@ -82,3 +82,25 @@ footer {
   margin-top: auto;
 }
 
+
+.btn-add {
+    margin: 0 5px;
+    padding: 10px 10px;
+    font-weight: 700;
+    border-radius: 20px;
+    border: none;
+    color: var(--color-mid-green);
+    background-color: var(--color-ivory);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transform: scale(1);
+    transition: background-color 1s ease-out,
+                transform 1s ease-out;
+}
+
+.btn-add:hover{
+    cursor: pointer;
+    background-color:  var(--color-cream);
+    transform: scale(0.98);
+    transition: all 0.5s ease-in;
+
+}
