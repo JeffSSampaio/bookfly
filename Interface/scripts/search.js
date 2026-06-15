@@ -12,31 +12,8 @@ function searchTable(searchTerm, tableData, fieldsToSearch) {
         })
     );
 }
-const deleteButton = (onDelete) => ({
-    icon: '/Interface/assets/iconDeleteRed.svg',
-    alt: 'Excluir',
-    bgColor: 'var(--color-red-smooth)',
-    hoverColor: 'var(--color-red-smooth-bk)',
-    onClick: (rowData) => onDelete(rowData)
-});
 
-const activateLoanBtn = (onActivate) => ({
-    icon:'/Interface/assets/iconPlus.svg',
-    alt: 'Ativar',
-    bgColor:'var(--color-dark-green)',
-    show: (rowData) => rowData.status === 'EM_ESPERA',
-    hoverColor:'var(--color-mid-green)',
-    onClick: (rowData) => onActivate(rowData) 
-})
 
-window.openDeleteUser = function (userData) {
-    openConfirmDeleteModal({
-        uid: `modal-delete-stock-${userData.id}`,
-        title: `Remover Usuário ID°${userData.id}`,
-        message: `Tem certeza que deseja remover <strong>${userData.name}</strong> do estoque? Esta ação não pode ser desfeita.`,
-        onConfirm: () => api.deleteUser(userData.id)
-    });
-};
 
 
 function rerenderTable(containerId, tableConfig, filtered, onEdit, extraButtons=[]) {
@@ -74,9 +51,6 @@ window.setupLoanSearch = function (allLoans) {
         timeZone: 'America/Sao_Paulo'
     });
 
-    const tableConfig = {
-        headers: ['ID', 'Usuário', 'Livro', 'Data de Empréstimo', 'Data de Devolução', 'Status']
-    };
 
     const loansData = allLoans.map(r => ({
         id: r.id,
@@ -92,7 +66,7 @@ window.setupLoanSearch = function (allLoans) {
 
     input.addEventListener('input', e => {
         const filtered = searchTable(e.target.value, loansData, ['id', 'user', 'book', 'status']);
-        rerenderTable('table-loans', tableConfig, filtered, window.openEditLoanModal);
+        rerenderTable('table-loans', window.loanTableConfig, filtered, window.openEditLoanModal);
     });
 };
 
@@ -103,9 +77,6 @@ window.setupPenaltySearch = function (allPenalties) {
         timeZone: 'America/Sao_Paulo'
     });
 
-    const tableConfig = {
-        headers: ['ID', 'Usuário', 'Livro','Valor da Multa', 'Data de Multa', 'Data de Entrega do Livro', 'Status']
-    };
 
     const penaltiesData = allPenalties.map(r => ({
         id: r.penaltyId,
@@ -124,14 +95,11 @@ window.setupPenaltySearch = function (allPenalties) {
 
     input.addEventListener('input', e => {
         const filtered = searchTable(e.target.value, penaltiesData, ['id', 'user', 'book','amount', 'status']);
-        rerenderTable('table-fines', tableConfig, filtered, window.openEditFineModal);
+        rerenderTable('table-fines', window.finesTableConfig, filtered, window.openEditFineModal);
     });
 };
 
 window.setupStockSearch = function (allStockBook) {
-    const tableConfig = {
-        headers: ['ID', 'Livro', 'Autor', 'Quantidade']
-    };
 
     const stockData = allStockBook.map(r => ({
         id: r.stockId,
@@ -146,7 +114,11 @@ window.setupStockSearch = function (allStockBook) {
 
     input.addEventListener('input', e => {
         const filtered = searchTable(e.target.value, stockData, ['id', 'title', 'author', 'qtd']);
-        rerenderTable('table-stock', tableConfig, filtered, window.openEditStockModal);
+        rerenderTable('table-stock',
+             window.stockTableConfig,
+             filtered,
+             window.openEditStockModal,
+             [window.deleteButton(window.openDeleteStockModal)]);
     });
 };
 
@@ -157,33 +129,7 @@ window.setupMovementSearch = function (allMoviments) {
         timeZone: 'America/Sao_Paulo'
     });
 
-    const tableConfig = {
-        headers: ['ID', 'Data de Criação', 'Usuário', 'Tipo do Usuário', 'Livro', 'Quantidade', 'Tipo', 'Descrição'],
-        columnConfig: {
-            description: {
-                whiteSpace: 'normal',
-                wordBreak: 'break-word',
-                maxWidth: '300px',
-                textAlign: 'justify'
-            },
-            id: {
-                width: '70px'
-            },
-            type: {
-                render: (cell, value) => {
-                    const isEntrada = value.includes('ENTRADA');
-                    cell.innerHTML = `<span style="background:${isEntrada ? '#e1f5ee' : '#fcebeb'};color:${isEntrada ? '#0f6e56' : '#a32d2d'};font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;display:inline-block;">${value}</span>`;
-                }
-            },
-            qtd: {
-                render: (cell, value) => {
-                    const isPositive = String(value).startsWith('+');
-                    cell.textContent = value;
-                    cell.style.color = isPositive ? '#0f6e56' : '#a32d2d';
-                }
-            }
-        }
-    };
+
 
     const movementsData = allMoviments.map(r => ({
         id: r.movimentId,
@@ -207,7 +153,7 @@ window.setupMovementSearch = function (allMoviments) {
             movementsData,
             ['id', 'createdTime', 'user', 'userType', 'type', 'book', 'qtd', 'description']
         );
-        rerenderTable('table-movements', tableConfig, filtered, window.openEditMoviment);
+        rerenderTable('table-movements', window.movimentTableConfig, filtered, window.openEditMoviment);
     });
 };
 
@@ -217,9 +163,7 @@ window.setupUsersSearch = function (allUsers) {
         timeStyle: 'short',
         timeZone: 'America/Sao_Paulo'
     });
-    const tableConfig = {
-        headers: ['ID', 'Nome', 'Email', 'Tipo de Usuario', 'Estado','H/T']
-    };
+ 
 
     const usersData = allUsers.map(r =>({
         id: r.id,
@@ -246,37 +190,16 @@ window.setupUsersSearch = function (allUsers) {
 
         rerenderTable(
             'table-users',
-            tableConfig,
+            window.usersTableConfig,
             filtered,
             window.openEditUser,
-            [deleteButton(window.openDeleteUser)]
+            [window.deleteButton(window.openDeleteUser)]
         );
     });
 };
 
 window.setupBooksSearch = function (allBooks) {
-    const tableConfig = {
-        headers: ['ID', 'Livro', 'Autores', 'Gênero'],
-        columnConfig: {
-            id: {
-                width: '70px'
-            },
-            authors: {
-                render: (cell, valuesArray) => {
-                    cell.innerHTML = valuesArray.map(author => 
-                        `<span class="db-badge db-badge--espera">${author}</span>`
-                    ).join(' ');
-                }
-            },
-            genders: {
-                render: (cell, valuesArray) => {
-                    cell.innerHTML = valuesArray.map(gender => 
-                        `<span class="db-badge db-badge--analise">${gender}</span>`
-                    ).join(' ');
-                }
-            }
-        }
-    };
+   
 
     const booksData = allBooks.map(r => {
         const authorsList = r.authors && r.authors.length > 0 
@@ -306,7 +229,12 @@ window.setupBooksSearch = function (allBooks) {
 
     input.addEventListener('input', e => {
         const filtered = searchTable(e.target.value, booksData, ['id', 'name', '_search_authors', '_search_genders']);
-        rerenderTable('table-books', tableConfig, filtered, window.openEditBookModal);
+        rerenderTable(
+            'table-books',
+            window.booksTableConfig, 
+            filtered, 
+            window.openEditBookModal,
+            [window.deleteButton(window.openDeleteBookModal)]);
     });
 };
 

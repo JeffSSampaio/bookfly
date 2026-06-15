@@ -215,7 +215,7 @@ const loanByUserConfig = {
         _penalty: r.penalty.penaltyId
     }))
 }
-console.log(allUsers)
+
 
 const usersTableConfig ={
     headers:['ID','Nome', 'Email','Tipo de Usuario','Estado','H/T'],
@@ -373,6 +373,14 @@ const movimentTableConfig = {
         description: r.description.toUpperCase() || ''
     }))
 };
+
+
+window.loanTableConfig = loanTableConfig;
+window.usersTableConfig = usersTableConfig;
+window.booksTableConfig = booksTableConfig;
+window.stockTableConfig = stockTableConfig;
+window.movimentTableConfig = movimentTableConfig;
+window.finesTableConfig = finesTableConfig;
 
 window.table = function (tableData) {
     let container = document.createElement('div');
@@ -1091,7 +1099,7 @@ window.openEditFineModal = function (fineData, index, rowElement) {
 
 
 
-const deleteButton = (onDelete) => ({
+window.deleteButton = (onDelete) => ({
     icon: '/Interface/assets/iconDeleteRed.svg',
     alt: 'Excluir',
     bgColor: 'var(--color-red-smooth)',
@@ -1099,7 +1107,7 @@ const deleteButton = (onDelete) => ({
     onClick: (rowData) => onDelete(rowData)
 });
 
-const activateLoanBtn = (onActivate) => ({
+window.activateLoanBtn = (onActivate) => ({
     icon:'/Interface/assets/iconPlus.svg',
     alt: 'Ativar',
     bgColor:'var(--color-dark-green)',
@@ -1158,6 +1166,7 @@ onEdit,
 '16px',
 extraButtons
 ),
+extraButtons: [deleteButton(window.openDeleteStockModal)]
 });
 
 renderTable({
