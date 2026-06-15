@@ -49,7 +49,7 @@
     border: none !important ;
     border-radius: 12px !important ; 
     transform: scale(1.0) !important;
-    transition: all 0.9s ease-out !important;
+    transition: all 0.5s ease-out !important;
 }
 .btn-icon > img {
     width: 20px !important ;
@@ -58,5 +58,5 @@
 .btn-icon:hover{
     background-color: var(--color-mid-green) !important;
     transform: scale(0.9) !important;
-    transition: all 0.9s ease-in !important;
+    transition: all 0.5s ease-in !important;
 }
