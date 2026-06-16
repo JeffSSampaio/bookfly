@@ -28,7 +28,16 @@ FROM (
                  'ADMIN',
                  'ACTIVE',
                  NOW()
+             ),
+             (
+                 'Bibliotecario',
+                 'bibliotecario@gmail.com',
+                 'bb',
+                 'BIBLIOTECARIO',
+                 'ACTIVE',
+                 NOW()
              )
+
      ) AS v(
             name,
             email,

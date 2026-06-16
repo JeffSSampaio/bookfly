@@ -16,6 +16,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -27,6 +28,66 @@ public class BookService {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final UserRepository userRepository;
+
+    @Auditable(
+            action = "REGISTRAR_LIVRO",
+            details = "REGISTRADO LIVRO NO SISTEMA"
+    )
+    public Book createBook(Book book){
+   ;
+//        Book existBookDeleted = bookRepository.findById(book.getId())
+//                .orElseThrow(() -> new NotFoundException("Esse Livro nâo existe no sistema"));
+//        if (existBookDeleted.getRecordStatus().getRecordStatusValue().equals(RecordStatusValue.DELETED) &&
+//                existBookDeleted.getId().equals(book.getId())
+//        ){
+//            existBookDeleted.getRecordStatus().setRecordStatusValue(RecordStatusValue.ACTIVE);
+//            existBookDeleted.getRecordStatus().setDateTime(LocalDateTime.now());
+//            return bookRepository.save(existBookDeleted);
+//        }
+
+        List<Author> authors = new ArrayList<>();
+
+        for (Author author : book.getAuthors()) {
+
+            Author authorExist = authorRepository
+                    .findByNameIgnoreCase(author.getName())
+                    .orElse(null);
+
+            if (authorExist != null) {
+                authors.add(authorExist);
+            } else {
+                Author newAuthor = new Author();
+                newAuthor.setName(author.getName());
+
+                Author savedAuthor = authorRepository.save(newAuthor);
+                authors.add(savedAuthor);
+            }
+        }
+        List<Gender> genders = book.getGenders()
+                .stream()
+                .distinct()
+                .toList();
+
+        String sumaryExists  = book.getSummary() !=null ? book.getSummary() : "Sem sumario";
+
+        Book bookToSave = new Book();
+        bookToSave.setTitle(book.getTitle());
+        bookToSave.setCover(book.getCover());
+        bookToSave.setSummary(sumaryExists);
+        bookToSave.setAuthors(authors);
+        bookToSave.setGenders(genders);
+
+        boolean existBook = bookRepository
+                .existsActiveByTitleAndAuthors(bookToSave.getTitle(), authors);
+
+        if (existBook){
+            throw new NotFoundException("Livro já cadastrado");
+        }
+
+        System.out.println("\nLivro cadastrado " + book);
+
+        return bookRepository.save(bookToSave);
+    }
 
     @Auditable(
             action = "REGISTRAR_LIVRO",

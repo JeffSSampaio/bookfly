@@ -55,8 +55,9 @@ public class BookController {
         book.setAuthors(authors);
 
         book.setGenders(request.genders());
+        book.setSummary(request.summary());
 
-        Book saved = bookService.createBook(request.userId(),book);
+        Book saved = bookService.createBook(book);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(BookDetail.from(saved));

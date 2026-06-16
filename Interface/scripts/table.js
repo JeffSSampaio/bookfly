@@ -785,9 +785,9 @@ window.openEditStockModal = function (stockData, index, rowElement) {
 
 
 window.openEditUser = function (userData, index, rowElement) {
-    const uid = `modal-edit-stock-${userData.id}`;
+    const uid = `modal-edit-user-${userData.id}`;
 
-     const USER_ROLE = ['USER','ADMIN'];
+     const USER_ROLE = ['USER','BIBLIOTECARIO','ADMIN'];
 
     const statusOptions = USER_ROLE.map(s =>
         `<option value="${s}" >${s}</option>`

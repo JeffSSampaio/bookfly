@@ -46,17 +46,10 @@ var adminMenuLinks =[
     // "<a href='../pages/books.html'>Livros</a>",
     "<a href='../pages/StockandBooks.html'>Estoque</a>",
     // "<a href='../pages/fines.html'>Multas</a>",
-     "<a href='../pages/users.html'>Usuários</a>",
+    loggedUser.role == 'ADMIN'? "<a href='../pages/users.html'>Usuários</a>"  : '',
     "<a href='../pages/movements.html'>Movimentações</a>"
   
 ]
-
-
-
-
-
-
-
 
 const currentPath = window.location.pathname.replace(/\\/g, '/');
 const currentPage = currentPath.substring(currentPath.lastIndexOf('/') + 1);
@@ -70,33 +63,58 @@ function shouldShowLink(linkHtml) {
 
 let content = document.getElementById("menu-content");
 
+let linksToRender = [];
 
-
-if(loggedUser.role == 'USER'){
-    userMenuLinks.forEach(element => {
-        if (!shouldShowLink(element)) return;
-        content.innerHTML += ` 
-        <div class='btns-menu'>
-          ${element}
-        </div>`;
-    });
-} else if(loggedUser.role == 'ADMIN'){
-    adminMenuLinks.forEach(element => {
-        if (!shouldShowLink(element)) return;
-        content.innerHTML += ` 
-        <div class='btns-menu'>
-          ${element}
-        </div>`;
-    });
-} else {
+switch (loggedUser.role) {
+  case 'USER':
+    linksToRender = userMenuLinks;
+    break;
+  case 'ADMIN':
+    linksToRender = adminMenuLinks;
+    break;
+  case 'BIBLIOTECARIO':
+    linksToRender = adminMenuLinks;
+    break;
+  default:
     alert('Usuário não reconhecido');
+    break;
 }
+
+linksToRender.forEach(element => {
+  if (!shouldShowLink(element)) return;
+  content.innerHTML += ` 
+    <div class='btns-menu'>
+      ${element}
+    </div>`;
+});
 
 content.innerHTML += `
   <div class='btns-menu logout-container'>
     <a class='log' href='#' onclick='logout()'>Desconectar</a>
   </div>
 `;
+
+// if(loggedUser.role == 'USER'){
+//     userMenuLinks.forEach(element => {
+//         if (!shouldShowLink(element)) return;
+//         content.innerHTML += ` 
+//         <div class='btns-menu'>
+//           ${element}
+//         </div>`;
+//     });
+// } else if(loggedUser.role == 'ADMIN'){
+//     adminMenuLinks.forEach(element => {
+//         if (!shouldShowLink(element)) return;
+//         content.innerHTML += ` 
+//         <div class='btns-menu'>
+//           ${element}
+//         </div>`;
+//     });
+// } else {
+//     alert('Usuário não reconhecido');
+// }
+
+
 
 
 
