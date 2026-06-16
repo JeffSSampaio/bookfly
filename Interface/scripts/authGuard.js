@@ -33,7 +33,7 @@
   const role = user.role || 'USER';
 
   if (publicPages.some(p => path.endsWith(p))) {
-    if (role === 'ADMIN') {
+    if (role === 'ADMIN' || role ==='BIBLIOTECARIO') {
       redirectToAdminHomePage();
     } else {
       redirectToUserHomePage();

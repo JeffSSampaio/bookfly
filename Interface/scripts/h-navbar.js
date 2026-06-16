@@ -37,19 +37,19 @@ var userMenuLinks = [
     "<a href='../pages/homepage.html'>Home</a>",
     // "<a href='../pages/my-books.html'>Minhas Estantes</a>",
     "<a href='../pages/bookloan.html'>Livros</a>",
-   
-
 ]
+
+
 
 var adminMenuLinks =[
     "<a href='../pages/LoansAndFines.html'>Emprestimos</a>",
-    // "<a href='../pages/books.html'>Livros</a>",
     "<a href='../pages/StockandBooks.html'>Estoque</a>",
-    // "<a href='../pages/fines.html'>Multas</a>",
-    loggedUser.role == 'ADMIN'? "<a href='../pages/users.html'>Usuários</a>"  : '',
     "<a href='../pages/movements.html'>Movimentações</a>"
-  
 ]
+
+if (loggedUser && loggedUser.role === 'ADMIN') {
+    adminMenuLinks.push("<a href='../pages/users.html'>Usuários</a>");
+}
 
 const currentPath = window.location.pathname.replace(/\\/g, '/');
 const currentPage = currentPath.substring(currentPath.lastIndexOf('/') + 1);
@@ -69,19 +69,21 @@ switch (loggedUser.role) {
   case 'USER':
     linksToRender = userMenuLinks;
     break;
-  case 'ADMIN':
-    linksToRender = adminMenuLinks;
-    break;
-  case 'BIBLIOTECARIO':
-    linksToRender = adminMenuLinks;
-    break;
+
+   case 'ADMIN':
+      linksToRender = adminMenuLinks;
+      break;
+    case 'BIBLIOTECARIO': 
+      linksToRender = adminMenuLinks;
+      break;
   default:
     alert('Usuário não reconhecido');
+    window.location.replace('/Interface/pages/login.html');
     break;
 }
 
 linksToRender.forEach(element => {
-  if (!shouldShowLink(element)) return;
+  if (!element || !shouldShowLink(element)) return; 
   content.innerHTML += ` 
     <div class='btns-menu'>
       ${element}
