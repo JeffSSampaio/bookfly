@@ -16,9 +16,7 @@
 
 ## 📖 Sobre o Projeto
 
-O **BookFly** é um sistema web completo para o gerenciamento de acervos e empréstimos de livros, desenvolvido para bibliotecas institucionais. Ele oferece controle de todo o ciclo de vida de um livro dentro da instituição — do cadastro ao empréstimo, da devolução à cobrança de multa — com uma interface intuitiva e uma API RESTful robusta.
-
-O sistema foi desenvolvido como projeto de estágio na **Secretaria de Estado da Segurança Pública do Maranhão (SSP/MA)** e construído do zero com foco em boas práticas de engenharia de software.
+O **BookFly** é um sistema web completo para o gerenciamento de acervos e empréstimos de livros, desenvolvido para bibliotecas institucionais. Ele oferece controle de todo o ciclo de vida de um livro dentro da instituição — do cadastro ao empréstimo, da devolução à cobrança de multa — com uma interface intuitiva e uma API RESTful.
 
 ![alt text](documents/image-1.png) ![alt text](documents/image-2.png) ![alt text](documents/image-4.png) ![alt text](documents/image-5.png) ![alt text](documents/image.png)
 ---
