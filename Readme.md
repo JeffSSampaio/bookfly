@@ -20,7 +20,7 @@ O **BookFly** é um sistema web completo para o gerenciamento de acervos e empr�
 
 O sistema foi desenvolvido como projeto de estágio na **Secretaria de Estado da Segurança Pública do Maranhão (SSP/MA)** e construído do zero com foco em boas práticas de engenharia de software.
 
-![](image-1.png) ![alt text](image-2.png) ![alt text](image-3.png) ![alt text](image-4.png) ![alt text](image-5.png)
+![alt text](documents/image-1.png) ![alt text](documents/image-2.png) ![alt text](documents/image-4.png) ![alt text](documents/image-5.png) ![alt text](documents/image.png)
 ---
 
 ## ✨ Funcionalidades
@@ -262,9 +262,10 @@ O front-end é composto por arquivos estáticos (HTML/CSS/JS). Para rodá-lo:
 
 ## 👨‍💻 Autor
 
-![alt text](<WhatsApp Image 2026-06-16 at 10.35.38.jpeg>)
 
 **Jefferson Sousa Sampaio Junior**
+
+![alt text](documents/jefferson.jpeg)
 
 [![GitHub](https://img.shields.io/badge/GitHub-JeffSSampaio-181717?style=flat-square&logo=github)](https://github.com/JeffSSampaio)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-jeffersonssampaio-0A66C2?style=flat-square&logo=linkedin)](https://linkedin.com/in/jeffersonssampaio)
