@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/Interface/styles/h-navbar.css">
+    <link rel="stylesheet" href="/Interface/styles/root.css">
+    <link rel="stylesheet" href="/Interface/styles/modal.css">
+    <link rel="stylesheet" href="/Interface/styles/bookloan.css">
+    <link rel="stylesheet" href="/Interface/styles/search.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+    <title>BookFly - Book Loans</title>
+</head>
+<body>
+    <div id="h-navbar-right" class="menu-right-container">
+        <div id="menu-content" class="body-menu">
+            <div class="menu-header">
+                <img id="close-menu" src="/Interface/assets/iconclose.svg" alt="Fechar menu"> 
+                <h1>Menu</h1>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay"></div>
+
+    <header class="h-navbar">
+        <div class="title-logo">
+            <!-- <img src="/Interface/assets/iconBook.svg" alt="BookFLy"> -->
+            <h1>BookFLy</h1>
+        </div>
+        <div class="h-container-actions-itens">
+           
+            <img src="/Interface/assets/iconMenu.svg" alt="Menu" class="icon-menu" id="icon-menu" onclick="btnMenu()">
+        </div>
+    </header>
+
+    <main class="bookloan-page">
+        <section class="bookloan-hero">
+            <div>
+                <span class="bookloan-tag">Livros</span>
+                <h2>Procure um livro e faça um empréstimo</h2>
+                <p>Escolha o livro que deseja, clique no + e continue para a página de empréstimos.</p>
+            </div>
+            <div class="bookloan-info">
+                <strong>Prazo de devolução:</strong>
+                <span>7 dias após o empréstimo</span>
+            </div>
+        </section>
+        <div class="search-input-container search-book-loan">
+                <input id="search-book" type="search" placeholder="Procurar Livros">
+            </div>
+        <section class="bookloan-grid-section">
+            <div class="bookloan-status-row">
+                <p id="user-message" class="bookloan-user-message"></p>
+                <p id="loading-message" class="bookloan-loading">Carregando livros...</p>
+            </div>
+            <div id="book-grid" class="books-grid"></div>
+            <p id="empty-message" class="bookloan-empty hidden">Nenhum livro encontrado para esse filtro.</p>
+        </section>
+    </main>
+
+
+    <script src="/Interface/scripts/authGuard.js"></script>
+    <script type="module" src="/Interface/scripts/bookloan.js"></script>
+    <script type="module" src="/Interface/scripts/modal.js"></script>
+    <script src="/Interface/scripts/h-navbar.js"></script>
+</body>
+</html>

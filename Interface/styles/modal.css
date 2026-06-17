@@ -1,0 +1,462 @@
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0px;
+    border-radius: 28px;
+
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(5px);
+
+    overflow-y: auto;
+}
+
+
+
+.c-modal,
+.book-detail-modal,
+.modal-bookcase-edit,
+.modal-bookcase-add {
+    position: relative;
+
+    width: min(720px, 94vw);
+    max-height: 88vh;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    border-radius: 28px;
+
+    background: white;
+
+    box-shadow:
+        0 32px 80px rgba(180, 180, 180, 0.22),
+        0 2px 0 rgba(255,255,255,0.55) inset;
+
+    animation: modal-enter 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+
+@keyframes modal-enter {
+    from {
+        opacity: 0;
+        transform: translateY(28px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-book-edit{
+    padding: 0px;
+}
+
+
+.c-modal {
+    width: min(580px, 94vw);
+    
+   
+}
+
+
+.modal-bookcase-edit {
+    width: min(160px, 94vw);
+}
+
+.modal-bookcase-add {
+    width: min(620px, 94vw);
+}
+
+.book-detail-modal {
+    width: min(900px, 94vw);
+    padding: 32px;
+    background-color: #f6f0e5;
+}
+
+
+
+
+.book-detail-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+    border: none;
+
+    background: var(--color-dark-green);
+    color: white;
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    display: grid;
+    place-items: center;
+
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.18);
+
+    transition:
+        transform 0.18s,
+        background 0.18s;
+}
+
+.book-detail-close:hover {
+    transform: scale(1.06);
+    background: var(--color-mid-green);
+}
+
+
+
+
+.book-detail-card {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+
+.book-detail-cover {
+    width: 260px;
+    max-width: 100%;
+
+    border-radius: 24px;
+
+    object-fit: cover;
+
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+}
+
+
+.book-detail-info {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+
+
+.book-detail-title {
+    margin: 0;
+
+    font-size: 1.5rem;
+    line-height: 1.2;
+
+    color: var(--color-dark-green);
+
+    font-weight: 700;
+}
+
+
+.book-detail-authors {
+    margin: 0;
+
+    color: var(--color-mid-green);
+
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.modal-header {
+        background: var(--color-dark-green);
+    padding: 20px 28px 18px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+
+.book-detail-status-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+
+.book-detail-label {
+    margin: 0;
+
+    color: var(--color-dark-green);
+
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+
+.book-detail-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 14px;
+
+    border-radius: 999px;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+
+.status-available {
+    background: #d9ecd8;
+    color: #1f4b34;
+}
+
+.status-available-y {
+    background: var(--badge-yellow);
+    color: rgb(153, 153, 7);
+}
+
+.status-unavailable {
+    background: #f4d2cf;
+    color: #a32c24;
+}
+
+
+
+
+.book-detail-description {
+    margin: 0;
+
+    padding: 16px 18px;
+
+    background-color: var(--badge-green);
+
+    color: var(--color-dark-green);
+
+    border-radius: 18px;
+
+    line-height: 1.7;
+
+    font-weight: 500;
+
+    font-size: 0.95rem;
+
+    text-align: justify;
+}
+
+.t-modal {
+    margin: 0;
+    font-family: var(--font-primary) !important;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: white !important;
+    flex: 1;
+}
+
+.f-input-modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+    margin: 10px 70px;
+}
+
+
+.f-input-modal label {
+    font-family: var(--font-primary);
+
+    color: var(--color-dark-green);
+
+    font-weight: 700;
+
+    font-size: 0.9rem;
+}
+
+
+.f-input-modal input,
+.f-input-modal textarea {
+    width: 100%;
+
+    padding: 12px 16px;
+
+    border-radius: 14px;
+
+    border: 1.5px solid var(--card-border);
+
+    background: white;
+
+    font-family: var(--font-primary);
+
+    color: var(--color-dark-green);
+
+    transition:
+        border-color 0.18s,
+        box-shadow 0.18s;
+}
+
+
+.f-input-modal input:focus,
+.f-input-modal textarea:focus {
+    outline: none;
+
+    border-color: var(--color-bright-green);
+
+    box-shadow: 0 0 0 3px rgba(78,124,82,0.15);
+}
+
+
+.f-input-modal textarea {
+    resize: none;
+    min-height: 120px;
+}
+
+
+
+.c-modal-btn {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin-top: 24px;
+}
+
+
+.c-modal-btn button {
+    border: none;
+
+    padding: 12px 22px;
+
+    border-radius: 14px;
+
+    font-family: var(--font-primary);
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s,
+        background 0.18s,
+        box-shadow 0.18s;
+}
+
+
+.c-modal-btn button:hover {
+    transform: translateY(-1px);
+}
+
+
+.c-modal-btn .confirmBtn {
+    background: var(--color-dark-green);
+
+    color: var(--color-ivory);
+
+    box-shadow: 0 4px 14px rgba(16,46,30,0.25);
+}
+
+
+.c-modal-btn .confirmBtn:hover {
+    background: var(--color-mid-green);
+}
+
+
+.c-modal-btn .closeBtn {
+    background: transparent;
+
+    border: 1.5px solid var(--card-border);
+
+    color: var(--color-mid-green);
+}
+
+
+.c-modal-btn .closeBtn:hover {
+    background: var(--color-ivory);
+}
+
+
+
+/* OUTROS */
+.modal-input-container {
+    margin-bottom: 12px;
+}
+
+.modal-loading-text {
+    color: var(--color-mid-green);
+    text-align: center;
+}
+
+.card-book-edit {
+    align-items: flex-start;
+}
+
+.btn-remove-book-edit {
+    opacity: 1;
+}
+
+.btn-delete-bookcase {
+    background: #c0392b !important;
+}
+
+
+
+/* RESPONSIVO */
+@media (max-width: 760px) {
+
+    .modal {
+        padding: 14px;
+    }
+
+    .book-detail-modal,
+    .c-modal,
+    .modal-bookcase-add,
+    .modal-bookcase-edit {
+        width: 100%;
+        max-height: 92vh;
+        border-radius: 24px;
+    }
+
+    .book-detail-modal {
+        padding: 22px;
+    }
+
+    .book-detail-card {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .book-detail-title,
+    .book-detail-authors {
+        text-align: center;
+    }
+
+    .book-detail-close {
+        top: 12px;
+        right: 12px;
+    }
+
+    .c-modal-btn {
+        flex-direction: column;
+    }
+
+    .c-modal-btn button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+

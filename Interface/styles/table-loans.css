@@ -1,0 +1,30 @@
+
+
+.loans-actions{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    flex-direction: row;
+}
+
+
+ .table-header-loans {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    width: 90%;
+ }
+
+
+
+
+
+.table-loans {
+    display: row; 
+    border-collapse: collapse;
+    border-radius: 20px;
+}
+
+
+

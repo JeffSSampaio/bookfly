@@ -1,0 +1,112 @@
+
+.search-input-container{
+    position: relative;
+  
+}
+.search-input-container input {
+  width: 100%;
+  padding: 12px 10px 12px 15px; 
+  border: none;
+  border-radius: 10px;
+  background: var(--color-ivory) ;
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--color-mid-green) ;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+.search-input-container input::placeholder {
+  color: var(--color-mid-green) ;
+  font-family: var(--font-primary);
+  font-weight: bold;
+  font-size: 15px;
+  opacity: 90%;
+}
+
+.search-input-container img {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  pointer-events: none; 
+}
+
+
+/* .search-book-loan input{
+    background: var(--color-mid-green) 
+} */
+
+
+.search-fines{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    flex-direction: row;
+}
+
+.search-fines input {  
+
+    padding:5px 10px; 
+    margin: 0 10px;
+    width: 200px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+.search-fines input::placeholder {
+
+}
+
+
+.search-movements{
+    margin: 0 10px;
+    width: 200px;
+}
+.search-movements input{
+    height: 30px;
+
+}
+
+.search-stock{
+    margin: 0 10px;
+    width: 200px;
+}
+.search-stock input{
+    height: 30px;
+}
+
+
+.search-loans{
+       display: flex;
+    justify-content: end;
+    align-items: end;
+    flex-direction: row;
+    /* width: 100%; */
+}
+
+.search-loans input {  
+
+    padding:5px 10px; 
+    margin: 0 10px;
+    border: none;
+    width: 200px;
+    border-radius: 10px;
+    font-weight: bold;
+
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+.search-loans input::placeholder {
+  
+}
+
+
+
+.search-books{
+    margin: 0 10px;
+    width: 200px;
+}
+.search-books input{
+    height: 30px;
+   
+}

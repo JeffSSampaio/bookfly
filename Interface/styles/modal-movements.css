@@ -1,0 +1,68 @@
+.modal-movements {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 8% auto;
+}
+
+.modal-movements-body {
+
+    align-items: center;
+
+}
+
+
+
+.modal-movements-field {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.modal-movements-field label {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.select-movement-books, 
+.modal-movements-field input {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-family: var(--font-primary);
+}
+
+.select-movement-books {
+    outline: none;
+    padding: 10px 20px;
+    font-weight: 800;
+    background-color: white;
+    color: var(--color-dark-green);
+    border: 1px solid var(--color-dark-green);
+    appearance: none;
+}
+
+.modal-movements-field input {
+    padding: 10px 10px;
+    border: 1px solid #ccc;
+    height: 40px;
+    color: var(--color-dark-green);
+    font-family: var(--font-primary);
+    font-weight: 400;
+}
+
+
+.modal-movements-actions{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 10px;
+    gap: 100px;
+}

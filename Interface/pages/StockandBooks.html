@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="/Interface/styles/h-navbar.css">
+    <link rel="stylesheet" href="/Interface/styles/root.css">
+    <link rel="stylesheet" href="/Interface/styles/modal.css">
+    <link rel="stylesheet" href="/Interface/styles/modal-books.css">
+    <link rel="stylesheet" href="/Interface/styles/modal-stock.css">
+    <link rel="stylesheet" href="/Interface/styles/table.css">
+    <link rel="stylesheet" href="/Interface/styles/search.css">
+     <link rel="stylesheet" href="/Interface/styles/table-books.css">
+    <link rel="stylesheet" href="/Interface/styles/table-stock.css">
+    <link rel="stylesheet" href="/Interface/styles/book-register.css">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+ 
+    <title>BookFly - Stock</title>
+</head>
+<body>
+
+    <div id="h-navbar-right" class="menu-right-container">
+        <div id="menu-content" class="body-menu">
+            <div class="menu-header">
+               <img  id="close-menu" src="/Interface/assets/iconclose.svg" alt="" srcset="">
+                <h1>Menu</h1>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay"></div>
+
+    <header class="h-navbar">
+        <div class="title-logo">
+            <!-- <img src="/Interface/assets/iconBook.svg" alt="" srcset=""> -->
+            <h1>BookFLy</h1>
+        </div>
+        <div class="h-container-actions-itens">
+           
+            <img src="/Interface/assets/iconMenu.svg" alt="" class="icon-menu" id="icon-menu" onclick="btnMenu()">
+        </div>
+    </header>
+
+
+     <div class="table-container ">
+         <div class="books-actions">
+                
+                    <h1 class="table-title-c">Livros</h1>
+                 <button class="btn-icon " id="btnRelBook">
+                 <img src="../assets/iconUpload.svg" alt="">
+                  </button>
+                  <div class="search-input-container search-books">
+               
+                     <input type="search" name="" id="search-books" placeholder="Buscar">
+               
+                </div>
+                <button class="btn-add" onclick="openRegisterBook()">
+                Registrar
+                </button>
+            </div>
+            <div id="table-books"></div>
+            
+        </div>
+
+      <div class="table-container">
+          <div class="stock-actions">
+                    
+              <h1 class="table-title-c">Estoque</h1>
+              <button class="btn-icon" id="btnRelStock">
+                  <img src="../assets/iconUpload.svg" alt="">
+              </button>
+              <div class="search-input-container search-stock">
+                        <input type="search" name="" id="search-stock" placeholder="Buscar">
+                    </div>
+                    <button class="btn-add" onclick="openAddItemOnStock()">Registrar</button>
+            </div>
+            
+            <div id="table-stock"></div>
+            </div>
+
+            </div>
+
+        </div>
+
+       
+    
+ 
+
+
+   
+        <script src="/Interface/scripts/authGuard.js"></script>
+        <script src="/Interface/scripts/search.js"></script>
+        <script type="module" src="/Interface/scripts/modal.js"></script>
+        <script type="module" src="/Interface/scripts/table.js"></script>
+        <script src="/Interface/scripts/h-navbar.js"></script>
+</body>
+</html>

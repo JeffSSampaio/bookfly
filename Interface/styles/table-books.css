@@ -1,0 +1,42 @@
+.books-actions{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    margin-right: 55px;
+   
+}
+
+
+ .books-actions button{
+    background-color: var(--color-ivory);
+    color: var(--color-mid-green);
+    margin: 0 5px;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 20px;
+    font-weight: 700;
+    font-family: var(--font-primary);
+    transform: scale(1);
+    transition:   background-color 1s ease-out,
+                  transform 1s ease-out;
+}
+.books-actions button:hover{
+    cursor: pointer;
+    background-color: var(--color-cream);
+    transform: scale(0.98);
+    transition: all 0.5s ease-in;
+
+} 
+.modal-books-table{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 20px;
+    width: 30%;
+    height: 45%;
+    background-color: var(--color-ivory);
+}
+

@@ -1,0 +1,97 @@
+.modal-loan{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow:auto;
+    background-color: rgba(0, 0,0,0.4);
+}
+
+.modal-loan-inner{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 20%;
+    background-color: var(--color-pastel-light);
+
+}
+
+.modal-loan-actions button{
+    display: flex;
+    padding: 10px;
+    background-color: var(--color-pastel-dark);
+    border: none;
+    border-radius: 20px;
+    font-family: var(--font-primary);
+    color: var(--color-brown);
+    font-weight: 500;
+    border: 2px solid var(--color-brown);
+
+}
+
+.modal-loan-actions button:hover{
+    background-color: var(--color-pastel-light);
+    transition: background-color 1s ease-in-out;
+}
+
+.modal-loan-header h1{
+    text-align: center;
+    color: var(--color-brown);
+    font-family: var(--font-primary);
+    margin: 20px    
+}
+
+.form-loan input{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-off-white);
+    padding: 7px;
+    border-radius: 15px;
+    border: none;
+
+
+}
+.modal-loan-field{
+    display: flex;
+    flex-direction: column;
+    margin: 0 26px;
+    padding: 0 20px;
+
+}
+
+.modal-loan-field label{
+    margin-left: 4px;
+    margin-bottom: 5px;
+  text-align: left;
+  font-family: var(--font-primary);
+  color: var(--color-brown);
+  font-weight: 500;
+}
+
+.modal-loan-actions{
+     display: flex;
+    flex-direction: row;
+    justify-content:space-around;
+    align-items: center;
+    margin: 10px 10px;
+    padding: 5px 10px;
+
+}
+.select-loan{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 7px;
+    border-radius: 15px;
+    border: 1px solid var(--color-dark-green);
+    color: var(--color-dark-green);
+    font-weight: 700;
+}

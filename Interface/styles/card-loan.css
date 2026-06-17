@@ -1,0 +1,128 @@
+
+.loan-card{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+   
+    margin: 10px ;
+    padding: 10px;
+    width: 200px;
+    height: 120px;
+  
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.home-loans-body{
+    margin: 5px;
+    padding: 20px;
+    display:grid;
+    grid-template-columns: 1fr 1fr ;
+}
+
+.home-loans-section{
+  
+    margin: 50px 20px;
+}
+
+.home-loans-grid{
+    display: grid;
+      background-color: var(--color-mid-green);
+    grid-template-columns: 1fr 1fr ;
+    gap: 10px;
+    padding: 2px;
+    margin: 20px 10px;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+}
+
+
+.home-loans-section h1{
+     text-align: left;
+     margin: 20px;
+     border: none;
+     font-family: var(--font-primary);
+    font-weight: 800;
+    font-size: 25px;
+    color: var(--color-dark-green);
+}
+
+.loan-card img {
+    height: 100px;
+    border-radius: 5px;
+}
+.loan-card-info{
+    padding: 1px;
+    font-family: var(--font-primary);
+    font-weight: 700;
+}
+
+.loan-card-info .loan-card-author{
+    color: var(--color-mid-green);
+    font-size: 10px;
+    opacity: 80%;
+}
+.loan-card-info .loan-card-title{
+    display: block;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 99px;
+    color:var(--color-dark-green);
+    font-weight: 700;
+    font-size: 12px;
+}
+
+
+.loan-card h1, .loan-card span, .loan-card p{
+    margin: 4px ;
+    padding: 1px ;
+}
+
+.loan-card-info .badge-status-active{
+    color: var(--color-golden);
+    font-weight: 700;
+    background-color: var(--badge-yellow);
+    font-family: var(--font-primary);
+    font-size: 11px;
+}
+
+
+.loan-card-info .badge-status-overdue{
+    color: red;
+    font-weight: 700;
+    background-color: var(--badge-red);
+    font-family: var(--font-primary);
+    font-size: 11px;
+}
+
+.loan-card-info .badge-status-returned{
+    color: green;
+    font-weight: 700;
+    background-color: var(--badge-green);
+    font-family: var(--font-primary);
+    font-size: 11px;
+}
+
+.date{
+   font-size: 11px;
+    color: var(--color-dark-green);
+}
+.empty-loans, .empty-returns{
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: white;
+    font-weight: 700;
+    font-family: var(--font-primary);
+    text-align: center;
+    
+}

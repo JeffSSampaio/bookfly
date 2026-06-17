@@ -1,0 +1,259 @@
+
+body {
+    background: var(--color-ivory);
+}
+
+.bookloan-page {
+    width: min(1180px, 100%);
+    margin: 40px auto 40px;
+    padding: 0 20px;
+}
+
+.search-book-loan input{
+    background: var(--color-mid-green) !important;
+    color: white !important;
+}
+.search-book-loan input::placeholder{
+    color: white !important;
+    opacity: 0.7 !important;
+}
+
+
+
+
+.bookloan-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 24px 28px;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 24px;
+}
+
+.bookloan-hero h2 {
+    margin: 8px 0 12px;
+    font-size: 32px;
+    line-height: 1.1;
+    color: var(--text-dark);
+    max-width: 600px;
+}
+
+.bookloan-hero p {
+    font-size: 15px;
+    color: var(--text-muted);
+    max-width: 550px;
+}
+
+.bookloan-tag {
+    display: inline-flex;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.03em;
+}
+
+.bookloan-info {
+    min-width: 240px;
+    padding: 18px 22px;
+    border-radius: 20px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    text-align: center;
+}
+
+.bookloan-info strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+}
+
+.bookloan-info span {
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.bookloan-grid-section {
+    display: grid;
+    gap: 18px;
+}
+
+.bookloan-status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.bookloan-user-message,
+.bookloan-loading {
+    color: var(--accent);
+    font-size: 14px;
+    margin: 0;
+}
+
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(90px, 1fr));
+    gap: 18px;
+}
+
+.book-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 84px minmax(0, 1fr) 48px;
+    align-items: center;
+    gap: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 16px 18px;
+    box-shadow: var(--card-shadow);
+    min-height: 130px;
+    transform: translateY(0);
+    transition: transform 0.2s ease-out;
+}
+
+.book-card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s ease-in;
+}
+
+.book-card-cover {
+    width: 84px;
+    height: 118px;
+    object-fit: cover;
+    border-radius: 14px;
+    background: #f0f0f0;
+}
+
+.book-card-info {
+    display: grid;
+    gap: 6px;
+}
+
+.book-card-info {
+    display: grid;
+    gap: 6px;
+}
+
+.book-card-title {
+    font-size: 18px;
+    line-height: 1.2;
+    font-weight: 800;
+    color: var(--color-dark-green);
+    margin: 0;
+}
+
+.book-card-author,
+.book-card-stock,
+.book-card-return {
+    font-size: 13px;
+    color: var(--color-mid-green);
+    margin: 0;
+}
+
+.book-card-rented {
+    background-color: #b0e4c9;
+    border-radius: 20px;
+    padding: 4px 8px;
+    color: #1f4b34;
+    font-weight: 700;
+}
+
+.loan-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.loan-button:hover {
+    transform: scale(1.05);
+    background: #1f4b34;
+}
+
+.loan-button img {
+    background-color: white;
+    border-radius: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.loan-cancel-button{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.9s ease-out, background-color 0.9s ease-out;
+}
+
+.loan-cancel-button:hover{
+    transform: scale(1.05);
+    background-color:  #1f4b34;
+    transition: all 0.9s ease-in;
+}
+
+.loan-cancel-button span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bolder;
+    border-radius: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.bookloan-empty {
+    margin: 0 auto;
+    padding: 18px;
+    text-align: center;
+    background: #fff8e5;
+    color: #7a5b2a;
+    border-radius: 16px;
+    border: 1px solid #f0d9a5;
+}
+
+.hidden {
+    display: none;
+}
+
+.bookloan-footer {
+    padding: 20px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+@media (max-width: 760px) {
+    .bookloan-hero {
+        flex-direction: column;
+    }
+
+    .bookloan-info {
+        width: 100%;
+        text-align: left;
+    }
+}

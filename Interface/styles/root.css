@@ -1,0 +1,106 @@
+
+:root {
+  --color-dark-green:   #1B3A2D;
+  --color-mid-green:    #2E5C44;
+  
+  --color-bright-green: #4E7C52;
+  --color-bright-green-2: #70b175;
+  --color-ivory:        #F5EDD8;
+  --color-golden:       #C9A836;
+  --color-brown:        #7a5b2a;
+  --color-off-white:    #f9f9f9;
+  --color-pastel-light: #f5f0e4;
+  --color-pastel-dark:  #e8dfc8;
+  --color-wine: #4A1521;
+  --color-wine-2: #5C1D24;
+  --color-blue-dark: #1A3644;
+  --color-blue-naive: #1B263B;
+  --color-cream: #f9f6f0 ;
+  --color-blue-smooth: #7FA1D2;
+  --color-blue-smooth-bk: #264e8ae1;
+  --color-red-smooth:#E28E8E;
+  --color-red-smooth-bk: #974040;
+
+
+  --badge-yellow: #FFF3C4;
+  --badge-green:  #D6F0E0;
+  --badge-red:    #FAD4D4;
+
+
+  --card-bg:      #ffffff;
+  --card-border:  #e8dfcc;
+  --card-shadow:  0 12px 24px rgba(16, 46, 30, 0.08);
+  --box-shadow:   0 4px 6px rgba(0, 0, 0, 0.2);
+
+
+  --text-dark:    #203224;
+  --text-muted:   #64706c;
+  --accent:       #2f5f41;
+  --accent-soft:  #d8e8d6;
+
+
+  --font-primary: "League Spartan", sans-serif;
+}
+
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--color-ivory);
+}
+
+
+h1, h2, h3, h4, p, a {
+  font-family: var(--font-primary) !important;
+  font-weight: 500;
+}
+
+button {
+  font-family: var(--font-primary) !important;
+  background-color: var(--color-mid-green);
+  font-size: 12px !important;
+}
+
+
+footer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--color-dark-green);
+  width: 100%;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-top: auto;
+}
+
+
+.btn-add {
+    margin: 0 5px;
+    padding: 10px 10px;
+    font-weight: 700;
+    border-radius: 20px;
+    border: none;
+    color: var(--color-mid-green);
+    background-color: var(--color-ivory);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transform: scale(1);
+    transition: background-color 1s ease-out,
+                transform 1s ease-out;
+}
+
+.btn-add:hover{
+    cursor: pointer;
+    background-color:  var(--color-cream);
+    transform: scale(0.98);
+    transition: all 0.5s ease-in;
+
+}

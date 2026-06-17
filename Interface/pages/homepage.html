@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/Interface/styles/h-navbar.css">
+    <link rel="stylesheet" href="/Interface/styles/root.css">
+    <link rel="stylesheet" href="/Interface/styles/modal.css">
+    <link rel="stylesheet" href="/Interface/styles/card-loan.css">
+    <link rel="stylesheet" href="/Interface/styles/search.css">
+    <link rel="stylesheet" href="/Interface/styles/homepage.css">
+    <link rel="stylesheet" href="/Interface/styles/dashboard.css">
+    <link rel="stylesheet" href="/Interface/styles/modal-books.css">
+    <link rel="stylesheet" href="/Interface/styles/modal-loan.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+
+    <title>BookFly - Home</title>
+</head>
+<body>
+
+    <div id="h-navbar-right" class="menu-right-container">
+        <div id="menu-content" class="body-menu">
+            <div class="menu-header">
+                <span id="close-menu">
+                    <img class="icon-close" src="/Interface/assets/iconclose.svg" alt="">
+                </span>
+                <h1>Menu</h1>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay"></div>
+
+    <header class="h-navbar">
+        <div class="title-logo">
+            <h1>BookFLy</h1>
+        </div>
+        <div class="h-container-actions-itens">
+            <div class="search-input-container"></div>
+            <button class="c-icon-menu">
+                <img src="/Interface/assets/iconMenu.svg" alt="" class="icon-menu" id="icon-menu" onclick="btnMenu()">
+            </button>
+        </div>
+    </header>
+
+    <div class="body-page">
+
+        
+        <div class="dashboard-toggle-bar">
+            <button class="dashboard-toggle-btn active" id="btn-view-cards" onclick="switchView('cards')">
+               Cards
+            </button>
+            <button class="dashboard-toggle-btn" id="btn-view-table" onclick="switchView('table')">
+                Tabela
+            </button>
+        </div>
+
+
+        <div id="view-cards" class="db-view">
+            <div class="db-cards-body">
+                <div class="db-cards-section">
+                    <h2 class="db-section-title">Empréstimo(s)</h2>
+                    <div class="db-cards-grid" id="loans-container"></div>
+                </div>
+                <div class="db-cards-section">
+                    <h2 class="db-section-title">Devoluções</h2>
+                    <div class="db-cards-grid" id="returns-container"></div>
+                </div>
+            </div>
+        </div>
+
+  
+        <div id="view-table" class="db-view db-table-view" style="display:none;">
+            <div class="db-table-header">
+                <h2 class="db-table-title">Histórico de Empréstimos</h2>
+            </div>
+            <div id="table-user-loans"></div>
+        </div>
+
+    </div>
+
+    <script src="/Interface/scripts/authGuard.js"></script>
+    <script type="module" src="/Interface/scripts/dashboard.js"></script>
+    <script type="module" src="/Interface/scripts/modal.js"></script>
+    <script src="/Interface/scripts/h-navbar.js"></script>
+
+</body>
+</html>

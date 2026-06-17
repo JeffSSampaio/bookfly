@@ -1,0 +1,15 @@
+
+
+
+.select-user{
+       display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 12px 17px;
+    border-radius: 15px;
+    border: 1px solid var(--color-dark-green);
+    color: var(--color-dark-green);
+    font-weight: 700;
+}
+

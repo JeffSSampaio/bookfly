@@ -1,0 +1,21 @@
+.modal-fines{}
+
+.b-modal-fines{}
+
+.select-fine-status{
+    background-color: white;
+    padding: 6px 12px;
+    width: 470px;
+    border: 1px solid var(--color-dark-green);
+    border-radius: 20px;
+    color: var(--color-dark-green);
+    font-weight: 700;
+}
+.modal-fines-field select{
+}
+.select-fine-status{
+
+}
+.modal-fines-actions{
+    
+}
