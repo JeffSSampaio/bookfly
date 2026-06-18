@@ -7,7 +7,7 @@
     :items-per-page="itemsPerPage"
     :headers="headers"
     :items="items"
-    :items-length="totalItems"
+    :items-length="totalItems" 
     :loading="loading"
     items-per-page-text="Linhas por Página"
     @update:options="$emit('updateOptions',$event)" 

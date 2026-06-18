@@ -8,7 +8,7 @@ import com.jefferson.bookfly_api.models.Book;
 import java.util.List;
 
 public record BookDetail(
-       Long bookid,
+       Long bookId,
        String title,
        String cover,
        String summary,
