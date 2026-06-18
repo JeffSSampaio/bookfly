@@ -8,12 +8,17 @@
 import { createVuetify } from 'vuetify'
 // Styles
 import '@mdi/font/css/materialdesignicons.css'
-
+import { pt } from 'vuetify/locale'
 import 'vuetify/styles'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
-    defaultTheme: 'system',
+    defaultTheme: 'light',
   },
+  locale:{
+    locale:'pt',
+    fallback:'en',
+    messages:{pt}
+  }
 })
