@@ -44,7 +44,9 @@ export default defineConfig({
       '.vue',
     ],
   },
+  base: '/bookfly',
   server: {
     port: 3000,
+    host: true,
   },
 })
