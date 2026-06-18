@@ -4,11 +4,18 @@ export function useUsers() {
     const users = ref([])
     const loading = ref(false)
 
-    async function getUsers(){
-        loading.value = true,
-        users.value= await api.get('users/list')
+    async function getUsers() {
+    loading.value = true
+
+    try {
+        const response = await api.get('users/list')
+        users.value = response.data
+    } catch (error) {
+        console.error(error)
+    } finally {
         loading.value = false
     }
+}
 
     return {
         users,
