@@ -12,6 +12,17 @@
     items-per-page-text="Linhas por Página"
     @update:options="$emit('updateOptions',$event)" 
     class="c-table">
+
+        <template v-for="header in headers" :key="header.key" v-slot:[`item.${header.key}`]="{ item }: { item: any }">
+  <slot :name="header.key" :item="item">
+    {{ item[header.key] }}
+  </slot>
+</template>
+
+
+     <template v-slot:item.actions="{ item }">
+  <slot name="actions" :item="item" />
+  </template>
   
   </v-data-table-server>
 
