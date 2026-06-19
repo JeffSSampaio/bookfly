@@ -19,10 +19,6 @@
   </slot>
 </template>
 
-
-     <template v-slot:item.actions="{ item }">
-  <slot name="actions" :item="item" />
-  </template>
   
   </v-data-table-server>
 
