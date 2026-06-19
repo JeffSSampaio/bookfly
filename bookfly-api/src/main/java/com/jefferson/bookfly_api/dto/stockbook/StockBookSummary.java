@@ -1,5 +1,6 @@
 package com.jefferson.bookfly_api.dto.stockbook;
 
+import com.jefferson.bookfly_api.dto.author.AuthorSummary;
 import com.jefferson.bookfly_api.dto.book.BookDetail;
 import com.jefferson.bookfly_api.dto.book.BookSummary;
 import com.jefferson.bookfly_api.models.StockBook;

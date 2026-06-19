@@ -34,7 +34,7 @@ public class MovimentController {
 
     @Operation(summary = "Listar todas as movimentações")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Movimentações retornadas com sucesso")})
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<List<MovimentSummary>> getAllMoviments() {
         List<Moviment> allMoviments = movimentService.getAllMoviments();
 

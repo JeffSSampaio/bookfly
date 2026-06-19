@@ -1,8 +1,11 @@
 package com.jefferson.bookfly_api.dto.penalty;
 
+import com.jefferson.bookfly_api.dto.book.BookSummaryPrincipal;
 import com.jefferson.bookfly_api.dto.loan.LoanByUserBooksSumary;
 import com.jefferson.bookfly_api.dto.loan.LoanUserBookSumary;
+import com.jefferson.bookfly_api.dto.user.UserDetail;
 import com.jefferson.bookfly_api.dto.user.UserMovimentSummary;
+import com.jefferson.bookfly_api.dto.user.UserSummaryPrincipal;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
 import com.jefferson.bookfly_api.models.Penalty;
@@ -13,27 +16,22 @@ import java.time.LocalDateTime;
 public record PenaltyDetail(
         Long penaltyId,
         StatusPenalty statusPenalty,
-        String bookName,
-        Long userId,
-        String userName,
+        BookSummaryPrincipal book,
+        UserSummaryPrincipal user,
         BigDecimal amount,
         LocalDateTime penaltyDate,
-        LocalDateTime returnLoanDate,
-        StatusLoan statusLoan
+        LocalDateTime payedDate
 
 ) {
     public static PenaltyDetail from(Penalty penalty){
-        var loan = penalty.getLoan();
         return new PenaltyDetail(
                 penalty.getId(),
                 penalty.getStatus(),
-                penalty.getLoan().getStockBook().getBook().getTitle(),
-                penalty.getLoan().getUser().getId(),
-                penalty.getLoan().getUser().getName(),
+                BookSummaryPrincipal.from(penalty.getLoan().getStockBook().getBook()),
+                UserSummaryPrincipal.from(penalty.getLoan().getUser()),
                 penalty.getAmount(),
                 penalty.getPenaltyDate(),
-                penalty.getPayedDate(),
-                loan != null ? loan.getStatus() : null
+                penalty.getPayedDate()
         );
     }
 }
