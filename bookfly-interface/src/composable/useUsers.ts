@@ -10,6 +10,7 @@ export function useUsers() {
         { title: 'Role', key: 'role' },
         { title: 'Status', key: 'recordStatus' },
         { title: 'Data', key: 'recordDateTime' },
+        { title: 'Ações', key: 'actions', sortable: false }
         ]
 
         const tableEngine = useServerTable(userService.getAll, headers, 'Usuários')

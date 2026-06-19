@@ -5,6 +5,8 @@ export function useStockBook(){
         { title: 'ID', key: 'stockId' },
         { title: 'Livro', key: 'book' },
         { title: 'Quantidade', key: 'qtd' },
+        { title: '', key: 'actions', sortable: false },
+        { title: 'Ações', key: 'actions', sortable: false }
     ]
 
  async function allStockBooks() {

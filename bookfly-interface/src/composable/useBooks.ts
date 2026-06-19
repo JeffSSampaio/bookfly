@@ -2,10 +2,11 @@ import { bookService } from "@/services/bookService";
 import { useServerTable } from "./useServerTable";
 
 export function useBooks(){
-const headers =[
+const headers = [
     {title: 'Id',key:'bookId'},
     {title:'Nome',key:'title'},
     {title: 'Autores',key:'authors'},
+    { title: 'Ações', key: 'actions', sortable: false }
 ]
 async function allbooks() {
     const response = await bookService.getAll()

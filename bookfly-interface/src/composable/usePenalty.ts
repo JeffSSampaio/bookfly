@@ -8,6 +8,7 @@ export  function usePenalty() {
         { title: 'Valor', key: 'amount' },
         { title: 'Status', key: 'statusPenalty' },
         {title: 'Dia da multa', key: 'penaltyDate' },
+        { title: 'Ações', key: 'actions', sortable: false }
      
     ]
 

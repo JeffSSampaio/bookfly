@@ -8,6 +8,7 @@ export const useLoans = () => {
         { title: 'Data de Empréstimo', key: 'loanDate' },
         { title: 'Data de Devolução', key: 'returnDate' },
         { title: 'Status', key: 'status' },
+        { title: 'Ações', key: 'actions', sortable: false }
     ]
 
     async function getAllLoans() {

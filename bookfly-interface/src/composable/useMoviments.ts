@@ -8,7 +8,8 @@ export function useMoviments() {
         { title: 'Livro', key: 'book' },
         { title: 'Quantidade', key: 'qtdMoved' },
         { title: 'Tipo', key: 'type' },
-        { title: 'Data de Criação', key: 'createdTime' }
+        { title: 'Data de Criação', key: 'createdTime' },
+        { title: 'Ações', key: 'actions', sortable: false }
     ]
 
     const tableEngine = useServerTable(movimentService.getAll, headers, 'Movimentações')
