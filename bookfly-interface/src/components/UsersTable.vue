@@ -5,9 +5,15 @@
   :total-items="totalItems" 
   :items="items" 
   :loading="loading"
-  :items-per-page="5"
   @update-options="getRows"
-  class="elevation-1" />
+  class="elevation-1" >
+  <template #recordStatus ="{item}">
+   <v-chip :color="item.recordStatus === 'ACTIVE' ? 'green' : 'red'">
+        {{ item.recordStatus }}
+      </v-chip>
+  </template>
+  
+  </DataTable>
 </template>
 
 <script setup lang="ts"> 
@@ -22,5 +28,7 @@ const {
   headers, 
   getRows 
 } = useUsers()
+        
+
 
 </script>

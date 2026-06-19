@@ -17,7 +17,7 @@ export function useUsers() {
     }
 
     async function getRows() {
-        const response = await userService.getAll;
+        const response = await userService.getAll();
         const list = Array.isArray(response)? response : []
 
         return list.map((data: any)=>{

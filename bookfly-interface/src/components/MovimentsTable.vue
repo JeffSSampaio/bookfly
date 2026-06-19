@@ -5,7 +5,6 @@
   :total-items="totalItems" 
   :items="items" 
   :loading="loading"
-  :items-per-page="5"
   @update-options="getRows"
   class="elevation-1" />
 </template>
