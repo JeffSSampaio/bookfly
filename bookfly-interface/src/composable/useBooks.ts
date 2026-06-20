@@ -2,13 +2,18 @@ import { bookService } from "@/services/bookService";
 import { useServerTable } from "./useServerTable";
 
 export function useBooks(){
-const headers = [
-    {title: 'Id',key:'bookId'},
-    {title:'Nome',key:'title'},
-    {title: 'Autores',key:'authors'},
-    { title: 'Ações', key: 'actions', sortable: false }
-]
-async function allbooks() {
+
+ function getHeaders(){
+   const headers = [
+       {title: 'Id',key:'bookId'},
+       {title:'Nome',key:'title'},
+       {title: 'Autores',key:'authors'},
+       { title: 'Ações', key: 'actions', sortable: false }
+   ]
+    return headers
+    
+ } 
+async function getRows() {
     const response = await bookService.getAll()
     const list = Array.isArray(response) ? response : []
 
@@ -29,8 +34,11 @@ async function allbooks() {
     })
   }
 
-    const tableEngine = useServerTable(allbooks,headers,'Livros')
+    const tableEngine = useServerTable(getRows,getHeaders(),'Livros')
 
+
+
+    
     return{
         ...tableEngine
     }
