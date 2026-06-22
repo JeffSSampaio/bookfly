@@ -182,9 +182,17 @@ public class StockBookService {
 
         stockBookRepository.save(stockBook);
     }
-
-    public Page<StockBookSummary> findAll(Pageable pageable){
-        return stockBookRepository.findAll(pageable).map(StockBookSummary::from);
+    public Page<StockBook> findAll(String search,Pageable pageable){
+        if (search == null || search.isBlank()){
+            return stockBookRepository.findAll(pageable);
+        }
+        return stockBookRepository.search(
+                search,
+                pageable
+        );
+    }
+    public Page<StockBook> findAll(Pageable pageable){
+        return stockBookRepository.findAll(pageable);
     }
 
 }

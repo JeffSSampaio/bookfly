@@ -4,6 +4,7 @@ import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.dto.penalty.PenaltyDetail;
 import com.jefferson.bookfly_api.dto.penalty.PenaltyRequest;
 import com.jefferson.bookfly_api.dto.penalty.PenaltyUpdateRequest;
+import com.jefferson.bookfly_api.dto.stockbook.StockBookSummary;
 import com.jefferson.bookfly_api.models.Penalty;
 import com.jefferson.bookfly_api.service.PdfService;
 import com.jefferson.bookfly_api.service.PenaltyService;
@@ -14,6 +15,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,9 +46,23 @@ public class PenaltyController {
         return ResponseEntity.ok().body(PenaltyDetail.from(penalty));
     }
 
-    @Operation(summary = "Listar todas as penalidades")
+    @Operation(summary = "Listar numeros de Penalty")
     @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
     @GetMapping("/list")
+    public ResponseEntity<Page<PenaltyDetail>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String direction
+    ){
+        Sort.Direction dir = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page,size,Sort.by(dir,sort));
+        return ResponseEntity.ok(penaltyService.findAll(pageable));
+    }
+
+    @Operation(summary = "Listar todas as penalidades")
+    @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
+    @GetMapping("/list-all")
     public ResponseEntity<List<PenaltyDetail>> getAllPenalties() {
         return ResponseEntity.ok()
                 .body(penaltyService.getAllPenaltys()

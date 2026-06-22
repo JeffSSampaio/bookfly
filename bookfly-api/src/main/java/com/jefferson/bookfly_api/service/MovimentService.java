@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.config.AuditContext;
+import com.jefferson.bookfly_api.dto.moviment.MovimentSummary;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
@@ -9,6 +10,8 @@ import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -167,5 +170,9 @@ public class MovimentService {
 
         stockBookRepository.save(stockBook);
         movimentRepository.delete(moviment);
+    }
+
+    public Page<MovimentSummary> findAll(Pageable pageable){
+        return movimentRepository.findAll(pageable).map(MovimentSummary::from);
     }
 }

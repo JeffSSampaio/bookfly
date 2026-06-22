@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.config.AuditContext;
+import com.jefferson.bookfly_api.dto.book.BookDetail;
 import com.jefferson.bookfly_api.dto.book.BookRequest;
 import com.jefferson.bookfly_api.enums.Gender;
 import com.jefferson.bookfly_api.enums.RecordStatusValue;
@@ -14,6 +15,8 @@ import com.jefferson.bookfly_api.repository.BookRepository;
 import com.jefferson.bookfly_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -247,5 +250,7 @@ public class BookService {
     public List<Book> findByTitle(String title) {
         return bookRepository.findActiveByTitleContaining(title);
     }
-
+    public Page<BookDetail> findAll(Pageable pageable){
+        return bookRepository.findAll(pageable).map(BookDetail::from);
+    }
 }

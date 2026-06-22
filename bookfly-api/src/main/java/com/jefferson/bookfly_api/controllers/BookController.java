@@ -4,6 +4,7 @@ import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.dto.book.BookDetail;
 import com.jefferson.bookfly_api.dto.book.BookRequest;
 import com.jefferson.bookfly_api.dto.book.BookUpdateRequest;
+import com.jefferson.bookfly_api.dto.loan.LoanSummary;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
 import com.jefferson.bookfly_api.service.BookService;
@@ -16,6 +17,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -81,15 +86,15 @@ public class BookController {
     @Operation(summary = "Listar todos os livros")
     @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
     @GetMapping("/list")
-    public ResponseEntity<List<BookDetail>> getAllBooks(){
-        return ResponseEntity.ok(
-                bookService.findAll()
-                        .stream()
-                        .map(book -> BookDetail.from(book))
-                        .toList()
-        );
-
-
+    public ResponseEntity<Page<BookDetail>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String direction
+    ){
+        Sort.Direction dir = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page,size,Sort.by(dir,sort));
+        return ResponseEntity.ok(bookService.findAll(pageable));
     }
 
     @Operation(summary = "Buscar livro por ID")

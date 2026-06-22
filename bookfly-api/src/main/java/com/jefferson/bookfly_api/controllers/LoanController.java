@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.controllers;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.dto.loan.*;
+import com.jefferson.bookfly_api.dto.moviment.MovimentSummary;
 import com.jefferson.bookfly_api.dto.user.UserOnlyRequest;
 import com.jefferson.bookfly_api.models.Loan;
 import com.jefferson.bookfly_api.models.Moviment;
@@ -17,6 +18,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +42,7 @@ public class LoanController {
 
     @Operation(summary = "Listar todos os empréstimos")
     @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
-    @GetMapping("/list/all")
+    @GetMapping("/list-all")
     public ResponseEntity<List<LoanSummary>> getAllLoans() {
         List<Loan> allLoans = loanService.getAllLoans();
         return ResponseEntity.ok()
@@ -53,14 +58,15 @@ public class LoanController {
     @Operation(summary = "Listar todos os empréstimos ativos")
     @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
     @GetMapping("/list")
-    public ResponseEntity<List<LoanSummary>> getAllActive() {
-        List<Loan> allLoans = loanService.getAllLoansActive();
-        return ResponseEntity.ok()
-                .body(
-                        allLoans.stream()
-                                .map(LoanSummary::from)
-                                .toList()
-                );
+    public ResponseEntity<Page<LoanSummary>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String direction
+    ){
+        Sort.Direction dir = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page,size,Sort.by(dir,sort));
+        return ResponseEntity.ok(loanService.findAll(pageable));
     }
 
 

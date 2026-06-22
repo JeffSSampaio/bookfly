@@ -131,7 +131,17 @@ public class UserService {
         return userRepository.existsById(id);
     }
 
-    public Page<UserSummary> findAll(Pageable pageable){
-        return userRepository.findAll(pageable).map(UserSummary::from);
+    public Page<User> findAll(String search,Pageable pageable){
+        if (search == null || search.isBlank()) {
+            return userRepository.findAll(pageable);
+        }
+        return userRepository.search(
+                search,
+                pageable
+        );
+    }
+
+    public Page<User> findAll(Pageable pageable){
+        return userRepository.findAll(pageable);
     }
 }

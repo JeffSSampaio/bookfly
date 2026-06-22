@@ -1,6 +1,7 @@
 package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
+import com.jefferson.bookfly_api.dto.penalty.PenaltyDetail;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
 import com.jefferson.bookfly_api.exceptions.DependencyViolationException;
@@ -8,6 +9,8 @@ import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -161,6 +164,10 @@ public class PenaltyService {
             penaltyExist.getRecordStatus().delete(userExist);
 
             penaltyRepository.save(penaltyExist);
+    }
+
+    public Page<PenaltyDetail> findAll(Pageable pageable){
+        return penaltyRepository.findAll(pageable).map(PenaltyDetail::from);
     }
 
 

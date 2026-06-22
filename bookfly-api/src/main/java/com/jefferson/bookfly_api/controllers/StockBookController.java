@@ -41,11 +41,14 @@ public class StockBookController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
-            @RequestParam(defaultValue = "asc") String direction
+            @RequestParam(defaultValue = "asc") String direction,
+            @RequestParam(required = false) String search
     ){
         Sort.Direction dir = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page,size,Sort.by(dir,sort));
-        return ResponseEntity.ok(stockBookService.findAll(pageable));
+        Page <StockBook> stockBooks = stockBookService.findAll(search,pageable);
+        Page<StockBookSummary> response = stockBooks.map(StockBookSummary::from);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Listar todos os livros no estoque")

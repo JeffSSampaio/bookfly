@@ -2,12 +2,15 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.config.AuditContext;
+import com.jefferson.bookfly_api.dto.loan.LoanSummary;
 import com.jefferson.bookfly_api.enums.*;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -370,5 +373,9 @@ public class LoanService {
 
         existLoan.getRecordStatus().delete(existUser);
         loanRepository.save(existLoan);
+    }
+
+    public Page<LoanSummary> findAll(Pageable pageable){
+        return loanRepository.findAll(pageable).map(LoanSummary::from);
     }
 }

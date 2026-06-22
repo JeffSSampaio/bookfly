@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,5 +21,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.email = :email AND u.recordStatus.recordStatusValue = 'ACTIVE'")
     Optional<User> findActiveByEmail(String email);
+    @Query(
+            """
+    SELECT u
+    FROM User u
+    WHERE LOWER(u.name) LIKE LOWER(CONCAT('%', :search,'%' ))
+    OR CAST(u.id AS string ) LIKE CONCAT('%', :search,'%' )
+    OR CAST(u.email as string ) LIKE CONCAT('%', :search,'%' )
 
+"""
+    )
+    Page<User> search(@Param("search") String search , Pageable pageable);
 }

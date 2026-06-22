@@ -1,39 +1,59 @@
-import {movimentService} from '@/services/movimentServices';
-import { useServerTable } from './useServerTable';
+import { computed } from 'vue'
+import { movimentService } from '@/services/movimentServices'
+import { useTableStore } from '@/stores/useTableStore'
+import type { TableOptions } from './useTable'
 
 export function useMoviments() {
-    function getHeaders(){
-        const headers = [
-            { title: 'ID', key: 'movimentId' },
-             { title: 'Usuário', key: 'user' },
-            { title: 'Livro', key: 'book' },
-            { title: 'Quantidade', key: 'qtdMoved' },
-            { title: 'Tipo', key: 'type' },
-            { title: 'Data de Criação', key: 'createdTime' },
-            { title: 'Ações', key: 'actions', sortable: false }
-        ]
-        return headers
-    }
+    const tableStore = useTableStore('moviments')
 
-    async function getRows(){
- 
-            const response = await movimentService.getAll();
-            const list = Array.isArray(response) ? response : [];
-            return list.map((data: any) => {
+    tableStore.headers = [
+        { title: 'ID', key: 'movimentId' },
+        { title: 'Usuário', key: 'user' },
+        { title: 'Livro', key: 'book' },
+        { title: 'Quantidade', key: 'qtdMoved' },
+        { title: 'Tipo', key: 'type' },
+        { title: 'Data de Criação', key: 'createdTime' },
+        { title: 'Ações', key: 'actions', sortable: false }
+    ]
+
+    async function getRows(options: TableOptions) {
+        const fetchAndTreat = async (opts: TableOptions) => {
+            const page = (opts.page ?? 1) - 1
+            const sortBy = opts.sortBy?.[0]
+            
+            const response = await movimentService.getAll(page, opts.itemsPerPage, sortBy)
+            
+            let content: any[] = []
+            if (response && 'content' in response) {
+                content = response.content
+            } else if (Array.isArray(response)) {
+                content = response
+            }
+
+            const treatedList = content.map((item: any) => ({
+                ...item,
+                user: item.user?.name ?? 'Sem Usuário',
+                book: item.book?.title ?? 'Sem Título'
+            }))
+
+            if (response && 'content' in response) {
                 return {
-                    ...data,
-                    book: data.book.title ?? "Sem Titulo",
-                    user: data.user.name ?? "Sem Informação"
-                };
-            });
-        
-        
+                    content: treatedList,
+                    page: response.page
+                }
+            }
+            return treatedList
+        }
+
+        await tableStore.getRows(options, fetchAndTreat)
     }
-
-
-    const tableEngine = useServerTable(getRows, getHeaders(), 'Movimentações')
 
     return {
-        ...tableEngine
+        titleTable: 'Movimentações',
+        headers: tableStore.headers,
+        items: computed(() => tableStore.items),
+        loading: computed(() => tableStore.loading),
+        totalItems: computed(() => tableStore.totalItems),
+        getRows
     }
 }

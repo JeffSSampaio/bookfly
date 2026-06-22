@@ -2,7 +2,6 @@ package com.jefferson.bookfly_api.controllers;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.dto.moviment.MovimentQtdRequest;
-import com.jefferson.bookfly_api.dto.moviment.MovimentRequest;
 import com.jefferson.bookfly_api.dto.moviment.MovimentSummary;
 import com.jefferson.bookfly_api.dto.moviment.MovimentUpdateRequest;
 import com.jefferson.bookfly_api.models.Moviment;
@@ -12,6 +11,10 @@ import com.jefferson.bookfly_api.service.PdfService;
 import com.jefferson.bookfly_api.strategy.pdf.MovimentPdfStrategy;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +30,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RequestMapping("/api/moviments")
 @RequiredArgsConstructor
 @Tag(name = "Movimentações", description = "Operações relacionadas às movimentações de estoque")
-public class MovimentController {
+public class MovementController {
 
     private final MovimentService movimentService;
     private final PdfService pdfService;
@@ -35,7 +38,22 @@ public class MovimentController {
     @Operation(summary = "Listar todas as movimentações")
     @ApiResponses({@ApiResponse(responseCode = "200", description = "Movimentações retornadas com sucesso")})
     @GetMapping("/list")
-    public ResponseEntity<List<MovimentSummary>> getAllMoviments() {
+    public ResponseEntity<Page<MovimentSummary>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String direction
+    ){
+        Sort.Direction dir = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page,size,Sort.by(dir,sort));
+        return ResponseEntity.ok(movimentService.findAll(pageable));
+    }
+
+
+    @Operation(summary = "Listar todas as movimentações")
+    @ApiResponses({@ApiResponse(responseCode = "200", description = "Movimentações retornadas com sucesso")})
+    @GetMapping("/list-all")
+    public ResponseEntity<List<MovimentSummary>> getAll() {
         List<Moviment> allMoviments = movimentService.getAllMoviments();
 
         return ResponseEntity.ok(

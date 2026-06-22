@@ -4,7 +4,7 @@
   :headers="headers" 
   :total-items="totalItems" 
   :items="items" 
-  :loading="loading"
+  :loading="loading",
   @update-options="getRows"
   class="elevation-1" >
   <template #recordStatus ="{item}">

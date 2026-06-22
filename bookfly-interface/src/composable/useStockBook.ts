@@ -1,34 +1,55 @@
-import {stockBookService} from '@/services/StockBookService';
-import {useServerTable} from '@/composable/useServerTable';
+import { computed } from 'vue'
+import { stockBookService } from '@/services/StockBookService'
+import { useTableStore } from '@/stores/useTableStore'
+import type { TableOptions } from './useTable'
 
-export function useStockBook(){
-    function getHeaders(){
-        const headers = [
-            { title: 'ID', key: 'stockId' },
-            { title: 'Livro', key: 'book' },
-            { title: 'Quantidade', key: 'qtd' },
-            { title: '', key: 'actions', sortable: false },
-            { title: 'Ações', key: 'actions', sortable: false }
-        ]
-        return headers
-    }
+export function useStockBook() {
+    const tableStore = useTableStore('stockBook')
 
- async function getRows() {
-    const response = await stockBookService.getAll();
-    const list = Array.isArray(response) ? response : []
-    return list.map((data: any) => {
-        return {
-            ...data,
-            book: data.book?.title ?? 'Sem título'
+    tableStore.headers = [
+        { title: 'ID', key: 'stockId' },
+        { title: 'Livro', key: 'book' },
+        { title: 'Quantidade', key: 'qtd' },
+        { title: 'Ações', key: 'actions', sortable: false }
+    ]
+
+    async function getRows(options: TableOptions) {
+        const fetchAndTreat = async (opts: TableOptions) => {
+            const page = (opts.page ?? 1) - 1
+            const sortBy = opts.sortBy?.[0]
+            
+            const response = await stockBookService.getAll(page, opts.itemsPerPage, sortBy,opts.search)
+            
+            let content: any[] = []
+            if (response && 'content' in response) {
+                content = response.content
+            } else if (Array.isArray(response)) {
+                content = response
+            }
+
+            const treatedList = content.map((stock: any) => ({
+                ...stock,
+                book: stock.book?.title ?? 'Sem Título'
+            }))
+
+            if (response && 'content' in response) {
+                return {
+                    content: treatedList,
+                    page: response.page
+                }
+            }
+            return treatedList
         }
-    })
-}
 
-    const tableEngine = useServerTable(getRows, getHeaders(), 'Estoque de Livros')
+        await tableStore.getRows(options, fetchAndTreat)
+    }
 
     return {
-        ...tableEngine
+        titleTable: 'Estoque de Livros',
+        headers: tableStore.headers,
+        items: computed(() => tableStore.items),
+        loading: computed(() => tableStore.loading),
+        totalItems: computed(() => tableStore.totalItems),
+        getRows
     }
-
 }
-    

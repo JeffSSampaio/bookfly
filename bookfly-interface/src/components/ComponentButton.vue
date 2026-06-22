@@ -3,6 +3,7 @@
       :color="color" 
       :size="size" 
       :variant="variant"
+      :class="class"
       @click="$emit('click')"
     >
         <slot />
@@ -26,6 +27,9 @@ defineProps({
   variant: {
     type: String as PropType<'flat' | 'outlined' | 'text' | 'tonal' | 'elevated' | 'plain'>,
     default: 'elevated'
+  },
+  class:{
+    type: String
   }
 })
 
@@ -33,6 +37,5 @@ defineEmits(['click'])
 </script>
 
 <style scoped>
-.color-blue{}
 
 </style>
