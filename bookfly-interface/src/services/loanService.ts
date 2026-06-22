@@ -1,7 +1,8 @@
 import {api} from '@/services/apiServices' 
 
 export const loanService = {
-    async getAll(){
-        return await api.get('loans/list');
+    getAll: async () => {
+        const response = await api.get('loans/list');
+        return response.data;
     }
 }

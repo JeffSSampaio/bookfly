@@ -1,6 +1,7 @@
 
 import { userService } from '@/services/userService'
 import { useServerTable } from './useServerTable'
+import type { TableOptions } from '@/composable/useTable'
 export function useUsers() {
 
     function getHeaders(){
@@ -16,16 +17,12 @@ export function useUsers() {
               return headers
     }
 
-    async function getRows() {
-        const response = await userService.getAll();
-        const list = Array.isArray(response)? response : []
-
-        return list.map((data: any)=>{
-            return{
-                ...data
-            }
-        })
-
+    
+    async function getRows(options: TableOptions) {
+        const page = (options.page ?? 1) - 1
+        const sortBy = options.sortBy?.[0]
+        const response = await userService.getAll(page, options.itemsPerPage, sortBy)
+        return response  
     }
     
 

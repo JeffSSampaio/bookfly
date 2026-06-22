@@ -1,6 +1,7 @@
 package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
+import com.jefferson.bookfly_api.dto.stockbook.StockBookSummary;
 import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
@@ -9,6 +10,8 @@ import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -178,6 +181,10 @@ public class StockBookService {
         stockBook.setQtd(0);
 
         stockBookRepository.save(stockBook);
+    }
+
+    public Page<StockBookSummary> findAll(Pageable pageable){
+        return stockBookRepository.findAll(pageable).map(StockBookSummary::from);
     }
 
 }

@@ -1,7 +1,8 @@
 import {api} from '@/services/apiServices';
 
 export const movimentService ={
-         async getAll(){
-                return await api.get('moviments/list');
+         getAll: async () => {
+                const response = await api.get('moviments/list');
+                return response.data;
         }
 }

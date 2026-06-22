@@ -1,9 +1,17 @@
 const BASE_URL = 'http://localhost:8080/api'
 
-async function get(endpoint: string) {
-  const response = await fetch(`${BASE_URL}/${endpoint}`);
-  if (!response.ok) throw new Error(`Erro na requisição: ${endpoint}: ${response.statusText}`);
-  return response.json();
+async function get(endpoint: string, params?: Record<string, any>) {
+  const query = params
+    ? '?' + new URLSearchParams(
+        Object.entries(params)
+          .filter(([_, v]) => v !== undefined && v !== null)
+          .map(([k, v]) => [k, String(v)])
+      ).toString()
+    : ''
+
+  const response = await fetch(`${BASE_URL}/${endpoint}${query}`)
+  if (!response.ok) throw new Error(`Erro na requisição: ${endpoint}: ${response.statusText}`)
+  return response.json()
 }
 
 async function post(endpoint: string, body: any) {

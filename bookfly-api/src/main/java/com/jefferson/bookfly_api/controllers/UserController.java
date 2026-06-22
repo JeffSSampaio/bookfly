@@ -13,6 +13,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
@@ -33,11 +37,28 @@ public class UserController {
     private final UserService userService;
     private final PdfService pdfService;
 
-    @Operation(summary = "Listar todos os usuários")
+    @Operation(summary = "Encontrar Numero de usuários")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso")
     })
     @GetMapping("/list")
+    public ResponseEntity<Page<UserSummary>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String direction
+    ){
+        Sort.Direction dir = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page,size,Sort.by(dir,sort));
+        return ResponseEntity.ok(userService.findAll(pageable));
+    }
+
+
+    @Operation(summary = "Listar todos os usuários")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso")
+    })
+    @GetMapping("/list-all")
     public ResponseEntity<List<UserSummary>> getAllUsers(){
         return ResponseEntity.ok(
                 userService.getAllUsersActive()

@@ -2,7 +2,8 @@ import {api}  from '@/services/apiServices'
 
 
 export const bookService = {
-    async getAll(){
-        return await api.get('books/list')
+    getAll: async () => {
+        const response = await api.get('books/list');
+        return response.data;
     }
 }

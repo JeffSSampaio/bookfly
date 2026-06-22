@@ -14,7 +14,7 @@ export function useStockBook(){
     }
 
  async function getRows() {
-    const response = await stockBookService.getAll()
+    const response = await stockBookService.getAll();
     const list = Array.isArray(response) ? response : []
     return list.map((data: any) => {
         return {

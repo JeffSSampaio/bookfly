@@ -3,12 +3,15 @@ package com.jefferson.bookfly_api.service;
 import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.config.AuditContext;
 import com.jefferson.bookfly_api.dto.user.UserRequest;
+import com.jefferson.bookfly_api.dto.user.UserSummary;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -128,5 +131,7 @@ public class UserService {
         return userRepository.existsById(id);
     }
 
-
+    public Page<UserSummary> findAll(Pageable pageable){
+        return userRepository.findAll(pageable).map(UserSummary::from);
+    }
 }
