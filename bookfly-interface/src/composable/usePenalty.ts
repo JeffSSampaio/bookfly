@@ -21,7 +21,7 @@ export function usePenalty() {
             const sortBy = opts.sortBy?.[0]
             const search = opts.search
 
-            const response = await penaltyService.getAll(page, opts.itemsPerPage, sortBy, search)
+            const response = await penaltyService.getAll(page, opts.itemsPerPage, sortBy,search)
 
             let content: any[] = []
             if (response && 'content' in response) {

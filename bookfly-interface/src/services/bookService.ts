@@ -6,13 +6,11 @@ export const bookService = {
                                        const sort = sortBy?.key ?? 'id'
                                        const direction = sortBy?.order ?? 'asc'
                                        const response = await api.get(`books/list`, {
-                                           params: {
                                                page: page,
                                                size: itemsPerPage,
                                                sort: sort,
                                                direction: direction,
                                                search: search
-                                           }
                                        })
                                        return response
                                    }
