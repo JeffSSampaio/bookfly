@@ -18,7 +18,7 @@ export function useUsers() {
         { title: 'Email', key: 'email' },
         { title: 'Role', key: 'role' },
         { title: 'Status', key: 'recordStatus' },
-        { title: 'Data', key: 'recordDateTime' },
+        { title: 'Data', key: 'recordDateTime',sortable:false },
         { title: 'Ações', key: 'actions', sortable: false }
     ]
 
@@ -35,10 +35,15 @@ export function useUsers() {
             } else if (Array.isArray(response)) {
                 content = response
             }
+          
+             const treatedList = content.map((user: any) => ({
+                ...user,
+                recordDateTime: formatDateTime(user.recordDateTime) 
+            }))
 
             if (response && 'content' in response) {
                 return {
-                    content,
+                    content: treatedList,
                     page: response.page
                 }
             }
