@@ -4,7 +4,7 @@ import { useTableStore } from '@/stores/useTableStore'
 import type { TableOptions } from './useTable'
 import {createCrudActions} from './useCreateCrudActions'
 import type {BtnAction} from '@/composable/useBtnActions'
-
+import {formatDateTime} from '@/utils/dateFormat'
 export const useLoans = () => {
     const tableStore = useTableStore('loans')
     const actions: BtnAction[]= [
@@ -51,7 +51,9 @@ export const useLoans = () => {
             const treatedList = content.map((item: any) => ({
                 ...item,
                 user: item.user?.name ?? 'Sem Nome',
-                book: item.book?.title ?? 'Sem Título de Livro'
+                book: item.book?.title ?? 'Sem Título de Livro',
+                loanDate: formatDateTime(item.loanDate),
+                returnDate: formatDateTime(item.returnDate)
             }))
 
             if (response && 'content' in response) {

@@ -36,9 +36,9 @@ export function useUsers() {
                 content = response
             }
           
-             const treatedList = content.map((user: any) => ({
-                ...user,
-                recordDateTime: formatDateTime(user.recordDateTime) 
+             const treatedList = content.map((item: any) => ({
+                ...item,
+                recordDateTime: formatDateTime(item.recordDateTime) 
             }))
 
             if (response && 'content' in response) {

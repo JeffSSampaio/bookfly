@@ -4,7 +4,7 @@ import { useTableStore } from '@/stores/useTableStore'
 import type { TableOptions } from './useTable'
 import {createCrudActions} from './useCreateCrudActions'
 import type {BtnAction} from '@/composable/useBtnActions'
-
+import {formatDateTime} from '@/utils/dateFormat'
 export function usePenalty() {
     const tableStore = useTableStore('penalty')
     const actions: BtnAction[]= [
@@ -15,7 +15,7 @@ export function usePenalty() {
         { title: 'Usuário', key: 'user' },
         { title: 'Valor', key: 'amount' },
         { title: 'Status', key: 'statusPenalty' },
-        { title: 'Data de Multa', key: 'penaltyDate' },
+        { title: 'Data de Multa', key: 'penaltyDate', sortable:false },
         { title: 'Ações', key: 'actions', sortable: false }
     ]
 
@@ -48,7 +48,8 @@ export function usePenalty() {
 
             const treatedList = content.map((item: any) => ({
                 ...item,
-                user: item.user?.name ?? 'No Name'
+                user: item.user?.name ?? 'Sem nome',
+                penaltyDate: formatDateTime(item.penaltyDate)
             }))
 
             if (response && 'content' in response) {

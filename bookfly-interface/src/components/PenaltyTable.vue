@@ -7,7 +7,7 @@
   :loading="loading"
   @update-options="getRows"
   :actions="actions"
-  class="elevation-1" />
+  class="elevation-1 w-66" />
 </template>
 
 <script setup lang="ts">

@@ -4,7 +4,7 @@ import { useTableStore } from '@/stores/useTableStore'
 import type { TableOptions } from './useTable'
 import {createCrudActions} from './useCreateCrudActions'
 import type {BtnAction} from '@/composable/useBtnActions'
-
+import {formatDateTime} from '@/utils/dateFormat'
 export function useMoviments() {
     const tableStore = useTableStore('moviments')
       const actions: BtnAction[]= [
@@ -51,7 +51,8 @@ export function useMoviments() {
             const treatedList = content.map((item: any) => ({
                 ...item,
                 user: item.user?.name ?? 'Sem Usuário',
-                book: item.book?.title ?? 'Sem Título'
+                book: item.book?.title ?? 'Sem Título',
+                createdTime: formatDateTime(item.createdTime)
             }))
 
             if (response && 'content' in response) {

@@ -40,9 +40,9 @@ export function useStockBook() {
                 content = response
             }
 
-            const treatedList = content.map((stock: any) => ({
-                ...stock,
-                book: stock.book?.title ?? 'Sem Título'
+            const treatedList = content.map((item: any) => ({
+                ...item,
+                book: item.book?.title ?? 'Sem Título'
             }))
 
             if (response && 'content' in response) {
