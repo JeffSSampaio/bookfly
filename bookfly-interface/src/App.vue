@@ -9,3 +9,9 @@
 <script lang="ts" setup>
   //
 </script>
+
+<style>
+* {
+  font-family: "League Spartan", sans-serif !important;
+}
+</style>
