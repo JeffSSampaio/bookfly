@@ -2,10 +2,14 @@ import { computed } from 'vue'
 import { loanService } from '@/services/loanService'
 import { useTableStore } from '@/stores/useTableStore'
 import type { TableOptions } from './useTable'
+import {createCrudActions} from './useCreateCrudActions'
+import type {BtnAction} from '@/composable/useBtnActions'
 
 export const useLoans = () => {
     const tableStore = useTableStore('loans')
-
+    const actions: BtnAction[]= [
+                ...createCrudActions(edit,deleted)
+            ]
     tableStore.headers = [
         { title: 'ID', key: 'id' },
         { title: 'Usuário', key: 'user' },
@@ -62,12 +66,19 @@ export const useLoans = () => {
         await tableStore.getRows(options, fetchAndTreat)
     }
 
+       function edit(){}
+
+    function deleted(){
+   
+    }
+
     return {
         titleTable: 'Empréstimos',
         headers: tableStore.headers,
         items: computed(() => tableStore.items),
         loading: computed(() => tableStore.loading),
         totalItems: computed(() => tableStore.totalItems),
-        getRows
+        getRows,
+        actions:actions
     }
 }

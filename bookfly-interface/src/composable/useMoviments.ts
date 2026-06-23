@@ -2,10 +2,14 @@ import { computed } from 'vue'
 import { movimentService } from '@/services/movimentServices'
 import { useTableStore } from '@/stores/useTableStore'
 import type { TableOptions } from './useTable'
+import {createCrudActions} from './useCreateCrudActions'
+import type {BtnAction} from '@/composable/useBtnActions'
 
 export function useMoviments() {
     const tableStore = useTableStore('moviments')
-
+      const actions: BtnAction[]= [
+                ...createCrudActions(edit,deleted)
+            ]
     tableStore.headers = [
         { title: 'ID', key: 'movimentId' },
         { title: 'Usuário', key: 'user' },
@@ -62,12 +66,19 @@ export function useMoviments() {
         await tableStore.getRows(options, fetchAndTreat)
     }
 
+       function edit(){}
+
+    function deleted(){
+   
+    }
+
     return {
         titleTable: 'Movimentações',
         headers: tableStore.headers,
         items: computed(() => tableStore.items),
         loading: computed(() => tableStore.loading),
         totalItems: computed(() => tableStore.totalItems),
-        getRows
+        getRows,
+        actions:actions
     }
 }

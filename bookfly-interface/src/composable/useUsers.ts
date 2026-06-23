@@ -2,9 +2,15 @@ import { computed } from 'vue'
 import { userService } from '@/services/userService'
 import { useTableStore } from '@/stores/useTableStore'
 import type { TableOptions } from './useTable'
-
+import {createCrudActions} from './useCreateCrudActions'
+import type {BtnAction} from '@/composable/useBtnActions'
+import {formatDateTime} from '@/utils/dateFormat'
 export function useUsers() {
     const tableStore = useTableStore('users')
+    const actions: BtnAction[] = [
+        ...createCrudActions(edit,deleted)
+    ]
+
 
     tableStore.headers = [
         { title: 'ID', key: 'id' },
@@ -41,6 +47,12 @@ export function useUsers() {
 
         await tableStore.getRows(options, fetchAndTreat)
     }
+     
+    function edit(){}
+
+    function deleted(){
+   
+    }
 
     return {
         titleTable: 'Usuários',
@@ -48,6 +60,7 @@ export function useUsers() {
         items: computed(() => tableStore.items),
         loading: computed(() => tableStore.loading),
         totalItems: computed(() => tableStore.totalItems),
-        getRows
+        getRows,
+        actions:actions
     }
 }

@@ -5,6 +5,7 @@
   :total-items="totalItems" 
   :items="items" 
   :loading="loading"
+  :actions="actions"
   @update-options="getRows"
   class="elevation-1" >
      <template #qtd="{item}">
@@ -25,6 +26,7 @@ const {
     loading, 
     totalItems, 
     headers, 
-    getRows 
+    getRows,
+    actions
     } = useStockBook()
 </script>

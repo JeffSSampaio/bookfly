@@ -60,7 +60,24 @@
         </div>  
       </template>
 
-      <template v-for="header in headers" :key="header.key" v-slot:[`item.${header.key}`]="{ item }: { item: any }">
+      <template v-slot:[`item.actions`]="{ item }">
+  <div class="d-flex ga-2">
+
+    <Button
+      v-for="action in actions"
+      :key="action.label"
+      :color="action.color"
+      size="small"
+      @click="action.handler(item)"
+    >
+      <v-icon>{{ action.icon }}</v-icon>
+      {{ action.label }}
+    </Button>
+
+  </div>
+</template>
+
+      <template v-for="header in headers.filter(h=> h.key !== 'actions')" :key="header.key" v-slot:[`item.${header.key}`]="{ item }: { item: any }">
         <div class="text-brightGreen font-weight-semibold">
           <slot :name="header.key" :item="item">
             {{ item[header.key] }}
@@ -73,6 +90,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import type { PropType } from 'vue'
+import Button from '@/components/ComponentButton.vue'
+import type {BtnAction} from '@/composable/useBtnActions'
+
+
 
 defineProps({
   title: {
@@ -98,10 +120,17 @@ defineProps({
   itemsPerPage: {
     type: Number,
     default: 5
-  }
+  },
+
+actions: {
+  type: Array as PropType<BtnAction[]>,
+  default: ()=> [
+
+  ]
+}
 })
 
-const emit = defineEmits(['updateOptions'])
+const emit = defineEmits(['updateOptions','editBtn','deleteBtn'])
 const search = ref('')
 
 function onOptionsUpdate(options: any) {

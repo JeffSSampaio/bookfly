@@ -2,10 +2,13 @@ import { computed } from 'vue'
 import { stockBookService } from '@/services/StockBookService'
 import { useTableStore } from '@/stores/useTableStore'
 import type { TableOptions } from './useTable'
-
+import {createCrudActions} from './useCreateCrudActions'
+import type {BtnAction} from '@/composable/useBtnActions'
 export function useStockBook() {
     const tableStore = useTableStore('stockBook')
-
+      const actions: BtnAction[]= [
+            ...createCrudActions(edit,deleted)
+        ]
     tableStore.headers = [
         { title: 'ID', key: 'stockId' },
         { title: 'Livro', key: 'book' },
@@ -54,12 +57,19 @@ export function useStockBook() {
         await tableStore.getRows(options, fetchAndTreat)
     }
 
+       function edit(){}
+
+    function deleted(){
+   
+    }
+
     return {
         titleTable: 'Estoque de Livros',
         headers: tableStore.headers,
         items: computed(() => tableStore.items),
         loading: computed(() => tableStore.loading),
         totalItems: computed(() => tableStore.totalItems),
-        getRows
+        getRows,
+        actions:actions
     }
 }

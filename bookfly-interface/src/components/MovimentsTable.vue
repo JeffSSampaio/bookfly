@@ -6,6 +6,7 @@
   :items="items" 
   :loading="loading"
   @update-options="getRows"
+  :actions="actions"
   class="elevation-1" />
 </template>
 
@@ -18,6 +19,7 @@ const {
   loading, 
   totalItems, 
   headers, 
-  getRows 
+  getRows,
+  actions
 } = useMoviments()
 </script>
