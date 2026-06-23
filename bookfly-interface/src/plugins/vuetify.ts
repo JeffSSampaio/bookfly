@@ -9,6 +9,9 @@ import { createVuetify } from 'vuetify'
 // Styles
 import '@mdi/font/css/materialdesignicons.css'
 
+import '@fontsource/league-spartan/400.css'
+import '@fontsource/league-spartan/700.css'
+
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import '@mdi/font/css/materialdesignicons.css'
 import { pt } from 'vuetify/locale'
@@ -48,6 +51,13 @@ export default createVuetify({
     defaultTheme: 'root',
     themes:{
       root
+    }
+  },
+  defaults: {
+    global: {
+      style: {
+        fontFamily: 'League Spartan'
+      }
     }
   },
   locale:{
