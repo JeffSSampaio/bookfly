@@ -90,11 +90,21 @@ public class BookController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
-            @RequestParam(defaultValue = "asc") String direction
-    ){
-        Sort.Direction dir = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page,size,Sort.by(dir,sort));
-        return ResponseEntity.ok(bookService.findAll(pageable));
+            @RequestParam(defaultValue = "asc") String direction,
+            @RequestParam(required = false) String search
+    ) {
+
+        Sort.Direction dir = direction.equalsIgnoreCase("desc")
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(dir, sort));
+
+        Page<Book> books = bookService.findAll(search, pageable);
+
+        Page<BookDetail> response = books.map(BookDetail::from);
+
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Buscar livro por ID")

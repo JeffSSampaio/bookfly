@@ -2,6 +2,8 @@ package com.jefferson.bookfly_api.repository;
 
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -26,5 +28,15 @@ public interface BookRepository extends JpaRepository<Book,Long> {
     @Query("SELECT b FROM Book b WHERE b.recordStatus.recordStatusValue = 'ACTIVE'")
     List<Book> findAllActive();
 
-
+    @Query("""
+    SELECT DISTINCT b
+    FROM Book b
+    LEFT JOIN b.authors a
+    WHERE CAST(b.id AS string) LIKE CONCAT('%', :search, '%')
+       OR LOWER(b.title) LIKE LOWER(CONCAT('%', :search, '%'))
+       OR LOWER(b.summary) LIKE LOWER(CONCAT('%', :search, '%'))
+       OR LOWER(a.name) LIKE LOWER(CONCAT('%', :search, '%'))
+    ORDER BY b.id ASC
+""")
+    Page<Book> search(String search, Pageable pageable);
 }

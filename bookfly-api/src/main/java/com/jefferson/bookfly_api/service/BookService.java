@@ -250,7 +250,20 @@ public class BookService {
     public List<Book> findByTitle(String title) {
         return bookRepository.findActiveByTitleContaining(title);
     }
-    public Page<BookDetail> findAll(Pageable pageable){
-        return bookRepository.findAll(pageable).map(BookDetail::from);
+
+    public Page<Book> findAll(String search, Pageable pageable) {
+
+        if (search == null || search.isBlank()) {
+            return bookRepository.findAll(pageable);
+        }
+
+        return bookRepository.search(
+                search,
+                pageable
+        );
+    }
+
+    public Page<Book> findAll(Pageable pageable){
+        return bookRepository.findAll(pageable);
     }
 }

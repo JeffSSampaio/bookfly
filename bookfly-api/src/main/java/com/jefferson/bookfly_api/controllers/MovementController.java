@@ -36,17 +36,29 @@ public class MovementController {
     private final PdfService pdfService;
 
     @Operation(summary = "Listar todas as movimentações")
-    @ApiResponses({@ApiResponse(responseCode = "200", description = "Movimentações retornadas com sucesso")})
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Movimentações retornadas com sucesso")
+    })
     @GetMapping("/list")
     public ResponseEntity<Page<MovimentSummary>> findAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
-            @RequestParam(defaultValue = "asc") String direction
-    ){
-        Sort.Direction dir = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page,size,Sort.by(dir,sort));
-        return ResponseEntity.ok(movimentService.findAll(pageable));
+            @RequestParam(defaultValue = "asc") String direction,
+            @RequestParam(required = false) String search
+    ) {
+
+        Sort.Direction dir = direction.equalsIgnoreCase("desc")
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(dir, sort));
+
+        Page<Moviment> moviments = movimentService.findAll(search, pageable);
+
+        Page<MovimentSummary> response = moviments.map(MovimentSummary::from);
+
+        return ResponseEntity.ok(response);
     }
 
 

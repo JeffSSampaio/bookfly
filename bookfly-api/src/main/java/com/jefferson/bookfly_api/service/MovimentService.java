@@ -171,8 +171,16 @@ public class MovimentService {
         stockBookRepository.save(stockBook);
         movimentRepository.delete(moviment);
     }
+    public Page<Moviment> findAll(String search,Pageable pageable){
+        if (search == null || search.isBlank()){
+            return movimentRepository.findAll(pageable);
+        }
 
-    public Page<MovimentSummary> findAll(Pageable pageable){
-        return movimentRepository.findAll(pageable).map(MovimentSummary::from);
+        return movimentRepository.search(
+                search,
+                pageable);
+    }
+    public Page<Moviment> findAll(Pageable pageable){
+        return movimentRepository.findAll(pageable);
     }
 }

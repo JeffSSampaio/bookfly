@@ -62,11 +62,21 @@ public class LoanController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
-            @RequestParam(defaultValue = "asc") String direction
-    ){
-        Sort.Direction dir = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page,size,Sort.by(dir,sort));
-        return ResponseEntity.ok(loanService.findAll(pageable));
+            @RequestParam(defaultValue = "asc") String direction,
+            @RequestParam(required = false) String search
+    ) {
+
+        Sort.Direction dir = direction.equalsIgnoreCase("desc")
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(dir, sort));
+
+        Page<Loan> loans = loanService.findAll(search, pageable);
+
+        Page<LoanSummary> response = loans.map(LoanSummary::from);
+
+        return ResponseEntity.ok(response);
     }
 
 

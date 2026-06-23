@@ -374,8 +374,18 @@ public class LoanService {
         existLoan.getRecordStatus().delete(existUser);
         loanRepository.save(existLoan);
     }
+    public Page<Loan> findAll(String search, Pageable pageable) {
 
-    public Page<LoanSummary> findAll(Pageable pageable){
-        return loanRepository.findAll(pageable).map(LoanSummary::from);
+        if (search == null || search.isBlank()) {
+            return loanRepository.findAll(pageable);
+        }
+
+        return loanRepository.search(
+                search,
+                pageable
+        );
+    }
+    public Page<Loan> findAll(Pageable pageable){
+        return loanRepository.findAll(pageable);
     }
 }

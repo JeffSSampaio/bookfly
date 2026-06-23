@@ -12,6 +12,8 @@ import com.jefferson.bookfly_api.repository.BookRepository;
 import com.jefferson.bookfly_api.repository.StockBookRepository;
 import com.jefferson.bookfly_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -121,4 +123,20 @@ public class AuthorService {
 
         authorRepository.save(author);
     }
+    public Page<Author> findAll(String search, Pageable pageable) {
+
+        if (search == null || search.isBlank()) {
+            return authorRepository.findAll(pageable);
+        }
+
+        return authorRepository.search(
+                search,
+                pageable
+        );
+    }
+
+    public Page<Author> findAll( Pageable pageable){
+        return authorRepository.findAll(pageable);
+    }
+
 }

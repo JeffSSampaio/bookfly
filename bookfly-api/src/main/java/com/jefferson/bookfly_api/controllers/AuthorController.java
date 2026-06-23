@@ -1,10 +1,15 @@
 package com.jefferson.bookfly_api.controllers;
 
+import com.jefferson.bookfly_api.dto.author.AuthorDetail;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
 import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.service.AuthorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +31,33 @@ public class AuthorController {
 
     @Operation(summary = "Listar todos os autores")
     @ApiResponse(responseCode = "200", description = "Autores retornados com sucesso")
-    @GetMapping("/list")
+    @GetMapping("/list-all")
     public ResponseEntity<List<Author>> getAllAuthors() {
         return ResponseEntity.ok(authorService.getAllAuthors());
+    }
+
+    @Operation(summary = "Listar todos os autores")
+    @ApiResponse(responseCode = "200", description = "Autores retornados com sucesso")
+    @GetMapping("/list")
+    public ResponseEntity<Page<AuthorDetail>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sort,
+            @RequestParam(defaultValue = "asc") String direction,
+            @RequestParam(required = false) String search
+    ) {
+
+        Sort.Direction dir = direction.equalsIgnoreCase("desc")
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(dir, sort));
+
+        Page<Author> authors = authorService.findAll(search, pageable);
+
+        Page<AuthorDetail> response = authors.map(AuthorDetail::from);
+
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Criar um novo autor")

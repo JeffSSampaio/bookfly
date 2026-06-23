@@ -53,11 +53,15 @@ public class PenaltyController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sort,
-            @RequestParam(defaultValue = "asc") String direction
+            @RequestParam(defaultValue = "asc") String direction,
+            @RequestParam(required = false) String search
     ){
+
         Sort.Direction dir = direction.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable = PageRequest.of(page,size,Sort.by(dir,sort));
-        return ResponseEntity.ok(penaltyService.findAll(pageable));
+        Page<Penalty> penalties = penaltyService.findAll(search,pageable);
+        Page<PenaltyDetail> response = penalties.map(PenaltyDetail::from);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Listar todas as penalidades")

@@ -19,9 +19,10 @@ export function usePenalty() {
         const fetchAndTreat = async (opts: TableOptions) => {
             const page = (opts.page ?? 1) - 1
             const sortBy = opts.sortBy?.[0]
-            
-            const response = await penaltyService.getAll(page, opts.itemsPerPage, sortBy)
-            
+            const search = opts.search
+
+            const response = await penaltyService.getAll(page, opts.itemsPerPage, sortBy, search)
+
             let content: any[] = []
             if (response && 'content' in response) {
                 content = response.content
@@ -47,7 +48,7 @@ export function usePenalty() {
     }
 
     return {
-        titleTable: 'Penalties',
+        titleTable: 'Multas',
         headers: tableStore.headers,
         items: computed(() => tableStore.items),
         loading: computed(() => tableStore.loading),

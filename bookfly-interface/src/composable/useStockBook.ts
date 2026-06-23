@@ -17,8 +17,8 @@ export function useStockBook() {
         const fetchAndTreat = async (opts: TableOptions) => {
             const page = (opts.page ?? 1) - 1
             const sortBy = opts.sortBy?.[0]
-            
-            const response = await stockBookService.getAll(page, opts.itemsPerPage, sortBy,opts.search)
+            const search = opts.search
+            const response = await stockBookService.getAll(page, opts.itemsPerPage, sortBy,search)
             
             let content: any[] = []
             if (response && 'content' in response) {

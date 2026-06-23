@@ -166,8 +166,17 @@ public class PenaltyService {
             penaltyRepository.save(penaltyExist);
     }
 
-    public Page<PenaltyDetail> findAll(Pageable pageable){
-        return penaltyRepository.findAll(pageable).map(PenaltyDetail::from);
+    public Page<Penalty> findAll(String search,Pageable pageable){
+        if (search == null || search.isBlank()){
+            return penaltyRepository.findAll(pageable);
+        }
+
+        return penaltyRepository.search(
+                search,
+                pageable);
+    }
+    public Page<Penalty> findAll(Pageable pageable){
+        return penaltyRepository.findAll(pageable);
     }
 
 
