@@ -18,8 +18,18 @@ export function useStockBook() {
             const page = (opts.page ?? 1) - 1
             const sortBy = opts.sortBy?.[0]
             const search = opts.search
-            const response = await stockBookService.getAll(page, opts.itemsPerPage, sortBy,search)
-            
+
+            const sortKeyMap: Record<string, string> = {
+                stockId: 'id',
+                book: 'book.title'  
+            }
+
+            const mappedSortBy = sortBy
+                ? { key: sortKeyMap[sortBy.key] ?? sortBy.key, order: sortBy.order }
+                : undefined
+
+            const response = await stockBookService.getAll(page, opts.itemsPerPage, mappedSortBy, search)
+
             let content: any[] = []
             if (response && 'content' in response) {
                 content = response.content

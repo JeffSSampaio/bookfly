@@ -26,18 +26,21 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     @Query("SELECT a FROM Author a WHERE a.recordStatus.recordStatusValue = 'ACTIVE' AND LOWER(a.name) = LOWER(:name)")
     Optional<Author> findActiveByName(String name);
 
-    @Query("""
+    @Query(value = """
     SELECT DISTINCT a
     FROM Author a
     LEFT JOIN a.books b
-    WHERE CAST(a.id AS string)
-          LIKE CONCAT('%', :search, '%')
-
-       OR LOWER(a.name)
-          LIKE LOWER(CONCAT('%', :search, '%'))
-
-       OR LOWER(b.title)
-          LIKE LOWER(CONCAT('%', :search, '%'))
+    WHERE CAST(a.id AS string) LIKE CONCAT('%', :search, '%')
+       OR LOWER(a.name) LIKE LOWER(CONCAT('%', :search, '%'))
+       OR LOWER(b.title) LIKE LOWER(CONCAT('%', :search, '%'))
+""",
+            countQuery = """
+    SELECT COUNT(DISTINCT a)
+    FROM Author a
+    LEFT JOIN a.books b
+    WHERE CAST(a.id AS string) LIKE CONCAT('%', :search, '%')
+       OR LOWER(a.name) LIKE LOWER(CONCAT('%', :search, '%'))
+       OR LOWER(b.title) LIKE LOWER(CONCAT('%', :search, '%'))
 """)
     Page<Author> search(String search, Pageable pageable);
 }

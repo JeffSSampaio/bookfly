@@ -21,8 +21,21 @@ export function useMoviments() {
             const page = (opts.page ?? 1) - 1
             const sortBy = opts.sortBy?.[0]
             const search = opts.search
+             const sortKeyMap: Record<string, string> = {
+                movimentId: 'id',
+                user: 'user.name',
+                book: 'book.title',
+                qtdMoved: 'quantity',
+                type: 'type',
+                createdTime: 'createdTime'
+            }
 
-            const response = await movimentService.getAll(page, opts.itemsPerPage, sortBy, search)
+            const mappedSortBy = sortBy
+                ? { key: sortKeyMap[sortBy.key] ?? sortBy.key, order: sortBy.order }
+                : undefined
+
+
+            const response = await movimentService.getAll(page, opts.itemsPerPage, mappedSortBy, search)
             
             let content: any[] = []
             if (response && 'content' in response) {

@@ -7,9 +7,9 @@ export function useBooks() {
     const tableStore = useTableStore('books')
 
     tableStore.headers = [
-        { title: 'Id', key: 'bookId' },
+        { title: 'ID', key: 'bookId' },
         { title: 'Nome', key: 'title' },
-        { title: 'Autores', key: 'authors' },
+        { title: 'Autores', key: 'authors' ,sortable: false},
         { title: 'Ações', key: 'actions', sortable: false }
     ]
 
@@ -19,7 +19,17 @@ export function useBooks() {
             const sortBy = opts.sortBy?.[0]
             const search = opts.search
 
-            const response = await bookService.getAll(page, opts.itemsPerPage, sortBy, search)
+             const sortKeyMap: Record<string, string> = {
+                bookId: 'id',
+                title: 'title',
+                authors: 'id'
+            }
+
+            const mappedSortBy = sortBy
+                ? { key: sortKeyMap[sortBy.key] ?? sortBy.key, order: sortBy.order }
+                : undefined
+
+            const response = await bookService.getAll(page, opts.itemsPerPage, mappedSortBy, search)
 
             let content: any[] = []
             if (response && 'content' in response) {

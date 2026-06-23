@@ -19,7 +19,7 @@ export const useTableStore = (id: string) => {
 
             const page = options.page ?? 1
             const itemsPerPage = options.itemsPerPage ?? 5
-            const sortBy = options.sortBy ?? [0]
+            const sortBy = options.sortBy 
 
             try {
                 const response = await fetchFn({ ...options, search: search.value });

@@ -21,8 +21,21 @@ export const useLoans = () => {
             const page = (opts.page ?? 1) - 1
             const sortBy = opts.sortBy?.[0]
             const search = opts.search
+             const sortKeyMap: Record<string, string> = {
+                id: 'id',
+                user: 'user.name',
+                book: 'book.title',
+                loanDate: 'loanDate',
+                returnDate: 'returnDate',
+                status: 'status'
+            }
 
-            const response = await loanService.getAll(page, opts.itemsPerPage, sortBy, search)
+            const mappedSortBy = sortBy
+                ? { key: sortKeyMap[sortBy.key] ?? sortBy.key, order: sortBy.order }
+                : undefined
+
+
+            const response = await loanService.getAll(page, opts.itemsPerPage, mappedSortBy, search)
 
             let content: any[] = []
             if (response && 'content' in response) {

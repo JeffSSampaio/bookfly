@@ -21,7 +21,19 @@ export function usePenalty() {
             const sortBy = opts.sortBy?.[0]
             const search = opts.search
 
-            const response = await penaltyService.getAll(page, opts.itemsPerPage, sortBy,search)
+             const sortKeyMap: Record<string, string> = {
+                penaltyId: 'id',
+                user: 'user.name',
+                amount: 'amount',
+                statusPenalty: 'status',
+                penaltyDate: 'date'
+            }
+
+            const mappedSortBy = sortBy
+                ? { key: sortKeyMap[sortBy.key] ?? sortBy.key, order: sortBy.order }
+                : undefined
+
+            const response = await penaltyService.getAll(page, opts.itemsPerPage, mappedSortBy, search)
 
             let content: any[] = []
             if (response && 'content' in response) {
