@@ -2,14 +2,17 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.dto.stockbook.StockBookSummary;
+import com.jefferson.bookfly_api.enums.ItemEventAction;
 import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
+import com.jefferson.bookfly_api.events.ItemEvent;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,7 +31,7 @@ public class StockBookService {
     private final BookRepository bookRepository;
     private final MovimentRepository movimentRepository;
     private final StockService stockService;
-
+    private final ApplicationEventPublisher eventPublisher;
 
     @Auditable(
             action = "ADICIONADO_LIVRO_ESTOQUE",
@@ -84,7 +87,7 @@ public class StockBookService {
 
         StockBook saved = stockBookRepository.save(stockBook);
         movimentRepository.save(moviment);
-
+        eventPublisher.publishEvent(new ItemEvent("stockbook", ItemEventAction.CREATED));
         return saved;
     }
 
@@ -147,7 +150,7 @@ public class StockBookService {
         moviment.setUser(admin);
         moviment.setCreatedTime(LocalDateTime.now());
         movimentRepository.save(moviment);
-
+        eventPublisher.publishEvent(new ItemEvent("stockbook", ItemEventAction.UPDATED));
         return stockBookRepository.save(stockBook);
     }
 
@@ -179,7 +182,7 @@ public class StockBookService {
 
         stockBook.getRecordStatus().delete(userExist);
         stockBook.setQtd(0);
-
+        eventPublisher.publishEvent(new ItemEvent("stockbook", ItemEventAction.DELETED));
         stockBookRepository.save(stockBook);
     }
     public Page<StockBook> findAll(String search,Pageable pageable){

@@ -2,13 +2,16 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.dto.penalty.PenaltyDetail;
+import com.jefferson.bookfly_api.enums.ItemEventAction;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
+import com.jefferson.bookfly_api.events.ItemEvent;
 import com.jefferson.bookfly_api.exceptions.DependencyViolationException;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,7 +29,7 @@ public class PenaltyService {
     private final PenaltyRepository penaltyRepository;
     private final UserRepository userRepository;
     private final LoanRepository loanRepository;
-
+    private final ApplicationEventPublisher eventPublisher;
     public List<Penalty> getAllPenaltys() {
         return penaltyRepository.findAll();
     }
@@ -59,7 +62,7 @@ public class PenaltyService {
 
             loan.setStatus(StatusLoan.ATRASADO);
             loanRepository.save(loan);
-
+            eventPublisher.publishEvent(new ItemEvent("penalties", ItemEventAction.CREATED));
             return penaltyRepository.save(penalty);
         } else {
             throw new DependencyViolationException("Não foi possível criar multa: o prazo de devolução ainda não venceu");
@@ -143,7 +146,7 @@ public class PenaltyService {
         if (updatedData.getLoan() != null) {
             existingPenalty.setLoan(updatedData.getLoan());
         }
-
+        eventPublisher.publishEvent(new ItemEvent("penalties", ItemEventAction.UPDATED));
         return penaltyRepository.save(existingPenalty);
     }
     @Auditable(
@@ -162,7 +165,7 @@ public class PenaltyService {
             }
 
             penaltyExist.getRecordStatus().delete(userExist);
-
+            eventPublisher.publishEvent(new ItemEvent("penalties", ItemEventAction.DELETED));
             penaltyRepository.save(penaltyExist);
     }
 

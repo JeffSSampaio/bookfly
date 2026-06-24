@@ -5,10 +5,12 @@ import type { TableOptions } from './useTable'
 import { createCrudActions } from './useCreateCrudActions'
 import { formatDateTime } from '@/utils/dateFormat'
 import { useForm, type FormField } from './useForm'
+import { useWebSocket } from './useWebSocket'
 
 export function useUsers() {
   const tableStore = useTableStore('users')
-  const { showModal, modalType, selectedItem, openModal, closeModal, deleteMessage, buildForm, fillForm } = useForm()
+  const { showModal, modalType, selectedItem, openModal, 
+    closeModal, deleteMessage, buildForm, fillForm,lastOptions,setLastOptions } = useForm()
 
   
   const fields: FormField[] = [
@@ -64,6 +66,7 @@ export function useUsers() {
   ]
 
   async function getRows(options: TableOptions) {
+    setLastOptions(options)
     const fetchAndTreat = async (opts: TableOptions) => {
       const page = (opts.page ?? 1) - 1
       const sortBy = opts.sortBy?.[0]
@@ -84,7 +87,10 @@ export function useUsers() {
 
     await tableStore.getRows(options, fetchAndTreat)
   }
-
+  
+useWebSocket('users', () => {
+  if (lastOptions.value) getRows(lastOptions.value)
+})
   return {
     titleTable: 'Usuários',
     headers: tableStore.headers,

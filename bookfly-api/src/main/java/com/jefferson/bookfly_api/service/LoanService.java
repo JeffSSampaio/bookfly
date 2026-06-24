@@ -4,11 +4,13 @@ import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.config.AuditContext;
 import com.jefferson.bookfly_api.dto.loan.LoanSummary;
 import com.jefferson.bookfly_api.enums.*;
+import com.jefferson.bookfly_api.events.ItemEvent;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class LoanService {
     private final StockBookRepository stockBookRepository;
     private final StockService stockService;
     private final PenaltyRepository penaltyRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Auditable(
             action = "LISTAR_TODAS_MOVIMENTAÇÕES",
@@ -115,6 +118,7 @@ public class LoanService {
 
         stockBookRepository.save(bookOnStock);
         movimentRepository.save(moviment);
+        eventPublisher.publishEvent(new ItemEvent("loans", ItemEventAction.CREATED));
         return loanRepository.save(loan);
     }
 
@@ -146,6 +150,7 @@ public class LoanService {
         });
 
         loanExists.setStatus(StatusLoan.ATIVO);
+        eventPublisher.publishEvent(new ItemEvent("loans", ItemEventAction.UPDATED));
         return loanRepository.save(loanExists);
     }
 
@@ -192,6 +197,7 @@ public class LoanService {
 
         stockBookRepository.save(bookOnStock);
         movimentRepository.save(movimentEntrada);
+        eventPublisher.publishEvent(new ItemEvent("loans", ItemEventAction.UPDATED));
         return loanRepository.save(loan);
     }
 
@@ -239,7 +245,7 @@ public class LoanService {
         movimentRepository.save(moviment);
         stockBookRepository.save(bookOnStock);
         loanRepository.delete(existLoan);
-
+        eventPublisher.publishEvent(new ItemEvent("loans", ItemEventAction.UPDATED));
         return moviment;
     }
 
@@ -329,7 +335,7 @@ public class LoanService {
 
             existLoan.setStatus(newLoanStatus);
         }
-
+        eventPublisher.publishEvent(new ItemEvent("loans", ItemEventAction.UPDATED));
         return loanRepository.save(existLoan);
     }
     @Auditable(
@@ -372,6 +378,7 @@ public class LoanService {
                 .orElseThrow(() -> new NotFoundException("Esse Usuário não existe para realizar esa ação"));
 
         existLoan.getRecordStatus().delete(existUser);
+        eventPublisher.publishEvent(new ItemEvent("loans", ItemEventAction.DELETED));
         loanRepository.save(existLoan);
     }
     public Page<Loan> findAll(String search, Pageable pageable) {

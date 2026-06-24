@@ -5,7 +5,9 @@ import com.jefferson.bookfly_api.config.AuditContext;
 import com.jefferson.bookfly_api.dto.book.BookDetail;
 import com.jefferson.bookfly_api.dto.book.BookRequest;
 import com.jefferson.bookfly_api.enums.Gender;
+import com.jefferson.bookfly_api.enums.ItemEventAction;
 import com.jefferson.bookfly_api.enums.RecordStatusValue;
+import com.jefferson.bookfly_api.events.ItemEvent;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
@@ -15,6 +17,7 @@ import com.jefferson.bookfly_api.repository.BookRepository;
 import com.jefferson.bookfly_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,7 +34,7 @@ public class BookService {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final UserRepository userRepository;
-
+    private final ApplicationEventPublisher eventPublisher;
     @Auditable(
             action = "REGISTRAR_LIVRO",
             details = "REGISTRADO LIVRO NO SISTEMA"
@@ -88,7 +91,7 @@ public class BookService {
         }
 
         System.out.println("\nLivro cadastrado " + book);
-
+        eventPublisher.publishEvent(new ItemEvent("books", ItemEventAction.CREATED));
         return bookRepository.save(bookToSave);
     }
 
@@ -151,7 +154,7 @@ public class BookService {
         }
 
         System.out.println("\nLivro cadastrado " + book);
-
+        eventPublisher.publishEvent(new ItemEvent("books", ItemEventAction.CREATED));
         return bookRepository.save(bookToSave);
     }
 
@@ -196,7 +199,7 @@ public class BookService {
             existBook.setAuthors(updatedAuthors);
         }
         AuditContext.capture("bookId",existBook.getId());
-
+        eventPublisher.publishEvent(new ItemEvent("books", ItemEventAction.UPDATED));
         return bookRepository.save(existBook);
     }
     @Auditable(
@@ -231,6 +234,7 @@ public class BookService {
                 .orElseThrow(()-> new NotFoundException("Este Usuário não existe para realizar a ação de deletar."));
         book.getRecordStatus().active(currentUser);
         bookRepository.save(book);
+        eventPublisher.publishEvent(new ItemEvent("books", ItemEventAction.UPDATED));
     }
 
     @Transactional
@@ -245,6 +249,7 @@ public class BookService {
         book.getRecordStatus().delete(existUser);
         AuditContext.capture("bookId",book.getId());
         bookRepository.save(book);
+        eventPublisher.publishEvent(new ItemEvent("books", ItemEventAction.DELETED));
     }
 
     public List<Book> findByTitle(String title) {

@@ -5,20 +5,22 @@ import type { TableOptions } from './useTable'
 import { createCrudActions } from './useCreateCrudActions'
 import type { BtnAction } from '@/composable/useBtnActions'
 import { useForm, type FormField } from './useForm'
+import { useWebSocket } from './useWebSocket'
 
 export function useBooks() {
     const tableStore = useTableStore('books')
-    const { showModal, modalType, selectedItem, openModal, closeModal, deleteMessage, buildForm, fillForm } = useForm()
+    const { showModal, modalType, selectedItem, openModal,
+        closeModal, deleteMessage, buildForm, fillForm, lastOptions, setLastOptions } = useForm()
 
-  
+
     const fields: FormField[] = [
-        { name: 'title',  label: 'Título', type: 'text' },
-        { name: 'authors',   label: 'Autores',   type: 'text' },
+        { name: 'title', label: 'Título', type: 'text' },
+        { name: 'authors', label: 'Autores', type: 'text' },
     ]
 
     const form = buildForm(fields)
 
- 
+
     function edit(item?: any) {
         fillForm(form.value, item)
         openModal('edit', item)
@@ -30,7 +32,7 @@ export function useBooks() {
 
     const actions: BtnAction[] = [...createCrudActions(edit, deleted)]
 
-  
+
     async function handleSubmit(formData: Record<string, any>) {
         if (selectedItem.value) {
             console.log('[useBooks] Atualizar livro:', selectedItem.value.bookId, formData)
@@ -52,15 +54,16 @@ export function useBooks() {
         // await getRows({ page: 1, itemsPerPage: 10 })
     }
 
-  
+
     tableStore.headers = [
-        { title: 'ID',      key: 'bookId' },
-        { title: 'Nome',    key: 'title' },
+        { title: 'ID', key: 'bookId' },
+        { title: 'Nome', key: 'title' },
         { title: 'Autores', key: 'authors', sortable: false },
-        { title: 'Ações',   key: 'actions', sortable: false }
+        { title: 'Ações', key: 'actions', sortable: false }
     ]
 
     async function getRows(options: TableOptions) {
+        setLastOptions(options)
         const fetchAndTreat = async (opts: TableOptions) => {
             const page = (opts.page ?? 1) - 1
             const sortBy = opts.sortBy?.[0]
@@ -93,6 +96,7 @@ export function useBooks() {
 
         await tableStore.getRows(options, fetchAndTreat)
     }
+    useWebSocket('books', () => { if (lastOptions.value) getRows(lastOptions.value) })
 
     return {
         titleTable: 'Livros',

@@ -4,12 +4,15 @@ import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.config.AuditContext;
 import com.jefferson.bookfly_api.dto.user.UserRequest;
 import com.jefferson.bookfly_api.dto.user.UserSummary;
+import com.jefferson.bookfly_api.enums.ItemEventAction;
 import com.jefferson.bookfly_api.enums.Role;
+import com.jefferson.bookfly_api.events.ItemEvent;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Auditable(
             action = "CRIADO_USUARIO",
@@ -40,7 +44,7 @@ public class UserService {
         userToSave.setEmail(user.getEmail());
         userToSave.setPassword(user.getPassword());
         userToSave.setRole(user.getRole());
-
+        eventPublisher.publishEvent(new ItemEvent("users", ItemEventAction.CREATED));
         return userRepository.save(user);
     }
 
@@ -84,7 +88,7 @@ public class UserService {
         if (newUser.getRole() != null) {
             userExist.setRole(newUser.getRole());
         }
-
+        eventPublisher.publishEvent(new ItemEvent("users", ItemEventAction.UPDATED));
         return userRepository.save(userExist);
     }
 
@@ -123,7 +127,7 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         user.getRecordStatus().delete(user);
-
+        eventPublisher.publishEvent(new ItemEvent("users", ItemEventAction.DELETED));
         userRepository.save(user);
     }
 

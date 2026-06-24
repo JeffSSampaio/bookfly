@@ -5,15 +5,17 @@ import type { TableOptions } from './useTable'
 import { createCrudActions } from './useCreateCrudActions'
 import type { BtnAction } from '@/composable/useBtnActions'
 import { useForm, type FormField } from './useForm'
+import { useWebSocket } from './useWebSocket'
 
 export function useStockBook() {
     const tableStore = useTableStore('stockBook')
-    const { showModal, modalType, selectedItem, openModal, closeModal, deleteMessage, buildForm, fillForm } = useForm()
+    const { showModal, modalType, selectedItem, openModal,
+        closeModal, deleteMessage, buildForm, fillForm, lastOptions, setLastOptions } = useForm()
 
-  
+
     const fields: FormField[] = [
-        { name: 'bookId', label: 'Livro',      type: 'select' },
-        { name: 'qtd',    label: 'Quantidade', type: 'text'   },
+        { name: 'bookId', label: 'Livro', type: 'select' },
+        { name: 'qtd', label: 'Quantidade', type: 'text' },
     ]
 
     const form = buildForm(fields)
@@ -29,7 +31,7 @@ export function useStockBook() {
 
     const actions: BtnAction[] = [...createCrudActions(edit, deleted)]
 
-   
+
     async function handleSubmit(formData: Record<string, any>) {
         if (selectedItem.value) {
             console.log('[useStockBook] Atualizar estoque:', selectedItem.value.stockId, formData)
@@ -53,13 +55,14 @@ export function useStockBook() {
 
 
     tableStore.headers = [
-        { title: 'ID',         key: 'stockId' },
-        { title: 'Livro',      key: 'book' },
+        { title: 'ID', key: 'stockId' },
+        { title: 'Livro', key: 'book' },
         { title: 'Quantidade', key: 'qtd' },
-        { title: 'Ações',      key: 'actions', sortable: false }
+        { title: 'Ações', key: 'actions', sortable: false }
     ]
 
     async function getRows(options: TableOptions) {
+        setLastOptions(options)
         const fetchAndTreat = async (opts: TableOptions) => {
             const page = (opts.page ?? 1) - 1
             const sortBy = opts.sortBy?.[0]
@@ -91,6 +94,7 @@ export function useStockBook() {
 
         await tableStore.getRows(options, fetchAndTreat)
     }
+    useWebSocket('stockbook', () => { if (lastOptions.value) getRows(lastOptions.value) })
 
     return {
         titleTable: 'Estoque de Livros',

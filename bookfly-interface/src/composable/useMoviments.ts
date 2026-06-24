@@ -6,22 +6,23 @@ import { createCrudActions } from './useCreateCrudActions'
 import type { BtnAction } from '@/composable/useBtnActions'
 import { formatDateTime } from '@/utils/dateFormat'
 import { useForm, type FormField } from './useForm'
-
+import { useWebSocket } from './useWebSocket'
 export function useMoviments() {
     const tableStore = useTableStore('moviments')
-    const { showModal, modalType, selectedItem, openModal, closeModal, deleteMessage, buildForm, fillForm } = useForm()
+    const { showModal, modalType, selectedItem, openModal,
+        closeModal, deleteMessage, buildForm, fillForm, lastOptions, setLastOptions } = useForm()
 
-  
+
     const fields: FormField[] = [
-        { name: 'userId',    label: 'Usuário',    type: 'select' },
-        { name: 'bookId',    label: 'Livro',      type: 'select' },
-        { name: 'qtdMoved',  label: 'Quantidade', type: 'text'   },
-        { name: 'type',      label: 'Tipo',       type: 'select' },
+        { name: 'userId', label: 'Usuário', type: 'select' },
+        { name: 'bookId', label: 'Livro', type: 'select' },
+        { name: 'qtdMoved', label: 'Quantidade', type: 'text' },
+        { name: 'type', label: 'Tipo', type: 'select' },
     ]
 
     const form = buildForm(fields)
 
-  
+
     function edit(item?: any) {
         fillForm(form.value, item)
         openModal('edit', item)
@@ -55,18 +56,19 @@ export function useMoviments() {
         // await getRows({ page: 1, itemsPerPage: 10 })
     }
 
-    
+
     tableStore.headers = [
-        { title: 'ID',              key: 'movimentId' },
-        { title: 'Usuário',         key: 'user' },
-        { title: 'Livro',           key: 'book' },
-        { title: 'Quantidade',      key: 'qtdMoved' },
-        { title: 'Tipo',            key: 'type' },
+        { title: 'ID', key: 'movimentId' },
+        { title: 'Usuário', key: 'user' },
+        { title: 'Livro', key: 'book' },
+        { title: 'Quantidade', key: 'qtdMoved' },
+        { title: 'Tipo', key: 'type' },
         { title: 'Data de Criação', key: 'createdTime' },
-        { title: 'Ações',           key: 'actions', sortable: false }
+        { title: 'Ações', key: 'actions', sortable: false }
     ]
 
     async function getRows(options: TableOptions) {
+        setLastOptions(options)
         const fetchAndTreat = async (opts: TableOptions) => {
             const page = (opts.page ?? 1) - 1
             const sortBy = opts.sortBy?.[0]
@@ -104,6 +106,7 @@ export function useMoviments() {
 
         await tableStore.getRows(options, fetchAndTreat)
     }
+    useWebSocket('moviments', () => { if (lastOptions.value) getRows(lastOptions.value) })
 
     return {
         titleTable: 'Movimentações',

@@ -6,21 +6,23 @@ import { createCrudActions } from './useCreateCrudActions'
 import type { BtnAction } from '@/composable/useBtnActions'
 import { formatDateTime } from '@/utils/dateFormat'
 import { useForm, type FormField } from './useForm'
+import { useWebSocket } from './useWebSocket'
 
 export const useLoans = () => {
     const tableStore = useTableStore('loans')
-    const { showModal, modalType, selectedItem, openModal, closeModal, deleteMessage, buildForm, fillForm } = useForm()
+    const { showModal, modalType, selectedItem, openModal,
+        closeModal, deleteMessage, buildForm, fillForm, lastOptions, setLastOptions } = useForm()
 
-  
+
     const fields: FormField[] = [
-        { name: 'userId',     label: 'Usuário',           type: 'select' },
-        { name: 'bookId',     label: 'Livro',             type: 'select' },
-        { name: 'returnDate', label: 'Data de Devolução', type: 'text'   },
+        { name: 'userId', label: 'Usuário', type: 'select' },
+        { name: 'bookId', label: 'Livro', type: 'select' },
+        { name: 'returnDate', label: 'Data de Devolução', type: 'text' },
     ]
 
     const form = buildForm(fields)
 
-    
+
     function edit(item?: any) {
         fillForm(form.value, item)
         openModal('edit', item)
@@ -32,7 +34,7 @@ export const useLoans = () => {
 
     const actions: BtnAction[] = [...createCrudActions(edit, deleted)]
 
-  
+
     async function handleSubmit(formData: Record<string, any>) {
         if (selectedItem.value) {
             console.log('[useLoans] Atualizar empréstimo:', selectedItem.value.id, formData)
@@ -54,18 +56,19 @@ export const useLoans = () => {
         // await getRows({ page: 1, itemsPerPage: 10 })
     }
 
-   
+
     tableStore.headers = [
-        { title: 'ID',               key: 'id' },
-        { title: 'Usuário',          key: 'user' },
-        { title: 'Livro',            key: 'book' },
+        { title: 'ID', key: 'id' },
+        { title: 'Usuário', key: 'user' },
+        { title: 'Livro', key: 'book' },
         { title: 'Data de Empréstimo', key: 'loanDate' },
-        { title: 'Data de Devolução',  key: 'returnDate' },
-        { title: 'Status',           key: 'status' },
-        { title: 'Ações',            key: 'actions', sortable: false }
+        { title: 'Data de Devolução', key: 'returnDate' },
+        { title: 'Status', key: 'status' },
+        { title: 'Ações', key: 'actions', sortable: false }
     ]
 
     async function getRows(options: TableOptions) {
+        setLastOptions(options)
         const fetchAndTreat = async (opts: TableOptions) => {
             const page = (opts.page ?? 1) - 1
             const sortBy = opts.sortBy?.[0]
@@ -104,6 +107,7 @@ export const useLoans = () => {
 
         await tableStore.getRows(options, fetchAndTreat)
     }
+    useWebSocket('loans', () => { if (lastOptions.value) getRows(lastOptions.value) })
 
     return {
         titleTable: 'Empréstimos',

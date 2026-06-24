@@ -3,13 +3,16 @@ package com.jefferson.bookfly_api.service;
 import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.config.AuditContext;
 import com.jefferson.bookfly_api.dto.moviment.MovimentSummary;
+import com.jefferson.bookfly_api.enums.ItemEventAction;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
+import com.jefferson.bookfly_api.events.ItemEvent;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,7 +30,7 @@ public class MovimentService {
     private final UserRepository userRepository;
     private final StockBookRepository stockBookRepository;
     private final StockService stockService;
-
+    private final ApplicationEventPublisher eventPublisher;
     @Transactional
     @Auditable(
             action = "FAZER_MOVIMENTACAO_ITENS",
@@ -76,7 +79,7 @@ public class MovimentService {
         moviment.setTypeItem(type);
         moviment.setQtdMoviment(Math.abs(qtd));
         moviment.setCreatedTime(LocalDateTime.now());
-
+        eventPublisher.publishEvent(new ItemEvent("moviments", ItemEventAction.CREATED));
         return movimentRepository.save(moviment);
     }
 
@@ -144,6 +147,7 @@ public class MovimentService {
         if (newMoviment.getQtdMoviment() != oldMoviment.getQtdMoviment() ) oldMoviment.setQtdMoviment(newMoviment.getQtdMoviment());
 
         stockBookRepository.save(stockBook);
+        eventPublisher.publishEvent(new ItemEvent("moviments", ItemEventAction.UPDATED));
         return movimentRepository.save(oldMoviment);
     }
 
@@ -169,6 +173,7 @@ public class MovimentService {
         }
 
         stockBookRepository.save(stockBook);
+        eventPublisher.publishEvent(new ItemEvent("moviments", ItemEventAction.DELETED));
         movimentRepository.delete(moviment);
     }
     public Page<Moviment> findAll(String search,Pageable pageable){

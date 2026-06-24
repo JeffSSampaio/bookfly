@@ -12,6 +12,7 @@ import com.jefferson.bookfly_api.repository.BookRepository;
 import com.jefferson.bookfly_api.repository.StockBookRepository;
 import com.jefferson.bookfly_api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,6 @@ public class AuthorService {
     private final StockBookRepository stockBookRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
-
 
     public List<Author> getAllAuthors() {
         return authorRepository.findAll();
