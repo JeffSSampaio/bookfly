@@ -9,8 +9,8 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn variant="text" @click="emit('cancel')">Cancelar</v-btn>
-        <v-btn color="primary" variant="flat" @click="emit('confirm')">
+        <v-btn variant="text" @click="model = false";>Cancelar</v-btn>
+        <v-btn color="primary" variant="flat" @click="emit('confirm')" :class="classText">
           {{ confirmText }}
         </v-btn>
       </v-card-actions>
@@ -21,13 +21,20 @@
 <script setup lang="ts">
 const model = defineModel<boolean>({ required: true })
 
-defineProps<{
-  title: string
-  confirmText?: string
-}>()
+defineProps({
+  title: {
+    type: String,
+    required: true
+  },
+  confirmText: {
+    type: String,
+    default: 'Confirmar'
+  },
+  classText:{
+    type:String,
+    default:''
+  }
+})
 
-const emit = defineEmits<{
-  confirm: []
-  cancel: []
-}>()
+const emit = defineEmits(['confirm', 'cancel'])
 </script>
