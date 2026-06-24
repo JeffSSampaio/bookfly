@@ -149,6 +149,7 @@ public class StockBookService {
         moviment.setDescription(description.toUpperCase());
         moviment.setUser(admin);
         moviment.setCreatedTime(LocalDateTime.now());
+        eventPublisher.publishEvent(new ItemEvent("moviments", ItemEventAction.UPDATED));
         movimentRepository.save(moviment);
         eventPublisher.publishEvent(new ItemEvent("stockbook", ItemEventAction.UPDATED));
         return stockBookRepository.save(stockBook);
