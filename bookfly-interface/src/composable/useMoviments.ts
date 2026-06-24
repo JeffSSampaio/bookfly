@@ -2,22 +2,68 @@ import { computed } from 'vue'
 import { movimentService } from '@/services/movimentServices'
 import { useTableStore } from '@/stores/useTableStore'
 import type { TableOptions } from './useTable'
-import {createCrudActions} from './useCreateCrudActions'
-import type {BtnAction} from '@/composable/useBtnActions'
-import {formatDateTime} from '@/utils/dateFormat'
+import { createCrudActions } from './useCreateCrudActions'
+import type { BtnAction } from '@/composable/useBtnActions'
+import { formatDateTime } from '@/utils/dateFormat'
+import { useForm, type FormField } from './useForm'
+
 export function useMoviments() {
     const tableStore = useTableStore('moviments')
-      const actions: BtnAction[]= [
-                ...createCrudActions(edit,deleted)
-            ]
+    const { showModal, modalType, selectedItem, openModal, closeModal, deleteMessage, buildForm, fillForm } = useForm()
+
+  
+    const fields: FormField[] = [
+        { name: 'userId',    label: 'Usuário',    type: 'select' },
+        { name: 'bookId',    label: 'Livro',      type: 'select' },
+        { name: 'qtdMoved',  label: 'Quantidade', type: 'text'   },
+        { name: 'type',      label: 'Tipo',       type: 'select' },
+    ]
+
+    const form = buildForm(fields)
+
+  
+    function edit(item?: any) {
+        fillForm(form.value, item)
+        openModal('edit', item)
+    }
+
+    function deleted(item?: any) {
+        openModal('delete', item)
+    }
+
+    const actions: BtnAction[] = [...createCrudActions(edit, deleted)]
+
+
+    async function handleSubmit(formData: Record<string, any>) {
+        if (selectedItem.value) {
+            console.log('[useMoviments] Atualizar movimentação:', selectedItem.value.movimentId, formData)
+            // await movimentService.update(selectedItem.value.movimentId, formData)
+        } else {
+            console.log('[useMoviments] Criar movimentação:', formData)
+            // await movimentService.create(formData)
+        }
+        closeModal()
+        // await getRows({ page: 1, itemsPerPage: 10 })
+    }
+
+    async function handleDelete() {
+        const id = selectedItem.value?.movimentId
+        if (!id) return
+        console.log('[useMoviments] Deletar movimentação:', id)
+        // await movimentService.delete(id)
+        closeModal()
+        // await getRows({ page: 1, itemsPerPage: 10 })
+    }
+
+    
     tableStore.headers = [
-        { title: 'ID', key: 'movimentId' },
-        { title: 'Usuário', key: 'user' },
-        { title: 'Livro', key: 'book' },
-        { title: 'Quantidade', key: 'qtdMoved' },
-        { title: 'Tipo', key: 'type' },
+        { title: 'ID',              key: 'movimentId' },
+        { title: 'Usuário',         key: 'user' },
+        { title: 'Livro',           key: 'book' },
+        { title: 'Quantidade',      key: 'qtdMoved' },
+        { title: 'Tipo',            key: 'type' },
         { title: 'Data de Criação', key: 'createdTime' },
-        { title: 'Ações', key: 'actions', sortable: false }
+        { title: 'Ações',           key: 'actions', sortable: false }
     ]
 
     async function getRows(options: TableOptions) {
@@ -25,7 +71,8 @@ export function useMoviments() {
             const page = (opts.page ?? 1) - 1
             const sortBy = opts.sortBy?.[0]
             const search = opts.search
-             const sortKeyMap: Record<string, string> = {
+
+            const sortKeyMap: Record<string, string> = {
                 movimentId: 'id',
                 user: 'user.name',
                 book: 'book.title',
@@ -38,15 +85,11 @@ export function useMoviments() {
                 ? { key: sortKeyMap[sortBy.key] ?? sortBy.key, order: sortBy.order }
                 : undefined
 
-
             const response = await movimentService.getAll(page, opts.itemsPerPage, mappedSortBy, search)
-            
+
             let content: any[] = []
-            if (response && 'content' in response) {
-                content = response.content
-            } else if (Array.isArray(response)) {
-                content = response
-            }
+            if (response && 'content' in response) content = response.content
+            else if (Array.isArray(response)) content = response
 
             const treatedList = content.map((item: any) => ({
                 ...item,
@@ -55,22 +98,11 @@ export function useMoviments() {
                 createdTime: formatDateTime(item.createdTime)
             }))
 
-            if (response && 'content' in response) {
-                return {
-                    content: treatedList,
-                    page: response.page
-                }
-            }
+            if (response && 'content' in response) return { content: treatedList, page: response.page }
             return treatedList
         }
 
         await tableStore.getRows(options, fetchAndTreat)
-    }
-
-       function edit(){}
-
-    function deleted(){
-   
     }
 
     return {
@@ -80,6 +112,13 @@ export function useMoviments() {
         loading: computed(() => tableStore.loading),
         totalItems: computed(() => tableStore.totalItems),
         getRows,
-        actions:actions
+        actions,
+        showModal,
+        modalType,
+        fields,
+        handleSubmit,
+        handleDelete,
+        deleteMessage: computed(() => deleteMessage('movimentação')),
+        closeModal
     }
 }

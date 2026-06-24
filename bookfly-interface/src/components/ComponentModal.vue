@@ -11,7 +11,7 @@
 
         <v-spacer />
         <div class=" d-flex  flex-row   justify-space-between w-100">
-          <v-btn variant="text" @click="model = false";>Cancelar</v-btn>
+          <v-btn variant="text" @click="emit('cancel')">Cancelar</v-btn>
           <v-btn color="primary" variant="flat" @click="emit('confirm')" :class="classText">
             {{ confirmText }}
           </v-btn>

@@ -1,39 +1,65 @@
-import { reactive , watch} from 'vue'
+import { ref, reactive, computed } from 'vue'
 
 export interface FormField {
-    name: string
-    label: string
-    type: 'text' | 'email' | 'password' | 'select'
-    cols?: number
-    class?: string
-    required?: boolean
-    items?: any[]
-    placeholder?: string
-    defaultValue?: any
-    rules?: ((value: any) => boolean | string)[]
+  name: string
+  label: string
+  type: 'text' | 'email' | 'password' | 'select'
+  cols?: number
+  required?: boolean
+  items?: any[]
+  placeholder?: string
+  defaultValue?: any
+  rules?: ((value: any) => boolean | string)[]
 }
 
 export function useForm() {
+  const showModal = ref(false)
+  const modalType = ref<'edit' | 'delete' | null>(null)
+  const selectedItem = ref<any>(null)
 
-    function buildForm(fields: FormField[]) {
-        const form = reactive<Record<string, any>>({})
+ 
 
-        fields.forEach(field => {
-            form[field.name] = field.defaultValue ?? ''
-        })
+function buildForm(fields: FormField[]) {
+  const formData: Record<string, any> = {}
+  fields.forEach((field) => {
+    formData[field.name] = field.defaultValue ?? ''
+  })
+  return ref(formData) 
+}
 
-        return form
-    }
+  
+  function fillForm(formData: Record<string, any>, item: any) {
+    Object.keys(formData).forEach((key) => {
+      formData[key] = item?.[key] ?? ''
+    })
+  }
 
-    function buildRules(field: FormField){
-        const rules = [...(field.rules ?? [])]
-        if(field.required){
-            rules.unshift(v => !!v || 'Campo obrigatório')
-        }
-        return rules
-    }
+  function openModal(type: 'edit' | 'delete', item?: any) {
+    modalType.value = type
+    selectedItem.value = item ?? null
+    showModal.value = true
+  }
 
-    return {
-        buildForm
-    }
+  function closeModal() {
+    modalType.value = null
+    selectedItem.value = null
+    showModal.value = false
+  }
+
+  function deleteMessage(entityLabel: string) {
+    return selectedItem.value?.name
+      ? `Deseja apagar ${entityLabel} "${selectedItem.value.name}"?`
+      : `Deseja apagar este ${entityLabel}?`
+  }
+
+  return {
+    showModal,
+    modalType,
+    selectedItem,
+    buildForm,
+    fillForm,
+    openModal,
+    closeModal,
+    deleteMessage,
+  }
 }

@@ -2,19 +2,62 @@ import { computed } from 'vue'
 import { bookService } from '@/services/bookService'
 import { useTableStore } from '@/stores/useTableStore'
 import type { TableOptions } from './useTable'
-import {createCrudActions} from './useCreateCrudActions'
-import type {BtnAction} from '@/composable/useBtnActions'
+import { createCrudActions } from './useCreateCrudActions'
+import type { BtnAction } from '@/composable/useBtnActions'
+import { useForm, type FormField } from './useForm'
 
 export function useBooks() {
     const tableStore = useTableStore('books')
-    const actions: BtnAction[]= [
-                    ...createCrudActions(edit,deleted)
-                ]
+    const { showModal, modalType, selectedItem, openModal, closeModal, deleteMessage, buildForm, fillForm } = useForm()
+
+  
+    const fields: FormField[] = [
+        { name: 'title',  label: 'Título', type: 'text' },
+        { name: 'authors',   label: 'Autores',   type: 'text' },
+    ]
+
+    const form = buildForm(fields)
+
+ 
+    function edit(item?: any) {
+        fillForm(form.value, item)
+        openModal('edit', item)
+    }
+
+    function deleted(item?: any) {
+        openModal('delete', item)
+    }
+
+    const actions: BtnAction[] = [...createCrudActions(edit, deleted)]
+
+  
+    async function handleSubmit(formData: Record<string, any>) {
+        if (selectedItem.value) {
+            console.log('[useBooks] Atualizar livro:', selectedItem.value.bookId, formData)
+            // await bookService.update(selectedItem.value.bookId, formData)
+        } else {
+            console.log('[useBooks] Criar livro:', formData)
+            // await bookService.create(formData)
+        }
+        closeModal()
+        // await getRows({ page: 1, itemsPerPage: 10 })
+    }
+
+    async function handleDelete() {
+        const id = selectedItem.value?.bookId
+        if (!id) return
+        console.log('[useBooks] Deletar livro:', id)
+        // await bookService.delete(id)
+        closeModal()
+        // await getRows({ page: 1, itemsPerPage: 10 })
+    }
+
+  
     tableStore.headers = [
-        { title: 'ID', key: 'bookId' },
-        { title: 'Nome', key: 'title' },
-        { title: 'Autores', key: 'authors' ,sortable: false},
-        { title: 'Ações', key: 'actions', sortable: false }
+        { title: 'ID',      key: 'bookId' },
+        { title: 'Nome',    key: 'title' },
+        { title: 'Autores', key: 'authors', sortable: false },
+        { title: 'Ações',   key: 'actions', sortable: false }
     ]
 
     async function getRows(options: TableOptions) {
@@ -23,7 +66,7 @@ export function useBooks() {
             const sortBy = opts.sortBy?.[0]
             const search = opts.search
 
-             const sortKeyMap: Record<string, string> = {
+            const sortKeyMap: Record<string, string> = {
                 bookId: 'id',
                 title: 'title',
                 authors: 'id'
@@ -36,33 +79,19 @@ export function useBooks() {
             const response = await bookService.getAll(page, opts.itemsPerPage, mappedSortBy, search)
 
             let content: any[] = []
-            if (response && 'content' in response) {
-                content = response.content
-            } else if (Array.isArray(response)) {
-                content = response
-            }
+            if (response && 'content' in response) content = response.content
+            else if (Array.isArray(response)) content = response
 
             const treatedList = content.map((item: any) => ({
                 ...item,
                 authors: item.authors ? item.authors.map((a: any) => a.name).join(', ') : 'Sem Autores'
             }))
 
-            if (response && 'content' in response) {
-                return {
-                    content: treatedList,
-                    page: response.page
-                }
-            }
+            if (response && 'content' in response) return { content: treatedList, page: response.page }
             return treatedList
         }
 
         await tableStore.getRows(options, fetchAndTreat)
-    }
-
-    function edit(){}
-
-    function deleted(){
-   
     }
 
     return {
@@ -72,6 +101,13 @@ export function useBooks() {
         loading: computed(() => tableStore.loading),
         totalItems: computed(() => tableStore.totalItems),
         getRows,
-        actions:actions
+        actions,
+        showModal,
+        modalType,
+        fields,
+        handleSubmit,
+        handleDelete,
+        deleteMessage: computed(() => deleteMessage('livro')),
+        closeModal
     }
 }

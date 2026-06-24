@@ -2,21 +2,66 @@ import { computed } from 'vue'
 import { penaltyService } from '@/services/penaltyServices'
 import { useTableStore } from '@/stores/useTableStore'
 import type { TableOptions } from './useTable'
-import {createCrudActions} from './useCreateCrudActions'
-import type {BtnAction} from '@/composable/useBtnActions'
-import {formatDateTime} from '@/utils/dateFormat'
+import { createCrudActions } from './useCreateCrudActions'
+import type { BtnAction } from '@/composable/useBtnActions'
+import { formatDateTime } from '@/utils/dateFormat'
+import { useForm, type FormField } from './useForm'
+
 export function usePenalty() {
     const tableStore = useTableStore('penalty')
-    const actions: BtnAction[]= [
-            ...createCrudActions(edit,deleted)
-        ]
+    const { showModal, modalType, selectedItem, openModal, closeModal, deleteMessage, buildForm, fillForm } = useForm()
+
+  
+    const fields: FormField[] = [
+        { name: 'userId', label: 'Usuário', type: 'select' },
+        { name: 'amount', label: 'Valor',   type: 'text'   },
+        { name: 'status', label: 'Status',  type: 'select' },
+    ]
+
+    const form = buildForm(fields)
+
+   
+    function edit(item?: any) {
+        fillForm(form.value, item)
+        openModal('edit', item)
+    }
+
+    function deleted(item?: any) {
+        openModal('delete', item)
+    }
+
+    const actions: BtnAction[] = [...createCrudActions(edit, deleted)]
+
+   
+    async function handleSubmit(formData: Record<string, any>) {
+        if (selectedItem.value) {
+            console.log('[usePenalty] Atualizar multa:', selectedItem.value.penaltyId, formData)
+            // await penaltyService.update(selectedItem.value.penaltyId, formData)
+        } else {
+            console.log('[usePenalty] Criar multa:', formData)
+            // await penaltyService.create(formData)
+        }
+        closeModal()
+        // await getRows({ page: 1, itemsPerPage: 10 })
+    }
+
+    async function handleDelete() {
+        const id = selectedItem.value?.penaltyId
+        if (!id) return
+        console.log('[usePenalty] Deletar multa:', id)
+        // await penaltyService.delete(id)
+        closeModal()
+        // await getRows({ page: 1, itemsPerPage: 10 })
+    }
+
+  
     tableStore.headers = [
-        { title: 'ID', key: 'penaltyId' },
-        { title: 'Usuário', key: 'user' },
-        { title: 'Valor', key: 'amount' },
-        { title: 'Status', key: 'statusPenalty' },
-        { title: 'Data de Multa', key: 'penaltyDate', sortable:false },
-        { title: 'Ações', key: 'actions', sortable: false }
+        { title: 'ID',           key: 'penaltyId' },
+        { title: 'Usuário',      key: 'user' },
+        { title: 'Valor',        key: 'amount' },
+        { title: 'Status',       key: 'statusPenalty' },
+        { title: 'Data de Multa', key: 'penaltyDate', sortable: false },
+        { title: 'Ações',        key: 'actions', sortable: false }
     ]
 
     async function getRows(options: TableOptions) {
@@ -25,7 +70,7 @@ export function usePenalty() {
             const sortBy = opts.sortBy?.[0]
             const search = opts.search
 
-             const sortKeyMap: Record<string, string> = {
+            const sortKeyMap: Record<string, string> = {
                 penaltyId: 'id',
                 user: 'user.name',
                 amount: 'amount',
@@ -40,11 +85,8 @@ export function usePenalty() {
             const response = await penaltyService.getAll(page, opts.itemsPerPage, mappedSortBy, search)
 
             let content: any[] = []
-            if (response && 'content' in response) {
-                content = response.content
-            } else if (Array.isArray(response)) {
-                content = response
-            }
+            if (response && 'content' in response) content = response.content
+            else if (Array.isArray(response)) content = response
 
             const treatedList = content.map((item: any) => ({
                 ...item,
@@ -52,25 +94,11 @@ export function usePenalty() {
                 penaltyDate: formatDateTime(item.penaltyDate)
             }))
 
-            if (response && 'content' in response) {
-                return {
-                    content: treatedList,
-                    page: response.page
-                }
-            }
+            if (response && 'content' in response) return { content: treatedList, page: response.page }
             return treatedList
         }
 
         await tableStore.getRows(options, fetchAndTreat)
-    }
-
-    function edit(){
-
-
-    }
-
-    function deleted(){
-   
     }
 
     return {
@@ -80,6 +108,13 @@ export function usePenalty() {
         loading: computed(() => tableStore.loading),
         totalItems: computed(() => tableStore.totalItems),
         getRows,
-        actions:actions
+        actions,
+        showModal,
+        modalType,
+        fields,
+        handleSubmit,
+        handleDelete,
+        deleteMessage: computed(() => deleteMessage('multa')),
+        closeModal
     }
 }
