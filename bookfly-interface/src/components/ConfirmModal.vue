@@ -6,7 +6,7 @@ v-model="model"
  @confirm="emit('confirm')"
  @cancel="emit('cancel')"
 >
- <p> {{ message }}</p>
+ <p class="text-darkGreen font-weight-semibold"> {{ message }}</p>
 </BaseModal>
 </template>
 <script setup lang="ts">

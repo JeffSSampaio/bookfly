@@ -1,14 +1,14 @@
 <template>
   <v-dialog v-model="model" max-width="600px" persistent>
     <v-card>
-      <v-card-title class="text-h5">{{ title }}</v-card-title>
+      <v-card-title class="text-h5 text-white  bg-darkGreen" >{{ title }}</v-card-title>
 
       <v-card-text>
         <slot />
       </v-card-text>
 
       <v-card-actions>
-        
+
         <v-spacer />
         <div class=" d-flex  flex-row   justify-space-between w-100">
           <v-btn variant="text" @click="model = false";>Cancelar</v-btn>
