@@ -10,18 +10,18 @@ import { useWebSocket } from './useWebSocket'
 
 export function usePenalty() {
     const tableStore = useTableStore('penalty')
-    const { showModal, modalType, selectedItem, openModal, closeModal, deleteMessage, buildForm, fillForm,lastOptions,setLastOptions } = useForm()
+    const { showModal, modalType, selectedItem, openModal, closeModal, deleteMessage, buildForm, fillForm, lastOptions, setLastOptions } = useForm()
 
-  
+
     const fields: FormField[] = [
         { name: 'userId', label: 'Usuário', type: 'select' },
-        { name: 'amount', label: 'Valor',   type: 'text'   },
-        { name: 'status', label: 'Status',  type: 'select' },
+        { name: 'amount', label: 'Valor', type: 'text' },
+        { name: 'status', label: 'Status', type: 'select' },
     ]
 
     const form = buildForm(fields)
 
-   
+
     function edit(item?: any) {
         fillForm(form.value, item)
         openModal('edit', item)
@@ -33,7 +33,7 @@ export function usePenalty() {
 
     const actions: BtnAction[] = [...createCrudActions(edit, deleted)]
 
-   
+
     async function handleSubmit(formData: Record<string, any>) {
         if (selectedItem.value) {
             console.log('[usePenalty] Atualizar multa:', selectedItem.value.penaltyId, formData)
@@ -50,19 +50,21 @@ export function usePenalty() {
         const id = selectedItem.value?.penaltyId
         if (!id) return
         console.log('[usePenalty] Deletar multa:', id)
-        // await penaltyService.delete(id)
+        penaltyService.delete(id)
         closeModal()
         // await getRows({ page: 1, itemsPerPage: 10 })
     }
 
-  
+
     tableStore.headers = [
-        { title: 'ID',           key: 'penaltyId' },
-        { title: 'Usuário',      key: 'user' },
-        { title: 'Valor',        key: 'amount' },
-        { title: 'Status',       key: 'statusPenalty' },
+        { title: 'ID', key: 'penaltyId' },
+        { title: 'Usuário', key: 'user' },
+        { title: 'Valor', key: 'amount' },
+        { title: 'Status', key: 'statusPenalty' },
         { title: 'Data de Multa', key: 'penaltyDate', sortable: false },
-        { title: 'Ações',        key: 'actions', sortable: false }
+        { title: 'Status', key: 'recordStatus' },
+        { title: 'Data/Hora', key: 'recordDateTime', sortable: false },
+        { title: 'Ações', key: 'actions', sortable: false },
     ]
 
     async function getRows(options: TableOptions) {
@@ -93,7 +95,8 @@ export function usePenalty() {
             const treatedList = content.map((item: any) => ({
                 ...item,
                 user: item.user?.name ?? 'Sem nome',
-                penaltyDate: formatDateTime(item.penaltyDate)
+                penaltyDate: formatDateTime(item.penaltyDate),
+                recordDateTime: formatDateTime(item.recordDateTime)
             }))
 
             if (response && 'content' in response) return { content: treatedList, page: response.page }
@@ -102,7 +105,7 @@ export function usePenalty() {
 
         await tableStore.getRows(options, fetchAndTreat)
     }
-    useWebSocket('penalties',   () => { if (lastOptions.value) getRows(lastOptions.value) })
+    useWebSocket('penalties', () => { if (lastOptions.value) getRows(lastOptions.value) })
     return {
         titleTable: 'Multas',
         headers: tableStore.headers,

@@ -9,8 +9,12 @@ import { useWebSocket } from './useWebSocket'
 
 export function useUsers() {
   const tableStore = useTableStore('users')
-  const { showModal, modalType, selectedItem, openModal, 
-    closeModal, deleteMessage, buildForm, fillForm,lastOptions,setLastOptions } = useForm()
+  const { 
+    formTitle,
+    setFormTitle,showModal, modalType,
+     selectedItem, openModal, closeModal, deleteMessage,
+      buildForm, fillForm,lastOptions,
+      setLastOptions } = useForm()
 
   
   const fields: FormField[] = [
@@ -20,8 +24,9 @@ export function useUsers() {
 
   const form = buildForm(fields)
 
- 
+   
   function edit(user?: any) {
+    setFormTitle(`Editando Usuário N°`) 
     fillForm(form, user)   
     openModal('edit', user)
   }
@@ -46,12 +51,15 @@ export function useUsers() {
     // await getRows({ page: 1, itemsPerPage: 10 })
   }
 
-  async function handleDelete() {
-    console.log('Deletando usuário:', selectedItem.value.id)
-    // await userService.delete(selectedItem.value.id)
-    console.log('Usuário deletado com sucesso:', selectedItem.value.id)
-    // await getRows({ page: 1, itemsPerPage: 10 })
-    closeModal()
+   async function handleDelete() {
+    try{
+        userService.delete(selectedItem.value.id);
+        console.log('Usuário deletado com sucesso:', selectedItem.value.name);
+        // await getRows({ page: 1, itemsPerPage: 10 })
+        closeModal();
+    }catch(e){
+        console.error("Erro:" + e)
+    }
   }
 
  
@@ -61,12 +69,12 @@ export function useUsers() {
     { title: 'Email',  key: 'email' },
     { title: 'Role',   key: 'role' },
     { title: 'Status', key: 'recordStatus' },
-    { title: 'Data',   key: 'recordDateTime', sortable: false },
+    { title: 'Data/Hora',   key: 'recordDateTime', sortable: false },
     { title: 'Ações',  key: 'actions', sortable: false },
   ]
 
   async function getRows(options: TableOptions) {
-    setLastOptions(options)
+   
     const fetchAndTreat = async (opts: TableOptions) => {
       const page = (opts.page ?? 1) - 1
       const sortBy = opts.sortBy?.[0]
@@ -78,20 +86,22 @@ export function useUsers() {
 
       const treatedList = content.map((item: any) => ({
         ...item,
-        recordDateTime: formatDateTime(item.recordDateTime),
+        recordDateTime: formatDateTime(item.recordDateTime)
       }))
+    
 
       if (response && 'content' in response) return { content: treatedList, page: response.page }
       return treatedList
     }
-
     await tableStore.getRows(options, fetchAndTreat)
+    setLastOptions(options)
   }
   
 useWebSocket('users', () => {
   if (lastOptions.value) getRows(lastOptions.value)
 })
   return {
+    formTitle,
     titleTable: 'Usuários',
     headers: tableStore.headers,
     items: computed(() => tableStore.items),

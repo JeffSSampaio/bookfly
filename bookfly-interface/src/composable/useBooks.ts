@@ -6,7 +6,7 @@ import { createCrudActions } from './useCreateCrudActions'
 import type { BtnAction } from '@/composable/useBtnActions'
 import { useForm, type FormField } from './useForm'
 import { useWebSocket } from './useWebSocket'
-
+import { formatDateTime } from '@/utils/dateFormat'
 export function useBooks() {
     const tableStore = useTableStore('books')
     const { showModal, modalType, selectedItem, openModal,
@@ -49,7 +49,7 @@ export function useBooks() {
         const id = selectedItem.value?.bookId
         if (!id) return
         console.log('[useBooks] Deletar livro:', id)
-        // await bookService.delete(id)
+         await bookService.delete(id)
         closeModal()
         // await getRows({ page: 1, itemsPerPage: 10 })
     }
@@ -59,6 +59,8 @@ export function useBooks() {
         { title: 'ID', key: 'bookId' },
         { title: 'Nome', key: 'title' },
         { title: 'Autores', key: 'authors', sortable: false },
+        {title:'Status', key:'recordStatus' },
+        {title:'Data/Hora',key:'recordDateTime'},
         { title: 'Ações', key: 'actions', sortable: false }
     ]
 
@@ -87,7 +89,8 @@ export function useBooks() {
 
             const treatedList = content.map((item: any) => ({
                 ...item,
-                authors: item.authors ? item.authors.map((a: any) => a.name).join(', ') : 'Sem Autores'
+                authors: item.authors ? item.authors.map((a: any) => a.name).join(', ') : 'Sem Autores',
+                recordDateTime: formatDateTime(item.recordDateTime)
             }))
 
             if (response && 'content' in response) return { content: treatedList, page: response.page }

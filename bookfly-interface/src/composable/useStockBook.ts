@@ -6,6 +6,7 @@ import { createCrudActions } from './useCreateCrudActions'
 import type { BtnAction } from '@/composable/useBtnActions'
 import { useForm, type FormField } from './useForm'
 import { useWebSocket } from './useWebSocket'
+import { formatDateTime } from '@/utils/dateFormat'
 
 export function useStockBook() {
     const tableStore = useTableStore('stockBook')
@@ -45,11 +46,14 @@ export function useStockBook() {
     }
 
     async function handleDelete() {
-        const id = selectedItem.value?.stockId
-        if (!id) return
-        console.log('[useStockBook] Deletar estoque:', id)
-        // await stockBookService.delete(id)
-        closeModal()
+       
+        try{
+            console.log('[useStockBook] Deletar estoque:', selectedItem.value.stockId)
+              stockBookService.delete(selectedItem.value.stockId)
+            closeModal()
+        }catch(e){
+            console.error('Error:'+e)
+        }
         // await getRows({ page: 1, itemsPerPage: 10 })
     }
 
@@ -58,25 +62,26 @@ export function useStockBook() {
         { title: 'ID', key: 'stockId' },
         { title: 'Livro', key: 'book' },
         { title: 'Quantidade', key: 'qtd' },
-        { title: 'Ações', key: 'actions', sortable: false }
+        {title:'Status', key:'recordStatus' },
+        {title:'Data/Hora',key:'recordDateTime'},
+        { title: 'Ações', key: 'actions', sortable: false },
     ]
 
     async function getRows(options: TableOptions) {
-        setLastOptions(options)
         const fetchAndTreat = async (opts: TableOptions) => {
             const page = (opts.page ?? 1) - 1
             const sortBy = opts.sortBy?.[0]
             const search = opts.search
-
+            
             const sortKeyMap: Record<string, string> = {
                 stockId: 'id',
                 book: 'book.title'
             }
-
+            
             const mappedSortBy = sortBy
-                ? { key: sortKeyMap[sortBy.key] ?? sortBy.key, order: sortBy.order }
-                : undefined
-
+            ? { key: sortKeyMap[sortBy.key] ?? sortBy.key, order: sortBy.order }
+            : undefined
+            
             const response = await stockBookService.getAll(page, opts.itemsPerPage, mappedSortBy, search)
 
             let content: any[] = []
@@ -85,16 +90,18 @@ export function useStockBook() {
 
             const treatedList = content.map((item: any) => ({
                 ...item,
-                book: item.book?.title ?? 'Sem Título'
+                book: item.book?.title ?? 'Sem Título',
+                recordDateTime: formatDateTime(item.recordDateTime)
             }))
 
             if (response && 'content' in response) return { content: treatedList, page: response.page }
             return treatedList
         }
-
+        
         await tableStore.getRows(options, fetchAndTreat)
+        setLastOptions(options)
     }
-    useWebSocket('stockbook', () => { if (lastOptions.value) getRows(lastOptions.value) })
+    useWebSocket('stock', () => { if (lastOptions.value) getRows(lastOptions.value) })
 
     return {
         titleTable: 'Estoque de Livros',

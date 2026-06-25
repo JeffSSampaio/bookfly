@@ -87,7 +87,8 @@ public class StockBookService {
 
         StockBook saved = stockBookRepository.save(stockBook);
         movimentRepository.save(moviment);
-        eventPublisher.publishEvent(new ItemEvent("stockbook", ItemEventAction.CREATED));
+        eventPublisher.publishEvent(new ItemEvent("moviments", ItemEventAction.UPDATED));
+        eventPublisher.publishEvent(new ItemEvent("stock", ItemEventAction.CREATED));
         return saved;
     }
 
@@ -151,7 +152,7 @@ public class StockBookService {
         moviment.setCreatedTime(LocalDateTime.now());
         eventPublisher.publishEvent(new ItemEvent("moviments", ItemEventAction.UPDATED));
         movimentRepository.save(moviment);
-        eventPublisher.publishEvent(new ItemEvent("stockbook", ItemEventAction.UPDATED));
+        eventPublisher.publishEvent(new ItemEvent("stock", ItemEventAction.UPDATED));
         return stockBookRepository.save(stockBook);
     }
 
@@ -183,9 +184,23 @@ public class StockBookService {
 
         stockBook.getRecordStatus().delete(userExist);
         stockBook.setQtd(0);
-        eventPublisher.publishEvent(new ItemEvent("stockbook", ItemEventAction.DELETED));
+        eventPublisher.publishEvent(new ItemEvent("stock", ItemEventAction.DELETED));
         stockBookRepository.save(stockBook);
     }
+
+    public StockBook removeBookOnStock(Long id){
+
+        StockBook stockBook = stockBookRepository.findById(id)
+                .orElseThrow(()-> new NotFoundException("Esse Livro não existe no estoque"));
+
+        stockBook.getRecordStatus().setDateTime(LocalDateTime.now());
+        stockBook.getRecordStatus().setRecordStatusValue(RecordStatusValue.DELETED);
+        stockBook.setQtd(0);
+        stockBookRepository.save(stockBook);
+        eventPublisher.publishEvent(new ItemEvent("stock", ItemEventAction.DELETED));
+        return stockBook;
+    }
+
     public Page<StockBook> findAll(String search,Pageable pageable){
         if (search == null || search.isBlank()){
             return stockBookRepository.findAll(pageable);

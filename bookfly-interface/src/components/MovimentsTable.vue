@@ -8,7 +8,13 @@
     :actions="actions"
     @update-options="getRows"
     class="elevation-1 w-66"
-  />
+  >
+  <template #recordStatus="{ item }">
+      <v-chip :color="item.recordStatus === 'ACTIVE' ? 'green' : 'red'">
+        {{ item.recordStatus }}
+      </v-chip>
+    </template>
+</DataTable>
 
   <FormModal
     :model-value="showModal && modalType === 'edit'"

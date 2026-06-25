@@ -100,12 +100,10 @@ public class StockBookController {
             @ApiResponse(responseCode = "204", description = "Livro removido do estoque"),
             @ApiResponse(responseCode = "404", description = "Livro não encontrado")
     })
-    @DeleteMapping("/remove/{bookId}")
-    public ResponseEntity<Void> removeBookFromStock(@PathVariable Long bookId, Long userId) {
-
-        stockBookService.removeBookOnStock(bookId,userId);
-
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/{bookId}")
+    public ResponseEntity<StockBookSummary> removeBookFromStock(@PathVariable Long bookId) {
+       StockBook stockBook= stockBookService.removeBookOnStock(bookId);
+        return ResponseEntity.ok(StockBookSummary.from(stockBook));
     }
 
     @Operation(summary = "Atualizar quantidade de livros no estoque")
@@ -129,11 +127,11 @@ public class StockBookController {
         );
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBookFromStock(@PathVariable Long id,Long userId){
-        stockBookService.removeBookOnStock(id,userId);
-        return ResponseEntity.noContent().build();
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deleteBookFromStock(@PathVariable Long id,Long userId){
+//        stockBookService.removeBookOnStock(id,userId);
+//        return ResponseEntity.noContent().build();
+//    }
 
 
     @Operation(summary = "Exportar PDF")

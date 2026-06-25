@@ -3,13 +3,16 @@ import type { SortOption } from '@/composable/useTable'
 
 export const bookService = {
     getAll: async (page: number = 0, itemsPerPage: number = 10, sortBy?: SortOption, search?: string) => {
-        return  api.get(`books/list`, {
-                page,
-                  size: itemsPerPage,
-                  sort: sortBy?.key ?? 'id',
-                  direction: sortBy?.order ?? 'asc',
-                  ...(search ? { search } : {})
+        return api.get(`books/list`, {
+            page,
+            size: itemsPerPage,
+            sort: sortBy?.key ?? 'id',
+            direction: sortBy?.order ?? 'asc',
+            ...(search ? { search } : {})
         })
-    
+
+    },
+    delete: async (id: number) => {
+        return await api.del(`books/${id}`)
     }
 }

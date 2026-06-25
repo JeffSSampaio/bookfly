@@ -51,7 +51,7 @@ export const useLoans = () => {
         const id = selectedItem.value?.id
         if (!id) return
         console.log('[useLoans] Deletar empréstimo:', id)
-        // await loanService.delete(id)
+        await loanService.delete(id)
         closeModal()
         // await getRows({ page: 1, itemsPerPage: 10 })
     }
@@ -64,16 +64,17 @@ export const useLoans = () => {
         { title: 'Data de Empréstimo', key: 'loanDate' },
         { title: 'Data de Devolução', key: 'returnDate' },
         { title: 'Status', key: 'status' },
+        { title: 'Status', key: 'recordStatus' },
+        { title: 'Data/Hora', key: 'recordDateTime' },
         { title: 'Ações', key: 'actions', sortable: false }
     ]
 
     async function getRows(options: TableOptions) {
-        setLastOptions(options)
         const fetchAndTreat = async (opts: TableOptions) => {
             const page = (opts.page ?? 1) - 1
             const sortBy = opts.sortBy?.[0]
             const search = opts.search
-
+            
             const sortKeyMap: Record<string, string> = {
                 id: 'id',
                 user: 'user.name',
@@ -82,9 +83,9 @@ export const useLoans = () => {
                 returnDate: 'returnDate',
                 status: 'status'
             }
-
+            
             const mappedSortBy = sortBy
-                ? { key: sortKeyMap[sortBy.key] ?? sortBy.key, order: sortBy.order }
+            ? { key: sortKeyMap[sortBy.key] ?? sortBy.key, order: sortBy.order }
                 : undefined
 
             const response = await loanService.getAll(page, opts.itemsPerPage, mappedSortBy, search)
@@ -92,20 +93,22 @@ export const useLoans = () => {
             let content: any[] = []
             if (response && 'content' in response) content = response.content
             else if (Array.isArray(response)) content = response
-
+            
             const treatedList = content.map((item: any) => ({
                 ...item,
                 user: item.user?.name ?? 'Sem Nome',
                 book: item.book?.title ?? 'Sem Título de Livro',
                 loanDate: formatDateTime(item.loanDate),
-                returnDate: formatDateTime(item.returnDate)
+                returnDate: formatDateTime(item.returnDate),
+                recordDateTime: formatDateTime(item.recordDateTime)
             }))
-
+            
             if (response && 'content' in response) return { content: treatedList, page: response.page }
             return treatedList
         }
-
+        
         await tableStore.getRows(options, fetchAndTreat)
+        setLastOptions(options)
     }
     useWebSocket('loans', () => { if (lastOptions.value) getRows(lastOptions.value) })
 

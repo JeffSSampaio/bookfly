@@ -51,7 +51,7 @@ export function useMoviments() {
         const id = selectedItem.value?.movimentId
         if (!id) return
         console.log('[useMoviments] Deletar movimentação:', id)
-        // await movimentService.delete(id)
+        movimentService.delete(id)
         closeModal()
         // await getRows({ page: 1, itemsPerPage: 10 })
     }
@@ -64,6 +64,8 @@ export function useMoviments() {
         { title: 'Quantidade', key: 'qtdMoved' },
         { title: 'Tipo', key: 'type' },
         { title: 'Data de Criação', key: 'createdTime' },
+        { title: 'Status', key: 'recordStatus' },
+        { title: 'Data/Hora', key: 'recordDateTime' },
         { title: 'Ações', key: 'actions', sortable: false }
     ]
 
@@ -97,7 +99,8 @@ export function useMoviments() {
                 ...item,
                 user: item.user?.name ?? 'Sem Usuário',
                 book: item.book?.title ?? 'Sem Título',
-                createdTime: formatDateTime(item.createdTime)
+                createdTime: formatDateTime(item.createdTime),
+                recordDateTime: formatDateTime(item.recordDateTime)
             }))
 
             if (response && 'content' in response) return { content: treatedList, page: response.page }

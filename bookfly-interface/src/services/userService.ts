@@ -10,5 +10,8 @@ export const userService = {
                   direction: sortBy?.order ?? 'asc',
                   ...(search ? { search } : {})
             })
+      },
+      delete: async(id:number)=>{
+            return await api.del(`users/${id}`)
       }
 }

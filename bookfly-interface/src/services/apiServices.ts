@@ -42,8 +42,14 @@ async function del(endpoint: string) {
     const response = await fetch(`${BASE_URL}/${endpoint}`, {
         method: 'DELETE',
     });
+    if (response.status === 204) {
+        return null; 
+    }
     if (!response.ok) throw new Error(`Erro na requisição: ${endpoint}: ${response.statusText}`);
-    return response.json();
+    
+    const text = await response.text();
+    return text ? JSON.parse(text) : null;
+  
 }
 
 export const api = {

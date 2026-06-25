@@ -11,5 +11,8 @@ export const penaltyService = {
                                 ...(search ? { search } : {})
                         })
 
+        },
+        delete: async (id: number) => {
+                return await api.del(`penalties/${id}`)
         }
 }

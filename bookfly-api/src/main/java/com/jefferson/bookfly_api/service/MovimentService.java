@@ -4,6 +4,7 @@ import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.config.AuditContext;
 import com.jefferson.bookfly_api.dto.moviment.MovimentSummary;
 import com.jefferson.bookfly_api.enums.ItemEventAction;
+import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
 import com.jefferson.bookfly_api.events.ItemEvent;
@@ -79,6 +80,8 @@ public class MovimentService {
         moviment.setTypeItem(type);
         moviment.setQtdMoviment(Math.abs(qtd));
         moviment.setCreatedTime(LocalDateTime.now());
+        moviment.getRecordStatus().setRecordStatusValue(RecordStatusValue.ACTIVE);
+        moviment.getRecordStatus().setDateTime(LocalDateTime.now());
         eventPublisher.publishEvent(new ItemEvent("moviments", ItemEventAction.CREATED));
         return movimentRepository.save(moviment);
     }
@@ -156,7 +159,7 @@ public class MovimentService {
             action = "DELETAR_MOVIMENTACAO",
             details = "DELETADA MOVIMENTACAO ID°{id}"
     )
-    public void deleteMoviment(Long id) {
+    public Moviment deleteMoviment(Long id) {
         Moviment moviment = movimentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Movimentação não encontrada"));
 
@@ -172,9 +175,14 @@ public class MovimentService {
             stockBook.setQtd(stockBook.getQtd() - moviment.getQtdMoviment());
         }
 
+        moviment.getRecordStatus().setRecordStatusValue(RecordStatusValue.DELETED);
+        moviment.getRecordStatus().setDateTime(LocalDateTime.now());
+
         stockBookRepository.save(stockBook);
-        eventPublisher.publishEvent(new ItemEvent("moviments", ItemEventAction.DELETED));
         movimentRepository.delete(moviment);
+        eventPublisher.publishEvent(new ItemEvent("stock", ItemEventAction.DELETED));
+        eventPublisher.publishEvent(new ItemEvent("moviments", ItemEventAction.DELETED));
+        return moviment;
     }
     public Page<Moviment> findAll(String search,Pageable pageable){
         if (search == null || search.isBlank()){

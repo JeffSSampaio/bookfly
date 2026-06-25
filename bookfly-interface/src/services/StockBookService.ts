@@ -11,5 +11,8 @@ export const stockBookService = {
 
         })
 
-    }
+    },
+    delete: async(id:number)=>{
+            return await api.del(`stock/${id}`)
+      }
 }

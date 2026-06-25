@@ -3,6 +3,7 @@ package com.jefferson.bookfly_api.service;
 import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.dto.penalty.PenaltyDetail;
 import com.jefferson.bookfly_api.enums.ItemEventAction;
+import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
 import com.jefferson.bookfly_api.events.ItemEvent;
@@ -167,6 +168,23 @@ public class PenaltyService {
             penaltyExist.getRecordStatus().delete(userExist);
             eventPublisher.publishEvent(new ItemEvent("penalties", ItemEventAction.DELETED));
             penaltyRepository.save(penaltyExist);
+    }
+
+
+    public Penalty removePenalty(Long id){
+        Penalty penaltyExist = penaltyRepository.findById(id)
+                .orElseThrow(()-> new NotFoundException("Essa multa não existe no sistema"));
+
+
+        if (penaltyExist.getStatus() == StatusPenalty.ANALISE){
+            throw new DependencyViolationException("Não é Possível Remover uma Multa em Análise");
+        }
+
+        penaltyExist.getRecordStatus().setRecordStatusValue(RecordStatusValue.DELETED);
+        penaltyExist.getRecordStatus().setDateTime(LocalDateTime.now());
+        penaltyRepository.save(penaltyExist);
+        eventPublisher.publishEvent(new ItemEvent("penalties", ItemEventAction.DELETED));
+        return penaltyExist;
     }
 
     public Page<Penalty> findAll(String search,Pageable pageable){

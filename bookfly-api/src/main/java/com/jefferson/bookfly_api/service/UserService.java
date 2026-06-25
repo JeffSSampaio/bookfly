@@ -127,8 +127,8 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         user.getRecordStatus().delete(user);
-        eventPublisher.publishEvent(new ItemEvent("users", ItemEventAction.DELETED));
         userRepository.save(user);
+        eventPublisher.publishEvent(new ItemEvent("users", ItemEventAction.DELETED));
     }
 
     public boolean userExistsById(Long id){

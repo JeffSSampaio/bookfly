@@ -381,6 +381,23 @@ public class LoanService {
         eventPublisher.publishEvent(new ItemEvent("loans", ItemEventAction.DELETED));
         loanRepository.save(existLoan);
     }
+
+
+    @Transactional
+    @Auditable(
+            action = "REMOVER_EMPRESTIMO_POR_USUARIO",
+            details = "USUÁRIO {userId} REMOVENDO EMPRESTIMO ID({id})"
+    )
+    public Loan removeLoan(Long id) {
+        Loan existLoan = loanRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Não existe esse empréstimo no sistema"));
+
+        existLoan.getRecordStatus().setRecordStatusValue(RecordStatusValue.DELETED);
+        existLoan.getRecordStatus().setDateTime(LocalDateTime.now());
+        loanRepository.save(existLoan);
+        eventPublisher.publishEvent(new ItemEvent("loans", ItemEventAction.DELETED));
+        return existLoan;
+    }
     public Page<Loan> findAll(String search, Pageable pageable) {
 
         if (search == null || search.isBlank()) {

@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.dto.loan;
 
 import com.jefferson.bookfly_api.dto.book.BookSummaryPrincipal;
 import com.jefferson.bookfly_api.dto.user.UserMovimentSummary;
+import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.models.Loan;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 
@@ -14,7 +15,10 @@ public record LoanSummary(
         UserMovimentSummary user,
         LocalDateTime loanDate,
         LocalDateTime returnDate,
-        StatusLoan status
+        StatusLoan status,
+        RecordStatusValue recordStatus,
+        LocalDateTime recordDateTime
+
 ) {
 
     public static LoanSummary from(Loan loan) {
@@ -24,7 +28,9 @@ public record LoanSummary(
                 UserMovimentSummary.from(loan.getUser()),
                 loan.getLoanDate(),
                 loan.getReturnDate(),
-                loan.getStatus()
+                loan.getStatus(),
+                loan.getRecordStatus().getRecordStatusValue(),
+                loan.getRecordStatus().getDateTime()
         );
     }
 }

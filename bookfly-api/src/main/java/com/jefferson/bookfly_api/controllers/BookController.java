@@ -153,15 +153,27 @@ public class BookController {
        return ResponseEntity.ok(BookDetail.from(updatedBook));
     }
 
+//    @Operation(summary = "Deletar livro")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "204", description = "Livro deletado"),
+//            @ApiResponse(responseCode = "404", description = "Livro não encontrado")
+//    })
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deletedBook(@PathVariable Long id, Long userId){
+//        bookService.removeBook(id,userId);
+//        return ResponseEntity.noContent().build();
+//    }
+
+
     @Operation(summary = "Deletar livro")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Livro deletado"),
             @ApiResponse(responseCode = "404", description = "Livro não encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletedBook(@PathVariable Long id, Long userId){
-        bookService.removeBook(id,userId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<BookDetail> deletedBook(@PathVariable Long id){
+       Book book = bookService.removeBook(id);
+        return ResponseEntity.ok(BookDetail.from(book));
     }
 
     @Operation(summary = "Exportar PDF")

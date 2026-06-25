@@ -96,15 +96,28 @@ public class PenaltyController {
         return ResponseEntity.ok(PenaltyDetail.from(updatedPenalty));
     }
 
+//    @Operation(summary = "Deletar penalidade")
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "Penalidade atualizada com sucesso"),
+//            @ApiResponse(responseCode = "404", description = "Penalidade não encontrada")
+//    })
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deletePenalty(@PathVariable Long id , Long userId ){
+//        penaltyService.removePenalty(id,userId);
+//        return ResponseEntity.noContent().build();
+//    }
+
+
     @Operation(summary = "Deletar penalidade")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Penalidade atualizada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Penalidade não encontrada")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePenalty(@PathVariable Long id , Long userId ){
-        penaltyService.removePenalty(id,userId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<PenaltyDetail> deletePenalty(@PathVariable Long id  ){
+        Penalty penalty = penaltyService.removePenalty(id);
+
+        return ResponseEntity.ok(PenaltyDetail.from(penalty));
     }
 
     @Operation(summary = "Exportar PDF")

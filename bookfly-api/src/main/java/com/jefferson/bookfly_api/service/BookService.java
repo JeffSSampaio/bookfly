@@ -237,20 +237,37 @@ public class BookService {
         eventPublisher.publishEvent(new ItemEvent("books", ItemEventAction.UPDATED));
     }
 
-    @Transactional
+//    @Transactional
+//    @Auditable(
+//            action = "REMOVER_LIVRO",
+//            details = "USUARIO {userId} REMOVEU LIVRO ID°{bookId}"
+//    )
+//    public void removeBook(Long id, Long userId){
+//        Book book = bookRepository.findById(id).orElseThrow(()-> new NotFoundException("Livro Não EnContrado"));
+//        User existUser = userRepository.findById(userId)
+//                 .orElseThrow(()-> new NotFoundException("Este Usuário não existe para realizar a ação de deletar."));
+//        book.getRecordStatus().delete(existUser);
+//        AuditContext.capture("bookId",book.getId());
+//        bookRepository.save(book);
+//        eventPublisher.publishEvent(new ItemEvent("books", ItemEventAction.DELETED));
+//    }
+
+
     @Auditable(
             action = "REMOVER_LIVRO",
             details = "USUARIO {userId} REMOVEU LIVRO ID°{bookId}"
     )
-    public void removeBook(Long id, Long userId){
+    public Book removeBook(Long id){
         Book book = bookRepository.findById(id).orElseThrow(()-> new NotFoundException("Livro Não EnContrado"));
-        User existUser = userRepository.findById(userId)
-                 .orElseThrow(()-> new NotFoundException("Este Usuário não existe para realizar a ação de deletar."));
-        book.getRecordStatus().delete(existUser);
+
+        book.getRecordStatus().setRecordStatusValue(RecordStatusValue.DELETED);
+        book.getRecordStatus().setDateTime(LocalDateTime.now());
         AuditContext.capture("bookId",book.getId());
         bookRepository.save(book);
         eventPublisher.publishEvent(new ItemEvent("books", ItemEventAction.DELETED));
+        return book;
     }
+
 
     public List<Book> findByTitle(String title) {
         return bookRepository.findActiveByTitleContaining(title);

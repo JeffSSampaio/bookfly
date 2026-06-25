@@ -43,7 +43,7 @@ import ConfirmModal from '@/components/ConfirmModal.vue'
 import { useUsers } from '@/composable/useUsers'
 
 const {
-  titleTable, items, loading, totalItems, headers, getRows, actions,
+  formTitle,titleTable, items, loading, totalItems, headers, getRows, actions,
   showModal, modalType, fields, handleSubmit, handleDelete, deleteMessage,closeModal
 } = useUsers()
 </script>

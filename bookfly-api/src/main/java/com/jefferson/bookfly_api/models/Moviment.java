@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.models;
 
 import com.jefferson.bookfly_api.enums.TypeMoviment;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@SQLDelete(sql = "UPDATE movimentacoes SET record_status_value = 'DELETED', status_date_time = NOW() WHERE id = ?")
 @Table(name = "movimentacoes")
 public class Moviment {
     @Id
@@ -35,11 +37,13 @@ public class Moviment {
 
     private int qtdMoviment;
 
+    @Embedded
+    private RecordStatus recordStatus = new RecordStatus();
 
     public Moviment() {
     }
 
-    public Moviment(Long id, User user, StockBook stockBook, String description, LocalDateTime createdTime, TypeMoviment typeItem, int qtdMoviment) {
+    public Moviment(Long id, User user, StockBook stockBook, String description, LocalDateTime createdTime, TypeMoviment typeItem, int qtdMoviment, RecordStatus recordStatus) {
         this.id = id;
         this.user = user;
         this.stockBook = stockBook;
@@ -47,7 +51,7 @@ public class Moviment {
         this.createdTime = createdTime;
         this.typeItem = typeItem;
         this.qtdMoviment = qtdMoviment;
-
+        this.recordStatus = recordStatus;
     }
 
     public Long getId() {
@@ -106,4 +110,11 @@ public class Moviment {
         this.qtdMoviment = qtdMoviment;
     }
 
+    public RecordStatus getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(RecordStatus recordStatus) {
+        this.recordStatus = recordStatus;
+    }
 }

@@ -11,5 +11,8 @@ export const loanService = {
 
         })
 
+    },
+    delete: async (id: number) => {
+        return await api.del(`loans/${id}`)
     }
 }

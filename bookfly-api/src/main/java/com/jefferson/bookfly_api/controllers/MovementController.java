@@ -124,9 +124,9 @@ public class MovementController {
             @ApiResponse(responseCode = "404", description = "Movimentação não encontrada")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMoviment(@PathVariable Long id) {
-        movimentService.deleteMoviment(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<MovimentSummary> deleteMoviment(@PathVariable Long id) {
+       Moviment moviment = movimentService.deleteMoviment(id);
+        return ResponseEntity.ok(MovimentSummary.from(moviment));
     }
 
     @Operation(summary = "Exportar PDF")

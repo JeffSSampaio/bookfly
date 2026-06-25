@@ -6,6 +6,7 @@ import com.jefferson.bookfly_api.dto.loan.LoanSummary;
 import com.jefferson.bookfly_api.dto.stockbook.StockBookSummary;
 import com.jefferson.bookfly_api.dto.user.UserMovimentSummary;
 import com.jefferson.bookfly_api.dto.user.UserSummary;
+import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
 import com.jefferson.bookfly_api.models.Moviment;
 
@@ -18,7 +19,9 @@ public record MovimentSummary(
         TypeMoviment type,
         String description,
         UserMovimentSummary user,
-        BookMovimentSummary book
+        BookMovimentSummary book,
+        RecordStatusValue recordStatus,
+        LocalDateTime recordDateTime
 
 
 ) {
@@ -30,7 +33,9 @@ public record MovimentSummary(
                 moviment.getTypeItem(),
                 moviment.getDescription(),
                 UserMovimentSummary.from(moviment.getUser()),
-                BookMovimentSummary.from(moviment.getStockBook().getBook())
+                BookMovimentSummary.from(moviment.getStockBook().getBook()),
+                moviment.getRecordStatus().getRecordStatusValue(),
+                moviment.getRecordStatus().getDateTime()
 
         );
     }

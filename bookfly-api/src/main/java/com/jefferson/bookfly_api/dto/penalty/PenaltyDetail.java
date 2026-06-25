@@ -6,6 +6,7 @@ import com.jefferson.bookfly_api.dto.loan.LoanUserBookSumary;
 import com.jefferson.bookfly_api.dto.user.UserDetail;
 import com.jefferson.bookfly_api.dto.user.UserMovimentSummary;
 import com.jefferson.bookfly_api.dto.user.UserSummaryPrincipal;
+import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
 import com.jefferson.bookfly_api.models.Penalty;
@@ -20,7 +21,9 @@ public record PenaltyDetail(
         UserSummaryPrincipal user,
         BigDecimal amount,
         LocalDateTime penaltyDate,
-        LocalDateTime payedDate
+        LocalDateTime payedDate,
+        RecordStatusValue recordStatus,
+        LocalDateTime recordDateTime
 
 ) {
     public static PenaltyDetail from(Penalty penalty){
@@ -31,7 +34,9 @@ public record PenaltyDetail(
                 UserSummaryPrincipal.from(penalty.getLoan().getUser()),
                 penalty.getAmount(),
                 penalty.getPenaltyDate(),
-                penalty.getPayedDate()
+                penalty.getPayedDate(),
+                penalty.getRecordStatus().getRecordStatusValue(),
+                penalty.getRecordStatus().getDateTime()
         );
     }
 }

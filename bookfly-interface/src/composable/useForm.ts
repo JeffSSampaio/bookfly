@@ -15,6 +15,7 @@ export interface FormField {
 export function useForm() {
     const showModal = ref(false)
     const modalType = ref<'edit' | 'delete' | null>(null)
+    const formTitle = ref<String>()
     const selectedItem = ref<any>(null)
     const lastOptions = ref<any>(null)
 
@@ -29,6 +30,10 @@ export function useForm() {
             formData[field.name] = field.defaultValue ?? ''
         })
         return ref(formData)
+    }
+
+    function setFormTitle(title:string){
+        formTitle.value = title
     }
 
 
@@ -57,6 +62,8 @@ export function useForm() {
     }
 
     return {
+        formTitle,
+        setFormTitle,
         showModal,
         modalType,
         selectedItem,
@@ -66,6 +73,6 @@ export function useForm() {
         closeModal,
         deleteMessage,
         lastOptions,
-        setLastOptions
+        setLastOptions,
     }
 }

@@ -10,5 +10,8 @@ export const movimentService = {
                         ...(search ? { search } : {})
                 })
 
+        },
+        delete: async (id: number) => {
+                return await api.del(`moviments/${id}`)
         }
 }
