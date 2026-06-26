@@ -70,8 +70,8 @@
       size="small"
       @click="action.handler(item)"
     >
-      <v-icon>{{ action.icon }}</v-icon>
-      {{ action.label }}
+    {{ action.label }}
+    <v-icon class="text-label-large">{{ action.icon }}</v-icon>
     </Button>
 
   </div>
