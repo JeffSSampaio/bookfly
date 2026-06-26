@@ -152,5 +152,6 @@ function clearSearch() {
 <style scoped>
 .c-table :deep(thead th) {
   background-color: #F5EDD8;
+  table-layout: fixed !important;
 }
 </style>
