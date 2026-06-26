@@ -43,13 +43,15 @@ export function useMoviments() {
     async function handleSubmit(formData: Record<string, any>) {
         if (selectedItem.value) {
             console.log('[useMoviments] Atualizar movimentação:', selectedItem.value.movimentId, formData)
-            // await movimentService.update(selectedItem.value.movimentId, formData)
-        } else {
-            console.log('[useMoviments] Criar movimentação:', formData)
-            // await movimentService.create(formData)
-        }
+             try{
+                 await movimentService.update(selectedItem.value.movimentId, formData)
+                
+            }catch(e){
+                console.error('Erro:'+e)
+            }
+        } 
         closeModal()
-        // await getRows({ page: 1, itemsPerPage: 10 })
+   
     }
 
     async function handleDelete() {

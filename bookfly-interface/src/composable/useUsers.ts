@@ -44,16 +44,13 @@ export function useUsers() {
 
   async function handleSubmit(formData: Record<string, any>) {
     if (selectedItem.value) {
-      console.log('Atualizando usuário:', selectedItem.value.id, formData)
-      // userService.update(selectedItem.value.id, formData)
+      try{
+        userService.update(selectedItem.value.id, formData)
+      }catch(e){
+        console.error('Erro:' + e)
+      }
     }
-    // } else {
-    //     console.log('Criando novo usuário:', formData)
-    // //   await userService.create(formData)
-    // }
-    console.log('Formulário enviado com sucesso:', formData)
     closeModal()
-    // await getRows({ page: 1, itemsPerPage: 10 })
   }
 
   async function handleDelete() {

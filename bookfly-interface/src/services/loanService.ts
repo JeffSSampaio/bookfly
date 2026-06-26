@@ -12,6 +12,9 @@ export const loanService = {
         })
 
     },
+    update: async (id: number, body: any) => {
+        return await api.put(`loans/${id}`, body)
+    },
     delete: async (id: number) => {
         return await api.del(`loans/${id}`)
     }

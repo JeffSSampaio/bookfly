@@ -12,6 +12,9 @@ export const stockBookService = {
         })
 
     },
+    update:async(id:number,body:any)=>{
+            return await api.put(`stock/${id}`, body )
+      },
     delete: async(id:number)=>{
             return await api.del(`stock/${id}`)
       }

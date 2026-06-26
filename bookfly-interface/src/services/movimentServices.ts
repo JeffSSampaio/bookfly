@@ -11,6 +11,9 @@ export const movimentService = {
                 })
 
         },
+        update: async (id: number, body: any) => {
+                return await api.put(`moviments/${id}`, body)
+        },
         delete: async (id: number) => {
                 return await api.del(`moviments/${id}`)
         }

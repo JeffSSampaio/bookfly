@@ -42,13 +42,15 @@ export function usePenalty() {
     async function handleSubmit(formData: Record<string, any>) {
         if (selectedItem.value) {
             console.log('[usePenalty] Atualizar multa:', selectedItem.value.penaltyId, formData)
-            // await penaltyService.update(selectedItem.value.penaltyId, formData)
-        } else {
-            console.log('[usePenalty] Criar multa:', formData)
-            // await penaltyService.create(formData)
+             penaltyService.update(selectedItem.value.penaltyId, formData)
+             try{
+                
+            }catch(e){
+                console.error('Erro:'+e)
+            }
         }
         closeModal()
-        // await getRows({ page: 1, itemsPerPage: 10 })
+    
     }
 
     async function handleDelete() {

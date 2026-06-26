@@ -12,6 +12,9 @@ export const bookService = {
         })
 
     },
+    update: async (id: number, body: any) => {
+        return await api.put(`books/${id}`, body)
+    },
     delete: async (id: number) => {
         return await api.del(`books/${id}`)
     }

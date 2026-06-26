@@ -41,11 +41,12 @@ export function useStockBook() {
     async function handleSubmit(formData: Record<string, any>) {
         if (selectedItem.value) {
             console.log('[useStockBook] Atualizar estoque:', selectedItem.value.stockId, formData)
-            // await stockBookService.update(selectedItem.value.stockId, formData)
-        } else {
-            console.log('[useStockBook] Criar estoque:', formData)
-            // await stockBookService.create(formData)
-        }
+            try{
+             stockBookService.update(selectedItem.value.stockId, formData)
+            }catch(e){
+                console.error('Erro:'+e)
+            }
+        } 
         closeModal()
         // await getRows({ page: 1, itemsPerPage: 10 })
     }

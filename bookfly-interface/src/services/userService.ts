@@ -11,6 +11,9 @@ export const userService = {
                   ...(search ? { search } : {})
             })
       },
+      update:async(id:number,body:any)=>{
+            return await api.put(`users/${id}`, body )
+      } ,
       delete: async(id:number)=>{
             return await api.del(`users/${id}`)
       }

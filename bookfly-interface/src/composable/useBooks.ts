@@ -40,13 +40,15 @@ export function useBooks() {
     async function handleSubmit(formData: Record<string, any>) {
         if (selectedItem.value) {
             console.log('[useBooks] Atualizar livro:', selectedItem.value.bookId, formData)
-            // await bookService.update(selectedItem.value.bookId, formData)
-        } else {
-            console.log('[useBooks] Criar livro:', formData)
-            // await bookService.create(formData)
-        }
+             try{
+             bookService.update(selectedItem.value.bookId, formData)
+                
+            }catch(e){
+                console.error('Erro:'+e)
+            }
+        } 
         closeModal()
-        // await getRows({ page: 1, itemsPerPage: 10 })
+      
     }
 
     async function handleDelete() {

@@ -42,13 +42,15 @@ export const useLoans = () => {
     async function handleSubmit(formData: Record<string, any>) {
         if (selectedItem.value) {
             console.log('[useLoans] Atualizar empréstimo:', selectedItem.value.id, formData)
-            // await loanService.update(selectedItem.value.id, formData)
-        } else {
-            console.log('[useLoans] Criar empréstimo:', formData)
-            // await loanService.create(formData)
+            try{
+                 await loanService.update(selectedItem.value.id, formData)
+                
+            }catch(e){
+                console.error('Erro:'+e)
+            }
         }
         closeModal()
-        // await getRows({ page: 1, itemsPerPage: 10 })
+      
     }
 
     async function handleDelete() {
