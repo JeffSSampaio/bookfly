@@ -17,18 +17,19 @@
   </DataTable>
 
   <FormModal
-    v-if="showModal && modalType === 'edit'"
+    v-if="modalType === 'edit'"
     v-model="showModal"
-    title="Editar Usuário"
+    :title="formTitle"
     :fields="fields"
+    v-model:formData = "form"
     @submit="handleSubmit"
     @cancel="closeModal()"
   />
 
   <ConfirmModal
-    v-if="showModal && modalType === 'delete'"
+    v-if="modalType === 'delete'"
     v-model="showModal"
-    title="Apagar Usuário"
+    :title="formTitle"
     confirm-text="Apagar"
     :message="deleteMessage"
     @confirm="handleDelete"
@@ -43,7 +44,8 @@ import ConfirmModal from '@/components/ConfirmModal.vue'
 import { useUsers } from '@/composable/useUsers'
 
 const {
-  formTitle,titleTable, items, loading, totalItems, headers, getRows, actions,
-  showModal, modalType, fields, handleSubmit, handleDelete, deleteMessage,closeModal
+  titleTable, items, loading, totalItems, headers, getRows, actions,
+  showModal, modalType, fields, handleSubmit, handleDelete, deleteMessage,closeModal, formTitle
+  ,form
 } = useUsers()
 </script>

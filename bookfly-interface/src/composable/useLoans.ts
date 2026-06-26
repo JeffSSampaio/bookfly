@@ -10,26 +10,30 @@ import { useWebSocket } from './useWebSocket'
 
 export const useLoans = () => {
     const tableStore = useTableStore('loans')
-    const { showModal, modalType, selectedItem, openModal,
+    const { 
+        formTitle, setFormTitle,
+        showModal, modalType, selectedItem, openModal,
         closeModal, deleteMessage, buildForm, fillForm, lastOptions, setLastOptions } = useForm()
 
 
     const fields: FormField[] = [
-        { name: 'userId', label: 'Usuário', type: 'select' },
-        { name: 'bookId', label: 'Livro', type: 'select' },
+        { name: 'user', label: 'Usuário', type: 'text' },
+        { name: 'book', label: 'Livro', type: 'text' },
         { name: 'returnDate', label: 'Data de Devolução', type: 'text' },
     ]
 
     const form = buildForm(fields)
 
 
-    function edit(item?: any) {
-        fillForm(form.value, item)
-        openModal('edit', item)
+    function edit(loan?: any) {
+        setFormTitle(`Editando o Empréstimo ID°${loan.id} `)
+        fillForm(form.value, loan)
+        openModal('edit', loan)
     }
 
-    function deleted(item?: any) {
-        openModal('delete', item)
+    function deleted(loan?: any) {
+         setFormTitle(`Apagando o Empréstimo ID°${loan.id} `)
+        openModal('delete', loan)
     }
 
     const actions: BtnAction[] = [...createCrudActions(edit, deleted)]
@@ -126,6 +130,8 @@ export const useLoans = () => {
         handleSubmit,
         handleDelete,
         deleteMessage: computed(() => deleteMessage('empréstimo')),
-        closeModal
+        closeModal,
+        formTitle,
+        form
     }
 }

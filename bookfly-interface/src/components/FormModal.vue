@@ -3,10 +3,10 @@
     v-model="model"
     :title="title"
     :confirm-text="confirmText"
-    @confirm="emit('submit', form)"
+    @confirm="emit('submit', formData)"
   >
     <FormRenderer
-      v-model="form"
+      v-model="formData"
       :fields="fields"
     />
   </BaseModal>
@@ -19,11 +19,11 @@ import FormRenderer from '@/components/ComponentForm.vue'
 import { useForm, type FormField } from '@/composable/useForm'
 
 const model = defineModel<boolean>({ required: true })
-
+const formData = defineModel<Record<string, any>>('formData', { required: true })
 const props = defineProps({
   title: {
     type: String,
-    default: 'Formulário'
+    default: 'formulário'
   },
   confirmText: {
     type: String,
@@ -39,7 +39,5 @@ const emit = defineEmits<{
   submit: [Record<string, any>]
 }>()
 
-const { buildForm } = useForm()
 
-const form = buildForm(props.fields)
 </script>

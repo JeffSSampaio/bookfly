@@ -17,16 +17,17 @@
 </DataTable>
 
   <FormModal
-    :model-value="showModal && modalType === 'edit'"
-    title="Editar Multa"
+    :model-value="modalType === 'edit'"
+    :title="formTitle"
+    v-model:formData="form"
     :fields="fields"
     @submit="handleSubmit"
     @cancel="closeModal()"
   />
 
   <ConfirmModal
-    :model-value="showModal && modalType === 'delete'"
-    title="Apagar Multa"
+    :model-value="modalType === 'delete'"
+    :title="formTitle"
     confirm-text="Apagar"
     :message="deleteMessage"
     @confirm="handleDelete"
@@ -40,8 +41,8 @@ import FormModal from '@/components/FormModal.vue'
 import ConfirmModal from '@/components/ConfirmModal.vue'
 import { usePenalty } from '@/composable/usePenalty'
 
-const {
-  titleTable, items, loading, totalItems, headers, getRows, actions,
+const {form,
+  formTitle,titleTable, items, loading, totalItems, headers, getRows, actions,
   showModal, modalType, fields, handleSubmit, handleDelete, deleteMessage, closeModal
 } = usePenalty()
 </script>

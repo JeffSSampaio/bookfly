@@ -23,16 +23,17 @@
   </DataTable>
 
   <FormModal
-    :model-value="showModal && modalType === 'edit'"
-    title="Editar Estoque"
+    :model-value="modalType === 'edit'"
+    v-model:formData="form"
+    :title="formTitle"
     :fields="fields"
     @submit="handleSubmit"
     @cancel="closeModal()"
   />
 
   <ConfirmModal
-    :model-value="showModal && modalType === 'delete'"
-    title="Apagar Estoque"
+    :model-value="modalType === 'delete'"
+    :title="formTitle"
     confirm-text="Apagar"
     :message="deleteMessage"
     @confirm="handleDelete"
@@ -47,7 +48,8 @@ import ConfirmModal from '@/components/ConfirmModal.vue'
 import { useStockBook } from '@/composable/useStockBook'
 
 const {
-  titleTable, items, loading, totalItems, headers, getRows, actions,
+  form,
+  formTitle, titleTable, items, loading, totalItems, headers, getRows, actions,
   showModal, modalType, fields, handleSubmit, handleDelete, deleteMessage, closeModal,
 } = useStockBook()
 </script>

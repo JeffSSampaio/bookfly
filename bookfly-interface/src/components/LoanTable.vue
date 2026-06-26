@@ -17,16 +17,17 @@
   </DataTable>
 
   <FormModal
-    :model-value="showModal && modalType === 'edit'"
-    title="Editar Empréstimo"
+    :model-value="modalType === 'edit'"
+    :title="formTitle"
+    v-model:formData="form"
     :fields="fields"
     @submit="handleSubmit"
     @cancel="closeModal"
   />
 
   <ConfirmModal
-    :model-value="showModal && modalType === 'delete'"
-    title="Apagar Empréstimo"
+    :model-value="modalType === 'delete'"
+    :title="formTitle"
     confirm-text="Apagar"
     :message="deleteMessage"
     @confirm="handleDelete"
@@ -41,6 +42,7 @@ import ConfirmModal from '@/components/ConfirmModal.vue'
 import { useLoans } from '@/composable/useLoans'
 
 const {
+  formTitle,form,
   titleTable, items, loading, totalItems, headers, getRows, actions,
   showModal, modalType, fields, handleSubmit, handleDelete, deleteMessage,closeModal
 } = useLoans()

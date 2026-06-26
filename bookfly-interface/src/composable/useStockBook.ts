@@ -10,24 +10,29 @@ import { formatDateTime } from '@/utils/dateFormat'
 
 export function useStockBook() {
     const tableStore = useTableStore('stockBook')
-    const { showModal, modalType, selectedItem, openModal,
+    const { 
+        formTitle,setFormTitle,
+        showModal, modalType, selectedItem, openModal,
         closeModal, deleteMessage, buildForm, fillForm, lastOptions, setLastOptions } = useForm()
 
 
     const fields: FormField[] = [
-        { name: 'bookId', label: 'Livro', type: 'select' },
+        { name: 'book', label: 'Livro', type: 'text' },
         { name: 'qtd', label: 'Quantidade', type: 'text' },
     ]
 
     const form = buildForm(fields)
 
-    function edit(item?: any) {
-        fillForm(form.value, item)
-        openModal('edit', item)
+
+    function edit(stockBook: any) {
+        setFormTitle(`Editando Livro do Estoque ID°${stockBook?.stockId}`)
+        fillForm(form.value,stockBook )
+        openModal('edit', stockBook)
     }
 
-    function deleted(item?: any) {
-        openModal('delete', item)
+    function deleted(stockBook?: any) {
+        setFormTitle(`Apagando Livro do Estoque ID°${stockBook?.stockId}`)
+        openModal('delete',stockBook)
     }
 
     const actions: BtnAction[] = [...createCrudActions(edit, deleted)]
@@ -117,6 +122,8 @@ export function useStockBook() {
         handleSubmit,
         handleDelete,
         closeModal,
-        deleteMessage: computed(() => deleteMessage('estoque')),
+        deleteMessage: computed(() => deleteMessage(`${selectedItem.value?.book}`)),
+        formTitle,
+        form
     }
 }

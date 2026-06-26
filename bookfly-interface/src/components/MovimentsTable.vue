@@ -18,7 +18,8 @@
 
   <FormModal
     :model-value="showModal && modalType === 'edit'"
-    title="Editar Movimentação"
+    :title="formTitle"
+    v-model:formData="form"
     :fields="fields"
     @submit="handleSubmit"
     @cancel="closeModal"
@@ -26,7 +27,7 @@
 
   <ConfirmModal
     :model-value="showModal && modalType === 'delete'"
-    title="Apagar Movimentação"
+    :title="formTitle"
     confirm-text="Apagar"
     :message="deleteMessage"
     @confirm="handleDelete"
@@ -41,6 +42,7 @@ import ConfirmModal from '@/components/ConfirmModal.vue'
 import { useMoviments } from '@/composable/useMoviments'
 
 const {
+  formTitle, form,
   titleTable, items, loading, totalItems, headers, getRows, actions,
   showModal, modalType, fields, handleSubmit, handleDelete, deleteMessage,closeModal
 } = useMoviments()

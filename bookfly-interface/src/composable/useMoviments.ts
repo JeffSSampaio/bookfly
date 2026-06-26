@@ -9,13 +9,16 @@ import { useForm, type FormField } from './useForm'
 import { useWebSocket } from './useWebSocket'
 export function useMoviments() {
     const tableStore = useTableStore('moviments')
-    const { showModal, modalType, selectedItem, openModal,
+    const { 
+        formTitle,setFormTitle,
+        showModal, modalType, selectedItem, openModal,
         closeModal, deleteMessage, buildForm, fillForm, lastOptions, setLastOptions } = useForm()
 
 
     const fields: FormField[] = [
-        { name: 'userId', label: 'Usuário', type: 'select' },
-        { name: 'bookId', label: 'Livro', type: 'select' },
+        { name: 'user', label: 'Usuário', type: 'select' },
+        { name: 'book', label: 'Livro', type: 'select' },
+        { name: 'description', label: 'Descrição', type: 'text' },
         { name: 'qtdMoved', label: 'Quantidade', type: 'text' },
         { name: 'type', label: 'Tipo', type: 'select' },
     ]
@@ -23,13 +26,15 @@ export function useMoviments() {
     const form = buildForm(fields)
 
 
-    function edit(item?: any) {
-        fillForm(form.value, item)
-        openModal('edit', item)
+    function edit(moviment?: any) {
+        setFormTitle(`Editando Movimentação ID°${moviment.movimentId}`)
+        fillForm(form.value, moviment)
+        openModal('edit', moviment)
     }
 
-    function deleted(item?: any) {
-        openModal('delete', item)
+    function deleted(moviment?: any) {
+        setFormTitle(`Apagando Movimentação ID°${moviment.movimentId}`)
+        openModal('delete', moviment)
     }
 
     const actions: BtnAction[] = [...createCrudActions(edit, deleted)]
@@ -62,6 +67,7 @@ export function useMoviments() {
         { title: 'Usuário', key: 'user' },
         { title: 'Livro', key: 'book' },
         { title: 'Quantidade', key: 'qtdMoved' },
+        { title: 'Descrição', key: 'description' },
         { title: 'Tipo', key: 'type' },
         { title: 'Data de Criação', key: 'createdTime' },
         { title: 'Status', key: 'recordStatus' },
@@ -125,6 +131,8 @@ export function useMoviments() {
         handleSubmit,
         handleDelete,
         deleteMessage: computed(() => deleteMessage('movimentação')),
-        closeModal
+        closeModal,
+        formTitle,
+        form
     }
 }

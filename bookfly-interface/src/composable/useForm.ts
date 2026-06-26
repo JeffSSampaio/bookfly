@@ -15,7 +15,7 @@ export interface FormField {
 export function useForm() {
     const showModal = ref(false)
     const modalType = ref<'edit' | 'delete' | null>(null)
-    const formTitle = ref<String>()
+    const formTitle = ref<string>('')
     const selectedItem = ref<any>(null)
     const lastOptions = ref<any>(null)
 
@@ -23,6 +23,9 @@ export function useForm() {
         lastOptions.value = options
     }
 
+    function setFormTitle(title:string){
+        formTitle.value = title;
+    }
 
     function buildForm(fields: FormField[]) {
         const formData: Record<string, any> = {}
@@ -32,9 +35,6 @@ export function useForm() {
         return ref(formData)
     }
 
-    function setFormTitle(title:string){
-        formTitle.value = title
-    }
 
 
     function fillForm(formData: Record<string, any>, item: any) {
@@ -56,14 +56,12 @@ export function useForm() {
     }
 
     function deleteMessage(entityLabel: string) {
-        return selectedItem.value?.name
-            ? `Deseja apagar ${entityLabel} "${selectedItem.value.name}"?`
-            : `Deseja apagar este ${entityLabel}?`
+        return entityLabel == undefined
+            ? `Deseja apagar este Item ?` 
+            : `Deseja apagar ${entityLabel}?`
     }
 
     return {
-        formTitle,
-        setFormTitle,
         showModal,
         modalType,
         selectedItem,
@@ -74,5 +72,7 @@ export function useForm() {
         deleteMessage,
         lastOptions,
         setLastOptions,
+        setFormTitle,
+        formTitle
     }
 }

@@ -9,7 +9,9 @@ import { useWebSocket } from './useWebSocket'
 import { formatDateTime } from '@/utils/dateFormat'
 export function useBooks() {
     const tableStore = useTableStore('books')
-    const { showModal, modalType, selectedItem, openModal,
+    const { 
+        formTitle,setFormTitle,
+        showModal, modalType, selectedItem, openModal,
         closeModal, deleteMessage, buildForm, fillForm, lastOptions, setLastOptions } = useForm()
 
 
@@ -21,13 +23,15 @@ export function useBooks() {
     const form = buildForm(fields)
 
 
-    function edit(item?: any) {
-        fillForm(form.value, item)
-        openModal('edit', item)
+    function edit(book?: any) {
+        setFormTitle(`Editando Livro ID°${book.bookId}`)
+        fillForm(form.value, book)
+        openModal('edit', book)
     }
 
-    function deleted(item?: any) {
-        openModal('delete', item)
+    function deleted(book?: any) {
+         setFormTitle(`Editando Livro ID°${book.bookId}`)
+        openModal('delete', book)
     }
 
     const actions: BtnAction[] = [...createCrudActions(edit, deleted)]
@@ -115,6 +119,8 @@ export function useBooks() {
         handleSubmit,
         handleDelete,
         deleteMessage: computed(() => deleteMessage('livro')),
-        closeModal
+        closeModal,
+        formTitle,
+        form
     }
 }

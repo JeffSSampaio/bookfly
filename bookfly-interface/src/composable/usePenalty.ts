@@ -10,25 +10,30 @@ import { useWebSocket } from './useWebSocket'
 
 export function usePenalty() {
     const tableStore = useTableStore('penalty')
-    const { showModal, modalType, selectedItem, openModal, closeModal, deleteMessage, buildForm, fillForm, lastOptions, setLastOptions } = useForm()
+    const { formTitle,setFormTitle, 
+        showModal, modalType, selectedItem,
+         openModal, closeModal, deleteMessage, 
+         buildForm, fillForm, lastOptions, setLastOptions } = useForm()
 
 
     const fields: FormField[] = [
-        { name: 'userId', label: 'Usuário', type: 'select' },
+        { name: 'user', label: 'Usuário', type: 'text' },
         { name: 'amount', label: 'Valor', type: 'text' },
-        { name: 'status', label: 'Status', type: 'select' },
+        { name: 'statusPenalty', label: 'Status', type: 'select' },
     ]
 
     const form = buildForm(fields)
 
 
-    function edit(item?: any) {
-        fillForm(form.value, item)
-        openModal('edit', item)
+    function edit(penalty?: any) {
+        setFormTitle(`Editando Multa de ID°${penalty.penaltyId}`)
+        fillForm(form.value, penalty)
+        openModal('edit', penalty)
     }
 
-    function deleted(item?: any) {
-        openModal('delete', item)
+    function deleted(penalty?: any) {
+        setFormTitle(`Apagando Multa de ID°${penalty.penaltyId}`)
+        openModal('delete', penalty)
     }
 
     const actions: BtnAction[] = [...createCrudActions(edit, deleted)]
@@ -120,6 +125,8 @@ export function usePenalty() {
         handleSubmit,
         handleDelete,
         deleteMessage: computed(() => deleteMessage('multa')),
-        closeModal
+        closeModal,
+        formTitle,
+        form
     }
 }
