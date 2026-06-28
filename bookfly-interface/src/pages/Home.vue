@@ -2,6 +2,7 @@
 <Navbar/>
 <UsersTable />
 <BooksTable/>
+<AuthorTable/>
 <MovimentsTable/>
 <LoanTable/>
 <PenaltyTable/>
@@ -15,5 +16,6 @@ import MovimentsTable from '@/components/MovimentsTable.vue'
 import LoanTable from '@/components/LoanTable.vue'
 import PenaltyTable from '@/components/PenaltyTable.vue'
 import StockBookTable from '@/components/StockBookTable.vue'
+import AuthorTable from '@/components/AuthorTable.vue'
 import Navbar from '@/components/Navbar.vue'
 </script>

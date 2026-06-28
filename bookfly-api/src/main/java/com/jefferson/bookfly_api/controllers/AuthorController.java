@@ -97,8 +97,8 @@ public class AuthorController {
             @ApiResponse(responseCode = "404", description = "Autor não encontrado")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id, Long userId) {
-        authorService.deleteAuthor(id,userId);
+    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
+        authorService.deleteAuthor(id);
         return ResponseEntity.noContent().build();
     }
 }

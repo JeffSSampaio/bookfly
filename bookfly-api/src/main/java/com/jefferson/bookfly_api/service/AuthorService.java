@@ -2,6 +2,7 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.config.AuditContext;
+import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -98,31 +100,60 @@ public class AuthorService {
         return savedBook;
     }
 
+//    @Transactional
+//    @Auditable(
+//            action = "DELETAR_AUTOR",
+//            details = "DELETADO AUTOR ID°{id} POR USUÁRIO {userId}"
+//    )
+//    public void deleteAuthor(Long id, Long userId) {
+//        Author author = authorRepository.findById(id)
+//                .orElseThrow(() -> new NotFoundException("Autor não encontrado para deleção"));
+//        User existUser = userRepository.findById(userId)
+//                .orElseThrow( () -> new NotFoundException("Este Usuário não existe para executar essa ação"));
+//        List<Book> booksWithAuthor = bookRepository.findActiveByAuthorsId(id);
+//        for (Book book : booksWithAuthor) {
+//
+//            if (book.getAuthors().size() == 1) {
+//                throw new NotFoundException("Não é possível remover o único autor do livro: " + book.getTitle());
+//            }
+//
+//            book.getAuthors().removeIf(a -> a.getId().equals(id));
+//            bookRepository.save(book);
+//        }
+//
+//        author.getRecordStatus().delete(existUser);
+//
+//        authorRepository.save(author);
+//    }
+
     @Transactional
     @Auditable(
             action = "DELETAR_AUTOR",
             details = "DELETADO AUTOR ID°{id} POR USUÁRIO {userId}"
     )
-    public void deleteAuthor(Long id, Long userId) {
+    public void deleteAuthor(Long id) {
         Author author = authorRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Autor não encontrado para deleção"));
-        User existUser = userRepository.findById(userId)
-                .orElseThrow( () -> new NotFoundException("Este Usuário não existe para executar essa ação"));
+
         List<Book> booksWithAuthor = bookRepository.findActiveByAuthorsId(id);
         for (Book book : booksWithAuthor) {
 
             if (book.getAuthors().size() == 1) {
                 throw new NotFoundException("Não é possível remover o único autor do livro: " + book.getTitle());
             }
-            
+
             book.getAuthors().removeIf(a -> a.getId().equals(id));
             bookRepository.save(book);
         }
 
-        author.getRecordStatus().delete(existUser);
+        author.getRecordStatus().setRecordStatusValue(RecordStatusValue.DELETED);
+        author.getRecordStatus().setDateTime(LocalDateTime.now());
 
         authorRepository.save(author);
     }
+
+
+
     public Page<Author> findAll(String search, Pageable pageable) {
 
         if (search == null || search.isBlank()) {
