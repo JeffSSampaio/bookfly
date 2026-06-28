@@ -12,9 +12,6 @@ import java.util.List;
 @Schema(description = "Dados para criação de um livro")
 public record BookUpdateRequest(
 
-        @NotNull(message = "Usuario Não pode ser nulo!")
-        Long userId,
-
         @Schema(description = "Título do livro")
         String title,
 

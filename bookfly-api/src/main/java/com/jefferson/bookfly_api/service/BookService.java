@@ -162,20 +162,58 @@ public class BookService {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
     }
+//    @Transactional
+//    @Auditable(
+//            action = "ATUALIZAR_LIVRO",
+//            details = "USUÁRIO {userId} ATUALIZOU LIVRO ID°{bookId}"
+//    )
+//    public Book updateBook(Long id,Long userId, Book book){
+//        Book existBook = bookRepository.findById(id)
+//                .orElseThrow(() -> new NotFoundException("Livro não existe"));
+//
+//            if (existBook.getRecordStatus().getRecordStatusValue() == RecordStatusValue.DELETED){
+//                User currentUser = userRepository.findById(userId)
+//                        .orElseThrow(()-> new NotFoundException("Este Usuario não existe para executar essa ação"));
+//                existBook.getRecordStatus().active(currentUser);
+//            }
+//        String sumaryExists  = book.getSummary() !=null ? book.getSummary() : "Sem sumario";
+//
+//        if (book.getTitle() != null) existBook.setTitle(book.getTitle());
+//        if (book.getCover() != null) existBook.setCover(book.getCover());
+//        if (book.getGenders() != null) existBook.setGenders(book.getGenders());
+//        if (book.getSummary() != null) existBook.setSummary(sumaryExists);
+//
+//
+//        if (book.getAuthors() != null) {
+//            List<Author> updatedAuthors = new ArrayList<>();
+//
+//            for (Author author : book.getAuthors()) {
+//                Author managedAuthor = authorRepository.findByName(author.getName())
+//                        .orElseGet(() -> {
+//                            Author newAuthor = new Author();
+//                            newAuthor.setName(author.getName());
+//                            return authorRepository.save(newAuthor);
+//                        });
+//                updatedAuthors.add(managedAuthor);
+//            }
+//            existBook.setAuthors(updatedAuthors);
+//        }
+//        AuditContext.capture("bookId",existBook.getId());
+//        eventPublisher.publishEvent(new ItemEvent("books", ItemEventAction.UPDATED));
+//        return bookRepository.save(existBook);
+//    }
+
+
+
     @Transactional
     @Auditable(
             action = "ATUALIZAR_LIVRO",
             details = "USUÁRIO {userId} ATUALIZOU LIVRO ID°{bookId}"
     )
-    public Book updateBook(Long id,Long userId, Book book){
+    public Book updateBook(Long id, Book book){
         Book existBook = bookRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Livro não existe"));
 
-            if (existBook.getRecordStatus().getRecordStatusValue() == RecordStatusValue.DELETED){
-                User currentUser = userRepository.findById(userId)
-                        .orElseThrow(()-> new NotFoundException("Este Usuario não existe para executar essa ação"));
-                existBook.getRecordStatus().active(currentUser);
-            }
         String sumaryExists  = book.getSummary() !=null ? book.getSummary() : "Sem sumario";
 
         if (book.getTitle() != null) existBook.setTitle(book.getTitle());

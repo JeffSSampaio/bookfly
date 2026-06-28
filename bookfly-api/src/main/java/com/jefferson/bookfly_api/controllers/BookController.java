@@ -148,7 +148,7 @@ public class BookController {
        bookEdit.setGenders(request.genders());
 
 
-       Book updatedBook = bookService.updateBook(id, request.userId(), bookEdit);
+       Book updatedBook = bookService.updateBook(id, bookEdit);
 
        return ResponseEntity.ok(BookDetail.from(updatedBook));
     }

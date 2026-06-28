@@ -9,8 +9,8 @@ import { useWebSocket } from './useWebSocket'
 import { formatDateTime } from '@/utils/dateFormat'
 export function useBooks() {
     const tableStore = useTableStore('books')
-    const { 
-        formTitle,setFormTitle,
+    const {
+        formTitle, setFormTitle,
         showModal, modalType, selectedItem, openModal,
         closeModal, deleteMessage, buildForm, fillForm, lastOptions, setLastOptions } = useForm()
 
@@ -30,7 +30,7 @@ export function useBooks() {
     }
 
     function deleted(book?: any) {
-         setFormTitle(`Editando Livro ID°${book.bookId}`)
+        setFormTitle(`Editando Livro ID°${book.bookId}`)
         openModal('delete', book)
     }
 
@@ -40,22 +40,33 @@ export function useBooks() {
     async function handleSubmit(formData: Record<string, any>) {
         if (selectedItem.value) {
             console.log('[useBooks] Atualizar livro:', selectedItem.value.bookId, formData)
-             try{
-             bookService.update(selectedItem.value.bookId, formData)
-                
-            }catch(e){
-                console.error('Erro:'+e)
+            try {
+
+                const treatedFormData = { ...formData }
+                if (typeof treatedFormData.authors === 'string') {
+                    treatedFormData.authors = treatedFormData.authors
+                        .split(',')                 
+                        .map(name => name.trim())    
+                        .filter(name => name !== '') 
+                } else if (!treatedFormData.authors) {
+                    treatedFormData.authors = []            
+                }
+
+                bookService.update(selectedItem.value.bookId, treatedFormData)
+
+            } catch (e) {
+                console.error('Erro:' + e)
             }
-        } 
+        }
         closeModal()
-      
+
     }
 
     async function handleDelete() {
         const id = selectedItem.value?.bookId
         if (!id) return
         console.log('[useBooks] Deletar livro:', id)
-         await bookService.delete(id)
+        await bookService.delete(id)
         closeModal()
         // await getRows({ page: 1, itemsPerPage: 10 })
     }
@@ -65,8 +76,8 @@ export function useBooks() {
         { title: 'ID', key: 'bookId' },
         { title: 'Nome', key: 'title' },
         { title: 'Autores', key: 'authors', sortable: false },
-        {title:'Status', key:'recordStatus' },
-        {title:'Data/Hora',key:'recordDateTime'},
+        { title: 'Status', key: 'recordStatus' },
+        { title: 'Data/Hora', key: 'recordDateTime' },
         { title: 'Ações', key: 'actions', sortable: false }
     ]
 
