@@ -17,7 +17,6 @@ export function useStockBook() {
 
 
     const fields: FormField[] = [
-        { name: 'book', label: 'Livro', type: 'text' },
         { name: 'qtd', label: 'Quantidade', type: 'text' },
     ]
 

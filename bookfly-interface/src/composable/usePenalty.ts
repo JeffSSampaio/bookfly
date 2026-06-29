@@ -17,9 +17,8 @@ export function usePenalty() {
 
 
     const fields: FormField[] = [
-        { name: 'user', label: 'Usuário', type: 'text' },
         { name: 'amount', label: 'Valor', type: 'text' },
-        { name: 'statusPenalty', label: 'Status', type: 'select' },
+        { name: 'statusPenalty', label: 'Status', type: 'select' ,items: ['PENDENTE','ANALISE','PAGO'] },
     ]
 
     const form = buildForm(fields)
@@ -42,8 +41,8 @@ export function usePenalty() {
     async function handleSubmit(formData: Record<string, any>) {
         if (selectedItem.value) {
             console.log('[usePenalty] Atualizar multa:', selectedItem.value.penaltyId, formData)
-             penaltyService.update(selectedItem.value.penaltyId, formData)
-             try{
+            try{
+                 penaltyService.update(selectedItem.value.penaltyId, formData)
                 
             }catch(e){
                 console.error('Erro:'+e)

@@ -13,7 +13,7 @@ export const penaltyService = {
 
         },
         update: async (id: number, body: any) => {
-                return await api.put(`penalties/${id}`, body)
+                return await api.put(`penalties/${id}`,body)
         },
         delete: async (id: number) => {
                 return await api.del(`penalties/${id}`)

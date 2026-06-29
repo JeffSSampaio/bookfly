@@ -147,8 +147,9 @@ public class PenaltyService {
         if (updatedData.getLoan() != null) {
             existingPenalty.setLoan(updatedData.getLoan());
         }
+        penaltyRepository.save(existingPenalty);
         eventPublisher.publishEvent(new ItemEvent("penalties", ItemEventAction.UPDATED));
-        return penaltyRepository.save(existingPenalty);
+        return existingPenalty;
     }
     @Auditable(
             action = "REMOCAO_MULTA",

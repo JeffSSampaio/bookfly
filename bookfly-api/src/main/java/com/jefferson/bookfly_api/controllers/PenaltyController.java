@@ -81,7 +81,7 @@ public class PenaltyController {
             @ApiResponse(responseCode = "200", description = "Penalidade atualizada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Penalidade não encontrada")
     })
-    @PatchMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<PenaltyDetail> updatePenalty(
             @PathVariable Long id,
             @RequestBody PenaltyUpdateRequest request

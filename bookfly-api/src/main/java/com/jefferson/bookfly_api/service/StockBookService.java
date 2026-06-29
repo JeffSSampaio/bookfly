@@ -117,12 +117,53 @@ public class StockBookService {
                 .orElseThrow(() -> new NotFoundException("Livro não está no estoque"));
     }
 
+//    @Transactional
+//    @Auditable(
+//            action = "ATUALIZACAO_LIVRO_QUANTIDADE",
+//            details = "QUANTIDADE DE LIVRO ID°{bookId} FOI ALTERADA POR USUARIO {adminId}  "
+//    )
+//    public StockBook updateQtd(Long bookId, int delta, Long adminId , String description) {
+//
+//        Book book = bookRepository.findById(bookId)
+//                .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
+//
+//        Stock stock = stockService.getStock();
+//
+//        StockBook stockBook = stockBookRepository
+//                .findByStockAndBook(stock, book)
+//                .orElseThrow(() -> new NotFoundException("Livro não está no estoque"));
+//
+//        int newQtd = stockBook.getQtd() + delta;
+//        if (newQtd < 0) throw new NotFoundException("Quantidade insuficiente no estoque");
+//
+//        User admin = userRepository.findById(adminId)
+//                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+//
+//        TypeMoviment type = delta > 0 ? TypeMoviment.ENTRADA_ADMIN : TypeMoviment.SAIDA_ADMIN;
+//        if (description == null || description.equals("")) description = "ALTERAÇÃO: Admin " + admin.getName() + " realizou " + type + " de " + Math.abs(delta) + " unidade(s)";
+//
+//        stockBook.setQtd(newQtd);
+//        Moviment moviment = new Moviment();
+//        moviment.setStockBook(stockBook);
+//        moviment.setQtdMoviment(Math.abs(delta));
+//        moviment.setTypeItem(type);
+//        moviment.setDescription(description.toUpperCase());
+//        moviment.setUser(admin);
+//        moviment.setCreatedTime(LocalDateTime.now());
+//        eventPublisher.publishEvent(new ItemEvent("moviments", ItemEventAction.UPDATED));
+//        movimentRepository.save(moviment);
+//        eventPublisher.publishEvent(new ItemEvent("stock", ItemEventAction.UPDATED));
+//        return stockBookRepository.save(stockBook);
+//    }
+
+
+
     @Transactional
     @Auditable(
             action = "ATUALIZACAO_LIVRO_QUANTIDADE",
             details = "QUANTIDADE DE LIVRO ID°{bookId} FOI ALTERADA POR USUARIO {adminId}  "
     )
-    public StockBook updateQtd(Long bookId, int delta, Long adminId , String description) {
+    public StockBook updateQtd(Long bookId, int delta, String description) {
 
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new NotFoundException("Livro não encontrado"));
@@ -136,11 +177,9 @@ public class StockBookService {
         int newQtd = stockBook.getQtd() + delta;
         if (newQtd < 0) throw new NotFoundException("Quantidade insuficiente no estoque");
 
-        User admin = userRepository.findById(adminId)
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         TypeMoviment type = delta > 0 ? TypeMoviment.ENTRADA_ADMIN : TypeMoviment.SAIDA_ADMIN;
-        if (description == null || description.equals("")) description = "ALTERAÇÃO: Admin " + admin.getName() + " realizou " + type + " de " + Math.abs(delta) + " unidade(s)";
+        if (description == null || description.equals("")) description = "ALTERAÇÃO: realizado " + type + " de " + Math.abs(delta) + " unidade(s)";
 
         stockBook.setQtd(newQtd);
         Moviment moviment = new Moviment();
@@ -148,12 +187,12 @@ public class StockBookService {
         moviment.setQtdMoviment(Math.abs(delta));
         moviment.setTypeItem(type);
         moviment.setDescription(description.toUpperCase());
-        moviment.setUser(admin);
         moviment.setCreatedTime(LocalDateTime.now());
-        eventPublisher.publishEvent(new ItemEvent("moviments", ItemEventAction.UPDATED));
         movimentRepository.save(moviment);
         eventPublisher.publishEvent(new ItemEvent("stock", ItemEventAction.UPDATED));
-        return stockBookRepository.save(stockBook);
+                stockBookRepository.save(stockBook);
+        eventPublisher.publishEvent(new ItemEvent("moviments", ItemEventAction.UPDATED));
+        return stockBook;
     }
 
     public List<StockBook> findAllActive(){

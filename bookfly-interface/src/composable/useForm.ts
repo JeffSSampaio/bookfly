@@ -1,16 +1,29 @@
 import { ref, reactive, computed } from 'vue'
 
-export interface FormField {
+interface BaseField {
     name: string
     label: string
-    type: 'text' | 'email' | 'password' | 'select'
     cols?: number
     required?: boolean
-    items?: any[]
-    placeholder?: string
-    defaultValue?: any
     rules?: ((value: any) => boolean | string)[]
 }
+
+interface TextField extends BaseField {
+    type: 'text' | 'email' | 'password'
+    placeholder?: string
+    defaultValue?: string
+}
+
+interface SelectField extends BaseField {
+    type: 'select'
+    items: any[]
+    multiple?: boolean
+    defaultValue?: string | string[]
+}
+
+export type FormField = TextField | SelectField
+
+
 
 export function useForm() {
     const showModal = ref(false)

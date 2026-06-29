@@ -9,8 +9,7 @@ public record StockBookUpdateQtdSummary(
         int qtdCurrent,
         int qtdUpdated,
         String type,
-        BookMovimentSummary book,
-        Long userId
+        BookMovimentSummary book
 
 
 ) {
@@ -20,8 +19,7 @@ public record StockBookUpdateQtdSummary(
                 stockBook.getQtd(),
                 qtdAlterada,
                 type,
-                BookMovimentSummary.from(stockBook.getBook()),
-                userId
+                BookMovimentSummary.from(stockBook.getBook())
 
         );
     }

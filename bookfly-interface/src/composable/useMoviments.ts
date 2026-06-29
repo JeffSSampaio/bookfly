@@ -16,11 +16,11 @@ export function useMoviments() {
 
 
     const fields: FormField[] = [
-        { name: 'user', label: 'Usuário', type: 'select' },
-        { name: 'book', label: 'Livro', type: 'select' },
+        { name: 'user', label: 'Usuário', type: 'select',items: [] },
+        { name: 'book', label: 'Livro', type: 'select', items: []  },
         { name: 'description', label: 'Descrição', type: 'text' },
         { name: 'qtdMoved', label: 'Quantidade', type: 'text' },
-        { name: 'type', label: 'Tipo', type: 'select' },
+        { name: 'type', label: 'Tipo', type: 'select',items: []  },
     ]
 
     const form = buildForm(fields)

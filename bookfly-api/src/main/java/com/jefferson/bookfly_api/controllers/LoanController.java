@@ -121,7 +121,7 @@ public class LoanController {
             @ApiResponse(responseCode = "200", description = "Empréstimo Editado com Sucesso!"),
             @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado")
     })
-    @PutMapping("/edit/{loanId}")
+    @PutMapping("/{loanId}")
     public ResponseEntity<LoanSummary> updateLoan(@PathVariable long loanId, @RequestBody LoanUpdateRequest request) {
         Loan newLoan = new Loan();
         newLoan.setId(loanId);

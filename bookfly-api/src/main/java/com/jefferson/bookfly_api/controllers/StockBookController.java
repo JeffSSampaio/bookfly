@@ -111,11 +111,12 @@ public class StockBookController {
             @ApiResponse(responseCode = "200", description = "Quantidade atualizada"),
             @ApiResponse(responseCode = "400", description = "Erro na atualização")
     })
-    @PutMapping("/update-qtd")
+    @PutMapping("/{id}")
     public ResponseEntity<StockBookUpdateQtdSummary> updateQtd(
+            @PathVariable Long id,
             @RequestBody @Valid StockBookUpdateQtdRequest request
     ) {
-        StockBook stockBook = stockBookService.updateQtd(request.bookId(),request.qtd(), request.userId(), request.description());
+        StockBook stockBook = stockBookService.updateQtd(id,request.qtd(),request.description());
 
         return ResponseEntity.ok(
                 StockBookUpdateQtdSummary.from(
