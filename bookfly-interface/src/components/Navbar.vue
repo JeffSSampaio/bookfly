@@ -2,11 +2,11 @@
 
     <BaseNavbar
       v-model:drawerValue="drawer"
-      :menu-items="meusLinks"
+      :menu-items="menuItems"
       title="BookFly"
       color="primary"
       @toggle-drawer="drawer = !drawer"
-      @menu-click="navegar"
+      @menu-click="navigate"
     />
 
 
@@ -17,15 +17,13 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import BaseNavbar from '@/components/ComponentNavBar.vue'
 import type { MenuItem } from '@/components/ComponentNavBar.vue'
-
+import { useNavbar } from '@/composable/useNavbar'
 const router = useRouter()
 const drawer = ref(false)
 
-const meusLinks: MenuItem[] = [
-  { title: 'Home', value: 'home', icon: 'mdi-home' },
-]
+const {menuItems} = useNavbar()
 
-function navegar(destino: string) {
-  router.push({ name: destino })
+function navigate(d: string) {
+  router.push({ name: d })
 }
 </script>
