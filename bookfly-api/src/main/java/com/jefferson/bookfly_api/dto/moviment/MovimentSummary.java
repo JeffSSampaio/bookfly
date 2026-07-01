@@ -26,6 +26,7 @@ public record MovimentSummary(
 
 ) {
     public static MovimentSummary from(Moviment moviment){
+
         return new MovimentSummary(
                 moviment.getId(),
                 moviment.getQtdMoviment(),

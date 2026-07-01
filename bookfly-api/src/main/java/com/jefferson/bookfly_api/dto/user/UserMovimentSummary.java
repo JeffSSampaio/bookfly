@@ -9,6 +9,9 @@ public record UserMovimentSummary(
         Role role
 ) {
    public static UserMovimentSummary from(User user){
+       if (user == null) {
+           return null; // tirar daqui quando tiver o spring security
+       }
        return new UserMovimentSummary(
                 user.getId(),
                user.getName(),
