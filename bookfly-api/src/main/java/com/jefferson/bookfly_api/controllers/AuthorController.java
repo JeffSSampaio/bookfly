@@ -1,8 +1,10 @@
 package com.jefferson.bookfly_api.controllers;
 
 import com.jefferson.bookfly_api.dto.author.AuthorDetail;
+import com.jefferson.bookfly_api.dto.author.AuthorRequest;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
+import com.jefferson.bookfly_api.models.RecordStatus;
 import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.service.AuthorService;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +34,11 @@ public class AuthorController {
     @Operation(summary = "Listar todos os autores")
     @ApiResponse(responseCode = "200", description = "Autores retornados com sucesso")
     @GetMapping("/list-all")
-    public ResponseEntity<List<Author>> getAllAuthors() {
-        return ResponseEntity.ok(authorService.getAllAuthors());
+    public ResponseEntity<List<AuthorDetail>> getAllAuthors() {
+
+        return ResponseEntity.ok(authorService.getAllAuthors().stream()
+                .map(AuthorDetail::from)
+                .toList());
     }
 
     @Operation(summary = "Listar todos os autores")
@@ -66,9 +71,11 @@ public class AuthorController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos")
     })
     @PostMapping("/create")
-    public ResponseEntity<Author> createAuthor(@RequestBody Author author) {
+    public ResponseEntity<AuthorDetail> createAuthor(@RequestBody Author author) {
+        Author createdAuthor = authorService.createAuthor(author);
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(authorService.createAuthor(author));
+                .body(AuthorDetail.from(createdAuthor));
     }
 
     @Operation(summary = "Editar autor")
@@ -77,8 +84,11 @@ public class AuthorController {
             @ApiResponse(responseCode = "404", description = "Autor não encontrado")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Author> editAuthor(@PathVariable Long id, @RequestBody Author author) {
-        return ResponseEntity.ok(authorService.editAuthor(id, author));
+    public ResponseEntity<AuthorDetail> editAuthor(@PathVariable Long id, @RequestBody AuthorRequest author) {
+        Author updatedAuthor = new Author();
+        updatedAuthor.setName(author.name());
+        updatedAuthor.setRecordStatus(new RecordStatus(author.recordStatusValue(),author.recordDateTime()));
+        return ResponseEntity.ok(AuthorDetail.from(authorService.editAuthor(id,updatedAuthor)));
     }
 
     @Operation(summary = "Associar autor a um livro")

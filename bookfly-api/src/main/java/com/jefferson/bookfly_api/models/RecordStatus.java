@@ -28,6 +28,9 @@ public class RecordStatus implements IRecordStatus {
         this.byUser = byUser;
     }
 
+    public RecordStatus(RecordStatusValue recordStatusValue, LocalDateTime localDateTime) {
+    }
+
     @Override
     public void delete(User user) {
         this.recordStatusValue = RecordStatusValue.DELETED;

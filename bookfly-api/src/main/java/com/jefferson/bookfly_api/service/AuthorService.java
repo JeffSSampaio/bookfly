@@ -2,12 +2,12 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.config.AuditContext;
+import com.jefferson.bookfly_api.enums.ItemEventAction;
 import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.Author;
 import com.jefferson.bookfly_api.models.Book;
 import com.jefferson.bookfly_api.models.StockBook;
-import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.repository.AuthorRepository;
 import com.jefferson.bookfly_api.repository.BookRepository;
 import com.jefferson.bookfly_api.repository.StockBookRepository;
@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +30,7 @@ public class AuthorService {
     private final StockBookRepository stockBookRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public List<Author> getAllAuthors() {
         return authorRepository.findAll();
@@ -42,7 +42,7 @@ public class AuthorService {
     )
     public Author createAuthor(Author author) {
         if (author.getId() != null && authorRepository.existsById(author.getId())) {
-            throw new NotFoundException("Esse Author já existe no sistema com o ID: " + author.getId());
+            throw new NotFoundException("Esse Autor já existe no sistema com o ID: " + author.getId());
         }
         AuditContext.capture("authorName",author.getName());
         return authorRepository.save(author);
@@ -74,7 +74,6 @@ public class AuthorService {
             }
             bookRepository.save(book);
         }
-
         return savedAuthor;
     }
 
