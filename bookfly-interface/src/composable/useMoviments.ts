@@ -16,11 +16,11 @@ export function useMoviments() {
 
 
     const fields: FormField[] = [
-        { name: 'user', label: 'Usuário', type: 'select',items: [] },
-        { name: 'book', label: 'Livro', type: 'select', items: []  },
+        { name: 'user', label: 'Usuário', type: 'text'},
+        // { name: 'book', label: 'Livro', type: 'select', items: []  },
         { name: 'description', label: 'Descrição', type: 'text' },
         { name: 'qtdMoved', label: 'Quantidade', type: 'text' },
-        { name: 'type', label: 'Tipo', type: 'select',items: []  },
+        { name: 'type', label: 'Tipo', type: 'select',items: ['ENTRADA','SAIDA','ENTRADA_ADMIN','SAIDA_ADMIN']  },
     ]
 
     const form = buildForm(fields)
@@ -41,8 +41,11 @@ export function useMoviments() {
 
 
     async function handleSubmit(formData: Record<string, any>) {
+      
         if (selectedItem.value) {
-            console.log('[useMoviments] Atualizar movimentação:', selectedItem.value.movimentId, formData)
+                 const { qtdMoviment, ...rest } = formData
+        const payload = { ...rest, qtdMoved: qtdMoviment } 
+             console.log('[useMoviments] Atualizar movimentação:', selectedItem.value.movimentId, formData)
              try{
                  await movimentService.update(selectedItem.value.movimentId, formData)
                 
