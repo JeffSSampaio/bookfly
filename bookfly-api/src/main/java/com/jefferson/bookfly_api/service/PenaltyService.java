@@ -1,12 +1,10 @@
 package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
-import com.jefferson.bookfly_api.dto.penalty.PenaltyDetail;
 import com.jefferson.bookfly_api.enums.ItemEventAction;
 import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.enums.StatusLoan;
 import com.jefferson.bookfly_api.enums.StatusPenalty;
-import com.jefferson.bookfly_api.events.ItemEvent;
 import com.jefferson.bookfly_api.exceptions.DependencyViolationException;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
@@ -99,15 +97,13 @@ public class PenaltyService {
         if (updatedData.getStatus() != null) {
             existingPenalty.setStatus(updatedData.getStatus());
             Loan loan = existingPenalty.getLoan();
-
-
-            if (updatedData.getAmount() == null) {
-                existingPenalty.setAmount(existingPenalty.getPaymentAmount(loan.getReturnDate(), LocalDateTime.now()));
-            }
+            existingPenalty.setAmount(existingPenalty.getPaymentAmount(loan.getReturnDate(), LocalDateTime.now()));
 
             if (updatedData.getStatus() == StatusPenalty.PAGO) {
                 existingPenalty.setPaid(true);
                 existingPenalty.setPayedDate(LocalDateTime.now());
+
+
 
                 if (loan != null) {
                     loan.setStatus(StatusLoan.FINALIZADO);
@@ -115,14 +111,13 @@ public class PenaltyService {
                 }
             }
 
-            if (updatedData.getStatus() == StatusPenalty.PENDENTE) {
+
+
+            if (updatedData.getStatus() == StatusPenalty.PENDENTE ) {
                 existingPenalty.setPaid(false);
                 existingPenalty.setPayedDate(null);
+                existingPenalty.setAmount(BigDecimal.valueOf(0.0));
 
-
-                if (updatedData.getAmount() == null) {
-                    existingPenalty.setAmount(BigDecimal.valueOf(0.0));
-                }
 
                 if (loan != null) {
                     loan.setStatus(StatusLoan.ATRASADO);
@@ -130,28 +125,28 @@ public class PenaltyService {
                 }
             }
 
-            if (updatedData.getStatus() == StatusPenalty.ANALISE) {
+            if (updatedData.getStatus() == StatusPenalty.ANALISE){
                 existingPenalty.setPaid(false);
                 existingPenalty.setPayedDate(null);
+                existingPenalty.setAmount(BigDecimal.valueOf(0.0));
 
-
-                if (updatedData.getAmount() == null) {
-                    existingPenalty.setAmount(BigDecimal.valueOf(0.0));
-                }
 
                 if (loan != null) {
                     loan.setStatus(StatusLoan.ANALISE);
                     loanRepository.save(loan);
                 }
             }
+
+
+
+
         }
 
         if (updatedData.getLoan() != null) {
             existingPenalty.setLoan(updatedData.getLoan());
         }
-        penaltyRepository.save(existingPenalty);
         eventPublisher.publishEvent(new ItemEvent("penalties", ItemEventAction.UPDATED));
-        return existingPenalty;
+        return penaltyRepository.save(existingPenalty);
     }
     @Auditable(
             action = "REMOCAO_MULTA",

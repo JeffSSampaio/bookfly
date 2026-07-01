@@ -2,11 +2,7 @@ package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
 import com.jefferson.bookfly_api.config.AuditContext;
-import com.jefferson.bookfly_api.dto.user.UserRequest;
-import com.jefferson.bookfly_api.dto.user.UserSummary;
 import com.jefferson.bookfly_api.enums.ItemEventAction;
-import com.jefferson.bookfly_api.enums.Role;
-import com.jefferson.bookfly_api.events.ItemEvent;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.User;
 import com.jefferson.bookfly_api.repository.UserRepository;
@@ -44,7 +40,6 @@ public class UserService {
         userToSave.setEmail(user.getEmail());
         userToSave.setPassword(user.getPassword());
         userToSave.setRole(user.getRole());
-        eventPublisher.publishEvent(new ItemEvent("users", ItemEventAction.CREATED));
         return userRepository.save(user);
     }
 
@@ -88,7 +83,7 @@ public class UserService {
         if (newUser.getRole() != null) {
             userExist.setRole(newUser.getRole());
         }
-        eventPublisher.publishEvent(new ItemEvent("users", ItemEventAction.UPDATED));
+
         return userRepository.save(userExist);
     }
 
@@ -128,7 +123,6 @@ public class UserService {
 
         user.getRecordStatus().delete(user);
         userRepository.save(user);
-        eventPublisher.publishEvent(new ItemEvent("users", ItemEventAction.DELETED));
     }
 
     public boolean userExistsById(Long id){

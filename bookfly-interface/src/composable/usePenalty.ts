@@ -6,7 +6,7 @@ import { createCrudActions } from './useCreateCrudActions'
 import type { BtnAction } from '@/composable/useBtnActions'
 import { formatDateTime } from '@/utils/dateFormat'
 import { useForm, type FormField } from './useForm'
-import { useWebSocket } from './useWebSocket'
+
 
 export function usePenalty() {
     const tableStore = useTableStore('penalty')
@@ -113,7 +113,7 @@ export function usePenalty() {
 
         await tableStore.getRows(options, fetchAndTreat)
     }
-    useWebSocket('penalties', () => { if (lastOptions.value) getRows(lastOptions.value) })
+
     return {
         titleTable: 'Multas',
         headers: tableStore.headers,

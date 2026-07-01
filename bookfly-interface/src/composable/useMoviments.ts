@@ -6,7 +6,7 @@ import { createCrudActions } from './useCreateCrudActions'
 import type { BtnAction } from '@/composable/useBtnActions'
 import { formatDateTime } from '@/utils/dateFormat'
 import { useForm, type FormField } from './useForm'
-import { useWebSocket } from './useWebSocket'
+
 export function useMoviments() {
     const tableStore = useTableStore('moviments')
     const { 
@@ -117,7 +117,6 @@ export function useMoviments() {
 
         await tableStore.getRows(options, fetchAndTreat)
     }
-    useWebSocket('moviments', () => { if (lastOptions.value) getRows(lastOptions.value) })
 
     return {
         titleTable: 'Movimentações',

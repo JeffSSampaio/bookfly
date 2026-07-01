@@ -5,7 +5,6 @@ import type { TableOptions } from './useTable'
 import { createCrudActions } from './useCreateCrudActions'
 import type { BtnAction } from '@/composable/useBtnActions'
 import { useForm, type FormField } from './useForm'
-import { useWebSocket } from './useWebSocket'
 import { formatDateTime } from '@/utils/dateFormat'
 export function useBooks() {
     const tableStore = useTableStore('books')
@@ -116,7 +115,6 @@ export function useBooks() {
 
         await tableStore.getRows(options, fetchAndTreat)
     }
-    useWebSocket('books', () => { if (lastOptions.value) getRows(lastOptions.value) })
 
     return {
         titleTable: 'Livros',

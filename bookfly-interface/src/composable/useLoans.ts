@@ -6,7 +6,7 @@ import { createCrudActions } from './useCreateCrudActions'
 import type { BtnAction } from '@/composable/useBtnActions'
 import { formatDateTime } from '@/utils/dateFormat'
 import { useForm, type FormField } from './useForm'
-import { useWebSocket } from './useWebSocket'
+
 
 export const useLoans = () => {
     const tableStore = useTableStore('loans')
@@ -116,7 +116,6 @@ export const useLoans = () => {
         await tableStore.getRows(options, fetchAndTreat)
         setLastOptions(options)
     }
-    useWebSocket('loans', () => { if (lastOptions.value) getRows(lastOptions.value) })
 
     return {
         titleTable: 'Empréstimos',

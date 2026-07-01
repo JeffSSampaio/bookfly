@@ -1,12 +1,10 @@
 package com.jefferson.bookfly_api.service;
 
 import com.jefferson.bookfly_api.annotation.Auditable;
-import com.jefferson.bookfly_api.dto.stockbook.StockBookSummary;
 import com.jefferson.bookfly_api.enums.ItemEventAction;
 import com.jefferson.bookfly_api.enums.RecordStatusValue;
 import com.jefferson.bookfly_api.enums.Role;
 import com.jefferson.bookfly_api.enums.TypeMoviment;
-import com.jefferson.bookfly_api.events.ItemEvent;
 import com.jefferson.bookfly_api.exceptions.NotFoundException;
 import com.jefferson.bookfly_api.models.*;
 import com.jefferson.bookfly_api.repository.*;
@@ -17,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -87,8 +84,6 @@ public class StockBookService {
 
         StockBook saved = stockBookRepository.save(stockBook);
         movimentRepository.save(moviment);
-        eventPublisher.publishEvent(new ItemEvent("moviments", ItemEventAction.UPDATED));
-        eventPublisher.publishEvent(new ItemEvent("stock", ItemEventAction.CREATED));
         return saved;
     }
 
@@ -189,9 +184,7 @@ public class StockBookService {
         moviment.setDescription(description.toUpperCase());
         moviment.setCreatedTime(LocalDateTime.now());
         movimentRepository.save(moviment);
-        eventPublisher.publishEvent(new ItemEvent("stock", ItemEventAction.UPDATED));
-                stockBookRepository.save(stockBook);
-        eventPublisher.publishEvent(new ItemEvent("moviments", ItemEventAction.UPDATED));
+        stockBookRepository.save(stockBook);
         return stockBook;
     }
 
@@ -223,7 +216,6 @@ public class StockBookService {
 
         stockBook.getRecordStatus().delete(userExist);
         stockBook.setQtd(0);
-        eventPublisher.publishEvent(new ItemEvent("stock", ItemEventAction.DELETED));
         stockBookRepository.save(stockBook);
     }
 
@@ -236,7 +228,6 @@ public class StockBookService {
         stockBook.getRecordStatus().setRecordStatusValue(RecordStatusValue.DELETED);
         stockBook.setQtd(0);
         stockBookRepository.save(stockBook);
-        eventPublisher.publishEvent(new ItemEvent("stock", ItemEventAction.DELETED));
         return stockBook;
     }
 

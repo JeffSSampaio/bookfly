@@ -5,7 +5,6 @@ import type { TableOptions } from './useTable'
 import { createCrudActions } from './useCreateCrudActions'
 import type { BtnAction } from '@/composable/useBtnActions'
 import { useForm, type FormField } from './useForm'
-import { useWebSocket } from './useWebSocket'
 import { formatDateTime } from '@/utils/dateFormat'
 
 export function useAuthors(){
@@ -43,7 +42,7 @@ const {
 
     async function handleSubmit(formData: Record<string, any>) {
             if (selectedItem.value) {
-                console.log('[usePenalty] Atualizar multa:', selectedItem.value.penaltyId, formData)
+                console.log(' Atualizar Autor:', selectedItem.value.penaltyId, formData)
                 try{
                     authorsService.update(selectedItem.value.id, formData)
                     
@@ -57,7 +56,7 @@ const {
     
         async function handleDelete() {
     
-            console.log('[usePenalty] Deletar multa:', selectedItem.value.id)
+            console.log('Deletar autor:', selectedItem.value.id)
              authorsService.delete(selectedItem.value.id)
             closeModal()
             // await getRows({ page: 1, itemsPerPage: 10 })
@@ -98,8 +97,8 @@ async function getRows(options: TableOptions) {
 
         await tableStore.getRows(options, fetchAndTreat)
     }
-    useWebSocket('authors', () => { if (lastOptions.value) getRows(lastOptions.value) })
- return {
+
+    return {
         titleTable: 'Autores',
         headers: tableStore.headers,
         items: computed(() => tableStore.items),

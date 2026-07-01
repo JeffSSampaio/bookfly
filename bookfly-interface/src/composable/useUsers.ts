@@ -5,7 +5,7 @@ import type { TableOptions } from './useTable'
 import { createCrudActions } from './useCreateCrudActions'
 import { formatDateTime } from '@/utils/dateFormat'
 import { useForm, type FormField } from './useForm'
-import { useWebSocket } from './useWebSocket'
+
 
 export function useUsers() {
   const tableStore = useTableStore('users')
@@ -99,9 +99,7 @@ export function useUsers() {
     setLastOptions(options)
   }
 
-  useWebSocket('users', () => {
-    if (lastOptions.value) getRows(lastOptions.value)
-  })
+
   return {
     titleTable: 'Usuários',
     headers: tableStore.headers,
