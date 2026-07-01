@@ -12,8 +12,7 @@ export function useUsers() {
   const {
     showModal, modalType,
     selectedItem, openModal, closeModal, deleteMessage,
-    buildForm, fillForm, lastOptions,
-    setLastOptions,
+    buildForm, fillForm,
     setFormTitle,
     formTitle
     
@@ -96,7 +95,6 @@ export function useUsers() {
       return treatedList
     }
     await tableStore.getRows(options, fetchAndTreat)
-    setLastOptions(options)
   }
 
 

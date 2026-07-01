@@ -13,7 +13,7 @@ export const useLoans = () => {
     const { 
         formTitle, setFormTitle,
         showModal, modalType, selectedItem, openModal,
-        closeModal, deleteMessage, buildForm, fillForm, lastOptions, setLastOptions } = useForm()
+        closeModal, deleteMessage, buildForm, fillForm } = useForm()
 
 
     const fields: FormField[] = [
@@ -114,7 +114,7 @@ export const useLoans = () => {
         }
         
         await tableStore.getRows(options, fetchAndTreat)
-        setLastOptions(options)
+    
     }
 
     return {

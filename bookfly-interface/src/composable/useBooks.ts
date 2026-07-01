@@ -11,7 +11,7 @@ export function useBooks() {
     const {
         formTitle, setFormTitle,
         showModal, modalType, selectedItem, openModal,
-        closeModal, deleteMessage, buildForm, fillForm, lastOptions, setLastOptions } = useForm()
+        closeModal, deleteMessage, buildForm, fillForm} = useForm()
 
 
     const fields: FormField[] = [
@@ -81,7 +81,7 @@ export function useBooks() {
     ]
 
     async function getRows(options: TableOptions) {
-        setLastOptions(options)
+   
         const fetchAndTreat = async (opts: TableOptions) => {
             const page = (opts.page ?? 1) - 1
             const sortBy = opts.sortBy?.[0]

@@ -30,11 +30,9 @@ export function useForm() {
     const modalType = ref<'edit' | 'delete' | null>(null)
     const formTitle = ref<string>('')
     const selectedItem = ref<any>(null)
-    const lastOptions = ref<any>(null)
 
-    function setLastOptions(options: any) {
-        lastOptions.value = options
-    }
+
+
 
     function setFormTitle(title:string){
         formTitle.value = title;
@@ -83,8 +81,6 @@ export function useForm() {
         openModal,
         closeModal,
         deleteMessage,
-        lastOptions,
-        setLastOptions,
         setFormTitle,
         formTitle
     }
