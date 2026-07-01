@@ -38,25 +38,27 @@ export function usePenalty() {
     const actions: BtnAction[] = [...createCrudActions(edit, deleted)]
 
 
-    async function handleSubmit(formData: Record<string, any>) {
-        if (selectedItem.value) {
-            console.log('[usePenalty] Atualizar multa:', selectedItem.value.penaltyId, formData)
-            try{
-                 penaltyService.update(selectedItem.value.penaltyId, formData)
-                
-            }catch(e){
-                console.error('Erro:'+e)
-            }
+ async function handleSubmit(formData: Record<string, any>) {
+    if (selectedItem.value) {
+        const { statusPenalty, ...rest } = formData
+        const payload = { ...rest, status: statusPenalty } 
+
+        // console.log('[usePenalty] Atualizar multa:', selectedItem.value.penaltyId, payload)
+        try {
+            await penaltyService.update(selectedItem.value.penaltyId, payload)
+        } catch (e) {
+            console.error('Erro ao atualizar multa:', e)
+            return
         }
-        closeModal()
-    
     }
+    closeModal()
+}
 
     async function handleDelete() {
         const id = selectedItem.value?.penaltyId
         if (!id) return
-        console.log('[usePenalty] Deletar multa:', id)
-        penaltyService.delete(id)
+        // console.log('[usePenalty] Deletar multa:', id)
+        await penaltyService.delete(id)
         closeModal()
         // await getRows({ page: 1, itemsPerPage: 10 })
     }

@@ -99,13 +99,15 @@ public class PenaltyService {
         if (updatedData.getStatus() != null) {
             existingPenalty.setStatus(updatedData.getStatus());
             Loan loan = existingPenalty.getLoan();
-            existingPenalty.setAmount(existingPenalty.getPaymentAmount(loan.getReturnDate(), LocalDateTime.now()));
+
+
+            if (updatedData.getAmount() == null) {
+                existingPenalty.setAmount(existingPenalty.getPaymentAmount(loan.getReturnDate(), LocalDateTime.now()));
+            }
 
             if (updatedData.getStatus() == StatusPenalty.PAGO) {
                 existingPenalty.setPaid(true);
                 existingPenalty.setPayedDate(LocalDateTime.now());
-
-
 
                 if (loan != null) {
                     loan.setStatus(StatusLoan.FINALIZADO);
@@ -113,13 +115,14 @@ public class PenaltyService {
                 }
             }
 
-
-
-            if (updatedData.getStatus() == StatusPenalty.PENDENTE ) {
+            if (updatedData.getStatus() == StatusPenalty.PENDENTE) {
                 existingPenalty.setPaid(false);
                 existingPenalty.setPayedDate(null);
-                existingPenalty.setAmount(BigDecimal.valueOf(0.0));
 
+
+                if (updatedData.getAmount() == null) {
+                    existingPenalty.setAmount(BigDecimal.valueOf(0.0));
+                }
 
                 if (loan != null) {
                     loan.setStatus(StatusLoan.ATRASADO);
@@ -127,21 +130,20 @@ public class PenaltyService {
                 }
             }
 
-            if (updatedData.getStatus() == StatusPenalty.ANALISE){
+            if (updatedData.getStatus() == StatusPenalty.ANALISE) {
                 existingPenalty.setPaid(false);
                 existingPenalty.setPayedDate(null);
-                existingPenalty.setAmount(BigDecimal.valueOf(0.0));
 
+
+                if (updatedData.getAmount() == null) {
+                    existingPenalty.setAmount(BigDecimal.valueOf(0.0));
+                }
 
                 if (loan != null) {
                     loan.setStatus(StatusLoan.ANALISE);
                     loanRepository.save(loan);
                 }
             }
-
-
-
-
         }
 
         if (updatedData.getLoan() != null) {
