@@ -61,7 +61,6 @@ public class PenaltyService {
 
             loan.setStatus(StatusLoan.ATRASADO);
             loanRepository.save(loan);
-            eventPublisher.publishEvent(new ItemEvent("penalties", ItemEventAction.CREATED));
             return penaltyRepository.save(penalty);
         } else {
             throw new DependencyViolationException("Não foi possível criar multa: o prazo de devolução ainda não venceu");
@@ -145,7 +144,6 @@ public class PenaltyService {
         if (updatedData.getLoan() != null) {
             existingPenalty.setLoan(updatedData.getLoan());
         }
-        eventPublisher.publishEvent(new ItemEvent("penalties", ItemEventAction.UPDATED));
         return penaltyRepository.save(existingPenalty);
     }
     @Auditable(
@@ -164,7 +162,6 @@ public class PenaltyService {
             }
 
             penaltyExist.getRecordStatus().delete(userExist);
-            eventPublisher.publishEvent(new ItemEvent("penalties", ItemEventAction.DELETED));
             penaltyRepository.save(penaltyExist);
     }
 
@@ -181,7 +178,6 @@ public class PenaltyService {
         penaltyExist.getRecordStatus().setRecordStatusValue(RecordStatusValue.DELETED);
         penaltyExist.getRecordStatus().setDateTime(LocalDateTime.now());
         penaltyRepository.save(penaltyExist);
-        eventPublisher.publishEvent(new ItemEvent("penalties", ItemEventAction.DELETED));
         return penaltyExist;
     }
 
